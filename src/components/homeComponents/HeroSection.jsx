@@ -1,95 +1,139 @@
-import React from 'react';
+import React from "react";
+// Import videos from assets folder
+import liveTrainingVideo from "../../assets/live-training.mp4";
+import doorSupervisorVideo from "../../assets/security_guard.mp4";
+import cctvVideo from "../../assets/cctv-operations.mp4";
+
+// Video component that uses imported assets
+const VideoPlayer = ({ src, label, className = "" }) => (
+  <div
+    className={`bg-gradient-to-br from-gray-800 to-gray-900 
+                rounded-xl overflow-hidden 
+                border border-gray-700 
+                shadow-xl relative group
+                w-full h-44 md:h-40
+                ${className}`}
+  >
+    <video
+      src={src}
+      className="w-full h-full object-fill"
+      controls
+      preload="metadata"
+    >
+      Your browser does not support the video tag.
+    </video>
+
+    {/* Label Overlay */}
+    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-3 opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+      <p className="text-white font-medium text-xs">{label}</p>
+    </div>
+
+    {/* Play Icon */}
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <svg
+        className="w-10 h-10 text-white opacity-80 group-hover:opacity-100 transition-opacity"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    </div>
+  </div>
+);
+
+// Metric card for stats
+const MetricCard = ({ value, label }) => (
+  <div className="bg-green-600 bg-opacity-10 backdrop-blur-lg rounded-xl p-4 text-center border border-gray-700">
+    <div className="text-xl font-bold text-white">{value}</div>
+    <div className="text-xs text-gray-300">{label}</div>
+  </div>
+);
 
 const HeroSection = () => {
   return (
-    <section className="bg-gradient-to-br from-blue-50 to-white py-16 md:py-24">
-      <div className="container mx-auto px-4">
-        {/* Main Hero Content */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 max-w-4xl mx-auto leading-tight">
-            Get trained, licensed, and ready to earn in{' '}
-            <span className="text-blue-600">3 weeks</span>
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            Earn £14 to £25 an hour with flexible security jobs. No experience needed.{' '}
-            <span className="font-semibold text-green-600">95% pass rate, first time.</span>
-          </p>
+    <section className="min-h-screen bg-gradient-to-br from-slate-950 via-gray-900 to-slate-900 font-sans relative">
+      {/* Background abstract pattern */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute top-10 left-10 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl"></div>
+        <div className="absolute bottom-10 right-10 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl"></div>
+      </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors w-full sm:w-auto min-w-[200px]">
-              Start Your Journey
-            </button>
-            <button className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-50 transition-colors w-full sm:w-auto min-w-[200px]">
-              Watch Success Stories
-            </button>
-          </div>
-        </div>
+      {/* Main container */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* LEFT COLUMN — text content */}
+          <div>
+            {/* 400k+ badge */}
+            <div className="inline-flex items-center bg-green-600 bg-opacity-90 backdrop-blur-sm text-white rounded-full px-4 py-2 text-sm font-semibold shadow-lg mb-6">
+              <span className="mr-2">🏆</span> 400K+ Professionals Trained
+            </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto">
-          {/* Stat 1 */}
-          <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">95%</div>
-            <div className="text-sm md:text-base text-gray-600">Pass Rate</div>
-          </div>
+            {/* main heading */}
+            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+              Get trained, licensed, and ready to earn <span className="text-green-400">in 3 weeks</span>
+            </h2>
 
-          {/* Stat 2 */}
-          <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-green-600 mb-2">Same Day</div>
-            <div className="text-sm md:text-base text-gray-600">Results</div>
-          </div>
+            {/* subheading */}
+            <p className="text-lg text-gray-300 mt-4 max-w-lg">
+              Earn £14 to £25 an hour with flexible security jobs. No experience needed. 95% pass rate, first time.
+            </p>
 
-          {/* Stat 3 */}
-          <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-purple-600 mb-2">85+</div>
-            <div className="text-sm md:text-base text-gray-600">UK Locations</div>
-          </div>
+            {/* CTA buttons */}
+            <div className="flex flex-wrap gap-4 mt-8">
+              <button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300 transform hover:scale-105">
+                Start Your Journey
+              </button>
+              <button className="border-2 border-gray-600 hover:border-gray-400 text-white font-semibold py-3 px-8 rounded-full transition duration-300 flex items-center gap-2 bg-black bg-opacity-30 backdrop-blur-sm">
+                ▶ Watch Success Stories
+              </button>
+            </div>
 
-          {/* Stat 4 */}
-          <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-orange-600 mb-2">£14-£25</div>
-            <div className="text-sm md:text-base text-gray-600">Hourly Rate</div>
-          </div>
-        </div>
-
-        {/* Additional Info Cards */}
-        <div className="mt-16 grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {/* Card 1 */}
-          <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Live Training</h3>
-            <p className="text-gray-600">Professional Doper Supervisor Course</p>
+            {/* three small stats (95%, same day, 85+ locations) */}
+            <div className="grid grid-cols-3 gap-4 mt-10 max-w-md">
+              <div className="bg-green-600 bg-opacity-10 backdrop-blur-lg rounded-xl p-3 text-center border border-gray-700">
+                <div className="text-2xl font-black text-white">95%</div>
+                <div className="text-xs uppercase tracking-wider text-gray-300">Pass Rate</div>
+              </div>
+              <div className="bg-blue-600 bg-opacity-10 backdrop-blur-lg rounded-xl p-3 text-center border border-gray-700">
+                <div className="text-2xl font-black text-white">Same Day</div>
+                <div className="text-xs uppercase tracking-wider text-gray-300">Results</div>
+              </div>
+              <div className="bg-purple-600 bg-opacity-10 backdrop-blur-lg rounded-xl p-3 text-center border border-gray-700">
+                <div className="text-2xl font-black text-white">85+</div>
+                <div className="text-xs uppercase tracking-wider text-gray-300">UK Locations</div>
+              </div>
+            </div>
           </div>
 
-          {/* Card 2 */}
-          <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">400K+</h3>
-            <p className="text-gray-600">Professionals Trained</p>
-            <p className="text-sm text-blue-600 mt-2">SIA Approved Official Training Centre</p>
-          </div>
+          {/* RIGHT COLUMN — videos and cards */}
+          <div>
+            {/* Three videos with imported assets */}
+            <div className="space-y-4 mb-6">
+              <VideoPlayer src={liveTrainingVideo} label="Live Training Preview"  className="w-full h-48 object-cover rounded-lg shadow-lg"/>
+              <VideoPlayer src={doorSupervisorVideo} label="Door Supervisor Course" className=" w-14 object-cover rounded-lg shadow-lg"/>
+              <VideoPlayer src={cctvVideo} label="CCTV Operations" className="w-full h-48 object-cover rounded-lg shadow-lg"/>
+            </div>
 
-          {/* Card 3 */}
-          <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">CCTV</h3>
-            <p className="text-gray-600">Training Available</p>
-          </div>
-        </div>
+            {/* bottom row of three stats */}
+            <div className="grid grid-cols-3 gap-3 mt-4">
+              <MetricCard value="85+" label="Locations Across UK" />
+              <MetricCard value="£14-£25" label="Hourly Rate" />
+              <MetricCard value="95%" label="Pass Rate" />
+            </div>
 
-        {/* Bottom Stats */}
-        <div className="mt-12 flex flex-wrap justify-center items-center gap-8 text-sm text-gray-600">
-          <span className="flex items-center">
-            <span className="font-bold text-blue-600 mr-2">95%</span>
-            Pass Rate
-          </span>
-          <span className="flex items-center">
-            <span className="font-bold text-green-600 mr-2">85+</span>
-            Locations Across the UK
-          </span>
-          <span className="flex items-center">
-            <span className="font-bold text-orange-600 mr-2">£14-£25</span>
-            Hourly Rate
-          </span>
+            {/* SIA badge row */}
+            <div className="flex flex-wrap gap-3 mt-6 justify-center">
+              <span className="px-4 py-2 bg-green-600 bg-opacity-90 backdrop-blur-sm text-white text-sm font-semibold rounded-full shadow-lg">
+                ✅ SIA Approved
+              </span>
+              <span className="px-4 py-2 bg-blue-600 bg-opacity-90 backdrop-blur-sm text-white text-sm font-semibold rounded-full shadow-lg">
+                🏆 Official Training Centre
+              </span>
+              <span className="px-4 py-2 bg-purple-600 bg-opacity-90 backdrop-blur-sm text-white text-sm font-semibold rounded-full shadow-lg">
+                Live Training
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
