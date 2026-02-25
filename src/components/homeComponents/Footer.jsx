@@ -1,6 +1,6 @@
 import React from "react";
 import { Phone, Mail, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/Logo.png";
 
 const Footer = () => {
   return (
