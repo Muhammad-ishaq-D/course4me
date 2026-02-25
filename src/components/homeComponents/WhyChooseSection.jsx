@@ -1,66 +1,77 @@
 import React from "react";
+import { Award, Zap, Users, MapPin } from "lucide-react";
 
-// Feature card component with icon
-const FeatureCard = ({ icon, title, description }) => (
-  <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow">
-    {/* Icon circle */}
-    <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl mb-6">
-      {icon}
+const FeatureCard = ({ icon: Icon, title, description }) => (
+  <div className="
+    bg-[#f8f9fb]
+    rounded-[28px]
+    p-10
+    shadow-[0_20px_40px_rgba(0,0,0,0.08)]
+    transition-all duration-300
+    hover:-translate-y-2
+    hover:shadow-[0_30px_60px_rgba(0,0,0,0.12)]
+  ">
+
+    {/* Icon */}
+    <div className="w-16 h-16 bg-[#B9FF5A] rounded-2xl flex items-center justify-center mb-8">
+      <Icon className="w-8 h-8 text-[#243447]" />
     </div>
-    
+
     {/* Title */}
-    <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
-    
+    <h3 className="text-[22px] font-semibold text-[#2f3a47] mb-4 leading-snug">
+      {title}
+    </h3>
+
     {/* Description */}
-    <p className="text-gray-600 leading-relaxed">{description}</p>
+    <p className="text-gray-600 leading-relaxed text-[15px]">
+      {description}
+    </p>
+
   </div>
 );
 
 const WhyChooseSection = () => {
   return (
-    <section className="bg-white font-sans py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+    <section className="bg-[#f3f4f6] py-28 font-sans">
+      <div className="max-w-[1400px] mx-auto px-8">
+
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        <div className="text-center mb-20">
+          <h2 className="text-[44px] md:text-[52px] font-bold text-[#2f3a47] mb-6 tracking-tight">
             Why 400,000+ Choose Get Licensed
           </h2>
-          <p className="text-gray-600 text-lg">
+          <p className="text-lg text-gray-600">
             Industry-leading training with proven results
           </p>
         </div>
 
-        {/* Cards grid - 4 columns on desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          
-          {/* Free & Unlimited Exam Attempts */}
-          <FeatureCard 
-            icon="∞"
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+          <FeatureCard
+            icon={Award}
             title="Free & Unlimited Exam Attempts"
-            description="We believe in you - take the exam as many times as needed at no extra cost."
+            description="We believe in you – take the exam as many times as needed at no extra cost."
           />
 
-          {/* Same Day Results */}
-          <FeatureCard 
-            icon="⚡"
+          <FeatureCard
+            icon={Zap}
             title="Same Day Results"
-            description="Get your results immediately after completing the exam - start working faster"
+            description="Get your results immediately after completing the exam – start working faster."
           />
 
-          {/* Top-Rated Instructors */}
-          <FeatureCard 
-            icon="★"
+          <FeatureCard
+            icon={Users}
             title="Top-Rated Instructors"
-            description="Learn from experienced professionals with real-world security backgrounds"
+            description="Learn from experienced professionals with real-world security backgrounds."
           />
 
-          {/* 85+ UK Locations */}
-          <FeatureCard 
-            icon="📍"
+          <FeatureCard
+            icon={MapPin}
             title="85+ UK Locations"
-            description="Convenient training centres across the country - find one near you"
+            description="Convenient training centres across the country – find one near you."
           />
+
         </div>
       </div>
     </section>

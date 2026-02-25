@@ -1,87 +1,81 @@
 import React from "react";
-
-// Partner item component
-const PartnerItem = ({ name, subtitle, borderColor = "border-gray-200" }) => (
-  <div className={`flex items-center gap-4 py-4 border-b ${borderColor} last:border-0`}>
-    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-      {name.charAt(0)}
-    </div>
-    <div>
-      <div className="text-lg font-bold text-gray-900">{name}</div>
-      {subtitle && <div className="text-sm text-gray-500">{subtitle}</div>}
-    </div>
-  </div>
-);
+import buildingIcon from "../../assets/icons/home/training-icon.png"; // replace with correct green icon
 
 const HiringTrainingSection = () => {
   return (
-    <section className="bg-white font-sans py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          
-          {/* LEFT COLUMN - Text content */}
-          <div>
-            {/* "HIRING & TRAINING" badge - navy blue */}
-            <div className="inline-block bg-blue-900 text-white text-sm font-semibold px-5 py-2 rounded-full mb-8 tracking-wider">
-              HIRING & TRAINING
-            </div>
+    <section className="relative bg-[#f3f4f6] py-24 font-sans overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
-            {/* Main heading - black text */}
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-              The complete solution <br />
-              for training and hiring, <br />
-              purpose-built for <br />
-              <span className="text-blue-600">security employers.</span>
+        <div className="relative grid grid-cols-1 lg:grid-cols-2 items-stretch">
+
+          {/* LEFT SIDE */}
+          <div className="  flex flex-col justify-center">
+
+            {/* Small Label */}
+            <p className="text-[#8BE34A] text-sm font-semibold tracking-widest uppercase mb-6">
+              Hiring & Training
+            </p>
+
+            {/* Heading */}
+            <h2 className="text-[44px] leading-[1.1] font-bold text-[#2f3a47]">
+              The complete solution
+              <br />
+              for training and hiring,
+              <br />
+              purpose-built for
+              <br />
+              security employers.
             </h2>
 
-            {/* Learn More link - blue */}
-            <div className="mt-8">
-              <a 
-                href="#" 
-                className="inline-flex items-center text-blue-600 text-lg font-semibold group hover:text-blue-800 transition-colors"
-              >
-                Learn More 
-                <span className="ml-2 text-2xl group-hover:translate-x-2 transition-transform">→</span>
-              </a>
-            </div>
+            {/* Button */}
+            <button className="mt-10 bg-[#2f3a47] text-white px-8 py-4 rounded-full font-semibold flex items-center gap-3 w-fit shadow-md hover:opacity-90 transition">
+              Learn More
+              <span className="text-xl">→</span>
+            </button>
 
-            {/* Partner with Industry Leaders text */}
-      
           </div>
 
-          {/* RIGHT COLUMN - Partner list */}
-          <div className="bg-gray-800 rounded-2xl p-8 border border-gray-200">
-            {/* O2 Arena */}
-            <div className="flex items-center gap-4 py-4 border-b border-gray-50">
-              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                O
+          {/* RIGHT SIDE CARD */}
+          <div className="relative lg:-ml-16 mt-12 lg:mt-0">
+
+            <div className="bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-[28px] p-12 text-white shadow-[0_40px_80px_rgba(0,0,0,0.35)]">
+
+              {/* Icon */}
+              <div className="w-14 h-14 bg-[#8BE34A] rounded-xl flex items-center justify-center mb-8">
+                <img src={buildingIcon} alt="" className="w-8 h-8" />
               </div>
-              <div className="text-lg font-bold text-gray-50">O2 Arena</div>
+
+              {/* Title */}
+              <h3 className="text-2xl font-bold mb-4">
+                Partner with Industry Leaders
+              </h3>
+
+              {/* Description */}
+              <p className="text-gray-300 max-w-md mb-8">
+                Join 400,000+ professionals trained through our
+                comprehensive programs
+              </p>
+
+              {/* Chips */}
+              <div className="flex flex-wrap gap-4">
+                <span className="bg-white/10 px-5 py-2 rounded-full text-sm">
+                  O2 Arena
+                </span>
+                <span className="bg-white/10 px-5 py-2 rounded-full text-sm">
+                  Wembley Stadium
+                </span>
+                <span className="bg-white/10 px-5 py-2 rounded-full text-sm">
+                  Premier League
+                </span>
+                <span className="bg-white/10 px-5 py-2 rounded-full text-sm">
+                  UK Security
+                </span>
+              </div>
+
             </div>
 
-            {/* Wembley Stadium */}
-            <div className="flex items-center gap-4 py-4 border-b border-gray-200">
-              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                W
-              </div>
-              <div className="text-lg font-bold text-gray-50">Wembley Stadium</div>
-            </div>
-
-            {/* Premier League */}
-            <div className="flex items-center gap-4 py-4 border-b border-gray-200">
-              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                PL
-              </div>
-              <div className="text-lg font-bold text-gray-50">Premier League</div>
-            </div>
-
-            {/* UK Security - bottom right */}
-            <div className="mt-8 flex justify-end">
-              <div className="bg-blue-50 text-blue-800 font-semibold px-6 py-2 rounded-full text-sm border border-blue-100">
-                UK SECURITY
-              </div>
-            </div>
           </div>
+
         </div>
       </div>
     </section>

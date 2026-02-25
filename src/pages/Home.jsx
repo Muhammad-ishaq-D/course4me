@@ -1,5 +1,4 @@
 import React from 'react'
-import Header from '../components/shared/Header'
 import HeroSection from '../components/homeComponents/HeroSection'
 import HiringTrainingSection from '../components/homeComponents/HiringTrainingSection'
 import CoursesLicencesSection from '../components/homeComponents/CoursesLicencesSection'
@@ -13,7 +12,7 @@ export default function Home() {
   return (
     
            <div className="">
-      <Header />
+   
       <HeroSection />
       <HiringTrainingSection />
       <CoursesLicencesSection />

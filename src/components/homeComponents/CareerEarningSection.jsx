@@ -1,99 +1,119 @@
 import React from "react";
+import {
+  Shield,
+  Camera,
+  Users,
+  Briefcase,
+  ArrowRight
+} from "lucide-react";
 
-// Role card component
-const RoleCard = ({ title, minRate, maxRate, training, iconLetter }) => {
-  return (
-    <div className="bg-gray-700 rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-      {/* Icon and title row */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-          {iconLetter}
-        </div>
-        <h3 className="text-xl font-bold text-gray-900">{title}</h3>
+const RoleCard = ({ icon: Icon, title, rate, training }) => (
+  <div className="
+    bg-gradient-to-br 
+    from-[#2b3e52] 
+    via-[#243447] 
+    to-[#1c2a38]
+    rounded-[32px]
+    p-10
+    text-white
+    shadow-[0_30px_60px_rgba(0,0,0,0.25)]
+    min-h-[420px]
+    flex flex-col justify-between
+    transition-all duration-300
+    hover:-translate-y-2
+    hover:shadow-[0_40px_80px_rgba(0,0,0,0.35)]
+  ">
+
+    {/* Top */}
+    <div>
+      <div className="w-16 h-16 bg-[#B9FF5A] rounded-2xl flex items-center justify-center mb-8">
+        <Icon className="w-8 h-8 text-[#1c2a38]" />
       </div>
 
-      {/* Earn up to */}
-      <div className="mb-3">
-        <span className="text-sm text-gray-500">Earn up to:</span>
+      <h3 className="text-[22px] font-semibold mb-8 tracking-tight">
+        {title}
+      </h3>
+
+      <p className="text-gray-400 text-sm mb-2">
+        Earn up to:
+      </p>
+
+      <div className="text-[#B9FF5A] text-5xl font-bold tracking-tight leading-none">
+        {rate}
       </div>
 
-      {/* Hourly rate */}
-      <div className="mb-4">
-        <span className="text-3xl font-bold text-gray-900">{minRate}-{maxRate}</span>
-        <span className="text-gray-500 ml-1">per hour</span>
-      </div>
+      <p className="text-gray-400 text-sm mt-2 mb-8">
+        per hour
+      </p>
 
-      {/* Training required */}
-      <div className="mb-6">
-        <div className="text-sm text-gray-500 mb-1">Training required:</div>
-        <div className="font-semibold text-gray-900">{training}</div>
+      <div className="border-t border-white/10 pt-6">
+        <p className="text-gray-400 text-sm">
+          Training required:
+        </p>
+        <p className="text-white font-medium mt-2">
+          {training}
+        </p>
       </div>
-
-      {/* View Role link */}
-      <a 
-        href="#" 
-        className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800 transition-colors"
-      >
-        View Role <span className="ml-2 text-xl">→</span>
-      </a>
     </div>
-  );
-};
+
+    {/* Bottom */}
+    <a
+      href="#"
+      className="mt-10 text-[#B9FF5A] font-semibold flex items-center gap-2 group"
+    >
+      View Role
+      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+    </a>
+
+  </div>
+);
 
 const CareerEarningSection = () => {
   return (
-    <section className="bg-white font-sans py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+    <section className="bg-[#f3f4f6] py-28 font-sans">
+      <div className="max-w-[1400px] mx-auto px-8">
+
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        <div className="text-center mb-20">
+          <h2 className="text-[44px] md:text-[52px] font-bold text-[#2f3a47] mb-6 tracking-tight">
             Your Security Career & Earning Potential
           </h2>
-          <p className="text-gray-600 text-lg">
+          <p className="text-lg text-gray-600">
             Explore the different security roles and see how much you can earn
           </p>
         </div>
 
-        {/* Cards grid - 4 columns on large screens */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          
-          {/* Door Supervisor */}
-          <RoleCard 
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+          <RoleCard
+            icon={Shield}
             title="Door Supervisor"
-            minRate="£13"
-            maxRate="£25"
+            rate="£13–£25"
             training="Door Supervisor Training"
-            iconLetter="D"
-            className="bg-gray-800"
           />
 
-          {/* CCTV Operator */}
-          <RoleCard 
+          <RoleCard
+            icon={Camera}
             title="CCTV Operator"
-            minRate="£12"
-            maxRate="£18"
+            rate="£12–£18"
             training="CCTV Operator Training"
-            iconLetter="C"
           />
 
-          {/* Security Guard */}
-          <RoleCard 
+          <RoleCard
+            icon={Users}
             title="Security Guard"
-            minRate="£11"
-            maxRate="£16"
+            rate="£11–£16"
             training="Security Guard Training"
-            iconLetter="S"
           />
 
-          {/* Close Protection */}
-          <RoleCard 
+          <RoleCard
+            icon={Briefcase}
             title="Close Protection"
-            minRate="£20"
-            maxRate="£50"
+            rate="£20–£50"
             training="Close Protection Course"
-            iconLetter="CP"
           />
+
         </div>
       </div>
     </section>
