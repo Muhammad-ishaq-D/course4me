@@ -115,10 +115,10 @@ const HeroSection = () => {
               <div className="relative w-full xl:w-auto">
                 <VideoPlayer
                   src={liveTrainingVideo}
-                  className="w-full h-[300px] sm:h-[400px] xl:w-[61vh] xl:h-[61vh]"
+                  className="w-full h-[300px] sm:h-[400px] xl:w-[61vh] xl:h-[65vh]"
                 />
 
-                <div className="absolute bottom-6 left-6 text-white">
+                <div className="absolute bottom-18 left-6 text-white">
                   <div className="flex items-center gap-2 bg-[#B9FF5A] text-black px-3 py-1 rounded-full text-sm font-semibold">
                     <img src={playIcon} className="w-3 h-3" />
                     Live Training
@@ -132,7 +132,7 @@ const HeroSection = () => {
               <div className="flex flex-col gap-6 w-full xl:w-auto">
 
                 <div className="relative w-full mt-6 md:mt-0  xl:w-46">
-                  <div className="w-full xl:w-46 h-[160px] sm:h-[180px] xl:h-45 bg-[#B9FF5A] rounded-2xl flex flex-col items-center justify-center text-center font-semibold text-gray-900">
+                  <div className="w-full xl:w-46 h-[160px] sm:h-[180px] xl:h-42 bg-[#B9FF5A] rounded-2xl flex flex-col items-center justify-center text-center font-semibold text-gray-900">
                     <img src={trainingIcon} className="w-8 h-8 mb-3" />
                     <div className="text-3xl font-bold">400K+</div>
                     <div className="text-sm">Professionals Trained</div>
@@ -157,7 +157,7 @@ const HeroSection = () => {
                 <div className="relative w-full xl:w-46">
                   <VideoPlayer
                     src={cctvVideo}
-                    className="w-full h-[160px] sm:h-[200px] xl:h-49 xl:w-46"
+                    className="w-full h-[160px] sm:h-[200px] xl:h-47 xl:w-46"
                   />
                   <div className="absolute bottom-3 left-3 text-white text-sm font-semibold">
                     CCTV
@@ -168,10 +168,10 @@ const HeroSection = () => {
             </div>
 
             {/* IMPORTANT: xl instead of lg */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 xl:gap-2">
 
               <div className="relative w-full xl:w-46">
-                <div className="w-full xl:w-46 h-[180px] xl:h-45 bg-[#FFFFFF1A] border border-[#FFFFFF33] backdrop-blur-xl text-white rounded-2xl flex flex-col items-center justify-center">
+                <div className="w-full xl:w-43 h-[180px] xl:h-45 bg-[#FFFFFF1A] border border-[#FFFFFF33] backdrop-blur-xl text-white rounded-2xl flex flex-col items-center justify-center">
                   <img src={checkIcon} className="w-8 h-8 mb-3" />
                   <div className="text-3xl font-bold">95%</div>
                 </div>
@@ -212,17 +212,17 @@ const HeroSection = () => {
 </div>         
               </div>
 
-              <div className="relative w-full xl:w-46">
+              <div className="relative w-full xl:w-43">
                 <VideoPlayer
                   src={doorSupervisorVideo}
-                  className="w-full h-[200px] xl:h-45 xl:w-46"
+                  className="w-full h-[200px] xl:h-45 xl:w-40"
                 />
                 <div className="absolute bottom-3 left-3 text-white text-sm font-semibold">
                   Security Guard
                 </div>
               </div>
 
-              <div className="w-full xl:w-46 h-[200px] xl:h-45 bg-gradient-to-br from-[#9810FA] to-[#E60076] text-white rounded-2xl flex flex-col items-center justify-center">
+              <div className="w-full xl:w-42 h-[200px] xl:h-45 bg-gradient-to-br from-[#9810FA] to-[#E60076] text-white rounded-2xl flex flex-col items-center justify-center">
                 <img src={lightningIcon} className="w-8 h-8 mb-3" />
                 <div className="text-2xl font-bold">£14–£25</div>
                 <div>Hourly Rate</div>
