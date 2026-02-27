@@ -38,14 +38,14 @@ const VideoPlayer = ({ src, label, className = "" }) => (
 
 const HeroSection = () => {
   return (
-    <section className="min-h-screen pb-8 md:pb-6 bg-gradient-to-br from-slate-950 via-gray-900 to-slate-900 relative overflow-hidden">
+    <section className="min-h-screen mt-12 md:mt-18 pb-8 md:pb-6 bg-gradient-to-br from-slate-950 via-gray-900 to-slate-900 relative overflow-hidden">
 
       {/* Glows */}
-      <div className="absolute top-12 right-0 sm:right-10 w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] bg-[#B9FF5A] opacity-40 blur-[80px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-12 right-0 sm:right-10 w-[250px] sm:w-[400px] h-[250px] sm:h-[400px] bg-[#B9FF5A] opacity-60 blur-[80px] rounded-full pointer-events-none"></div>
       <div className="absolute bottom-20 sm:bottom-32 right-1/2 -translate-x-1/2 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] bg-purple-600 opacity-40 blur-[80px] rounded-full pointer-events-none"></div>
-      <div className="absolute bottom-12 left-0 sm:left-38 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] bg-blue-600 opacity-30 blur-[80px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-12 left-0 sm:left-38 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] bg-blue-600 opacity-60 blur-[80px] rounded-full pointer-events-none"></div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 lg:px-8 py-12 md:py-20">
 
         {/* IMPORTANT: xl instead of lg */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-start">
@@ -53,12 +53,12 @@ const HeroSection = () => {
           {/* LEFT COLUMN */}
           <div>
 
-            <div className="inline-flex items-center bg-[#B9FF5A33] border border-[#B9FF5A] text-[#B9FF5A] rounded-full px-4 py-2 text-sm font-semibold shadow-lg mb-6">
+            <div className="inline-flex items-center  bg-[#B9FF5A33] border border-[#B9FF5A] text-[#B9FF5A] rounded-full px-4 py-2 text-sm font-semibold shadow-lg mb-6">
               <img src={arrowUpIcon} className="w-4 h-4 mr-2" />
               400K+ Professionals Trained
             </div>
 
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+            <h2 className="text-4xl sm:text-5xl   lg:text-6xl font-extrabold text-white leading-tight">
               Get trained, <br />
               licensed, and <br />
               <span className="relative inline-block text-[#B9FF5A]">

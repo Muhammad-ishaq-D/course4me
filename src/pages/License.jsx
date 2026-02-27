@@ -9,8 +9,8 @@ export default function Licenses() {
   return (
     <div>
 <SIASection />
-{/* <HowItWorksSection /> */}
-{/* <CompareLicences />
+{/* <HowItWorksSection />
+<CompareLicences />
 <FAQSection />
 <HelpSection /> */}
     </div>
