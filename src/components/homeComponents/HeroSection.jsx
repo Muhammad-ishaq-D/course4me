@@ -1,17 +1,17 @@
 import React from "react";
-import liveTrainingVideo from "../../assets/live-training.mp4";
-import doorSupervisorVideo from "../../assets/security_guard.mp4";
-import cctvVideo from "../../assets/cctv-operations.mp4";
-import siaIcon from "../../assets/icons/home/sia-icon.png";
-import trainingIcon from "../../assets/icons/home/training-icon.png";
-import checkIcon from "../../assets/icons/home/check-icon.png";
-import lightningIcon from "../../assets/icons/home/lightning-icon.png";
-import playIcon from "../../assets/icons/home/play-icon.png";
-import playCircleIcon from "../../assets/icons/home/play-circle-icon.png";
-import scrollIcon from "../../assets/icons/home/scroll-icon.png";
-import underlineStroke from "../../assets/icons/home/underline-stroke.svg";
-import arrowUpIcon from "../../assets/icons/home/arrow-up-curve.png";
-import locationIcon from "../../assets/icons/home/location-icon.png";
+import liveTrainingVideo from "../../assets/home/live-training.mp4";
+import doorSupervisorVideo from "../../assets/home/security_guard.mp4";
+import cctvVideo from "../../assets/home/cctv-operations.mp4";
+import siaIcon from "../../assets/home/sia-icon.png";
+import trainingIcon from "../../assets/home/training-icon.png";
+import checkIcon from "../../assets/home/check-icon.png";
+import lightningIcon from "../../assets/home/lightning-icon.png";
+import playIcon from "../../assets/home/play-icon.png";
+import playCircleIcon from "../../assets/home/play-circle-icon.png";
+import scrollIcon from "../../assets/home/scroll-icon.png";
+import underlineStroke from "../../assets/home/underline-stroke.svg";
+import arrowUpIcon from "../../assets/home/arrow-up-curve.png";
+import locationIcon from "../../assets/home/location-icon.png";
 
 const VideoPlayer = ({ src, label, className = "" }) => (
   <div

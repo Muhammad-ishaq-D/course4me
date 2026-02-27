@@ -1,6 +1,6 @@
 import React from "react";
-import checkIcon from "../../assets/icons/home/check-icon.png";
-import arrowUpIcon from "../../assets/icons/home/arrow-up-curve.png";
+import checkIcon from "../../assets/home/check-icon.png";
+import arrowUpIcon from "../../assets/home/arrow-up-curve.png";
 
 const CoursesHero = () => {
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import buildingIcon from "../../assets/icons/home/training-icon.png"; // replace with correct green icon
+import buildingIcon from "../../assets/home/training-icon.png"; // replace with correct green icon
 
 const HiringTrainingSection = () => {
   return (

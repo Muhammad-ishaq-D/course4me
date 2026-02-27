@@ -1,76 +1,89 @@
 import React from "react";
-import { Award, Zap, Users, MapPin } from "lucide-react";
+import { Award, Users, Target, CheckCircle } from "lucide-react";
 
-const FeatureCard = ({ icon: Icon, title, description }) => (
-  <div className="
-    bg-[#f8f9fb]
-    rounded-[28px]
-    p-10
-    shadow-[0_20px_40px_rgba(0,0,0,0.08)]
-    transition-all duration-300
-    hover:-translate-y-2
-    hover:shadow-[0_30px_60px_rgba(0,0,0,0.12)]
-  ">
+const features = [
+  {
+    icon: Award,
+    iconBg: "bg-blue-600",
+    title: "SIA Approved",
+    description:
+      "All centres are officially accredited by the Security Industry Authority",
+  },
+  {
+    icon: Users,
+    iconBg: "bg-purple-600",
+    title: "Expert Trainers",
+    description:
+      "Experienced instructors with real-world security industry knowledge",
+  },
+  {
+    icon: Target,
+    iconBg: "bg-green-600",
+    title: "95% Pass Rate",
+    description:
+      "Industry-leading success rate with free exam retakes included",
+  },
+  {
+    icon: CheckCircle,
+    iconBg: "bg-orange-500",
+    title: "Modern Facilities",
+    description:
+      "State-of-the-art training rooms with the latest equipment",
+  },
+];
 
-    {/* Icon */}
-    <div className="w-16 h-16 bg-[#B9FF5A] rounded-2xl flex items-center justify-center mb-8">
-      <Icon className="w-8 h-8 text-[#243447]" />
-    </div>
-
-    {/* Title */}
-    <h3 className="text-[22px] font-semibold text-[#2f3a47] mb-4 leading-snug">
-      {title}
-    </h3>
-
-    {/* Description */}
-    <p className="text-gray-600 leading-relaxed text-[15px]">
-      {description}
-    </p>
-
-  </div>
-);
-
-const WhyChooseSection = () => {
+const WhyChooseTrainingCentres = () => {
   return (
-    <section className="bg-[#f3f4f6] py-28 font-sans">
-      <div className="max-w-[1400px] mx-auto px-8">
+    <section className="bg-[#f3f4f6] py-24">
+      <div className="max-w-[1300px] mx-auto px-6">
 
         {/* Header */}
-        <div className="text-center mb-20">
-          <h2 className="text-[44px] md:text-[52px] font-bold text-[#2f3a47] mb-6 tracking-tight">
-            Why 400,000+ Choose Get Licensed
+        <div className="text-center mb-16">
+          <h2 className="text-[40px] md:text-[48px] font-bold text-[#2f3a47]">
+            Why Choose Our Training Centres?
           </h2>
-          <p className="text-lg text-gray-600">
-            Industry-leading training with proven results
+          <p className="text-gray-600 text-lg mt-4">
+            Consistent quality across all locations
           </p>
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 
-          <FeatureCard
-            icon={Award}
-            title="Free & Unlimited Exam Attempts"
-            description="We believe in you – take the exam as many times as needed at no extra cost."
-          />
+          {features.map((item, index) => {
+            const Icon = item.icon;
 
-          <FeatureCard
-            icon={Zap}
-            title="Same Day Results"
-            description="Get your results immediately after completing the exam – start working faster."
-          />
+            return (
+              <div
+                key={index}
+                className="
+                  bg-white
+                  border border-gray-200
+                  rounded-[24px]
+                  p-8
+                "
+              >
 
-          <FeatureCard
-            icon={Users}
-            title="Top-Rated Instructors"
-            description="Learn from experienced professionals with real-world security backgrounds."
-          />
+                {/* Icon */}
+                <div
+                  className={`${item.iconBg} w-14 h-14 rounded-xl flex items-center justify-center mb-6`}
+                >
+                  <Icon className="w-6 h-6 text-white" />
+                </div>
 
-          <FeatureCard
-            icon={MapPin}
-            title="85+ UK Locations"
-            description="Convenient training centres across the country – find one near you."
-          />
+                {/* Title */}
+                <h3 className="text-[20px] font-semibold text-[#2f3a47] mb-3">
+                  {item.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-gray-600 text-[15px] leading-relaxed">
+                  {item.description}
+                </p>
+
+              </div>
+            );
+          })}
 
         </div>
       </div>
@@ -78,4 +91,4 @@ const WhyChooseSection = () => {
   );
 };
 
-export default WhyChooseSection;
+export default WhyChooseTrainingCentres;

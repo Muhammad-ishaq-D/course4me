@@ -1,6 +1,6 @@
 import React from "react";
 import { Download } from "lucide-react";
-import GetLicensedApp from "../../assets/Get Licensed App.png";
+import GetLicensedApp from "../../assets/home/Get Licensed App.png";
 
 const AppDownloadSection = () => {
   return (

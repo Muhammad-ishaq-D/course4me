@@ -1,43 +1,51 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Logo from "../../assets/Logo.png";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
 
+  const navLinkClasses = ({ isActive }) =>
+    isActive
+      ? "text-[#B9FF5A] font-semibold"
+      : "text-[#2f3a47] font-medium hover:text-black transition";
+
+  const mobileNavLinkClasses = ({ isActive }) =>
+    isActive
+      ? "text-[#B9FF5A] font-semibold"
+      : "hover:text-black transition";
+
   return (
-    <header className="bg-[#f3f4f6] shadow-sm relative z-50">
+    <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-[72px]">
 
-          {/* LEFT - LOGO */}
-          <div className="flex items-center">
-            <Link to="/">
-              <img src={Logo} alt="courses4me" className="w-26 md:w-58" />
-            </Link>
-          </div>
+          {/* LOGO */}
+          <Link to="/">
+            <img src={Logo} alt="courses4me" className="w-26 md:w-58" />
+          </Link>
 
           {/* DESKTOP NAV */}
           <nav className="hidden lg:flex items-center gap-10">
-   <Link to="/" className="text-[#2f3a47] font-medium hover:text-black transition">
+            <NavLink to="/" end className={navLinkClasses}>
               Home
-            </Link>
+            </NavLink>
 
-            <Link to="/courses" className="text-[#2f3a47] font-medium hover:text-black transition">
+            <NavLink to="/courses" className={navLinkClasses}>
               Courses
-            </Link>
+            </NavLink>
 
-            <Link to="/licences" className="text-[#2f3a47] font-medium hover:text-black transition">
+            <NavLink to="/licences" className={navLinkClasses}>
               Licences
-            </Link>
+            </NavLink>
 
-            <Link to="/locations" className="text-[#2f3a47] font-medium hover:text-black transition">
+            <NavLink to="/locations" className={navLinkClasses}>
               Locations
-            </Link>
+            </NavLink>
 
-            <Link to="/careers" className="text-[#2f3a47] font-medium hover:text-black transition">
+            <NavLink to="/careers" className={navLinkClasses}>
               Careers
-            </Link>
+            </NavLink>
           </nav>
 
           {/* DESKTOP RIGHT SIDE */}
@@ -78,11 +86,10 @@ const Header = () => {
               }`}
             />
           </button>
-
         </div>
       </div>
 
-      {/* MOBILE / TABLET MENU */}
+      {/* MOBILE MENU */}
       <div
         className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-lg transition-all duration-300 overflow-hidden ${
           open ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
@@ -90,25 +97,46 @@ const Header = () => {
       >
         <div className="flex flex-col px-6 py-6 space-y-5 text-[#2f3a47]">
 
-           <Link to="/" onClick={() => setOpen(false)} className="hover:text-black transition">
+          <NavLink
+            to="/"
+            end
+            onClick={() => setOpen(false)}
+            className={mobileNavLinkClasses}
+          >
             Home
-          </Link>
+          </NavLink>
 
-          <Link to="/courses" onClick={() => setOpen(false)} className="hover:text-black transition">
+          <NavLink
+            to="/courses"
+            onClick={() => setOpen(false)}
+            className={mobileNavLinkClasses}
+          >
             Courses
-          </Link>
+          </NavLink>
 
-          <Link to="/licences" onClick={() => setOpen(false)} className="hover:text-black transition">
+          <NavLink
+            to="/licences"
+            onClick={() => setOpen(false)}
+            className={mobileNavLinkClasses}
+          >
             Licences
-          </Link>
+          </NavLink>
 
-          <Link to="/locations" onClick={() => setOpen(false)} className="hover:text-black transition">
+          <NavLink
+            to="/locations"
+            onClick={() => setOpen(false)}
+            className={mobileNavLinkClasses}
+          >
             Locations
-          </Link>
+          </NavLink>
 
-          <Link to="/careers" onClick={() => setOpen(false)} className="hover:text-black transition">
+          <NavLink
+            to="/careers"
+            onClick={() => setOpen(false)}
+            className={mobileNavLinkClasses}
+          >
             Careers
-          </Link>
+          </NavLink>
 
           <div className="pt-4 border-t border-gray-200 flex flex-col gap-4">
             <Link

@@ -1,18 +1,20 @@
 import React from "react";
-import starIcon from "../../assets/icons/courses/star.svg";
-import checkIcon from "../../assets/icons/home/check-icon.png";
+import starIcon from "../../assets/courses/star1.svg";
+import checkIcon from "../../assets/home/check-icon.png";
 
-import doorImg from "../../assets/icons/courses/door.png";
-import cctvImg from "../../assets/icons/courses/cctv.png";
-import firstAidImg from "../../assets/icons/courses/first-aid.png";
-import guardImg from "../../assets/icons/courses/security-guard.png";
-import closeImg from "../../assets/icons/courses/close-protection.png";
-import conflictImg from "../../assets/icons/courses/conflict.png";
+import doorImg from "../../assets/courses/door.png";
+import cctvImg from "../../assets/courses/cctv.png";
+import firstAidImg from "../../assets/courses/first-aid.png";
+import guardImg from "../../assets/courses/security-guard.png";
+import closeImg from "../../assets/courses/close-protection.png";
+import conflictImg from "../../assets/courses/conflict.png";
 
 const courses = [
   {
     title: "Door Supervisor Training",
     subtitle: "Complete SIA Door Supervisor Licence Course",
+    description:
+      "Become a certified door supervisor with our comprehensive training program. Learn conflict management, physical intervention, and legal responsibilities.",
     image: doorImg,
     rating: "4.9 (1240)",
     passRate: "96% Pass Rate",
@@ -24,12 +26,14 @@ const courses = [
       "Physical Intervention Skills",
       "Conflict Management",
       "Legal & Licensing",
-      "Venue Security Operations"
-    ]
+      "Venue Security Operations",
+    ],
   },
   {
     title: "CCTV Operator Training",
     subtitle: "Public Space Surveillance (CCTV) Licence",
+    description:
+      "Master professional surveillance techniques and obtain your CCTV operator licence. Essential for control room and monitoring roles.",
     image: cctvImg,
     rating: "4.8 (890)",
     passRate: "94% Pass Rate",
@@ -41,12 +45,14 @@ const courses = [
       "Surveillance Techniques",
       "System Operations",
       "Legal Framework",
-      "Incident Recording"
-    ]
+      "Incident Recording",
+    ],
   },
   {
     title: "First Aid at Work",
     subtitle: "Level 3 Emergency First Aid Certification",
+    description:
+      "Comprehensive emergency response training. Essential for all security professionals and workplace safety requirements.",
     image: firstAidImg,
     rating: "4.9 (2100)",
     passRate: "98% Pass Rate",
@@ -58,12 +64,14 @@ const courses = [
       "CPR & AED Training",
       "Wound Management",
       "Emergency Scenarios",
-      "HSE Certified"
-    ]
+      "HSE Certified",
+    ],
   },
   {
     title: "Security Guard Training",
     subtitle: "SIA Security Guard Licence Course",
+    description:
+      "Foundation course for aspiring security guards. Learn patrol procedures, access control, and emergency response protocols.",
     image: guardImg,
     rating: "4.7 (1560)",
     passRate: "95% Pass Rate",
@@ -75,12 +83,14 @@ const courses = [
       "Patrol Procedures",
       "Access Control",
       "Emergency Response",
-      "Report Writing"
-    ]
+      "Report Writing",
+    ],
   },
   {
     title: "Close Protection",
     subtitle: "Elite Bodyguard & Executive Protection",
+    description:
+      "Advanced training for close protection officers. High-level security for VIPs, executives, and celebrities.",
     image: closeImg,
     rating: "5 (340)",
     passRate: "92% Pass Rate",
@@ -92,12 +102,14 @@ const courses = [
       "Threat Assessment",
       "Defensive Driving",
       "Route Planning",
-      "VIP Protection"
-    ]
+      "VIP Protection",
+    ],
   },
   {
     title: "Conflict Management",
     subtitle: "De-escalation & Resolution Training",
+    description:
+      "Master conflict de-escalation techniques and communication skills. Essential for all customer-facing security roles.",
     image: conflictImg,
     rating: "4.8 (980)",
     passRate: "97% Pass Rate",
@@ -109,9 +121,9 @@ const courses = [
       "De-escalation Tactics",
       "Communication Skills",
       "Body Language",
-      "Scenario Training"
-    ]
-  }
+      "Scenario Training",
+    ],
+  },
 ];
 
 const CoursesSection = () => {
@@ -149,8 +161,9 @@ const CoursesSection = () => {
           {courses.map((course, index) => (
             <div
               key={index}
-              className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition overflow-hidden border border-gray-100"
+              className="bg-white rounded-3xl shadow-lg hover:shadow-xl transition overflow-hidden border border-gray-100 flex flex-col"
             >
+
               {/* Image */}
               <div className="relative">
                 <img
@@ -165,16 +178,11 @@ const CoursesSection = () => {
                   </div>
                 )}
 
-                <div className={`absolute top-4 right-4 ${course.badgeColor} text-white p-2 rounded-xl`}>
-                  ★
-                </div>
-
                 <div className="absolute bottom-4 left-4 flex gap-3">
                   <div className="flex items-center bg-black/70 text-white text-xs px-3 py-1 rounded-full">
                     <img src={starIcon} className="w-3 h-3 mr-1" />
                     {course.rating}
                   </div>
-
                   <div className="bg-black/70 text-white text-xs px-3 py-1 rounded-full">
                     {course.passRate}
                   </div>
@@ -182,7 +190,7 @@ const CoursesSection = () => {
               </div>
 
               {/* Content */}
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-bold text-[#1f2f3f]">
                   {course.title}
                 </h3>
@@ -191,6 +199,12 @@ const CoursesSection = () => {
                   {course.subtitle}
                 </p>
 
+                {/* Description */}
+                <p className="text-gray-600 text-sm mt-4 leading-relaxed">
+                  {course.description}
+                </p>
+
+                {/* Features */}
                 <ul className="mt-5 space-y-2">
                   {course.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
@@ -200,7 +214,8 @@ const CoursesSection = () => {
                   ))}
                 </ul>
 
-                <div className="flex justify-between items-center mt-6 pt-5 border-t">
+                {/* Bottom Section */}
+                <div className="mt-auto pt-6 border-t flex justify-between items-center">
                   <div>
                     <div className="text-sm text-gray-500">
                       {course.duration}
@@ -220,7 +235,6 @@ const CoursesSection = () => {
           ))}
 
         </div>
-
       </div>
     </section>
   );

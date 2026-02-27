@@ -6,7 +6,7 @@ import CareerEarningSection from '../components/homeComponents/CareerEarningSect
 import TestimonialsSection from '../components/homeComponents/TestimonialsSection'
 import WhyChooseSection from '../components/homeComponents/WhyChooseSection'
 import AppDownloadSection from '../components/homeComponents/AppDownloadSection'
-import Footer from '../components/homeComponents/Footer'
+
 
 export default function Home() {
   return (
@@ -20,7 +20,7 @@ export default function Home() {
       <TestimonialsSection />
       <WhyChooseSection />
       <AppDownloadSection />
-      <Footer />
+   
     </div>
     
   )
