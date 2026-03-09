@@ -6,22 +6,26 @@ import CareerEarningSection from '../components/homeComponents/CareerEarningSect
 import TestimonialsSection from '../components/homeComponents/TestimonialsSection'
 import WhyChooseSection from '../components/homeComponents/WhyChooseSection'
 import AppDownloadSection from '../components/homeComponents/AppDownloadSection'
+import TrainersSection from '../components/homeComponents/TrainersSection'
+import BlogSection from '../components/homeComponents/BlogSection'
 
 
 export default function Home() {
   return (
-    
-           <div className="">
-   
+
+    <div className="">
+
       <HeroSection />
       <HiringTrainingSection />
       <CoursesLicencesSection />
       <CareerEarningSection />
       <TestimonialsSection />
+      <TrainersSection />
+      <BlogSection />
       <WhyChooseSection />
       <AppDownloadSection />
-   
+
     </div>
-    
+
   )
 }

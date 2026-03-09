@@ -1,5 +1,5 @@
 import React from "react";
-import { Star } from "lucide-react";
+import { Quote, Star } from "lucide-react";
 
 const Stars = ({ color = "#B9FF5A" }) => (
   <div className="flex gap-1 mb-6">
@@ -17,7 +17,7 @@ const TestimonialsSection = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-[#2f3a47] mb-4">
-            Trained by Experts Who&apos;ve Done the Job
+            They've done the job. They<br /> know how to get you ready to<br />ork in security.
           </h2>
           <p className="text-lg text-gray-600">
             Real stories from real students
@@ -32,12 +32,14 @@ const TestimonialsSection = () => {
 
             <Stars />
 
-            <div className="text-[#B9FF5A] text-5xl leading-none mb-6">“</div>
+            {/* <div className="text-[#B9FF5A] text-5xl leading-none mb-6">“</div>
+            <img src={Quote} alt="" className="w-45"/> */}
+            <Quote size={48} className="text-[#B9FF5A] mb-6" />
 
             <p className="text-lg leading-relaxed text-gray-200 mb-10">
-              Ben was genuinely brilliant. He made the course fun and engaging,
+              "Ben was genuinely brilliant. He made the course fun and engaging,
               and I felt completely prepared for the exam. The same-day results
-              were amazing – I started applying for jobs that evening!
+              were amazing – I started applying for jobs that evening!"
             </p>
 
             <div className="border-t border-white/10 pt-6">
@@ -56,10 +58,10 @@ const TestimonialsSection = () => {
 
             {/* Instructor Card */}
             <div className="bg-white rounded-[28px] p-8 border border-gray-200 shadow-sm">
-              <div className="flex items-start gap-6">
-
+              <div className="flex flex-col items-start gap-6">
+<div className="flex gap-6">
                 {/* Avatar */}
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#243447] to-[#1c2a38] flex items-center justify-center text-white font-bold text-xl">
+                <div className="w-18 h-16 rounded-2xl bg-gradient-to-br from-[#243447] to-[#1c2a38] flex items-center justify-center text-white font-bold text-xl">
                   JR
                 </div>
 
@@ -67,20 +69,21 @@ const TestimonialsSection = () => {
                   <h4 className="text-xl font-semibold text-[#2f3a47]">
                     Mr. John Redfern
                   </h4>
-                  <p className="text-[#B9FF5A] font-semibold text-sm mt-1">
+                  <p className="text-[#B9FF5A] bg-gray-900 py-1 text-center rounded-2xl font-semibold text-sm mt-1">
                     US Army Veteran
                   </p>
                   <p className="text-gray-500 text-sm mb-4">
                     Lead Security Instructor
                   </p>
 
-                  <p className="text-gray-600 leading-relaxed">
+              
+                </div>
+                </div>
+    <p className="text-gray-600 leading-relaxed">
                     20+ years of real-world security experience across military
                     and civilian roles. Passionate about preparing the next
                     generation of security professionals.
                   </p>
-                </div>
-
               </div>
             </div>
 
