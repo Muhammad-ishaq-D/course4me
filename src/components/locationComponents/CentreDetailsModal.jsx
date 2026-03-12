@@ -14,7 +14,7 @@ const CentreDetailsModal = ({ centre, onClose }) => {
   if (!centre) return null;
   const [selectedCentre, setSelectedCentre] = useState(null);
   const [showBookModal, setShowBookModal] = useState(false);
-  
+
   const handleBookNow = () => {
     setSelectedCentre(centre);
     setShowBookModal(true);
@@ -103,12 +103,12 @@ const CentreDetailsModal = ({ centre, onClose }) => {
               <div className="mt-4 space-y-2 text-gray-600">
 
                 <div className="flex items-center gap-2 text-xs">
-                  <MapPin className="w-3 h-3 text-[#B9FF5A]" />
+                  <MapPin className="w-3 h-3 text-[#F15A24] " />
                   {centre.address}
                 </div>
 
                 <div className="flex items-center gap-2 text-xs">
-                  <Clock className="w-3 h-3 text-[#B9FF5A]" />
+                  <Clock className="w-3 h-3 text-[#F15A24] " />
                   {centre.hours}
                 </div>
 
@@ -142,7 +142,7 @@ const CentreDetailsModal = ({ centre, onClose }) => {
 
               {/* Buttons */}
               <div className="flex items-center gap-4 mt-6">
-                <button 
+                <button
                   onClick={handleBookNow}
                   className="flex-1 bg-[#2f3a47] text-white py-2 rounded-full font-medium hover:bg-black transition flex items-center justify-center gap-2"
                 >
@@ -160,19 +160,19 @@ const CentreDetailsModal = ({ centre, onClose }) => {
             <div>
 
               {/* Facilities */}
-{centre.facilities && centre.facilities.length > 0 && (
-  <div className="mb-5">
-    <h3 className="text-md font-semibold text-[#2f3a47] mb-4">
-      Facilities
-    </h3>
+              {centre.facilities && centre.facilities.length > 0 && (
+                <div className="mb-5">
+                  <h3 className="text-md font-semibold text-[#2f3a47] mb-4">
+                    Facilities
+                  </h3>
 
-    <ul className="text-xs text-gray-600 space-y-2">
-      {centre.facilities.map((facility, index) => (
-        <li key={index}>{facility}</li>
-      ))}
-    </ul>
-  </div>
-)}
+                  <ul className="text-xs text-gray-600 space-y-2">
+                    {centre.facilities.map((facility, index) => (
+                      <li key={index}>{facility}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Contact */}
               <div>
@@ -184,14 +184,14 @@ const CentreDetailsModal = ({ centre, onClose }) => {
 
                   {centre.phone && (
                     <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-[#B9FF5A]" />
+                      <Phone className="w-4 h-4 text-[#F15A24] " />
                       {centre.phone}
                     </div>
                   )}
 
                   {centre.email && (
                     <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-[#B9FF5A]" />
+                      <Mail className="w-4 h-4 text-[#F15A24] " />
                       {centre.email}
                     </div>
                   )}

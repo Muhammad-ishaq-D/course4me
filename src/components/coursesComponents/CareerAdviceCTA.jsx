@@ -21,7 +21,7 @@ const CareerAdviceCTA = () => {
 
           {/* Button */}
           <div className="mt-10">
-            <button className="bg-[#B9FF5A] hover:bg-[#a4e649] text-[#1f2f3f] font-semibold px-10 py-4 rounded-full text-lg shadow-lg hover:shadow-xl transition duration-300">
+            <button className="bg-[#F15A24]  hover:bg-[#a4e649] text-[#1f2f3f] font-semibold px-10 py-4 rounded-full text-lg shadow-lg hover:shadow-xl transition duration-300">
               Get Free Career Advice
             </button>
           </div>

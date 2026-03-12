@@ -28,7 +28,7 @@ const NationwideCoverage = () => {
             <div className="relative z-10 flex flex-col items-center text-center text-white">
 
               {/* Icon */}
-              <div className="w-20 h-20 bg-[#B9FF5A] rounded-full flex items-center justify-center mb-8 shadow-lg">
+              <div className="w-20 h-20 bg-[#F15A24]  rounded-full flex items-center justify-center mb-8 shadow-lg">
                 <MapPin size={36} className="text-[#2f3a47]" />
               </div>
 
@@ -43,7 +43,7 @@ const NationwideCoverage = () => {
               </p>
 
               {/* Button */}
-              <button className="mt-10 bg-[#B9FF5A] hover:bg-[#a6e64c] text-[#1f2f3f] font-semibold px-8 py-4 rounded-full shadow-lg transition">
+              <button className="mt-10 bg-[#F15A24]  hover:bg-[#a6e64c] text-[#1f2f3f] font-semibold px-8 py-4 rounded-full shadow-lg transition">
                 View Interactive Map
               </button>
 

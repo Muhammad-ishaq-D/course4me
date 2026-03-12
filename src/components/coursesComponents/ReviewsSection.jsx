@@ -69,7 +69,7 @@ const ReviewsSection = () => {
           </div>
 
           {/* Pass Rate */}
-          <div className="bg-gradient-to-br from-[#b9ff5a] to-[#9fe33f] rounded-3xl p-8 shadow-xl text-[#1f2f3f]">
+          <div className="bg-gradient-to-br from-[#F15A24]  to-[#9fe33f] rounded-3xl p-8 shadow-xl text-[#1f2f3f]">
             <div className="flex items-center gap-3 mb-6">
               <img src={passIcon} className="w-6 h-6" />
               <span className="font-semibold">Pass Rate</span>
@@ -84,239 +84,239 @@ const ReviewsSection = () => {
           </div>
 
         </div>
-{/* Testimonials Grid */}
-<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+        {/* Testimonials Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
 
-  {/* 1 - Sarah */}
-  <div className="bg-white rounded-3xl shadow-lg p-6 flex flex-col">
-    <div>
-      <div className="flex gap-1 mb-4">
-        {[...Array(5)].map((_, i) => (
-          <img key={i} src={starIcon} className="w-4 h-4" />
-        ))}
-      </div>
+          {/* 1 - Sarah */}
+          <div className="bg-white rounded-3xl shadow-lg p-6 flex flex-col">
+            <div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <img key={i} src={starIcon} className="w-4 h-4" />
+                ))}
+              </div>
 
-      <img src={quoteIcon} className="w-5 h-5 opacity-30 mb-3" />
+              <img src={quoteIcon} className="w-5 h-5 opacity-30 mb-3" />
 
-      <p className="text-gray-600 leading-relaxed">
-        I had the opportunity to take the course under excellent instruction.
-        The trainer was patient, knowledgeable, and made learning enjoyable.
-        Passed first time!
-      </p>
-    </div>
+              <p className="text-gray-600 leading-relaxed">
+                I had the opportunity to take the course under excellent instruction.
+                The trainer was patient, knowledgeable, and made learning enjoyable.
+                Passed first time!
+              </p>
+            </div>
 
-    <div className="mt-6 pt-4 border-t flex items-center gap-4">
-      <img src={review1} className="w-12 h-12 rounded-full object-cover" />
-      <div>
-        <div className="font-semibold text-[#1f2f3f]">
-          Sarah Johnson
+            <div className="mt-6 pt-4 border-t flex items-center gap-4">
+              <img src={review1} className="w-12 h-12 rounded-full object-cover" />
+              <div>
+                <div className="font-semibold text-[#1f2f3f]">
+                  Sarah Johnson
+                </div>
+                <div className="text-sm text-gray-500">
+                  Door Supervisor Training
+                </div>
+                <div className="text-xs text-gray-400">
+                  Manchester · January 2026
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          {/* 2 - James */}
+          <div className="bg-white rounded-3xl shadow-lg p-6 flex flex-col">
+            <div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <img key={i} src={starIcon} className="w-4 h-4" />
+                ))}
+              </div>
+
+              <img src={quoteIcon} className="w-5 h-5 opacity-30 mb-3" />
+
+              <p className="text-gray-600 leading-relaxed">
+                Great trainer, I am doing the door supervision course next month.
+                Very professional and thorough teaching style.
+              </p>
+            </div>
+
+            <div className="mt-6 pt-4 border-t flex items-center gap-4">
+              <img src={review2} className="w-12 h-12 rounded-full object-cover" />
+              <div>
+                <div className="font-semibold text-[#1f2f3f]">
+                  James Mitchell
+                </div>
+                <div className="text-sm text-gray-500">
+                  Security Guard Training
+                </div>
+                <div className="text-xs text-gray-400">
+                  London · February 2026
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          {/* 3 - Image Birmingham */}
+          <div className="relative rounded-3xl overflow-hidden shadow-lg">
+            <img src={DoorSupervisor} className="w-full h-[320px] object-cover" />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 text-white">
+              <div className="flex items-center gap-2 text-sm text-[#F15A24]  mb-2">
+                <img src={locationIcon} className="w-4 h-4" />
+                Birmingham
+              </div>
+              <div className="font-semibold">
+                Birmingham Door Supervisor Training – January 2026
+              </div>
+            </div>
+          </div>
+
+
+          {/* 4 - Marcus (Dark) */}
+          <div className="bg-gradient-to-br from-[#2f3a47] to-[#1f2933] text-white rounded-3xl shadow-lg p-6 flex flex-col">
+            <div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <img key={i} src={starIcon} className="w-4 h-4" />
+                ))}
+              </div>
+
+              <img src={quoteIcon} className="w-5 h-5 mb-3 opacity-70" />
+
+              <p className="text-white/90 leading-relaxed">
+                Completed the CCTV course with very professional trainers.
+                Learnt so much about surveillance law and practical techniques.
+                Highly recommended!
+              </p>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-white/10">
+              <div className="font-semibold text-[#F15A24] ">
+                Marcus Thompson
+              </div>
+              <div className="text-sm text-white/70">
+                CCTV Operator Training
+              </div>
+              <div className="text-xs text-white/50">
+                Leeds · December 2025
+              </div>
+            </div>
+          </div>
+
+
+          {/* 5 - Emma */}
+          <div className="bg-white rounded-3xl shadow-lg p-6 flex flex-col">
+            <div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <img key={i} src={starIcon} className="w-4 h-4" />
+                ))}
+              </div>
+
+              <img src={quoteIcon} className="w-5 h-5 opacity-30 mb-3" />
+
+              <p className="text-gray-600 leading-relaxed">
+                Brilliant course! The hands-on practice and realistic
+                scenarios really prepared me for real emergencies.
+                Instructor was amazing.
+              </p>
+            </div>
+
+            <div className="mt-6 pt-4 border-t flex items-center gap-4">
+              <img src={review3} className="w-12 h-12 rounded-full object-cover" />
+              <div>
+                <div className="font-semibold text-[#1f2f3f]">
+                  Emma Wilson
+                </div>
+                <div className="text-sm text-gray-500">
+                  First Aid at Work
+                </div>
+                <div className="text-xs text-gray-400">
+                  Bristol · January 2026
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          {/* 6 - Image Manchester */}
+          <div className="relative rounded-3xl overflow-hidden shadow-lg">
+            <img src={SecurityTraining} className="w-full h-[320px] object-cover" />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 text-white">
+              <div className="flex items-center gap-2 text-sm text-[#F15A24]  mb-2">
+                <img src={locationIcon} className="w-4 h-4" />
+                Manchester
+              </div>
+              <div className="font-semibold">
+                Security Guard Training Class – August 2025
+              </div>
+            </div>
+          </div>
+
+
+          {/* 7 - David (Dark) */}
+          <div className="bg-gradient-to-br from-[#2f3a47] to-[#1f2933] text-white rounded-3xl shadow-lg p-6 flex flex-col">
+            <div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <img key={i} src={starIcon} className="w-4 h-4" />
+                ))}
+              </div>
+
+              <img src={quoteIcon} className="w-5 h-5 mb-3 opacity-70" />
+
+              <p className="text-white/90 leading-relaxed">
+                Intensive and worth every penny. The defensive driving and
+                threat assessment modules were exceptional.
+                Now working with high-profile clients.
+              </p>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-white/10">
+              <div className="font-semibold text-[#F15A24] ">
+                David Chen
+              </div>
+              <div className="text-sm text-white/70">
+                Close Protection
+              </div>
+              <div className="text-xs text-white/50">
+                London · November 2025
+              </div>
+            </div>
+          </div>
+
+
+          {/* 8 - Lisa (Dark) */}
+          <div className="bg-gradient-to-br from-[#2f3a47] to-[#1f2933] text-white rounded-3xl shadow-lg p-6 flex flex-col">
+            <div>
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <img key={i} src={starIcon} className="w-4 h-4" />
+                ))}
+              </div>
+
+              <img src={quoteIcon} className="w-5 h-5 mb-3 opacity-70" />
+
+              <p className="text-white/90 leading-relaxed">
+                The conflict de-escalation training has been invaluable
+                in my daily work. I feel much more confident handling
+                difficult situations professionally.
+              </p>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-white/10">
+              <div className="font-semibold text-[#F15A24] ">
+                Lisa Patel
+              </div>
+              <div className="text-sm text-white/70">
+                Conflict Management
+              </div>
+              <div className="text-xs text-white/50">
+                Birmingham · February 2026
+              </div>
+            </div>
+          </div>
+
         </div>
-        <div className="text-sm text-gray-500">
-          Door Supervisor Training
-        </div>
-        <div className="text-xs text-gray-400">
-          Manchester · January 2026
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  {/* 2 - James */}
-  <div className="bg-white rounded-3xl shadow-lg p-6 flex flex-col">
-    <div>
-      <div className="flex gap-1 mb-4">
-        {[...Array(5)].map((_, i) => (
-          <img key={i} src={starIcon} className="w-4 h-4" />
-        ))}
-      </div>
-
-      <img src={quoteIcon} className="w-5 h-5 opacity-30 mb-3" />
-
-      <p className="text-gray-600 leading-relaxed">
-        Great trainer, I am doing the door supervision course next month.
-        Very professional and thorough teaching style.
-      </p>
-    </div>
-
-    <div className="mt-6 pt-4 border-t flex items-center gap-4">
-      <img src={review2} className="w-12 h-12 rounded-full object-cover" />
-      <div>
-        <div className="font-semibold text-[#1f2f3f]">
-          James Mitchell
-        </div>
-        <div className="text-sm text-gray-500">
-          Security Guard Training
-        </div>
-        <div className="text-xs text-gray-400">
-          London · February 2026
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  {/* 3 - Image Birmingham */}
-  <div className="relative rounded-3xl overflow-hidden shadow-lg">
-    <img src={DoorSupervisor} className="w-full h-[320px] object-cover" />
-    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 text-white">
-      <div className="flex items-center gap-2 text-sm text-[#B9FF5A] mb-2">
-        <img src={locationIcon} className="w-4 h-4" />
-        Birmingham
-      </div>
-      <div className="font-semibold">
-        Birmingham Door Supervisor Training – January 2026
-      </div>
-    </div>
-  </div>
-
-
-  {/* 4 - Marcus (Dark) */}
-  <div className="bg-gradient-to-br from-[#2f3a47] to-[#1f2933] text-white rounded-3xl shadow-lg p-6 flex flex-col">
-    <div>
-      <div className="flex gap-1 mb-4">
-        {[...Array(5)].map((_, i) => (
-          <img key={i} src={starIcon} className="w-4 h-4" />
-        ))}
-      </div>
-
-      <img src={quoteIcon} className="w-5 h-5 mb-3 opacity-70" />
-
-      <p className="text-white/90 leading-relaxed">
-        Completed the CCTV course with very professional trainers.
-        Learnt so much about surveillance law and practical techniques.
-        Highly recommended!
-      </p>
-    </div>
-
-    <div className="mt-6 pt-4 border-t border-white/10">
-      <div className="font-semibold text-[#B9FF5A]">
-        Marcus Thompson
-      </div>
-      <div className="text-sm text-white/70">
-        CCTV Operator Training
-      </div>
-      <div className="text-xs text-white/50">
-        Leeds · December 2025
-      </div>
-    </div>
-  </div>
-
-
-  {/* 5 - Emma */}
-  <div className="bg-white rounded-3xl shadow-lg p-6 flex flex-col">
-    <div>
-      <div className="flex gap-1 mb-4">
-        {[...Array(5)].map((_, i) => (
-          <img key={i} src={starIcon} className="w-4 h-4" />
-        ))}
-      </div>
-
-      <img src={quoteIcon} className="w-5 h-5 opacity-30 mb-3" />
-
-      <p className="text-gray-600 leading-relaxed">
-        Brilliant course! The hands-on practice and realistic
-        scenarios really prepared me for real emergencies.
-        Instructor was amazing.
-      </p>
-    </div>
-
-    <div className="mt-6 pt-4 border-t flex items-center gap-4">
-      <img src={review3} className="w-12 h-12 rounded-full object-cover" />
-      <div>
-        <div className="font-semibold text-[#1f2f3f]">
-          Emma Wilson
-        </div>
-        <div className="text-sm text-gray-500">
-          First Aid at Work
-        </div>
-        <div className="text-xs text-gray-400">
-          Bristol · January 2026
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  {/* 6 - Image Manchester */}
-  <div className="relative rounded-3xl overflow-hidden shadow-lg">
-    <img src={SecurityTraining} className="w-full h-[320px] object-cover" />
-    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 text-white">
-      <div className="flex items-center gap-2 text-sm text-[#B9FF5A] mb-2">
-        <img src={locationIcon} className="w-4 h-4" />
-        Manchester
-      </div>
-      <div className="font-semibold">
-        Security Guard Training Class – August 2025
-      </div>
-    </div>
-  </div>
-
-
-  {/* 7 - David (Dark) */}
-  <div className="bg-gradient-to-br from-[#2f3a47] to-[#1f2933] text-white rounded-3xl shadow-lg p-6 flex flex-col">
-    <div>
-      <div className="flex gap-1 mb-4">
-        {[...Array(5)].map((_, i) => (
-          <img key={i} src={starIcon} className="w-4 h-4" />
-        ))}
-      </div>
-
-      <img src={quoteIcon} className="w-5 h-5 mb-3 opacity-70" />
-
-      <p className="text-white/90 leading-relaxed">
-        Intensive and worth every penny. The defensive driving and
-        threat assessment modules were exceptional.
-        Now working with high-profile clients.
-      </p>
-    </div>
-
-    <div className="mt-6 pt-4 border-t border-white/10">
-      <div className="font-semibold text-[#B9FF5A]">
-        David Chen
-      </div>
-      <div className="text-sm text-white/70">
-        Close Protection
-      </div>
-      <div className="text-xs text-white/50">
-        London · November 2025
-      </div>
-    </div>
-  </div>
-
-
-  {/* 8 - Lisa (Dark) */}
-  <div className="bg-gradient-to-br from-[#2f3a47] to-[#1f2933] text-white rounded-3xl shadow-lg p-6 flex flex-col">
-    <div>
-      <div className="flex gap-1 mb-4">
-        {[...Array(5)].map((_, i) => (
-          <img key={i} src={starIcon} className="w-4 h-4" />
-        ))}
-      </div>
-
-      <img src={quoteIcon} className="w-5 h-5 mb-3 opacity-70" />
-
-      <p className="text-white/90 leading-relaxed">
-        The conflict de-escalation training has been invaluable
-        in my daily work. I feel much more confident handling
-        difficult situations professionally.
-      </p>
-    </div>
-
-    <div className="mt-6 pt-4 border-t border-white/10">
-      <div className="font-semibold text-[#B9FF5A]">
-        Lisa Patel
-      </div>
-      <div className="text-sm text-white/70">
-        Conflict Management
-      </div>
-      <div className="text-xs text-white/50">
-        Birmingham · February 2026
-      </div>
-    </div>
-  </div>
-
-</div>
 
         {/* CTA */}
         <div className="text-center mt-16">

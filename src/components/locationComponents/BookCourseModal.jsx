@@ -74,7 +74,7 @@ const BookCourseModal = ({ centre, onClose, showModal }) => {
               <div className="mt-6 bg-[#f7f9fb] rounded-2xl p-5 space-y-5">
 
                 <div className="flex gap-3">
-                  <MapPin className="w-5 h-5 text-[#B9FF5A]" />
+                  <MapPin className="w-5 h-5 text-[#F15A24] " />
                   <div>
                     <div className="text-xs text-gray-400 font-semibold">
                       LOCATION
@@ -86,7 +86,7 @@ const BookCourseModal = ({ centre, onClose, showModal }) => {
                 </div>
 
                 <div className="flex gap-3">
-                  <Clock className="w-5 h-5 text-[#B9FF5A]" />
+                  <Clock className="w-5 h-5 text-[#F15A24] " />
                   <div>
                     <div className="text-xs text-gray-400 font-semibold">
                       OPENING HOURS
@@ -98,7 +98,7 @@ const BookCourseModal = ({ centre, onClose, showModal }) => {
                 </div>
 
                 <div className="flex gap-3">
-                  <Calendar className="w-5 h-5 text-[#B9FF5A]" />
+                  <Calendar className="w-5 h-5 text-[#F15A24] " />
                   <div>
                     <div className="text-xs text-gray-400 font-semibold">
                       AVAILABILITY
@@ -115,12 +115,12 @@ const BookCourseModal = ({ centre, onClose, showModal }) => {
                   </div>
 
                   <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <Phone className="w-4 h-4 text-[#B9FF5A]" />
+                    <Phone className="w-4 h-4 text-[#F15A24] " />
                     {centre.phone}
                   </div>
 
                   <div className="flex items-center gap-2 text-sm text-gray-700">
-                    <Mail className="w-4 h-4 text-[#B9FF5A]" />
+                    <Mail className="w-4 h-4 text-[#F15A24] " />
                     {centre.email}
                   </div>
                 </div>
@@ -140,22 +140,22 @@ const BookCourseModal = ({ centre, onClose, showModal }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input
                     placeholder="First Name *"
-                    className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B9FF5A]"
+                    className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#F15A24] "
                   />
                   <input
                     placeholder="Last Name *"
-                    className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B9FF5A]"
+                    className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#F15A24] "
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                   <input
                     placeholder="Email Address *"
-                    className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B9FF5A]"
+                    className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#F15A24] "
                   />
                   <input
                     placeholder="Phone Number *"
-                    className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B9FF5A]"
+                    className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#F15A24] "
                   />
                 </div>
               </div>
@@ -167,7 +167,7 @@ const BookCourseModal = ({ centre, onClose, showModal }) => {
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <select className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B9FF5A]">
+                  <select className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#F15A24] ">
                     <option>Select Course *</option>
                     {centre.courses.map((course, i) => (
                       <option key={i}>{course}</option>
@@ -176,14 +176,14 @@ const BookCourseModal = ({ centre, onClose, showModal }) => {
 
                   <input
                     type="date"
-                    className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B9FF5A]"
+                    className="border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#F15A24] "
                   />
                 </div>
 
                 <textarea
                   rows="4"
                   placeholder="Additional Information (Optional)"
-                  className="mt-4 w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#B9FF5A]"
+                  className="mt-4 w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#F15A24] "
                 />
               </div>
 

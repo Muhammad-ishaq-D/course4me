@@ -152,7 +152,7 @@ const centres = [
 
 const AllTrainingCentres = () => {
 
-    const [selectedCentre, setSelectedCentre] = useState(null);
+  const [selectedCentre, setSelectedCentre] = useState(null);
 
   return (
     <section className="bg-[#f3f6f9] py-24 px-6 lg:px-12">
@@ -208,7 +208,7 @@ const AllTrainingCentres = () => {
 
                 {/* Postcode */}
                 <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                  <MapPin className="w-4 h-4 text-[#B9FF5A]" />
+                  <MapPin className="w-4 h-4 text-[#F15A24] " />
                   {centre.postcode}
                 </div>
 
@@ -235,12 +235,12 @@ const AllTrainingCentres = () => {
                 </div>
 
                 {/* Button */}
-<button
-  onClick={() => setSelectedCentre(centre)}
-  className="mt-auto bg-[#2f3a47] text-white py-3 rounded-full font-medium hover:bg-black transition"
->
-  View Details →
-</button>
+                <button
+                  onClick={() => setSelectedCentre(centre)}
+                  className="mt-auto bg-[#2f3a47] text-white py-3 rounded-full font-medium hover:bg-black transition"
+                >
+                  View Details →
+                </button>
 
               </div>
             </div>
@@ -250,11 +250,11 @@ const AllTrainingCentres = () => {
 
       </div>
       {selectedCentre && (
-  <CentreDetailsModal
-    centre={selectedCentre}
-    onClose={() => setSelectedCentre(null)}
-  />
-)}
+        <CentreDetailsModal
+          centre={selectedCentre}
+          onClose={() => setSelectedCentre(null)}
+        />
+      )}
     </section>
   );
 };

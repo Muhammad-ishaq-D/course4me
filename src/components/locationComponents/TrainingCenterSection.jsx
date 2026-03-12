@@ -14,7 +14,7 @@ const TrainingCentresSection = () => {
     <section className="relative overflow-hidden bg-gradient-to-br from-[#243443] via-[#1f2f3f] to-[#16222c] py-24 px-6 lg:px-12">
 
       {/* Background Glow */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#B9FF5A] opacity-10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#F15A24]  opacity-10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -22,7 +22,7 @@ const TrainingCentresSection = () => {
         <div>
 
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-[#B9FF5A1A] border border-[#B9FF5A] text-[#B9FF5A] px-4 py-2 rounded-full text-sm font-semibold mb-8">
+          <div className="inline-flex items-center gap-2 bg-[#F15A241A] border border-[#F15A24]  text-[#F15A24]  px-4 py-2 rounded-full text-sm font-semibold mb-8">
             <MapPin size={16} />
             Find Your Nearest Centre
           </div>
@@ -51,7 +51,7 @@ const TrainingCentresSection = () => {
               />
             </div>
 
-            <button className="bg-[#B9FF5A] hover:bg-[#a4e649] text-[#1f2f3f] font-semibold px-6 py-3 rounded-xl transition">
+            <button className="bg-[#F15A24]  hover:bg-[#a4e649] text-[#1f2f3f] font-semibold px-6 py-3 rounded-xl transition">
               Search
             </button>
           </div>

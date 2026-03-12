@@ -8,6 +8,9 @@ import WhyChooseSection from '../components/homeComponents/WhyChooseSection'
 import AppDownloadSection from '../components/homeComponents/AppDownloadSection'
 import TrainersSection from '../components/homeComponents/TrainersSection'
 import BlogSection from '../components/homeComponents/BlogSection'
+import TrainingPreviewSection from '../components/homeComponents/TrainingPreviewSection'
+import VideoTestimonials from '../components/homeComponents/VideoTestimonials'
+import AppPromotionSection from '../components/homeComponents/AppPromotionSection'
 
 
 export default function Home() {
@@ -18,11 +21,14 @@ export default function Home() {
       <HeroSection />
       <HiringTrainingSection />
       <CoursesLicencesSection />
+      <TrainingPreviewSection />
       <CareerEarningSection />
+      <VideoTestimonials />
       <TestimonialsSection />
       <TrainersSection />
       <BlogSection />
       <WhyChooseSection />
+      <AppPromotionSection />
       <AppDownloadSection />
 
     </div>

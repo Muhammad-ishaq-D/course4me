@@ -1,28 +1,28 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import Logo from "../../assets/Logo.png";
+import Logo from "../../assets/Logo.svg";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
 
   const navLinkClasses = ({ isActive }) =>
     isActive
-      ? "text-[#B9FF5A] font-semibold"
+      ? "text-[#F15A24]  font-semibold"
       : "text-[#2f3a47] font-medium hover:text-black transition";
 
   const mobileNavLinkClasses = ({ isActive }) =>
     isActive
-      ? "text-[#B9FF5A] font-semibold"
+      ? "text-[#F15A24]  font-semibold"
       : "hover:text-black transition";
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
+    <header className="fixed top-10 left-0 w-full z-50 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-[72px]">
 
           {/* LOGO */}
           <Link to="/">
-            <img src={Logo} alt="courses4me" className="w-26 md:w-58" />
+            <img src={Logo} alt="courses4me" className="w-26 md:w-48" />
           </Link>
 
           {/* DESKTOP NAV */}
@@ -52,14 +52,14 @@ const Header = () => {
           <div className="hidden lg:flex items-center gap-6">
             <Link
               to="/signin"
-              className="text-[#2f3a47] text-[18px] font-medium hover:text-black transition"
+              className="text-[#00A3F4] text-[18px] font-medium hover:text-black transition"
             >
               Sign In
             </Link>
 
             <Link
               to="/courses"
-              className="bg-[#B9FF5A] text-[#2f3a47] font-semibold px-6 py-2.5 rounded-full shadow-md hover:brightness-95 transition"
+              className="bg-[#F15A24]  text-[#2f3a47] font-semibold px-6 py-2.5 rounded-full shadow-md hover:brightness-95 transition"
             >
               Find Course
             </Link>
@@ -71,19 +71,16 @@ const Header = () => {
             className="lg:hidden flex flex-col justify-center items-center w-8 h-8 relative"
           >
             <span
-              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${
-                open ? "rotate-45 translate-y-1.5" : ""
-              }`}
+              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${open ? "rotate-45 translate-y-1.5" : ""
+                }`}
             />
             <span
-              className={`h-0.5 w-6 bg-[#2f3a47] rounded my-1 transition-all duration-300 ${
-                open ? "opacity-0" : ""
-              }`}
+              className={`h-0.5 w-6 bg-[#2f3a47] rounded my-1 transition-all duration-300 ${open ? "opacity-0" : ""
+                }`}
             />
             <span
-              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${
-                open ? "-rotate-45 -translate-y-1.5" : ""
-              }`}
+              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${open ? "-rotate-45 -translate-y-1.5" : ""
+                }`}
             />
           </button>
         </div>
@@ -91,9 +88,8 @@ const Header = () => {
 
       {/* MOBILE MENU */}
       <div
-        className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-lg transition-all duration-300 overflow-hidden ${
-          open ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-lg transition-all duration-300 overflow-hidden ${open ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="flex flex-col px-6 py-6 space-y-5 text-[#2f3a47]">
 
@@ -142,7 +138,7 @@ const Header = () => {
             <Link
               to="/signin"
               onClick={() => setOpen(false)}
-              className="text-left hover:text-black transition"
+              className="text-left text-[#00A3F4] hover:text-[#43bcf8] transition"
             >
               Sign In
             </Link>
@@ -150,7 +146,7 @@ const Header = () => {
             <Link
               to="/courses"
               onClick={() => setOpen(false)}
-              className="bg-[#B9FF5A] text-[#2f3a47] font-semibold py-3 rounded-full shadow-md hover:brightness-95 transition text-center"
+              className="bg-[#F15A24]  text-[#2f3a47] font-semibold py-3 rounded-full shadow-md hover:brightness-95 transition text-center"
             >
               Find Course
             </Link>

@@ -71,17 +71,15 @@ const FAQSection = () => {
 
                   <ChevronDown
                     size={20}
-                    className={`text-[#B9FF5A] transition-transform duration-300 ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
+                    className={`text-[#F15A24]  transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
 
                 {/* Answer */}
                 <div
-                  className={`px-8 overflow-hidden transition-all duration-300 ${
-                    isOpen ? "max-h-96 pb-8 opacity-100" : "max-h-0 opacity-0"
-                  }`}
+                  className={`px-8 overflow-hidden transition-all duration-300 ${isOpen ? "max-h-96 pb-8 opacity-100" : "max-h-0 opacity-0"
+                    }`}
                 >
                   <p className="text-gray-600 leading-relaxed">
                     {item.answer}

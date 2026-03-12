@@ -3,7 +3,8 @@ import {
     MapPin,
     Award,
     Users,
-    ShieldCheck
+    ShieldCheck,
+    ChevronRight,
 } from "lucide-react";
 import John from "../../assets/home/john.png";
 import Sarah from "../../assets/home/sarah.png";
@@ -85,48 +86,47 @@ const trainers = [
 
 export default function TrainersSection() {
     return (
-        <section className="bg-gradient-to-b from-[#F9FAFB] to-[#FFFFFF] text-black py-20 px-6">
+        <section className="bg-white text-[#1A1A1A] py-24 px-6">
             <div className="max-w-7xl mx-auto">
 
-                {/* Badge */}
-                <div className="flex justify-center mb-4">
-                    <span className="flex items-center gap-2 bg-black text-[#B9FF5A] px-4 py-1 rounded-full text-sm">
-                        <Users size={16} /> OUR TEAM
+                <div className="flex justify-center mb-6">
+                    <span className="flex items-center gap-2 bg-[#1A1A1A] text-white px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase shadow-md">
+                        <Users size={16} className="text-[#00A3FF]" /> OUR TEAM
                     </span>
                 </div>
 
                 {/* Heading */}
-                <h2 className="text-center text-4xl font-bold mb-4">
+                <h2 className="text-center text-[44px] md:text-[52px] font-bold mb-6 tracking-tight">
                     Meet Our Trainers
                 </h2>
 
-                <p className="text-center text-gray-700 max-w-2xl mx-auto mb-8">
+                <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 text-lg font-medium">
                     Industry veterans and certified professionals who are passionate
                     about launching your career in security. Every trainer is 5-star rated.
                 </p>
 
                 {/* Stats */}
-                <div className="flex justify-center gap-4 flex-wrap mb-14">
+                <div className="flex justify-center gap-4 flex-wrap mb-20">
 
-                    <div className="flex items-center gap-2 bg-white text-black px-5 py-2 rounded-full text-sm font-medium">
-                        <Award className="text-[#B9FF5A]" size={16} />
+                    <div className="flex items-center gap-2 bg-white text-[#1A1A1A] border border-gray-100 px-6 py-2.5 rounded-full text-sm font-bold shadow-sm">
+                        <Award className="text-[#00A3FF] " size={18} />
                         80+ Years Combined Experience
                     </div>
 
-                    <div className="flex items-center gap-2 bg-white text-black px-5 py-2 rounded-full text-sm font-medium">
-                        <Star className="text-[#B9FF5A]" size={16} />
+                    <div className="flex items-center gap-2 bg-white text-[#1A1A1A] border border-gray-100 px-6 py-2.5 rounded-full text-sm font-bold shadow-sm">
+                        <Star className="text-[#FF5421] " size={18} fill="#FF5421" />
                         4.9 Average Rating
                     </div>
 
-                    <div className="flex items-center gap-2 bg-white text-black px-5 py-2 rounded-full text-sm font-medium">
-                        <Users className="text-[#B9FF5A]" size={16} />
+                    <div className="flex items-center gap-2 bg-white text-[#1A1A1A] border border-gray-100 px-6 py-2.5 rounded-full text-sm font-bold shadow-sm">
+                        <Users className="text-[#00A3FF] " size={18} />
                         5,000+ Reviews
                     </div>
 
                 </div>
 
                 {/* Trainer Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
 
                     {trainers.map((trainer, i) => (
                         <TrainerCard key={i} trainer={trainer} />
@@ -140,10 +140,10 @@ export default function TrainersSection() {
 
 function TrainerCard({ trainer }) {
     return (
-        <div className="bg-white text-black rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-white text-[#1A1A1A] rounded-[32px] overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:shadow-[0_40px_80px_rgba(0,0,0,0.1)] transition-all duration-300">
 
             {/* Image */}
-            <div className="relative h-64">
+            <div className="relative h-72">
 
                 <img
                     src={trainer.image}
@@ -152,59 +152,60 @@ function TrainerCard({ trainer }) {
                 />
 
                 {/* Badge */}
-                <span className="absolute top-4 left-4 bg-[#B9FF5A] text-black text-xs font-semibold px-3 py-1 rounded-full">
+                <span className="absolute top-5 left-5 bg-[#00A3FF] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-lg flex items-center gap-1.5">
+                    <ShieldCheck size={12} />
                     {trainer.badge}
                 </span>
 
                 {/* Rating */}
-                <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full flex items-center gap-1 text-sm">
-                    <Star size={14} className="text-[#B9FF5A] fill-[#B9FF5A]" />
+                <div className="absolute top-5 right-5 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-xs font-bold shadow-md">
+                    <Star size={14} className="text-[#FF5421] fill-[#FF5421] " />
                     {trainer.rating}
                 </div>
 
                 {/* Name Overlay */}
-                <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent p-4 text-white">
-                    <h3 className="font-semibold text-lg">{trainer.name}</h3>
-                    <p className="text-sm text-gray-200">{trainer.role}</p>
+                <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
+                    <h3 className="font-bold text-xl mb-0.5">{trainer.name}</h3>
+                    <p className="text-sm text-gray-300 font-medium">{trainer.role}</p>
                 </div>
             </div>
 
             {/* Content */}
-            <div className="p-6">
+            <div className="p-8">
 
-                <h4 className="font-semibold mb-2">{trainer.title}</h4>
+                <h4 className="font-bold text-lg mb-3 tracking-tight">{trainer.title}</h4>
 
                 {/* Stars */}
-                <div className="flex items-center gap-1 text-[#B9FF5A] mb-3">
+                <div className="flex items-center gap-1.5 text-[#FF5421]  mb-4">
                     {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} size={16} fill="#B9FF5A" />
+                        <Star key={i} size={16} fill="#FF5421" stroke="none" />
                     ))}
-                    <span className="text-gray-500 text-sm ml-2">
-                        ({trainer.reviews})
+                    <span className="text-gray-500 text-xs font-bold ml-2">
+                        ({trainer.reviews} reviews)
                     </span>
                 </div>
 
                 {/* Experience + Locations */}
-                <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                <div className="flex items-center gap-6 text-sm text-gray-500 font-bold mb-6">
 
-                    <div className="flex items-center gap-1">
-                        <ShieldCheck size={16} />
+                    <div className="flex items-center gap-2">
+                        <Award size={18} className="text-[#00A3FF]" />
                         {trainer.experience}
                     </div>
 
-                    <div className="flex items-center gap-1">
-                        <MapPin size={16} />
+                    <div className="flex items-center gap-2">
+                        <MapPin size={18} className="text-[#00A3FF]" />
                         3 locations
                     </div>
 
                 </div>
 
                 {/* City tags */}
-                <div className="flex flex-wrap gap-2 mb-5">
+                <div className="flex flex-wrap gap-2.5 mb-8">
                     {trainer.locations.map((city, i) => (
                         <span
                             key={i}
-                            className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs"
+                            className="bg-[#F3F4F6] text-gray-600 px-4 py-1.5 rounded-full text-[11px] font-bold border border-gray-100"
                         >
                             {city}
                         </span>
@@ -212,8 +213,9 @@ function TrainerCard({ trainer }) {
                 </div>
 
                 {/* Button */}
-                <button className="w-full border border-gray-300 rounded-full py-3 text-sm font-medium hover:bg-gray-50 transition">
-                    View Full Profile →
+                <button className="group w-full border-2 border-gray-100 rounded-full py-3.5 text-sm font-bold text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 flex items-center justify-center gap-2">
+                    View Full Profile
+                    <ChevronRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </button>
             </div>
         </div>

@@ -5,15 +5,17 @@ import AppRoutes from './routes/AppRoutes'
 import Header from './components/shared/Header'
 import { BrowserRouter } from 'react-router-dom'
 import Footer from './components/shared/Footer'
+import TopNav from './components/shared/TopNav'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <BrowserRouter>
-    <Header />
-    <AppRoutes />
-   <Footer />
+      <TopNav />
+      <Header />
+      <AppRoutes />
+      <Footer />
     </BrowserRouter>
   )
 }

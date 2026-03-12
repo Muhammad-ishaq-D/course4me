@@ -14,7 +14,7 @@ const CareerCTA = () => {
       <div className="relative max-w-4xl mx-auto px-6 py-28 text-center">
 
         {/* Icon Circle */}
-        <div className="w-20 h-20 mx-auto rounded-full bg-[#b9ff5a] flex items-center justify-center shadow-[0_10px_40px_rgba(185,255,90,0.4)]">
+        <div className="w-20 h-20 mx-auto rounded-full bg-[#F15A24]  flex items-center justify-center shadow-[0_10px_40px_rgba(185,255,90,0.4)]">
           <Phone size={28} className="text-[#0f2234]" />
         </div>
 
@@ -33,7 +33,7 @@ const CareerCTA = () => {
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
 
           {/* Primary Button */}
-          <button className="bg-[#b9ff5a] text-[#0f2234] font-semibold px-8 py-4 rounded-full shadow-[0_8px_25px_rgba(185,255,90,0.4)] hover:brightness-105 transition flex items-center gap-3">
+          <button className="bg-[#F15A24]  text-[#0f2234] font-semibold px-8 py-4 rounded-full shadow-[0_8px_25px_rgba(185,255,90,0.4)] hover:brightness-105 transition flex items-center gap-3">
             <Phone size={18} />
             Call 0800 XXX XXXX
           </button>

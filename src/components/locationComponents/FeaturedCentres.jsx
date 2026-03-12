@@ -77,7 +77,7 @@ const FeaturedCentres = () => {
 
         {/* Heading */}
         <div className="flex items-center gap-3 mb-12">
-          <Sparkles className="w-6 h-6 text-[#B9FF5A]" />
+          <Sparkles className="w-6 h-6 text-[#F15A24] " />
           <h2 className="text-3xl md:text-4xl font-bold text-[#2f3a47]">
             Featured Training Centres
           </h2>
@@ -101,7 +101,7 @@ const FeaturedCentres = () => {
                 />
 
                 {/* Featured Badge */}
-                <div className="absolute top-4 left-4 bg-[#B9FF5A] text-[#1f2f3f] text-xs font-semibold px-3 py-1 rounded-full">
+                <div className="absolute top-4 left-4 bg-[#F15A24]  text-[#1f2f3f] text-xs font-semibold px-3 py-1 rounded-full">
                   Featured
                 </div>
 
@@ -127,13 +127,13 @@ const FeaturedCentres = () => {
 
                 {/* Address */}
                 <div className="flex items-start gap-2 text-sm text-gray-600 mb-3">
-                  <MapPin className="w-4 h-4 text-[#B9FF5A] mt-1" />
+                  <MapPin className="w-4 h-4 text-[#F15A24]  mt-1" />
                   {centre.address}
                 </div>
 
                 {/* Hours */}
                 <div className="flex items-start gap-2 text-sm text-gray-600 mb-3">
-                  <Clock className="w-4 h-4 text-[#B9FF5A] mt-1" />
+                  <Clock className="w-4 h-4 text-[#F15A24]  mt-1" />
                   {centre.hours}
                 </div>
 
@@ -166,9 +166,9 @@ const FeaturedCentres = () => {
 
                 {/* Buttons */}
                 <div className="mt-auto flex items-center gap-4">
-                  <button   
-                  onClick={() => setSelectedCentre(centre)}
- className="flex-1 bg-[#2f3a47] text-white py-3 rounded-full font-medium hover:bg-black transition flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => setSelectedCentre(centre)}
+                    className="flex-1 bg-[#2f3a47] text-white py-3 rounded-full font-medium hover:bg-black transition flex items-center justify-center gap-2">
                     Book Now →
                   </button>
 
@@ -183,9 +183,9 @@ const FeaturedCentres = () => {
 
         </div>
         <BookCourseModal
-  centre={selectedCentre}
-  onClose={() => setSelectedCentre(null)}
-/>
+          centre={selectedCentre}
+          onClose={() => setSelectedCentre(null)}
+        />
       </div>
     </section>
   );

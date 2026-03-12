@@ -1,19 +1,20 @@
 import React from "react";
 import checkIcon from "../../assets/home/check-icon.png";
 import arrowUpIcon from "../../assets/home/arrow-up-curve.png";
+import { CheckCircle, TrendingUp } from "lucide-react";
 
 const CoursesHero = () => {
   return (
     <section className="relative bg-gradient-to-br from-[#1f2f3f] via-[#172535] to-[#0f1e2c] overflow-hidden">
 
       {/* Background Glow */}
-      <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-[#B9FF5A] opacity-10 blur-[140px] rounded-full pointer-events-none" />
+      <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-[#F15A24]  opacity-10 blur-[140px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-24 lg:py-32 relative z-10">
 
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 bg-[#B9FF5A1A] border border-[#B9FF5A66] text-[#B9FF5A] px-5 py-2 rounded-full text-sm font-medium mb-10">
-          <img src={arrowUpIcon} alt="" className="w-4 h-4" />
+        <div className="inline-flex items-center gap-2 bg-[#F15A241A] border border-[#F15A2466] text-[#F15A24]  px-5 py-2 rounded-full text-sm font-medium mb-10">
+          <TrendingUp className="w-4 h-4 text-[#F15A24]" />
           SIA Approved Training Centre
         </div>
 
@@ -35,8 +36,8 @@ const CoursesHero = () => {
         <div className="mt-12 flex flex-wrap gap-10 text-gray-200">
 
           <div className="flex items-center gap-3">
-            <div className="w-6 h-6 rounded-full bg-[#B9FF5A] flex items-center justify-center">
-              <img src={checkIcon} alt="" className="w-3 h-3" />
+            <div className="w-6 h-6 rounded-full bg-[#F15A2433]  flex items-center justify-center">
+              <CheckCircle className="w-3 h-3 text-[#F15A24]" />
             </div>
             <span className="text-base font-medium">
               95% Average Pass Rate
@@ -44,8 +45,8 @@ const CoursesHero = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="w-6 h-6 rounded-full bg-[#B9FF5A] flex items-center justify-center">
-              <img src={checkIcon} alt="" className="w-3 h-3" />
+            <div className="w-6 h-6 rounded-full bg-[#F15A2433]  flex items-center justify-center">
+              <CheckCircle className="w-3 h-3 text-[#F15A24]" />
             </div>
             <span className="text-base font-medium">
               Same Day Results
@@ -53,8 +54,8 @@ const CoursesHero = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="w-6 h-6 rounded-full bg-[#B9FF5A] flex items-center justify-center">
-              <img src={checkIcon} alt="" className="w-3 h-3" />
+            <div className="w-6 h-6 rounded-full bg-[#F15A2433]  flex items-center justify-center">
+              <CheckCircle className="w-3 h-3 text-[#F15A24]" />
             </div>
             <span className="text-base font-medium">
               85+ UK Locations

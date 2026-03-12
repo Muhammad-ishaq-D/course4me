@@ -1,110 +1,112 @@
 import React from "react";
 import { Quote, Star } from "lucide-react";
 
-const Stars = ({ color = "#B9FF5A" }) => (
-  <div className="flex gap-1 mb-6">
+const Stars = ({ color = "#FF5421" }) => (
+  <div className="flex gap-1">
     {[...Array(5)].map((_, i) => (
-      <Star key={i} size={18} fill={color} stroke={color} />
+      <Star key={i} size={16} fill={color} stroke={color} />
     ))}
   </div>
 );
 
 const TestimonialsSection = () => {
   return (
-    <section className="bg-[#f6f7f9] py-24 font-sans">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section className="bg-white py-24 font-sans">
+      <div className="max-w-[1240px] mx-auto px-6 lg:px-8">
 
         {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#2f3a47] mb-4">
-            They've done the job. They<br /> know how to get you ready to<br />ork in security.
+        <div className="text-center mb-20">
+          <h2 className="text-[44px] md:text-[56px] font-bold text-[#1A1A1A] mb-5 leading-[1.05] tracking-tight">
+            They've done the job. They <br className="hidden md:block" />
+            know how to get you ready <br className="hidden md:block" />
+            to work in security.
           </h2>
-          <p className="text-lg text-gray-600">
-            Real stories from real students
+          <p className="text-gray-500 text-base sm:text-lg font-medium">
+            Real stories from real students and instructors
           </p>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
-          {/* LEFT - Large Dark Testimonial */}
-          <div className="bg-gradient-to-br from-[#243447] to-[#1c2a38] rounded-[28px] p-10 text-white shadow-[0_25px_60px_rgba(0,0,0,0.25)]">
-
-            <Stars />
-
-            {/* <div className="text-[#B9FF5A] text-5xl leading-none mb-6">“</div>
-            <img src={Quote} alt="" className="w-45"/> */}
-            <Quote size={48} className="text-[#B9FF5A] mb-6" />
-
-            <p className="text-lg leading-relaxed text-gray-200 mb-10">
-              "Ben was genuinely brilliant. He made the course fun and engaging,
-              and I felt completely prepared for the exam. The same-day results
-              were amazing – I started applying for jobs that evening!"
-            </p>
-
-            <div className="border-t border-white/10 pt-6">
-              <p className="font-semibold text-white">
-                Sarah Mitchell
-              </p>
-              <p className="text-gray-400 text-sm">
-                Door Supervisor Course, London
-              </p>
+          {/* LEFT - Main Student Testimonial (Ben) */}
+          <div className="bg-white rounded-[32px] p-10 border border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.03)] flex flex-col items-start h-full">
+            <div className="mb-6">
+              <Stars />
             </div>
 
+            <div className="mb-8 p-3 bg-[#E6F4FF] rounded-2xl w-fit">
+               <Quote size={28} className="text-[#00A3FF] fill-[#00A3FF] opacity-30" />
+            </div>
+
+            <p className="text-[#1A1A1A] text-xl font-medium leading-relaxed mb-12 flex-1">
+              "Ben was genuinely brilliant. He made the course fun and engaging,
+              and I felt completely prepared for the exam. The same-day results
+              were amazing — I started applying for jobs that evening!"
+            </p>
+
+            <div className="border-t border-gray-50 pt-8 w-full">
+              <p className="font-bold text-[#1A1A1A] text-lg leading-tight mb-1">
+                Ben
+              </p>
+              <p className="text-gray-400 text-sm font-bold">
+                Door Supervisor Course Graduate
+              </p>
+            </div>
           </div>
 
           {/* RIGHT COLUMN */}
-          <div className="space-y-8">
+          <div className="flex flex-col gap-6">
 
             {/* Instructor Card */}
-            <div className="bg-white rounded-[28px] p-8 border border-gray-200 shadow-sm">
-              <div className="flex flex-col items-start gap-6">
-<div className="flex gap-6">
+            <div className="bg-[#F8F9FA] rounded-[32px] p-10 border border-gray-100 flex flex-col gap-8">
+              <div className="flex items-center gap-6">
                 {/* Avatar */}
-                <div className="w-18 h-16 rounded-2xl bg-gradient-to-br from-[#243447] to-[#1c2a38] flex items-center justify-center text-white font-bold text-xl">
+                <div className="w-20 h-20 rounded-[20px] bg-[#1A1A1A] flex items-center justify-center text-white font-bold text-2xl shadow-xl flex-shrink-0">
                   JR
                 </div>
 
                 <div>
-                  <h4 className="text-xl font-semibold text-[#2f3a47]">
+                  <h4 className="text-2xl font-bold text-[#1A1A1A] tracking-tight mb-2">
                     Mr. John Redfern
                   </h4>
-                  <p className="text-[#B9FF5A] bg-gray-900 py-1 text-center rounded-2xl font-semibold text-sm mt-1">
-                    US Army Veteran
-                  </p>
-                  <p className="text-gray-500 text-sm mb-4">
+                  <div className="inline-flex items-center bg-[#00A3FF] text-white px-3 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest">
+                     US Army Veteran
+                  </div>
+                  <p className="text-gray-400 text-xs font-bold mt-2">
                     Lead Security Instructor
                   </p>
-
-              
                 </div>
-                </div>
-    <p className="text-gray-600 leading-relaxed">
-                    20+ years of real-world security experience across military
-                    and civilian roles. Passionate about preparing the next
-                    generation of security professionals.
-                  </p>
               </div>
+
+              <p className="text-gray-500 leading-relaxed font-medium text-base">
+                20+ years of real-world security experience across military and
+                civilian roles. Passionate about preparing the next generation of
+                security professionals with practical, hands-on training.
+              </p>
             </div>
 
-            {/* Light Green Testimonial */}
-            <div className="bg-[#eef5e8] border border-[#B9FF5A]/40 rounded-[28px] p-8">
+            {/* Marcus Thompson Testimonial Card */}
+            <div className="bg-white border border-gray-100 rounded-[32px] p-10 shadow-[0_10px_30px_rgba(0,0,0,0.02)]">
+              <div className="flex items-center gap-3 mb-8">
+                <Stars />
+                <span className="text-[#1A1A1A] text-xs font-bold ml-1">Excellent</span>
+              </div>
 
-              <Stars color="#2f3a47" />
-
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                The instructors were professional and knowledgeable.
-                They shared real stories from their careers which really
-                helped put everything into context. Highly recommend!
+              <p className="text-gray-500 text-base font-medium leading-relaxed mb-10 italic">
+                "The instructors were professional and knowledgeable. They shared
+                real stories from their careers which really helped put everything into
+                context. The training quality is second to none. Highly recommend!"
               </p>
 
-              <p className="font-semibold text-[#2f3a47]">
-                Marcus Thompson
-              </p>
-              <p className="text-sm text-gray-500">
-                CCTV Operator Course, Manchester
-              </p>
-
+              <div>
+                <p className="font-bold text-[#1A1A1A] text-lg mb-1">
+                  Marcus Thompson
+                </p>
+                <p className="text-xs text-gray-400 font-bold">
+                  CCTV Operator Course, Manchester
+                </p>
+              </div>
             </div>
 
           </div>

@@ -185,7 +185,7 @@ const CoursesSection = () => {
                 />
 
                 {course.popular && (
-                  <div className="absolute top-4 left-4 bg-[#B9FF5A] text-black text-xs font-semibold px-3 py-1 rounded-full">
+                  <div className="absolute top-4 left-4 bg-[#F15A24]  text-black text-xs font-semibold px-3 py-1 rounded-full">
                     Popular
                   </div>
                 )}
