@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Clock, Users, Calendar, Info, CreditCard, ChevronDown, MapPin, Flame, Quote, Star } from "lucide-react";
 import cctvImg from "../../assets/courses/cctv.png";
-import TrustBanner from "./TrustBanner";
 import LocationSelector from "./LocationSelector";
+import TrustBanner from "./TrustBanner";
 
 const RecommendedCourse = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -140,7 +140,7 @@ const RecommendedCourse = () => {
                         <span className="text-[15px] font-bold text-[#1A202C]">{schedule.date}</span>
                         <div className="flex items-center gap-6">
                           <span className="text-xl font-extrabold text-[#1A202C]">{schedule.price}</span>
-                          <button className="px-8 py-3 bg-[#8B2C02] text-white rounded-xl font-extrabold text-sm hover:bg-[#A33503] transition-colors shadow-md shadow-[#8B2C02]/20">
+                          <button className="px-8 py-3 bg-[#F15A24] text-white rounded-xl font-extrabold text-sm hover:bg-[#A33503] transition-colors shadow-md shadow-[#8B2C02]/20">
                             Book Now
                           </button>
                         </div>
