@@ -1,277 +1,200 @@
-import React, { useState } from "react";
-import starIcon from "../../assets/courses/star1.svg";
-import checkIcon from "../../assets/home/check-icon.png";
+import React from "react";
+import { Shield, Star, Clock, Users, MapPin, ChevronDown, Lightbulb, CreditCard, RotateCcw } from "lucide-react";
 
-import doorImg from "../../assets/courses/door.png";
-import cctvImg from "../../assets/courses/cctv.png";
-import firstAidImg from "../../assets/courses/first-aid.png";
-import guardImg from "../../assets/courses/security-guard.png";
-import closeImg from "../../assets/courses/close-protection.png";
-import conflictImg from "../../assets/courses/conflict.png";
+/* ICONS MAPPING */
+const categoryIcons = {
+  "Door Supervisor Training": { icon: Shield, color: "bg-[#2F5BE7]", iconColor: "text-white" },
+  "First Aid at Work": { icon: ({ className }) => <span className={className}>❤️</span>, color: "bg-[#E02424]", iconColor: "text-white" },
+  "Security Guard Training": { icon: ({ className }) => <span className={className}>🛡️</span>, color: "bg-[#059669]", iconColor: "text-white" },
+  "Close Protection": { icon: ({ className }) => <span className={className}>💼</span>, color: "bg-[#D97706]", iconColor: "text-white" },
+  "Conflict Management": { icon: ({ className }) => <span className={className}>💬</span>, color: "bg-[#4F46E5]", iconColor: "text-white" },
+};
 
-/* IMPORT ENROLL FLOW */
-import EnrollModal from "./enroll/EnrollModal";
-
-const courses = [
+const coursesData = [
   {
     title: "Door Supervisor Training",
     subtitle: "Complete SIA Door Supervisor Licence Course",
-    description: "Become a certified door supervisor with our comprehensive training program.",
-    image: doorImg,
-    rating: "4.9 (1240)",
-    passRate: "96% Pass Rate",
-    duration: "4 days",
-    price: "£185",
+    days: 4,
+    booked: "3,947",
+    rating: "4.9",
+    locationType: "In-Person",
+    price: "185.00",
     popular: true,
-    features: [
-      "Physical Intervention Skills",
-      "Conflict Management",
-      "Legal & Licensing",
-      "Venue Security Operations"
-    ]
-  },
-  {
-    title: "CCTV Operator Training",
-    subtitle: "Public Space Surveillance (CCTV) Licence",
-    description: "Master professional surveillance techniques and obtain your CCTV operator licence.",
-    image: cctvImg,
-    rating: "4.8 (890)",
-    passRate: "94% Pass Rate",
-    duration: "3 days",
-    price: "£165",
-    popular: true,
-    features: [
-      "Surveillance Techniques",
-      "System Operations",
-      "Legal Framework",
-      "Incident Recording"
-    ]
   },
   {
     title: "First Aid at Work",
     subtitle: "Level 3 Emergency First Aid Certification",
-    description: "Comprehensive emergency response training.",
-    image: firstAidImg,
-    rating: "4.9 (2100)",
-    passRate: "98% Pass Rate",
-    duration: "3 days",
-    price: "£150",
+    days: 3,
+    booked: "2,312",
+    rating: "4.8",
+    locationType: "In-Person",
+    price: "150.00",
     popular: true,
-    features: [
-      "CPR & AED Training",
-      "Wound Management",
-      "Emergency Scenarios",
-      "HSE Certified"
-    ]
   },
   {
     title: "Security Guard Training",
     subtitle: "SIA Security Guard Licence Course",
-    description: "Foundation course for aspiring security guards.",
-    image: guardImg,
-    rating: "4.7 (1560)",
-    passRate: "95% Pass Rate",
-    duration: "4 days",
-    price: "£175",
+    days: 4,
+    booked: "2,504",
+    rating: "4.7",
+    locationType: "In-Person",
+    price: "175.00",
     popular: false,
-    features: [
-      "Patrol Procedures",
-      "Access Control",
-      "Emergency Response",
-      "Report Writing"
-    ]
   },
   {
     title: "Close Protection",
     subtitle: "Elite Bodyguard & Executive Protection",
-    description: "Advanced training for close protection officers.",
-    image: closeImg,
-    rating: "5 (340)",
-    passRate: "92% Pass Rate",
-    duration: "5 days",
-    price: "£995",
+    days: 5,
+    booked: "804",
+    rating: "5",
+    locationType: "In-Person",
+    price: "995.00",
     popular: false,
-    features: [
-      "Threat Assessment",
-      "Defensive Driving",
-      "Route Planning",
-      "VIP Protection"
-    ]
   },
   {
     title: "Conflict Management",
     subtitle: "De-escalation & Resolution Training",
-    description: "Master conflict de-escalation techniques.",
-    image: conflictImg,
-    rating: "4.8 (980)",
-    passRate: "97% Pass Rate",
-    duration: "2 days",
-    price: "£120",
+    days: 2,
+    booked: "1,072",
+    rating: "4.8",
+    locationType: "Hybrid",
+    price: "120.00",
     popular: false,
-    features: [
-      "De-escalation Tactics",
-      "Communication Skills",
-      "Body Language",
-      "Scenario Training"
-    ]
-  }
+  },
 ];
 
+const SidebarTitle = ({ title, children, dark = false }) => (
+  <div className="flex items-center gap-3 mb-5">
+    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${dark ? "bg-[#00A3FF]" : "bg-gray-100"}`}>
+      <Shield className={`w-4 h-4 ${dark ? "text-white" : "text-gray-400"}`} />
+    </div>
+    <h3 className={`font-extrabold text-[12px] uppercase tracking-widest ${dark ? "text-white" : "text-[#1A202C]"}`}>
+      {title}
+    </h3>
+  </div>
+);
+
 const CoursesSection = () => {
-
-  const [selectedCourse, setSelectedCourse] = useState(null);
-
-  const openEnroll = (course) => {
-    setSelectedCourse(course);
-  };
-
-  const closeEnroll = () => {
-    setSelectedCourse(null);
-  };
-
   return (
-    <section className="bg-[#f3f6f9] py-20 px-6 lg:px-12">
+    <section className="bg-[#F8FAFC] pb-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
 
-      <div className="max-w-7xl mx-auto">
-
-        {/* Header */}
-
-        <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 gap-6">
-
-          <div>
-            <h2 className="text-4xl font-bold text-[#1f2f3f]">
-              All Courses
-            </h2>
-
-            <p className="text-gray-500 mt-2">
-              Showing 6 courses available
-            </p>
+        {/* Left Column: Course List */}
+        <div className="flex-1">
+          <div className="mb-10">
+            <h2 className="text-3xl font-extrabold text-[#1A202C]">All Courses</h2>
+            <p className="text-sm text-gray-500 font-medium mt-1">Showing 5 additional courses available</p>
           </div>
 
-          <div className="flex gap-3">
-            <button className="bg-[#1f2f3f] text-white px-5 py-2 rounded-full text-sm">
-              All Courses
-            </button>
+          <div className="space-y-6">
+            {coursesData.map((course, idx) => {
+              const theme = categoryIcons[course.title] || { icon: Shield, color: "bg-gray-100", iconColor: "text-gray-500" };
+              const Icon = theme.icon;
+              return (
+                <div key={idx} className="bg-white rounded-[24px] border border-gray-100 p-6 flex flex-col md:flex-row items-center gap-8 shadow-[0_4px_20px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300 cursor-pointer">
+                  {/* Icon */}
+                  <div className={`${theme.color} w-20 h-20 rounded-[20px] flex items-center justify-center shrink-0 shadow-sm`}>
+                    <Icon className={`w-10 h-10 ${theme.iconColor}`} />
+                  </div>
 
-            <button className="bg-white text-gray-600 px-5 py-2 rounded-full text-sm border">
-              Popular
-            </button>
+                  {/* Info */}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-xl font-extrabold text-[#1A202C] tracking-tight">{course.title}</h3>
+                      {course.popular && (
+                        <span className="bg-[#00A3FF] text-white text-[9px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
+                          Popular
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-400 font-medium mb-5">{course.subtitle}</p>
 
-            <button className="bg-white text-gray-600 px-5 py-2 rounded-full text-sm border">
-              SIA Courses
-            </button>
+                    <div className="flex flex-wrap gap-6 text-[12px] text-gray-400 font-bold">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-gray-300" />
+                        {course.days} days
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-gray-300" />
+                        {course.booked} booked
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                        {course.rating}
+                      </div>
+                      <div className="flex items-center gap-2 text-[#059669]">
+                        <MapPin className="w-4 h-4" />
+                        {course.locationType}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Price & CTA */}
+                  <div className="flex items-center gap-8 shrink-0 border-l border-gray-100 pl-8 h-16">
+                    <div className="text-right">
+                      <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">From:</div>
+                      <div className="text-3xl font-extrabold text-[#1A202C]">£{course.price}</div>
+                    </div>
+                    <button className="bg-[#1A202C] text-white px-6 py-3 rounded-xl text-sm font-extrabold flex items-center gap-2 hover:bg-black transition-all shadow-sm whitespace-nowrap">
+                      View Dates <ChevronDown className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-
         </div>
 
-        {/* Courses Grid */}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-
-          {courses.map((course, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-3xl shadow-lg hover:shadow-xl transition overflow-hidden border border-gray-100 flex flex-col"
-            >
-
-              {/* Image */}
-
-              <div className="relative">
-
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="w-full h-[230px] object-cover"
-                />
-
-                {course.popular && (
-                  <div className="absolute top-4 left-4 bg-[#F15A24]  text-black text-xs font-semibold px-3 py-1 rounded-full">
-                    Popular
+        {/* Right Column: Sidebar */}
+        <div className="w-full lg:w-[360px] space-y-8">
+          {/* Training Guarantee */}
+          <div className="bg-[#1A202C] rounded-[32px] p-8 shadow-xl">
+            <SidebarTitle title="Training Guarantee" dark />
+            <p className="text-[12px] text-gray-400 leading-[1.6] mb-8 font-medium">
+              All bookings are protected with our Training Guarantee. If you don't pass, we'll rebook your exam for free — no questions asked.
+            </p>
+            <ul className="space-y-5 mb-8">
+              {[
+                "Free exam retakes",
+                "Same-day results",
+                "95% average pass rate",
+                "Full support throughout"
+              ].map((item, i) => (
+                <li key={i} className="flex items-center gap-3 text-[12px] font-bold text-white/90">
+                  <div className="w-5 h-5 rounded-full border border-[#00A3FF] flex items-center justify-center shrink-0">
+                    <div className="w-2 h-2 rounded-full bg-[#00A3FF]" />
                   </div>
-                )}
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <a href="#" className="text-[#00A3FF] text-[12px] font-extrabold hover:underline flex items-center gap-1 uppercase tracking-wider">
+              Learn more <ChevronDown className="w-3.5 h-3.5 -rotate-90" />
+            </a>
+          </div>
 
-                <div className="absolute bottom-4 left-4 flex gap-3">
-
-                  <div className="flex items-center bg-black/70 text-white text-xs px-3 py-1 rounded-full">
-                    <img src={starIcon} className="w-3 h-3 mr-1" />
-                    {course.rating}
+          {/* Why Choose Us */}
+          <div className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm">
+            <SidebarTitle title="Why Choose Us" />
+            <ul className="space-y-6">
+              {[
+                { label: "95% Average Pass Rate", icon: Lightbulb, color: "text-yellow-500" },
+                { label: "85+ UK Training Centres", icon: MapPin, color: "text-[#F15A24]" },
+                { label: "Same-Day Results", icon: Clock, color: "text-[#059669]" },
+                { label: "Instalment Plans Available", icon: CreditCard, color: "text-[#9B51E0]" },
+                { label: "Free Exam Retakes", icon: RotateCcw, color: "text-red-500" },
+              ].map((item, i) => (
+                <li key={i} className="flex items-center gap-4">
+                  <div className={`w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0`}>
+                    <item.icon className={`w-4 h-4 ${item.color}`} />
                   </div>
-
-                  <div className="bg-black/70 text-white text-xs px-3 py-1 rounded-full">
-                    {course.passRate}
-                  </div>
-
-                </div>
-
-              </div>
-
-              {/* Content */}
-
-              <div className="p-6 flex flex-col flex-grow">
-
-                <h3 className="text-xl font-bold text-[#1f2f3f]">
-                  {course.title}
-                </h3>
-
-                <p className="text-sm text-gray-500 mt-1">
-                  {course.subtitle}
-                </p>
-
-                <p className="text-gray-600 text-sm mt-4 leading-relaxed">
-                  {course.description}
-                </p>
-
-                <ul className="mt-5 space-y-2">
-
-                  {course.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                      <img src={checkIcon} className="w-4 h-4" />
-                      {feature}
-                    </li>
-                  ))}
-
-                </ul>
-
-                {/* Bottom */}
-
-                <div className="mt-auto pt-6 border-t flex justify-between items-center">
-
-                  <div>
-                    <div className="text-sm text-gray-500">
-                      {course.duration}
-                    </div>
-
-                    <div className="text-xl font-bold text-[#1f2f3f]">
-                      {course.price}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => openEnroll(course)}
-                    className="bg-[#2f3a47] text-white px-6 py-2 rounded-full text-sm hover:bg-black transition"
-                  >
-                    Enroll Now →
-                  </button>
-
-                </div>
-
-              </div>
-
-            </div>
-          ))}
-
+                  <span className="text-[13px] font-extrabold text-[#1A202C]">{item.label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
-
-      {/* ENROLL MODAL */}
-
-      {selectedCourse && (
-        <EnrollModal
-          course={selectedCourse}
-          onClose={closeEnroll}
-        />
-      )}
-
     </section>
   );
 };

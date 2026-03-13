@@ -1,330 +1,182 @@
 import React from "react";
+import { Star, ExternalLink } from "lucide-react";
 
-import starIcon from "../../assets/courses/star2.svg";
-import quoteIcon from "../../assets/courses/quote.svg";
-import trustIcon from "../../assets/courses/trust.svg";
-import googleIcon from "../../assets/courses/google.svg";
-import passIcon from "../../assets/courses/pass.svg";
-import locationIcon from "../../assets/courses/location.svg";
-import DoorSupervisor from "../../assets/courses/Birmingham Door Supervisor Training - January 2026.png"
-import SecurityTraining from "../../assets/courses/Security Guard Training Class - August 2025.png"
-
+/* IMPORT IMAGES - Reusing existing or standard paths */
+import sarahImg from "../../assets/courses/Sarah Johnson.png";
+import jamesImg from "../../assets/courses/James Mitchell.png";
+import emmaImg from "../../assets/courses/Emma Wilson.png";
+// Using standard ones if missing, or placeholders if needed, but I'll try to match the names from the previous file
 import review1 from "../../assets/courses/Sarah Johnson.png";
 import review2 from "../../assets/courses/James Mitchell.png";
-
 import review3 from "../../assets/courses/Emma Wilson.png";
+
+const stats = [
+  {
+    label: "Trustpilot",
+    value: "33,359",
+    subValue: "Total Reviews",
+    rating: "4.8",
+    color: "bg-[#00B67A]",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 9.125l-9.143-.013L12 0 9.143 9.112 0 9.125l7.408 5.378L4.625 24 12 18.675 19.375 24l-2.783-9.497L24 9.125z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Google Reviews",
+    value: "9,517",
+    subValue: "Total Reviews",
+    rating: "4.9",
+    color: "bg-[#4285F4]",
+    icon: (
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Pass Rate",
+    value: "95%",
+    subValue: "Average Success",
+    rating: "First Time Pass",
+    color: "bg-[#F15A24]",
+    icon: <Star className="w-5 h-5" />,
+  },
+];
+
+const testimonials = [
+  {
+    stars: 5,
+    text: "I had the opportunity to take the course under excellent instruction. The trainer was patient, knowledgeable, and made learning enjoyable. Passed first time!",
+    name: "Sarah Johnson",
+    course: "Door Supervisor Training",
+    location: "Manchester",
+    image: review1,
+  },
+  {
+    stars: 5,
+    text: "Great trainer, I am doing the door supervision course next month. Very professional and thorough teaching style.",
+    name: "James Mitchell",
+    course: "Security Guard Training",
+    location: "London",
+    image: review2,
+  },
+  {
+    stars: 5,
+    text: "Completed the CCTV course with very professional trainers. Learnt so much about surveillance law and practical techniques. Highly recommended!",
+    name: "Marcus Thompson",
+    course: "CCTV Operator Training",
+    location: "Leeds",
+    dark: true,
+  },
+  {
+    stars: 5,
+    text: "Brilliant course! The hands-on practice and realistic scenarios really prepared me for real emergencies. Instructor was amazing.",
+    name: "Emma Wilson",
+    course: "First Aid at Work",
+    location: "Bristol",
+    image: review3,
+  },
+  {
+    stars: 5,
+    text: "Intensive and worth every penny. The defensive driving and threat assessment modules were exceptional. Now working with high-profile clients.",
+    name: "David Chen",
+    course: "Close Protection",
+    location: "London",
+    dark: true,
+  },
+  {
+    stars: 5,
+    text: "The conflict de-escalation training has been invaluable in my daily work. I feel much more confident handling difficult situations professionally.",
+    name: "Lisa Patel",
+    course: "Conflict Management",
+    location: "Birmingham",
+    dark: true,
+  },
+];
 
 const ReviewsSection = () => {
   return (
-    <section className="bg-[#f3f6f9] py-24 px-6 lg:px-12">
+    <section className="bg-white py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-
-        {/* Heading */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#2f3a47]">
-            Real stories from real people
-          </h2>
-          <p className="text-gray-500 mt-4 text-lg">
-            Trusted by thousands of security professionals across the UK
-          </p>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#1A202C]">Real stories from real people</h2>
+          <p className="text-gray-500 mt-4 text-lg">Trusted by thousands of security professionals across the UK</p>
         </div>
 
-        {/* Top Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-
-          {/* Trustpilot */}
-          <div className="bg-gradient-to-br from-[#0fa968] to-[#0b8a56] text-white rounded-3xl p-8 shadow-xl">
-            <div className="flex items-center gap-3 mb-6">
-              <img src={trustIcon} className="w-6 h-6" />
-              <span className="font-semibold">Trustpilot</span>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {stats.map((stat, i) => (
+            <div key={i} className={`${stat.color} rounded-3xl p-8 text-white shadow-lg`}>
+              <div className="flex items-center gap-2 mb-6 opacity-90">
+                {stat.icon}
+                <span className="font-bold text-sm uppercase tracking-wider">{stat.label}</span>
+              </div>
+              <div className="text-5xl font-extrabold mb-1">{stat.value}</div>
+              <div className="text-sm opacity-80 mb-8 font-medium">{stat.subValue}</div>
+              <div className="flex items-center gap-2">
+                {stat.label !== "Pass Rate" ? (
+                  <>
+                    <div className="flex gap-1 text-white">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                      ))}
+                    </div>
+                    <span className="font-bold">{stat.rating}</span>
+                  </>
+                ) : (
+                  <span className="font-extrabold flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full border border-white flex items-center justify-center text-[10px]">👍</span>
+                    {stat.rating}
+                  </span>
+                )}
+              </div>
             </div>
-
-            <div className="text-5xl font-bold">33,359</div>
-            <div className="text-white/80 mt-2">Total Reviews</div>
-
-            <div className="flex items-center gap-2 mt-6">
-              {[...Array(5)].map((_, i) => (
-                <img key={i} src={starIcon} className="w-4 h-4" />
-              ))}
-              <span className="font-semibold">4.8</span>
-            </div>
-          </div>
-
-          {/* Google */}
-          <div className="bg-gradient-to-br from-[#4a7bd9] to-[#3d64b4] text-white rounded-3xl p-8 shadow-xl">
-            <div className="flex items-center gap-3 mb-6">
-              <img src={googleIcon} className="w-6 h-6" />
-              <span className="font-semibold">Google Reviews</span>
-            </div>
-
-            <div className="text-5xl font-bold">9,517</div>
-            <div className="text-white/80 mt-2">Total Reviews</div>
-
-            <div className="flex items-center gap-2 mt-6">
-              {[...Array(5)].map((_, i) => (
-                <img key={i} src={starIcon} className="w-4 h-4" />
-              ))}
-              <span className="font-semibold">4.9</span>
-            </div>
-          </div>
-
-          {/* Pass Rate */}
-          <div className="bg-gradient-to-br from-[#F15A24]  to-[#9fe33f] rounded-3xl p-8 shadow-xl text-[#1f2f3f]">
-            <div className="flex items-center gap-3 mb-6">
-              <img src={passIcon} className="w-6 h-6" />
-              <span className="font-semibold">Pass Rate</span>
-            </div>
-
-            <div className="text-5xl font-bold">95%</div>
-            <div className="text-gray-700 mt-2">Average Success</div>
-
-            <div className="mt-6 font-semibold">
-              First Time Pass
-            </div>
-          </div>
-
+          ))}
         </div>
+
         {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
-
-          {/* 1 - Sarah */}
-          <div className="bg-white rounded-3xl shadow-lg p-6 flex flex-col">
-            <div>
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <img key={i} src={starIcon} className="w-4 h-4" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {testimonials.map((test, i) => (
+            <div
+              key={i}
+              className={`${
+                test.dark ? "bg-[#1A202C] text-white" : "bg-white border border-gray-100"
+              } rounded-3xl p-8 shadow-sm flex flex-col`}
+            >
+              <div className="flex gap-1 mb-6">
+                {[...Array(test.stars)].map((_, i) => (
+                  <Star key={i} className={`w-3.5 h-3.5 fill-current ${test.dark ? "text-yellow-400" : "text-yellow-400"}`} />
                 ))}
               </div>
-
-              <img src={quoteIcon} className="w-5 h-5 opacity-30 mb-3" />
-
-              <p className="text-gray-600 leading-relaxed">
-                I had the opportunity to take the course under excellent instruction.
-                The trainer was patient, knowledgeable, and made learning enjoyable.
-                Passed first time!
+              <p className={`text-[13px] leading-relaxed mb-8 flex-1 ${test.dark ? "text-gray-300" : "text-gray-600"}`}>
+                "{test.text}"
               </p>
-            </div>
-
-            <div className="mt-6 pt-4 border-t flex items-center gap-4">
-              <img src={review1} className="w-12 h-12 rounded-full object-cover" />
-              <div>
-                <div className="font-semibold text-[#1f2f3f]">
-                  Sarah Johnson
-                </div>
-                <div className="text-sm text-gray-500">
-                  Door Supervisor Training
-                </div>
-                <div className="text-xs text-gray-400">
-                  Manchester · January 2026
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          {/* 2 - James */}
-          <div className="bg-white rounded-3xl shadow-lg p-6 flex flex-col">
-            <div>
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <img key={i} src={starIcon} className="w-4 h-4" />
-                ))}
-              </div>
-
-              <img src={quoteIcon} className="w-5 h-5 opacity-30 mb-3" />
-
-              <p className="text-gray-600 leading-relaxed">
-                Great trainer, I am doing the door supervision course next month.
-                Very professional and thorough teaching style.
-              </p>
-            </div>
-
-            <div className="mt-6 pt-4 border-t flex items-center gap-4">
-              <img src={review2} className="w-12 h-12 rounded-full object-cover" />
-              <div>
-                <div className="font-semibold text-[#1f2f3f]">
-                  James Mitchell
-                </div>
-                <div className="text-sm text-gray-500">
-                  Security Guard Training
-                </div>
-                <div className="text-xs text-gray-400">
-                  London · February 2026
+              <div className="flex items-center gap-4 border-t pt-6 border-gray-100 dark:border-white/10">
+                {test.image ? (
+                  <img src={test.image} alt={test.name} className="w-10 h-10 rounded-full object-cover" />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-gray-200" />
+                )}
+                <div>
+                  <div className={`text-sm font-bold ${test.dark ? "text-[#F15A24]" : "text-[#1A202C]"}`}>
+                    {test.name}
+                  </div>
+                  <div className={`text-[10px] ${test.dark ? "text-gray-400" : "text-gray-500"}`}>
+                    {test.course} · {test.location}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
-
-          {/* 3 - Image Birmingham */}
-          <div className="relative rounded-3xl overflow-hidden shadow-lg">
-            <img src={DoorSupervisor} className="w-full h-[320px] object-cover" />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 text-white">
-              <div className="flex items-center gap-2 text-sm text-[#F15A24]  mb-2">
-                <img src={locationIcon} className="w-4 h-4" />
-                Birmingham
-              </div>
-              <div className="font-semibold">
-                Birmingham Door Supervisor Training – January 2026
-              </div>
-            </div>
-          </div>
-
-
-          {/* 4 - Marcus (Dark) */}
-          <div className="bg-gradient-to-br from-[#2f3a47] to-[#1f2933] text-white rounded-3xl shadow-lg p-6 flex flex-col">
-            <div>
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <img key={i} src={starIcon} className="w-4 h-4" />
-                ))}
-              </div>
-
-              <img src={quoteIcon} className="w-5 h-5 mb-3 opacity-70" />
-
-              <p className="text-white/90 leading-relaxed">
-                Completed the CCTV course with very professional trainers.
-                Learnt so much about surveillance law and practical techniques.
-                Highly recommended!
-              </p>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-white/10">
-              <div className="font-semibold text-[#F15A24] ">
-                Marcus Thompson
-              </div>
-              <div className="text-sm text-white/70">
-                CCTV Operator Training
-              </div>
-              <div className="text-xs text-white/50">
-                Leeds · December 2025
-              </div>
-            </div>
-          </div>
-
-
-          {/* 5 - Emma */}
-          <div className="bg-white rounded-3xl shadow-lg p-6 flex flex-col">
-            <div>
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <img key={i} src={starIcon} className="w-4 h-4" />
-                ))}
-              </div>
-
-              <img src={quoteIcon} className="w-5 h-5 opacity-30 mb-3" />
-
-              <p className="text-gray-600 leading-relaxed">
-                Brilliant course! The hands-on practice and realistic
-                scenarios really prepared me for real emergencies.
-                Instructor was amazing.
-              </p>
-            </div>
-
-            <div className="mt-6 pt-4 border-t flex items-center gap-4">
-              <img src={review3} className="w-12 h-12 rounded-full object-cover" />
-              <div>
-                <div className="font-semibold text-[#1f2f3f]">
-                  Emma Wilson
-                </div>
-                <div className="text-sm text-gray-500">
-                  First Aid at Work
-                </div>
-                <div className="text-xs text-gray-400">
-                  Bristol · January 2026
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          {/* 6 - Image Manchester */}
-          <div className="relative rounded-3xl overflow-hidden shadow-lg">
-            <img src={SecurityTraining} className="w-full h-[320px] object-cover" />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6 text-white">
-              <div className="flex items-center gap-2 text-sm text-[#F15A24]  mb-2">
-                <img src={locationIcon} className="w-4 h-4" />
-                Manchester
-              </div>
-              <div className="font-semibold">
-                Security Guard Training Class – August 2025
-              </div>
-            </div>
-          </div>
-
-
-          {/* 7 - David (Dark) */}
-          <div className="bg-gradient-to-br from-[#2f3a47] to-[#1f2933] text-white rounded-3xl shadow-lg p-6 flex flex-col">
-            <div>
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <img key={i} src={starIcon} className="w-4 h-4" />
-                ))}
-              </div>
-
-              <img src={quoteIcon} className="w-5 h-5 mb-3 opacity-70" />
-
-              <p className="text-white/90 leading-relaxed">
-                Intensive and worth every penny. The defensive driving and
-                threat assessment modules were exceptional.
-                Now working with high-profile clients.
-              </p>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-white/10">
-              <div className="font-semibold text-[#F15A24] ">
-                David Chen
-              </div>
-              <div className="text-sm text-white/70">
-                Close Protection
-              </div>
-              <div className="text-xs text-white/50">
-                London · November 2025
-              </div>
-            </div>
-          </div>
-
-
-          {/* 8 - Lisa (Dark) */}
-          <div className="bg-gradient-to-br from-[#2f3a47] to-[#1f2933] text-white rounded-3xl shadow-lg p-6 flex flex-col">
-            <div>
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <img key={i} src={starIcon} className="w-4 h-4" />
-                ))}
-              </div>
-
-              <img src={quoteIcon} className="w-5 h-5 mb-3 opacity-70" />
-
-              <p className="text-white/90 leading-relaxed">
-                The conflict de-escalation training has been invaluable
-                in my daily work. I feel much more confident handling
-                difficult situations professionally.
-              </p>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-white/10">
-              <div className="font-semibold text-[#F15A24] ">
-                Lisa Patel
-              </div>
-              <div className="text-sm text-white/70">
-                Conflict Management
-              </div>
-              <div className="text-xs text-white/50">
-                Birmingham · February 2026
-              </div>
-            </div>
-          </div>
-
+          ))}
         </div>
 
-        {/* CTA */}
-        <div className="text-center mt-16">
-          <button className="bg-[#2f3a47] text-white px-8 py-4 rounded-full shadow-lg hover:bg-black transition">
-            View All Reviews →
+        <div className="text-center">
+          <button className="bg-[#1A202C] text-white px-8 py-3.5 rounded-full font-bold flex items-center gap-2 mx-auto hover:bg-black transition">
+            View All Reviews <ExternalLink className="w-4 h-4" />
           </button>
         </div>
-
       </div>
     </section>
   );
