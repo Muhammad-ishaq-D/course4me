@@ -12,7 +12,7 @@ const HelpSection = () => {
 
         {/* Icon Circle */}
         <div className="w-20 h-20 bg-[#F15A24]  rounded-full flex items-center justify-center mx-auto mb-10 shadow-lg">
-          <Phone size={30} className="text-[#1f2f3f]" strokeWidth={2.5} />
+          <Phone size={30} className="text-[#ffff]" strokeWidth={2.5} />
         </div>
 
         {/* Heading */}
@@ -30,7 +30,7 @@ const HelpSection = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-12">
 
           {/* Call Button */}
-          <button className="bg-[#F15A24]  hover:bg-[#a4e649] text-[#1f2f3f] font-semibold px-10 py-4 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition duration-300">
+          <button className="bg-[#F15A24]  hover:bg-[#a02e05] text-[#ffff] font-semibold px-10 py-4 rounded-full flex items-center gap-3 shadow-lg hover:shadow-xl transition duration-300">
             <Phone size={18} />
             Call 0800 XXX XXXX
           </button>

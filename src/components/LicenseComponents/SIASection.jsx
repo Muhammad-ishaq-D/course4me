@@ -1,12 +1,13 @@
 import React from "react";
 import badgeIcon from "../../assets/license/badge.svg";
+import badgeIcon1 from "../../assets/license/badge1.svg";
 import starIcon from "../../assets/license/star.svg";
 import arrowIcon from "../../assets/license/arrow.svg";
 import siaImage from "../../assets/license/sia.png";
 
 const SIASection = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#243443] via-[#1f2f3f] to-[#16222c] py-20 px-6 lg:px-12">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#243443] via-[#1f2f3f] to-[#16222c] py-20 px-6 lg:px-12 mt-20">
 
       {/* Soft Background Glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#F15A24]  opacity-10 blur-[120px] rounded-full pointer-events-none" />
@@ -20,7 +21,7 @@ const SIASection = () => {
 
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-[#F15A241A] border border-[#F15A24]  text-[#F15A24]  px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              <img src={badgeIcon} className="w-4 h-4" />
+              <img src={badgeIcon1} className="w-4 h-4 text-[#F15A24]" />
               SIA Approved & Regulated
             </div>
 
@@ -45,7 +46,7 @@ const SIASection = () => {
               </div>
 
               <div className="bg-[#2f3f50] border border-white/10 rounded-2xl px-6 py-4 text-center min-w-[140px]">
-                <div className="text-[#F15A24]  text-2xl font-bold">24–48h</div>
+                <div className="text-[#F15A24]  text-2xl font-bold">24 – 48h</div>
                 <div className="text-gray-400 text-sm mt-1">Processing</div>
               </div>
 
@@ -58,11 +59,11 @@ const SIASection = () => {
 
             {/* Buttons */}
             <div className="flex flex-wrap gap-5 mt-10">
-              <button className="bg-[#F15A24]  hover:bg-[#a4e649] text-[#1f2f3f] font-semibold px-8 py-4 rounded-full shadow-lg transition">
+              <button className="bg-[#F15A24]  hover:bg-[#a02e05] text-[#ffffff] font-semibold px-8 py-4 rounded-full shadow-lg transition">
                 Book Your Training
               </button>
 
-              <button className="border border-white/30 text-white px-8 py-4 rounded-full hover:bg-white/10 transition">
+              <button className="border border-white/30 font-semibold text-white px-8 py-4 rounded-full hover:bg-white/10 transition">
                 Free Advice
               </button>
             </div>
@@ -99,8 +100,8 @@ const SIASection = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
               <div className="rounded-3xl bg-gradient-to-br from-[#2a4f7c] to-[#1f3c5c] p-8 text-white">
-                <div className="w-10 h-10 bg-[#F15A24]  rounded-xl flex items-center justify-center mb-4">
-                  <img src={starIcon} className="w-5 h-5" />
+                <div className="w-10 h-10  flex items-center justify-center mb-4">
+                  <img src={starIcon} className="w-8 h-8" />
                 </div>
 
                 <div className="text-3xl font-bold">85+</div>
@@ -110,8 +111,8 @@ const SIASection = () => {
               </div>
 
               <div className="rounded-3xl bg-gradient-to-br from-[#4c2b72] to-[#352055] p-8 text-white">
-                <div className="w-10 h-10 bg-[#F15A24]  rounded-xl flex items-center justify-center mb-4">
-                  <img src={arrowIcon} className="w-5 h-5" />
+                <div className="w-10 h-10 flex items-center justify-center mb-4">
+                  <img src={arrowIcon} className="w-8 h-8" />
                 </div>
 
                 <div className="text-3xl font-bold">400K+</div>
