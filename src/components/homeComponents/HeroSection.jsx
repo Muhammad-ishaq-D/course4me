@@ -13,7 +13,7 @@ import { motion } from "framer-motion";
 const VideoPlayer = ({ src, label, className = "" }) => (
   <div
     className={`bg-linear-to-br from-gray-800 to-gray-900 
-                rounded-xl overflow-hidden 
+                rounded-3xl overflow-hidden 
                 border border-gray-700 
                 shadow-xl relative group
                 ${className}`}
@@ -157,7 +157,7 @@ const HeroSection = () => {
               <div className="flex flex-col gap-6 w-full xl:w-auto">
 
                 <div className="relative w-full mt-6 md:mt-0  xl:w-46">
-                  <div className="w-full xl:w-46 h-[160px] sm:h-[180px] xl:h-42 bg-[#00A3FF] rounded-2xl flex flex-col items-center justify-center text-center font-semibold text-white">
+                  <div className="w-full xl:w-46 h-[160px] sm:h-[180px] xl:h-42 bg-[#00A3FF] rounded-3xl flex flex-col items-center justify-center text-center font-semibold text-white">
                     <Users className="w-8 h-8 mb-3 text-white" />
                     <div className="text-3xl font-bold text-white">400K+</div>
                     <div className="text-sm text-white">Professionals Trained</div>
@@ -169,7 +169,7 @@ const HeroSection = () => {
                       duration: 12,
                       repeat: Infinity,
                       ease: "easeInOut"
-                    }} className="absolute -top-10 left-1/2 -translate-x-1/2 px-6  py-4 bg-white/90 backdrop-blur-sm rounded-xl shadow-xl flex items-center gap-3 text-sm font-semibold whitespace-nowrap">
+                    }} className="absolute -top-10 left-1/2 -translate-x-1/2 px-6  py-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl flex items-center gap-3 text-sm font-semibold whitespace-nowrap">
                     {/* Icon Circle */}
                     <div className="w-8 h-8 bg-[#00A3FF1A] rounded-full flex items-center justify-center">
                       <CheckCircle className="w-4 h-4 text-[#00A3FF]" />
@@ -202,7 +202,7 @@ const HeroSection = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 xl:gap-2">
 
               <div className="relative w-full xl:w-46">
-                <div className="w-full xl:w-43 h-[180px] xl:h-45 bg-[#E6F4FF] border border-[#00A3FF33] backdrop-blur-xl  rounded-2xl flex flex-col items-center justify-center">
+                <div className="w-full xl:w-43 h-[180px] xl:h-45 bg-[#E6F4FF] border border-[#00A3FF33] backdrop-blur-xl  rounded-3xl flex flex-col items-center justify-center">
                   <CheckCircle className="w-8 h-8 mb-3 text-[#00A3FF]" />
                   <div className="text-3xl font-bold text-[#00A3FF]">95%</div>
                 </div>
@@ -254,14 +254,14 @@ const HeroSection = () => {
               <div className="relative w-full xl:w-43">
                 <VideoPlayer
                   src={doorSupervisorVideo}
-                  className="w-full h-[200px] xl:h-45 xl:w-40"
+                  className="w-full h-[200px] xl:h-45 xl:w-42"
                 />
                 <div className="absolute bottom-3 left-3 text-sm font-semibold text-white">
                   Security Guard
                 </div>
               </div>
 
-              <div className="w-full xl:w-42 h-[200px] xl:h-45 bg-[#FF5421] rounded-2xl flex flex-col items-center justify-center text-white">
+              <div className="w-full xl:w-45 h-[200px] xl:h-45 bg-[#FF5421] rounded-3xl flex flex-col items-center justify-center text-white">
                 <img src={lightningIcon} className="w-8 h-8 mb-3" />
                 <div className="text-2xl font-bold">£14–£25</div>
                 <div className="text-sm">Hourly Rate</div>
