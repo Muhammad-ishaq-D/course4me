@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Star, MapPin, Calendar, ChevronRight } from 'lucide-react';
+import BookingModal from './booking/BookingModal';
+import CentreDetailsModal from './details/CentreDetailsModal';
 
 export default function RegularTrainingCentreCard({
   image,
@@ -12,6 +14,17 @@ export default function RegularTrainingCentreCard({
   courses,
   extraCoursesCount
 }) {
+  const [showBooking, setShowBooking] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+
+  const handleBookingSubmit = () => {
+    setShowBooking(false);
+    setShowDetails(true);
+  };
+
+  const centreData = {
+    image, city, subtitle, rating, address, nextAvailable, courses, extraCoursesCount
+  };
   return (
     <div className="bg-white rounded-[24px] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 transform hover:-translate-y-1 w-full">
       {/* Image Header wrapper for rounded crop */}
@@ -76,11 +89,34 @@ export default function RegularTrainingCentreCard({
         <div className="flex-1"></div>
 
         {/* Action Button */}
-        <button className="w-full bg-[#18181B] hover:bg-[#27272A] text-white rounded-full py-3.5 px-4 flex items-center justify-center gap-2 font-bold transition-colors text-[14px] mt-auto">
+        <button 
+          onClick={() => setShowBooking(true)}
+          className="w-full bg-[#18181B] hover:bg-[#27272A] text-white rounded-full py-3.5 px-4 flex items-center justify-center gap-2 font-bold transition-colors text-[14px] mt-auto"
+        >
           View Details
           <ChevronRight size={18} className="text-gray-400" />
         </button>
       </div>
+
+      {/* Modals */}
+      {showBooking && (
+        <BookingModal 
+          centre={centreData} 
+          onClose={() => setShowBooking(false)} 
+          onSubmit={handleBookingSubmit}
+        />
+      )}
+
+      {showDetails && (
+        <CentreDetailsModal 
+          centre={centreData} 
+          onClose={() => setShowDetails(false)}
+          onBookNow={() => {
+            setShowDetails(false);
+            setShowBooking(true);
+          }}
+        />
+      )}
     </div>
   );
 }

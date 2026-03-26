@@ -39,7 +39,7 @@ const HeroSection = () => {
 
 
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 lg:px-8 py-12 md:py-20">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12  py-12 md:py-20">
 
         {/* IMPORTANT: xl instead of lg */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-start">

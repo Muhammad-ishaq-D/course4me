@@ -46,6 +46,9 @@ const Header = () => {
             <NavLink to="/careers" className={navLinkClasses}>
               Careers
             </NavLink>
+            <NavLink to="/blog" className={navLinkClasses}>
+              Blog & News
+            </NavLink>
           </nav>
 
           {/* DESKTOP RIGHT SIDE */}
@@ -132,6 +135,13 @@ const Header = () => {
             className={mobileNavLinkClasses}
           >
             Careers
+          </NavLink>
+          <NavLink
+            to="/blog"
+            onClick={() => setOpen(false)}
+            className={mobileNavLinkClasses}
+          >
+            Blog & News
           </NavLink>
 
           <div className="pt-4 border-t border-gray-200 flex flex-col gap-4">
