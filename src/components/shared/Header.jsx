@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../../assets/Logo.svg";
+import { ChevronDown } from "lucide-react";
+import BrowseCoursesModal from "./BrowseCoursesModal";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const [isCoursesModalOpen, setIsCoursesModalOpen] = useState(false);
 
   const navLinkClasses = ({ isActive }) =>
     isActive
@@ -31,9 +34,12 @@ const Header = () => {
               Home
             </NavLink>
 
-            <NavLink to="/courses" className={navLinkClasses}>
-              Courses
-            </NavLink>
+            <button
+              onClick={() => setIsCoursesModalOpen(true)}
+              className={`${navLinkClasses({ isActive: false })} flex items-center gap-1 cursor-pointer`}
+            >
+              Courses <ChevronDown className="w-4 h-4 mt-1" />
+            </button>
 
             <NavLink to="/licences" className={navLinkClasses}>
               Licences
@@ -105,13 +111,15 @@ const Header = () => {
             Home
           </NavLink>
 
-          <NavLink
-            to="/courses"
-            onClick={() => setOpen(false)}
-            className={mobileNavLinkClasses}
+          <button
+            onClick={() => {
+              setOpen(false);
+              setIsCoursesModalOpen(true);
+            }}
+            className={`${mobileNavLinkClasses({ isActive: false })} flex items-center gap-1 text-left`}
           >
-            Courses
-          </NavLink>
+            Courses <ChevronDown className="w-4 h-4" />
+          </button>
 
           <NavLink
             to="/licences"
@@ -164,6 +172,10 @@ const Header = () => {
 
         </div>
       </div>
+      <BrowseCoursesModal
+        isOpen={isCoursesModalOpen}
+        onClose={() => setIsCoursesModalOpen(false)}
+      />
     </header>
   );
 };
