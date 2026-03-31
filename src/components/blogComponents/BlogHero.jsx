@@ -3,7 +3,7 @@ import { Search, TrendingUp } from "lucide-react";
 
 const BlogHero = () => {
   return (
-    <section className="bg-[#0A192F] pt-32 pb-20 relative overflow-hidden text-white">
+    <section className="bg-[#0A192F] mt-20 md:mt-24 pb-20 relative overflow-hidden text-white">
       {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-linear-to-b from-[#00A3FF1A] to-transparent pointer-events-none"></div>
 

@@ -7,7 +7,7 @@ import siaImage from "../../assets/license/sia.png";
 
 const SIASection = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#243443] via-[#1f2f3f] to-[#16222c] py-20 px-6 lg:px-12 mt-20">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#243443] via-[#1f2f3f] to-[#16222c] py-20 px-6 lg:px-12 mt-20 md:mt-24">
 
       {/* Soft Background Glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#F15A24]  opacity-10 blur-[120px] rounded-full pointer-events-none" />

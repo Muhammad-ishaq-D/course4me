@@ -39,7 +39,14 @@ export const courses = {
       "Must have a valid First Aid qualification (or take it with this course)",
       "Must have the right to work in the UK",
       "Basic English communication skills"
-    ]
+    ],
+    passRate: "98%",
+    nextDate: "17th Mar",
+    format: "In-Person",
+    guarantee: {
+      title: "Training Guarantee",
+      desc: "Free exam retakes if you don't pass first time"
+    }
   },
   "cctv-training": {
     id: "cctv-training",
@@ -75,7 +82,14 @@ export const courses = {
       "No previous experience required",
       "Attention to detail and focus",
       "Ability to work long shifts"
-    ]
+    ],
+    passRate: "99%",
+    nextDate: "22nd Mar",
+    format: "In-Person",
+    guarantee: {
+      title: "Training Guarantee",
+      desc: "Free exam retakes if you don't pass first time"
+    }
   },
   "first-aid-at-work": {
     id: "first-aid-at-work",
@@ -111,7 +125,14 @@ export const courses = {
       "No previous experience needed",
       "Physically able to perform tasks (CPR)",
       "Good English comprehension"
-    ]
+    ],
+    passRate: "100%",
+    nextDate: "15th Mar",
+    format: "In-Person",
+    guarantee: {
+      title: "Training Guarantee",
+      desc: "Free exam retakes if you don't pass first time"
+    }
   },
   "security-guard": {
     id: "security-guard",
@@ -147,6 +168,13 @@ export const courses = {
       "Right to work in the UK",
       "Basic English proficiency",
       "No prior experience needed"
-    ]
+    ],
+    passRate: "97%",
+    nextDate: "10th Mar",
+    format: "In-Person",
+    guarantee: {
+      title: "Training Guarantee",
+      desc: "Free exam retakes if you don't pass first time"
+    }
   }
 };

@@ -104,34 +104,34 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
           exit={{ scale: 0.95, opacity: 0, y: 20 }}
           className="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden"
         >
-          <div className="p-8 md:p-10">
+          <div className="max-h-[90vh] md:max-h-[95vh] overflow-y-auto p-5 md:p-10">
             {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-[#1E293B] uppercase tracking-wide">
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8">
+              <h2 className="text-lg md:text-2xl font-bold text-[#1E293B] uppercase tracking-wide">
                 Browse Courses
               </h2>
-              <Link
+              {/* <Link
                 to="/courses"
                 onClick={onClose}
-                className="flex items-center gap-2 text-[#F15A24] font-semibold hover:underline"
+                className="flex items-center gap-1 md:gap-2 text-[#F15A24] font-semibold hover:underline"
               >
-                View All Courses <ArrowUpRight className="w-5 h-5" />
-              </Link>
+                View All Courses <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+              </Link> */}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
               {/* Categories Section */}
               <div>
-                <h3 className="text-sm font-bold text-[#94A3B8] uppercase tracking-widest mb-6">
+                <h3 className="text-sm font-bold text-[#94A3B8] uppercase tracking-widest mb-4 md:mb-6">
                   Categories
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3 md:space-y-4">
                   {categories.map((cat, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-4 p-3 rounded-2xl cursor-pointer hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100 group"
+                      className="flex items-center gap-3 md:gap-4 p-2 md:p-3 rounded-2xl cursor-pointer hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100 group"
                     >
-                      <div className={`${cat.color} p-3 rounded-xl text-white shadow-sm`}>
+                      <div className={`${cat.color} p-2.5 md:p-3 rounded-xl text-white shadow-sm`}>
                         {cat.icon}
                       </div>
                       <div>
@@ -149,17 +149,17 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
 
               {/* Popular Courses Section */}
               <div>
-                <h3 className="text-sm font-bold text-[#94A3B8] uppercase tracking-widest mb-6">
+                <h3 className="text-sm font-bold text-[#94A3B8] uppercase tracking-widest mb-4 md:mb-6">
                   Popular Courses
                 </h3>
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   {popularCourses.map((course, idx) => (
                     <div
                       key={idx}
                       onClick={() => handleCourseClick(course.id)}
-                      className="flex items-center gap-4 cursor-pointer group"
+                      className="flex items-center gap-3 md:gap-4 cursor-pointer group"
                     >
-                      <div className="w-20 h-16 rounded-xl overflow-hidden shrink-0 shadow-md">
+                      <div className="w-16 h-14 md:w-20 md:h-16 rounded-xl overflow-hidden shrink-0 shadow-md">
                         <img
                           src={course.image}
                           alt={course.title}
@@ -189,7 +189,7 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
                 {/* Explore Button */}
                 <button
                   onClick={() => { navigate('/courses'); onClose(); }}
-                  className="w-full mt-8 bg-[#F15A24] text-white font-bold py-4 rounded-full shadow-lg hover:shadow-[#F15A24]/30 hover:brightness-110 transition-all active:scale-95"
+                  className="w-full mt-6 md:mt-8 bg-[#F15A24] text-white font-bold py-3 md:py-4 rounded-full shadow-lg hover:shadow-[#F15A24]/30 hover:brightness-110 transition-all active:scale-95"
                 >
                   Explore All Courses
                 </button>
@@ -200,7 +200,7 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-2 right-4 p-2 rounded-full hover:bg-gray-100 text-[#94A3B8] transition-colors"
+            className="absolute top-8 right-6 md:right-4 p-2 rounded-full hover:bg-gray-100 text-[#94A3B8] transition-colors"
           >
             <X className="w-6 h-6" />
           </button>

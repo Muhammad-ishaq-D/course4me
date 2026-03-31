@@ -12,7 +12,7 @@ const Footer = () => {
 
           {/* Column 1 - About & Contact */}
           <div className="max-w-xs">
-            <img src={Logo} alt="logo" className="w-[30%]" />
+            <img src={Logo} alt="logo" className="w-[50%]" />
             <p className="text-[#A1A1A1] text-[14px] leading-relaxed mb-10">
               Courses4Me helps you get SIA trained, licensed, and ready for real security jobs — trusted by 400,000+ people across the UK.
             </p>

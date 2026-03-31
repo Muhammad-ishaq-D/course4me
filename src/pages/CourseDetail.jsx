@@ -25,11 +25,11 @@ const CourseDetail = () => {
       <div className="sticky top-[112px] z-40 bg-white border-b border-gray-100 hidden md:block">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex items-center gap-12 h-16 text-sm font-bold text-[#64748B]">
-            <a href="#overview" className="text-[#F15A24] border-b-2 border-[#F15A24] h-full flex items-center transition-colors">Overview</a>
-            <a href="#curriculum" className="hover:text-[#F15A24] transition-colors">Curriculum</a>
-            <a href="#dates" className="hover:text-[#F15A24] transition-colors">Dates & Prices</a>
-            <a href="#school" className="hover:text-[#F15A24] transition-colors">Training School</a>
-            <a href="#faq" className="hover:text-[#F15A24] transition-colors">FAQ</a>
+            <a href="" className="text-[#F15A24] border-b-2 border-[#F15A24] h-full flex items-center transition-colors">Overview</a>
+            <a href="" className="hover:text-[#F15A24] transition-colors">Curriculum</a>
+            <a href="" className="hover:text-[#F15A24] transition-colors">Dates & Prices</a>
+            <a href="" className="hover:text-[#F15A24] transition-colors">Training School</a>
+            <a href="" className="hover:text-[#F15A24] transition-colors">FAQ</a>
           </div>
         </div>
       </div>

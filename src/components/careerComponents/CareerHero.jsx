@@ -9,7 +9,7 @@ const CareerHero = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_70%,rgba(59,130,246,0.35),transparent_20%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(34,197,94,0.25),transparent_20%)]" />
 
-      <div className="relative max-w-6xl mx-auto px-6 pt-28 pb-32 text-center">
+      <div className="relative max-w-6xl mx-auto px-6 mt-20 md:mt-24 pb-32 text-center">
 
         {/* Top Badge */}
         <div className="inline-flex items-center gap-2 bg-[#2a3f33] text-[#a3ff5a] text-sm px-5 py-2 rounded-full border border-[#3c5e48]">
