@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const CourseCard = ({
+  id,
   image,
   title,
   description,
@@ -11,6 +13,8 @@ const CourseCard = ({
   date,
   category,
 }) => {
+  const navigate = useNavigate();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 25 }}
@@ -73,11 +77,17 @@ const CourseCard = ({
 
         {/* BUTTONS */}
         <div className="flex gap-3 mt-auto">
-          <button className="flex-1 bg-[#F65B15] hover:bg-[#e25512] text-white text-sm font-semibold py-2.5 rounded-lg transition">
+          <button 
+            onClick={() => navigate(`/course/${id}/book`)}
+            className="flex-1 bg-[#F65B15] hover:bg-[#e25512] text-white text-sm font-semibold py-2.5 rounded-lg transition"
+          >
             Book Now
           </button>
 
-          <button className="flex items-center justify-center gap-1 border border-white/10 text-white/80 text-sm px-4 rounded-lg hover:bg-white/5 transition">
+          <button 
+            onClick={() => navigate(`/course/${id}`)}
+            className="flex items-center justify-center gap-1 border border-white/10 text-white/80 text-sm px-4 rounded-lg hover:bg-white/5 transition"
+          >
             Learn More
             <ArrowRight size={14} />
           </button>

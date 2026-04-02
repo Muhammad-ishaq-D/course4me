@@ -7,6 +7,8 @@ import Locations from "../pages/Locations";
 import Careers from "../pages/Careers";
 import Blog from "../pages/Blog";
 import CourseDetail from "../pages/CourseDetail";
+import CourseBooking from "../pages/CourseBooking";
+import CourseResults from "../pages/CourseResults";
 
 
 const AppRoutes = () => {
@@ -15,6 +17,8 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/courses" element={<Courses />} />
       <Route path="/course/:courseId" element={<CourseDetail />} />
+      <Route path="/course/:courseId/book" element={<CourseBooking />} />
+      <Route path="/booking/course" element={<CourseResults />} />
       <Route path="/licences" element={<Licenses />} />
       <Route path="/blog" element={<Blog />} />
       {/* <Route path="/locations" element={<Locations />} />
