@@ -116,7 +116,7 @@ const CourseResults = () => {
         initialLocation={postcode}
       />
       {/* Search Header */}
-      <header className="bg-white border-b border-gray-100 py-3 sticky top-0 z-50">
+      <header className="fixed bg-white border-b border-gray-100 py-3 top-28 w-full shadow-xs z-50">
         <div className="max-w-[1200px] mx-auto px-4 flex items-center justify-between">
           <div className="flex-1 max-w-[600px] relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -136,7 +136,7 @@ const CourseResults = () => {
         </div>
       </header>
 
-      <main className="max-w-[1200px] mx-auto px-4 py-6 md:py-10">
+      <main className="max-w-[1200px] mx-auto px-4 py-6 md:py-20">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* 4. Left Sidebar (Filters) */}
           <aside className="w-full lg:w-[240px] shrink-0">

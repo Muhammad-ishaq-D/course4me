@@ -7,7 +7,7 @@ const SearchModal = ({ isOpen, onClose, initialCourse = "", initialLocation = ""
   const navigate = useNavigate();
   const [courseQuery, setCourseQuery] = useState(initialCourse);
   const [locationQuery, setLocationQuery] = useState(initialLocation);
-  
+
   const [isCourseDropdownOpen, setIsCourseDropdownOpen] = useState(false);
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +51,7 @@ const SearchModal = ({ isOpen, onClose, initialCourse = "", initialLocation = ""
     // 3-step loading simulation
     setTimeout(() => setLoadingStep(1), 800);
     setTimeout(() => setLoadingStep(2), 1600);
-    
+
     setTimeout(() => {
       setIsLoading(false);
       onClose();
@@ -59,18 +59,30 @@ const SearchModal = ({ isOpen, onClose, initialCourse = "", initialLocation = ""
     }, 2400);
   };
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <>
       {/* Background Overlay */}
-      <div 
+      <div
         className="fixed inset-0 bg-black/60 z-100 transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal Container */}
-      <div className="fixed top-0 left-0 w-full bg-[#1C1C1C] z-101 shadow-2xl animate-in slide-in-from-top-4 duration-300">
+      <div className="fixed top-0 left-0 w-full bg-[#1C1C1C] z-101 shadow-2xl animate-in slide-in-from-top-4 duration-300" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999 }}>
         <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-8">
           <div className="flex justify-between items-center mb-6 text-white">
             <h2 className="text-xl font-bold tracking-tight">Refine Your Search</h2>
@@ -80,7 +92,7 @@ const SearchModal = ({ isOpen, onClose, initialCourse = "", initialLocation = ""
           </div>
 
           <div className="flex flex-col md:flex-row gap-4">
-            
+
             {/* Course Input with Dropdown */}
             <div className="flex-1 relative flex flex-col gap-2">
               <label className="text-xs font-bold text-white uppercase tracking-widest">Find your perfect course</label>
@@ -98,11 +110,11 @@ const SearchModal = ({ isOpen, onClose, initialCourse = "", initialLocation = ""
                   placeholder="e.g. Door Supervisor Training"
                 />
                 {courseQuery && (
-                  <button 
+                  <button
                     onClick={() => {
-                        setCourseQuery("");
-                        setIsCourseDropdownOpen(true);
-                    }} 
+                      setCourseQuery("");
+                      setIsCourseDropdownOpen(true);
+                    }}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     <X size={16} />
@@ -123,7 +135,7 @@ const SearchModal = ({ isOpen, onClose, initialCourse = "", initialLocation = ""
                   </div>
                   <div className="max-h-[300px] overflow-y-auto">
                     {courseList.filter(c => c.title.toLowerCase().includes(courseQuery.toLowerCase())).map((course, idx) => (
-                      <div 
+                      <div
                         key={course.id}
                         onClick={() => {
                           setCourseQuery(course.title);
@@ -162,7 +174,7 @@ const SearchModal = ({ isOpen, onClose, initialCourse = "", initialLocation = ""
                     {locations
                       .filter(loc => loc.toLowerCase().includes(locationQuery.toLowerCase()))
                       .map((loc, idx) => (
-                        <div 
+                        <div
                           key={idx}
                           onClick={() => {
                             setLocationQuery(loc);
@@ -182,7 +194,7 @@ const SearchModal = ({ isOpen, onClose, initialCourse = "", initialLocation = ""
 
             {/* Search Button */}
             <div className="flex items-end mt-4 md:mt-0">
-              <button 
+              <button
                 onClick={handleSearch}
                 disabled={isLoading}
                 className="w-full md:w-auto h-[52px] px-10 bg-[#F15A24] text-white font-extrabold rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#F15A24]/20 flex items-center justify-center gap-2"

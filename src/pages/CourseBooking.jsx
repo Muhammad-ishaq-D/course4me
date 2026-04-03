@@ -136,14 +136,14 @@ const CourseBooking = () => {
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen mt-28 font-sans">
-      <SearchModal 
-        isOpen={isSearchModalOpen} 
-        onClose={() => setIsSearchModalOpen(false)} 
+      <SearchModal
+        isOpen={isSearchModalOpen}
+        onClose={() => setIsSearchModalOpen(false)}
         initialCourse={course.title}
         initialLocation={searchLocation}
       />
       {/* 1. Specialized Booking Header */}
-      <header className="bg-white border-b border-gray-200 py-3 sticky top-0 z-50 px-4 md:px-0">
+      <header className="bg-white border-b border-gray-200 py-3 fixed top-28 w-full shadow-md z-50 px-4 md:px-0">
         <div className="max-w-[1200px] mx-auto flex items-center justify-between px-4 md:px-6">
           <div className="flex-1 max-w-[600px] relative ml-4 md:ml-0">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
