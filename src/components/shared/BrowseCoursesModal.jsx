@@ -20,31 +20,31 @@ import firstAidImg from "../../assets/courses/first-aid.png";
 const categories = [
   {
     icon: <Shield className="w-6 h-6" />,
-    name: "SIA Courses",
+    name: "SIA Training",
     count: "5 courses",
     color: "bg-[#FF3B30]",
-    id: "sia-courses"
+    id: "SIA Training"
   },
   {
     icon: <Activity className="w-6 h-6" />,
     name: "First Aid",
     count: "1 course",
     color: "bg-[#34C759]",
-    id: "first-aid"
+    id: "First Aid"
   },
   {
     icon: <Shield className="w-6 h-6" />,
-    name: "SIA Courses", // Replicating the image exactly
+    name: "Health & Safety",
     count: "2 courses",
     color: "bg-[#007AFF]",
-    id: "sia-courses-2"
+    id: "Health & Safety"
   },
   {
     icon: <Briefcase className="w-6 h-6" />,
     name: "Specialist",
     count: "2 courses",
     color: "bg-[#5856D6]",
-    id: "specialist"
+    id: "Specialist"
   }
 ];
 
@@ -82,6 +82,11 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
 
   const handleCourseClick = (courseId) => {
     navigate(`/course/${courseId}`);
+    onClose();
+  };
+
+  const handleCategoryClick = (categoryId) => {
+    navigate(`/courses?category=${encodeURIComponent(categoryId)}`);
     onClose();
   };
 
@@ -129,6 +134,7 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
                   {categories.map((cat, idx) => (
                     <div
                       key={idx}
+                      onClick={() => handleCategoryClick(cat.id)}
                       className="flex items-center gap-3 md:gap-4 p-2 md:p-3 rounded-2xl cursor-pointer hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100 group"
                     >
                       <div className={`${cat.color} p-2.5 md:p-3 rounded-xl text-white shadow-sm`}>

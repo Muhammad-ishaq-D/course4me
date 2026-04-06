@@ -1,9 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BookOpen, Clock, BookOpenCheck, Users, Play, ArrowRight, Shield } from "lucide-react";
 import underlineStroke from "../../assets/home/underline-stroke.svg";
-import doorSupervisorVideo from "../../assets/home/James Okonkwo.png";
+import doorSupervisorImg from "../../assets/home/James Okonkwo.png";
+
+// ─── Data ────────────────────────────────────────────────────────────────────
+
+const PREVIEW_COURSES = [
+    {
+        id: "cctv-training",
+        title: "CCTV Operator Course",
+        img: "https://images.pexels.com/photos/8369648/pexels-photo-8369648.jpeg",
+        badge: "High Demand",
+        days: "3 Days",
+        modules: "8 Modules",
+        users: "95K+",
+        desc: "Learn public space surveillance, data protection laws, and modern CCTV systems operation.",
+        isPopular: true,
+        isNew: false,
+    },
+    {
+        id: "security-guard",
+        title: "Close Protection Officer",
+        img: "https://images.pexels.com/photos/6077326/pexels-photo-6077326.jpeg",
+        badge: "Premium",
+        days: "14 Days",
+        modules: "18 Modules",
+        users: "42K+",
+        desc: "Elite bodyguard training including threat assessment, route planning, and VIP protection.",
+        isPopular: false,
+        isNew: true,
+    },
+    {
+        id: "first-aid-at-work",
+        title: "First Aid at Work",
+        img: "https://images.pexels.com/photos/7551662/pexels-photo-7551662.jpeg",
+        badge: "Essential",
+        days: "3 Days",
+        modules: "10 Modules",
+        users: "120K+",
+        desc: "Nationally recognised first aid qualification covering CPR, emergency response, and more.",
+        isPopular: true,
+        isNew: false,
+    },
+];
+
+const FILTERS = ["All Courses", "Popular", "New"];
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 const TrainingPreviewSection = () => {
+    const navigate = useNavigate();
+    const [activeFilter, setActiveFilter] = useState("All Courses");
+
+    const filteredCourses = PREVIEW_COURSES.filter((c) => {
+        if (activeFilter === "Popular") return c.isPopular;
+        if (activeFilter === "New") return c.isNew;
+        return true;
+    });
+
     return (
         <div className="max-w-[1240px] mx-auto px-4 sm:px-6 py-16 sm:py-20 font-sans">
 
@@ -38,15 +93,19 @@ const TrainingPreviewSection = () => {
 
                     {/* Category Filter Pills */}
                     <div className="bg-[#F8F9FA] p-1.5 rounded-full border border-gray-100 flex items-center gap-1 w-fit shadow-sm">
-                        <button className="px-6 py-2.5 bg-[#1A1A1A] text-white rounded-full text-xs font-bold transition-all shadow-md">
-                            All Courses
-                        </button>
-                        <button className="px-6 py-2.5 text-gray-400 hover:text-gray-600 rounded-full text-xs font-bold transition-all">
-                            Popular
-                        </button>
-                        <button className="px-6 py-2.5 text-gray-400 hover:text-gray-600 rounded-full text-xs font-bold transition-all">
-                            New
-                        </button>
+                        {FILTERS.map((f) => (
+                            <button
+                                key={f}
+                                onClick={() => setActiveFilter(f)}
+                                className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all ${
+                                    activeFilter === f
+                                        ? "bg-[#1A1A1A] text-white shadow-md"
+                                        : "text-gray-400 hover:text-gray-600"
+                                }`}
+                            >
+                                {f}
+                            </button>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -55,10 +114,13 @@ const TrainingPreviewSection = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
 
                 {/* LEFT: Featured Main Card */}
-                <div className="relative rounded-[32px] overflow-hidden group cursor-pointer shadow-xl flex flex-col justify-end min-h-[500px]">
+                <div
+                    onClick={() => navigate("/course/door-supervisor")}
+                    className="relative rounded-[32px] overflow-hidden group cursor-pointer shadow-xl flex flex-col justify-end min-h-[500px]"
+                >
                     {/* Background Image */}
                     <img
-                        src={doorSupervisorVideo}
+                        src={doorSupervisorImg}
                         alt="Security Training"
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
@@ -118,88 +180,65 @@ const TrainingPreviewSection = () => {
 
                 {/* RIGHT: List of Course Cards */}
                 <div className="flex flex-col gap-6">
+                    {filteredCourses.length > 0 ? (
+                        filteredCourses.map((course) => (
+                            <div
+                                key={course.id}
+                                onClick={() => navigate(`/course/${course.id}`)}
+                                className="bg-white border border-gray-100 rounded-[28px] p-4 flex flex-col sm:flex-row gap-6 hover:shadow-xl hover:border-gray-200 transition-all duration-300 cursor-pointer group relative items-center"
+                            >
+                                <div className="relative w-full sm:w-44 h-36 sm:h-32 flex-shrink-0 overflow-hidden rounded-[20px]">
+                                    <span className="absolute top-2.5 left-2.5 px-2 py-1 bg-[#00A3FF] text-white text-[9px] font-bold uppercase tracking-wider rounded z-20 shadow-lg">
+                                        {course.badge}
+                                    </span>
 
-                    {[
-                        {
-                            title: "CCTV Operator Course",
-                            img: "https://images.pexels.com/photos/8369648/pexels-photo-8369648.jpeg",
-                            badge: "High Demand",
-                            days: "3 Days",
-                            modules: "8 Modules",
-                            users: "95K+",
-                            desc: "Learn public space surveillance, data protection laws, and modern CCTV systems operation."
-                        },
-                        {
-                            title: "Close Protection Officer",
-                            img: "https://images.pexels.com/photos/6077326/pexels-photo-6077326.jpeg",
-                            badge: "Premium",
-                            days: "14 Days",
-                            modules: "18 Modules",
-                            users: "42K+",
-                            desc: "Elite bodyguard training including threat assessment, route planning, and VIP protection."
-                        },
-                        {
-                            title: "First Aid at Work",
-                            img: "https://images.pexels.com/photos/7551662/pexels-photo-7551662.jpeg",
-                            badge: "Essential",
-                            days: "3 Days",
-                            modules: "10 Modules",
-                            users: "120K+",
-                            desc: "Nationally recognised first aid qualification covering CPR, emergency response, and"
-                        }
-                    ].map((course, i) => (
-                        <div
-                            key={i}
-                            className="bg-white border border-gray-100 rounded-[28px] p-4 flex flex-col sm:flex-row gap-6 hover:shadow-xl hover:border-gray-200 transition-all duration-300 cursor-pointer group relative items-center"
-                        >
-                            <div className="relative w-full sm:w-44 h-36 sm:h-32 flex-shrink-0 overflow-hidden rounded-[20px]">
-                                <span className="absolute top-2.5 left-2.5 px-2 py-1 bg-[#00A3FF] text-white text-[9px] font-bold uppercase tracking-wider rounded z-20 shadow-lg">
-                                    {course.badge}
-                                </span>
+                                    <img
+                                        src={course.img}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-90"
+                                    />
 
-                                <img
-                                    src={course.img}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-90"
-                                />
-
-                                <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/20 group-hover:bg-black/10 transition-colors">
-                                    <div className="w-11 h-11 bg-[#FF5421] rounded-full flex items-center justify-center group-hover:scale-110 transition shadow-xl">
-                                        <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+                                    <div className="absolute inset-0 flex items-center justify-center z-10 bg-black/20 group-hover:bg-black/10 transition-colors">
+                                        <div className="w-11 h-11 bg-[#FF5421] rounded-full flex items-center justify-center group-hover:scale-110 transition shadow-xl">
+                                            <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="flex-1 flex flex-col py-1">
-                                <h4 className="text-lg font-bold text-[#1A1A1A] mb-1.5 tracking-tight group-hover:text-[#FF5421] transition-colors">
-                                    {course.title}
-                                </h4>
+                                <div className="flex-1 flex flex-col py-1">
+                                    <h4 className="text-lg font-bold text-[#1A1A1A] mb-1.5 tracking-tight group-hover:text-[#FF5421] transition-colors">
+                                        {course.title}
+                                    </h4>
 
-                                <p className="text-gray-500 text-sm mb-4 leading-relaxed font-medium line-clamp-2">
-                                    {course.desc}
-                                </p>
+                                    <p className="text-gray-500 text-sm mb-4 leading-relaxed font-medium line-clamp-2">
+                                        {course.desc}
+                                    </p>
 
-                                <div className="flex flex-wrap gap-4 text-gray-400 text-xs font-bold">
-                                    <div className="flex items-center gap-1.5">
-                                        <Clock className="w-3.5 h-3.5 text-[#00A3FF]" />
-                                        <span>{course.days}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <BookOpenCheck className="w-3.5 h-3.5 text-[#00A3FF]" />
-                                        <span>{course.modules}</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <Users className="w-3.5 h-3.5 text-[#00A3FF]" />
-                                        <span>{course.users}</span>
+                                    <div className="flex flex-wrap gap-4 text-gray-400 text-xs font-bold">
+                                        <div className="flex items-center gap-1.5">
+                                            <Clock className="w-3.5 h-3.5 text-[#00A3FF]" />
+                                            <span>{course.days}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <BookOpenCheck className="w-3.5 h-3.5 text-[#00A3FF]" />
+                                            <span>{course.modules}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <Users className="w-3.5 h-3.5 text-[#00A3FF]" />
+                                            <span>{course.users}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Chevron decoration */}
-                            <div className="hidden sm:flex pr-4">
-                                <ArrowRight className="w-5 h-5 text-gray-200 group-hover:text-[#FF5421] group-hover:translate-x-1 transition-all" />
+                                <div className="hidden sm:flex pr-4">
+                                    <ArrowRight className="w-5 h-5 text-gray-200 group-hover:text-[#FF5421] group-hover:translate-x-1 transition-all" />
+                                </div>
                             </div>
+                        ))
+                    ) : (
+                        <div className="flex items-center justify-center h-full min-h-[200px] border border-dashed border-gray-200 rounded-[28px] text-gray-400 text-sm font-medium">
+                            No courses in this filter
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
 
@@ -218,12 +257,18 @@ const TrainingPreviewSection = () => {
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-5 relative z-10">
-                    <button className="px-10 py-5 bg-[#FF5421] text-white rounded-full text-base font-bold hover:bg-[#e04a1b] transition-all shadow-xl shadow-[#FF5421]/20 flex items-center gap-3 active:scale-95">
+                    <button
+                        onClick={() => navigate("/courses")}
+                        className="px-10 py-5 bg-[#FF5421] text-white rounded-full text-base font-bold hover:bg-[#e04a1b] transition-all shadow-xl shadow-[#FF5421]/20 flex items-center gap-3 active:scale-95"
+                    >
                         <Shield className="w-5 h-5 fill-white/20" />
                         Book a Course
                     </button>
 
-                    <button className="px-10 py-5 bg-white/5 hover:bg-white/10 text-white rounded-full text-base font-bold transition-all border border-white/10 flex items-center gap-3 backdrop-blur-sm active:scale-95">
+                    <button
+                        onClick={() => navigate("/courses")}
+                        className="px-10 py-5 bg-white/5 hover:bg-white/10 text-white rounded-full text-base font-bold transition-all border border-white/10 flex items-center gap-3 backdrop-blur-sm active:scale-95"
+                    >
                         <Play className="w-5 h-5 fill-white" />
                         Watch More
                     </button>

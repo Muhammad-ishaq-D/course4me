@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Award, Briefcase, Building2, Users } from "lucide-react";
 
 const HiringTrainingSection = () => {
+  const navigate = useNavigate();
   return (
     <section className="relative bg-white py-24 font-sans overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -31,7 +33,10 @@ const HiringTrainingSection = () => {
             </p>
 
             {/* Button */}
-            <button className="mt-4 bg-[#1A1A1A] text-white px-10 py-4.5 rounded-full font-bold flex items-center gap-3 w-fit shadow-xl hover:bg-black transition-all">
+            <button
+              onClick={() => navigate("/careers")}
+              className="mt-4 bg-[#1A1A1A] text-white px-10 py-4.5 rounded-full font-bold flex items-center gap-3 w-fit shadow-xl hover:bg-black transition-all"
+            >
               Learn More
               <span className="text-xl">→</span>
             </button>

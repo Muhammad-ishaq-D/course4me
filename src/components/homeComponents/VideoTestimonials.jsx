@@ -53,7 +53,7 @@ export default function VideoTestimonials() {
     ];
 
     return (
-        <section className="bg-[#1A1A1A] text-white py-24 relative overflow-hidden">
+        <section id="video-testimonials" className="bg-[#1A1A1A] text-white py-24 relative overflow-hidden">
             {/* Decor */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FF5421] opacity-5 blur-[150px] -mr-64 -mt-64"></div>
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#00A3FF] opacity-5 blur-[150px] -ml-64 -mb-64"></div>

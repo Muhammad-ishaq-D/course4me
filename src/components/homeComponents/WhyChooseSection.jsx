@@ -1,5 +1,6 @@
 import React from "react";
-import { Award, Users, Target, CheckCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Award, Users, Target, CheckCircle, ArrowRight } from "lucide-react";
 
 const features = [
   {
@@ -37,7 +38,8 @@ const features = [
 ];
 
 const WhyChooseTrainingCentres = () => {
-  return (
+    const navigate = useNavigate();
+    return (
     <section className="bg-[#F9FAFB] py-24 font-sans">
       <div className="max-w-[1300px] mx-auto px-6">
 
@@ -92,6 +94,17 @@ const WhyChooseTrainingCentres = () => {
             );
           })}
 
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="mt-16 text-center">
+            <button 
+                onClick={() => navigate("/courses")}
+                className="inline-flex items-center gap-3 bg-[#1A1A1A] text-white px-10 py-4.5 rounded-full font-bold shadow-xl hover:opacity-90 transition-all transform hover:scale-105"
+            >
+                Browse All Courses
+                <ArrowRight size={18} />
+            </button>
         </div>
       </div>
     </section>

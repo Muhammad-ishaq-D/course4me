@@ -1,3 +1,5 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Star,
     MapPin,
@@ -85,6 +87,7 @@ const trainers = [
 ];
 
 export default function TrainersSection() {
+    const navigate = useNavigate();
     return (
         <section className="bg-white text-[#1A1A1A] py-24 px-6">
             <div className="max-w-7xl mx-auto">
@@ -129,7 +132,7 @@ export default function TrainersSection() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
 
                     {trainers.map((trainer, i) => (
-                        <TrainerCard key={i} trainer={trainer} />
+                        <TrainerCard key={i} trainer={trainer} onClick={() => navigate("/courses")} />
                     ))}
 
                 </div>
@@ -138,7 +141,7 @@ export default function TrainersSection() {
     );
 }
 
-function TrainerCard({ trainer }) {
+function TrainerCard({ trainer, onClick }) {
     return (
         <div className="bg-white text-[#1A1A1A] rounded-[32px] overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.05)] border border-gray-100 hover:shadow-[0_40px_80px_rgba(0,0,0,0.1)] transition-all duration-300">
 
@@ -213,7 +216,10 @@ function TrainerCard({ trainer }) {
                 </div>
 
                 {/* Button */}
-                <button className="group w-full border-2 border-gray-100 rounded-full py-3.5 text-sm font-bold text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 flex items-center justify-center gap-2">
+                <button 
+                  onClick={onClick}
+                  className="group w-full border-2 border-gray-100 rounded-full py-3.5 text-sm font-bold text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 flex items-center justify-center gap-2"
+                >
                     View Full Profile
                     <ChevronRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </button>
