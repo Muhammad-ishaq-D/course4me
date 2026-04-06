@@ -13,7 +13,7 @@ export default function TopNav() {
             <div className="max-w-[1200px] mx-auto flex items-center justify-between h-[40px] px-3 sm:px-4">
 
                 {/* Left */}
-                <div className="flex items-center text-[11px] sm:text-[12px] font-medium text-gray-700 tracking-wide cursor-pointer">
+                <div className="flex items-center text-[11px] sm:text-[12px] font-medium text-[#5E5E5E] tracking-wide cursor-pointer">
                     <span className="uppercase">Go To</span>
                     <ChevronDown size={14} className="ml-1" />
                 </div>
@@ -22,7 +22,7 @@ export default function TopNav() {
                 <div className="flex items-center gap-3 sm:gap-5 text-[11px] sm:text-[12px] text-gray-600">
 
                     {/* Quick Links */}
-                    <div className="flex items-center font-medium uppercase tracking-wide cursor-pointer">
+                    <div className="flex items-center font-medium uppercase tracking-wide  text-[#5E5E5E] cursor-pointer">
                         <span className="hidden sm:inline">Quick Links</span>
                         <span className="sm:hidden">Links</span>
                         <ChevronDown size={14} className="ml-1" />

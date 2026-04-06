@@ -16,8 +16,9 @@ const CareerPathSection = () => {
       progression:
         "Senior Security Officer → Security Supervisor → Security Manager",
       badge: "High Demand",
-      badgeColor: "bg-orange-500",
+      badgeColor: "bg-[#F8510C]",
       icon: Shield,
+      jobs: 5,
       image:
         "/src/assets/careers/Security Guard Licence.png"
     },
@@ -31,6 +32,7 @@ const CareerPathSection = () => {
       badge: "Very High Demand",
       badgeColor: "bg-red-500",
       icon: Users,
+      jobs: 3,
       image:
         "/src/assets/careers/Door Supervisor Licence.png"
     }
@@ -42,16 +44,16 @@ const CareerPathSection = () => {
 
         {/* Top Badge */}
         <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 bg-[#e7f5d4] text-[#1e2e3e] text-sm font-medium px-5 py-2 rounded-full">
+          <div className="inline-flex items-center gap-2 bg-[#F8510C1A] text-[#F8510C] text-sm font-medium px-5 py-2 rounded-full">
             <TrendingUp size={14} />
             Explore Career Paths
           </div>
 
-          <h2 className="mt-6 text-4xl font-bold text-[#2f3a47]">
+          <h2 className="mt-6 text-4xl font-bold text-black">
             Choose Your Security Career Path
           </h2>
 
-          <p className="mt-4 text-gray-500 max-w-2xl mx-auto">
+          <p className="mt-4 text-[#4A5565] max-w-2xl mx-auto">
             From entry-level positions to specialized roles, discover the
             perfect career path for your skills and ambitions
           </p>
@@ -66,10 +68,10 @@ const CareerPathSection = () => {
             return (
               <div
                 key={i}
-                className="bg-white rounded-[24px] shadow-lg border-2 border-[#a3ff5a] overflow-hidden transition hover:shadow-xl"
+                className="bg-white rounded-[28px] shadow-2xl border border-[#F8510C] overflow-hidden"
               >
                 {/* Image Section */}
-                <div className="relative h-[220px]">
+                <div className="relative h-[230px]">
 
                   <img
                     src={item.image}
@@ -77,18 +79,22 @@ const CareerPathSection = () => {
                     className="w-full h-full object-cover"
                   />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                  {/* Dark Overlay */}
+                  <div className="absolute inset-0 bg-black/70" />
 
-                  {/* Icon */}
-                  <div className="absolute top-4 left-4 bg-blue-600 w-12 h-12 rounded-xl flex items-center justify-center shadow-md">
-                    <Icon size={20} className="text-white" />
+                  {/* Top Left Jobs Badge */}
+                  <div className="absolute top-4 left-4 bg-blue-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                    {item.jobs} Jobs Available
                   </div>
 
-                  {/* Badge */}
-                  <div
-                    className={`absolute top-4 right-4 text-white text-xs font-semibold px-3 py-1 rounded-full ${item.badgeColor}`}
-                  >
+                  {/* Top Right Badge */}
+                  <div className={`absolute top-4 right-4 text-white text-xs font-semibold px-3 py-1 rounded-full ${item.badgeColor}`}>
                     {item.badge}
+                  </div>
+
+                  {/* Icon */}
+                  <div className="absolute top-16 left-6 bg-blue-600 w-12 h-12 rounded-xl flex items-center justify-center">
+                    <Icon size={20} className="text-white" />
                   </div>
 
                   {/* Title + Salary */}
@@ -96,21 +102,21 @@ const CareerPathSection = () => {
                     <h3 className="text-2xl font-bold">
                       {item.title}
                     </h3>
-                    <div className="text-[#a3ff5a] font-semibold mt-1">
-                      $ {item.salary}
+                    <div className="text-[#F8510C] font-semibold mt-1">
+                      £ {item.salary}
                     </div>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-8">
+                <div className="p-8 bg-[#F9FAFB]">
 
                   <p className="text-gray-600">
                     {item.description}
                   </p>
 
                   {/* Career Progression */}
-                  <div className="mt-6 bg-[#f3f6f9] rounded-xl p-5 relative">
+                  <div className="mt-6 bg-[#EEF2F6] rounded-xl p-5 relative">
                     <div className="text-sm font-semibold text-gray-500 mb-2">
                       Career Progression
                     </div>
@@ -120,19 +126,19 @@ const CareerPathSection = () => {
 
                     <CheckCircle
                       size={18}
-                      className="absolute top-5 right-5 text-green-500"
+                      className="absolute top-5 right-5 text-[#00A63E]"
                     />
                   </div>
 
                   {/* View Requirements */}
-                  <div className="mt-6 flex items-center justify-between text-sm font-medium text-[#2f3a47] cursor-pointer hover:opacity-70 transition">
+                  <div className="mt-6 flex items-center justify-between text-sm font-medium text-[#2f3a47] cursor-pointer">
                     View Requirements & Responsibilities
                     <ArrowRight size={16} />
                   </div>
 
                   {/* CTA */}
-                  <button className="mt-6 w-full bg-[#2f3a47] text-white py-4 rounded-full font-medium hover:bg-black transition flex items-center justify-center gap-2">
-                    View {item.title} Jobs
+                  <button className="mt-6 w-full bg-[#1E1E1E] text-white py-4 rounded-full font-medium flex items-center justify-center gap-2">
+                    View {item.title} Jobs ({item.jobs})
                     <ArrowRight size={18} />
                   </button>
 

@@ -4,8 +4,10 @@ import {
   Clock,
   ArrowRight
 } from "lucide-react";
-
+import { useState } from "react";
+import ApplyModal from "./ApplyModalNew";
 const AllJobListings = () => {
+  const [selectedJob, setSelectedJob] = useState(null);
   const jobs = [
     {
       title: "Security Guard - Retail",
@@ -14,6 +16,7 @@ const AllJobListings = () => {
       salary: "£24,000 - £26,000",
       posted: "2 days ago",
       type: "Full-time",
+      role: "Security Guard",
       description:
         "Busy shopping centre requires experienced SIA licensed security guards for day and night shifts.",
       requirements: [
@@ -29,6 +32,7 @@ const AllJobListings = () => {
       salary: "£12 - £15 per hour",
       posted: "1 day ago",
       type: "Part-time",
+      role: "Door Supervisor",
       description:
         "High-end nightclub seeking professional door supervisors for weekend shifts.",
       requirements: [
@@ -44,6 +48,7 @@ const AllJobListings = () => {
       salary: "£22,000 - £24,000",
       posted: "3 days ago",
       type: "Full-time",
+      role: "CCTV Operator",
       description:
         "Modern control room monitoring city centre locations. Training provided.",
       requirements: [
@@ -59,6 +64,7 @@ const AllJobListings = () => {
       salary: "£50,000 - £70,000",
       posted: "5 days ago",
       type: "Contract",
+      role: "Close Protection Officer",
       description:
         "Experienced CPO required for high-profile client. International travel involved.",
       requirements: [
@@ -75,6 +81,7 @@ const AllJobListings = () => {
       salary: "£23,000 - £27,000",
       posted: "1 week ago",
       type: "Full-time",
+      role: "Security Guard",
       description:
         "Professional office environment seeking security officers for 24/7 coverage.",
       requirements: [
@@ -90,6 +97,7 @@ const AllJobListings = () => {
       salary: "£25,000 - £30,000",
       posted: "4 days ago",
       type: "Full-time",
+      role: "Security Guard",
       description:
         "Mobile patrol covering multiple sites. Company vehicle and phone provided.",
       requirements: [
@@ -100,42 +108,87 @@ const AllJobListings = () => {
     }
   ];
 
+  // Duplicate to make 12 cards
+  const allJobs = [...jobs, ...jobs];
+
+  const filters = [
+    "All (12)",
+    "Security Guard (5)",
+    "Door Supervisor (3)",
+    "CCTV Operator (2)",
+    "Close Protection Officer (2)"
+  ];
+
   const typeStyles = {
-    "Full-time": "bg-[#e3e9ff] text-[#2d5bff]",
-    "Part-time": "bg-[#e3e9ff] text-[#2d5bff]",
-    Contract: "bg-[#e3e9ff] text-[#2d5bff]"
+    "Full-time": "bg-[#E3E9FF] text-[#2D5BFF]",
+    "Part-time": "bg-[#E3E9FF] text-[#2D5BFF]",
+    Contract: "bg-[#E3E9FF] text-[#2D5BFF]"
+  };
+
+  const roleStyles = {
+    "Security Guard": "bg-gradient-to-r from-[#155DFC] to-[#155DFC] text-white",
+    "Door Supervisor": "bg-[#9333EA] text-white",
+    "CCTV Operator": "bg-[#16A34A] text-white",
+    "Close Protection Officer": "bg-[#F59E0B] text-white"
   };
 
   return (
-    <section className="bg-[#f4f7fb] py-24 px-6">
+    <section className="bg-[#F3F4F6] py-16 px-6">
       <div className="max-w-7xl mx-auto">
 
-        {/* Heading */}
-        <div className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#2f3a47]">
-            All Job Listings
-          </h2>
-          <p className="text-gray-500 mt-2">
-            Showing {jobs.length} jobs
-          </p>
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-6">
+
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1E1E1E]">
+              All Job Listings
+            </h2>
+            <p className="text-gray-500 mt-2">
+              Showing 12 jobs
+            </p>
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap gap-3">
+            {filters.map((item, i) => (
+              <div
+                key={i}
+                className={`px-5 py-2 rounded-full text-sm font-semibold cursor-pointer ${i === 0
+                  ? "bg-[#F8510C] text-white"
+                  : "bg-[#E5E7EB] text-[#374151]"
+                  }`}
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+
         </div>
 
         {/* Grid */}
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-          {jobs.map((job, index) => (
+          {allJobs.map((job, index) => (
             <div
               key={index}
-              className="bg-white rounded-[20px] p-7 shadow-[0_10px_25px_rgba(0,0,0,0.06)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.08)] transition duration-300 flex flex-col"
+              className="bg-[#F9FAFB] rounded-[22px] p-7 shadow-[0_6px_20px_rgba(0,0,0,0.05)] border border-transparent hover:border-[#F8510C] transition"
             >
 
-              {/* Job Type Badge */}
-              <div className={`text-xs font-semibold px-3 py-1 rounded-full w-fit mb-4 ${typeStyles[job.type]}`}>
-                {job.type}
+              {/* Badges */}
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
+
+                <div className={`text-xs font-semibold px-3 py-[6px] rounded-full ${typeStyles[job.type]}`}>
+                  {job.type}
+                </div>
+
+                <div className={`text-xs font-semibold px-3 py-[6px] rounded-full ${roleStyles[job.role]}`}>
+                  {job.role}
+                </div>
+
               </div>
 
               {/* Title */}
-              <h3 className="text-lg font-bold text-[#2f3a47]">
+              <h3 className="text-[20px] font-bold text-[#1E1E1E]">
                 {job.title}
               </h3>
 
@@ -147,11 +200,11 @@ const AllJobListings = () => {
               <div className="mt-4 space-y-2 text-sm">
 
                 <div className="flex items-center gap-2 text-gray-600">
-                  <MapPin size={16} className="text-[#a3ff5a]" />
+                  <MapPin size={16} className="text-[#F8510C]" />
                   {job.location}
                 </div>
 
-                <div className="flex items-center gap-2 text-green-600 font-semibold">
+                <div className="flex items-center gap-2 text-[#00A63E] font-semibold">
                   <DollarSign size={16} />
                   {job.salary}
                 </div>
@@ -178,7 +231,7 @@ const AllJobListings = () => {
                   {job.requirements.map((req, i) => (
                     <span
                       key={i}
-                      className="bg-[#eef1f5] text-gray-600 text-xs px-3 py-1 rounded-full"
+                      className="bg-[#EEF2F6] text-gray-600 text-xs px-3 py-1 rounded-full"
                     >
                       {req}
                     </span>
@@ -187,15 +240,25 @@ const AllJobListings = () => {
               </div>
 
               {/* Button */}
-              <button className="mt-8 bg-[#2f3a47] text-white py-3 rounded-full font-medium hover:bg-black transition flex items-center justify-center gap-2">
+              <button
+                onClick={() => setSelectedJob(job)}
+                className="mt-7 w-full bg-[#1E1E1E] text-white py-3 rounded-full font-medium flex items-center justify-center gap-2 hover:bg-black transition"
+              >
                 Apply Now
-                <ArrowRight size={18} />
+                <ArrowRight size={16} />
               </button>
 
             </div>
           ))}
 
         </div>
+        {selectedJob && (
+          <ApplyModal
+            job={selectedJob}
+            onClose={() => setSelectedJob(null)}
+          />
+        )}
+
       </div>
     </section>
   );

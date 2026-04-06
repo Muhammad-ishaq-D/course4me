@@ -10,13 +10,13 @@ import CareerCTA from '../components/careerComponents/CareerCTA'
 export default function Careers() {
   return (
     <div>
-        <CareerHero />
-        <CareerPathSection />
-        <FeaturedJobs />
-        <AllJobListings />
-        <WhyWorkSection />
-        <StepsSection />
-        <CareerCTA />
+      <CareerHero />
+      <CareerPathSection />
+      <FeaturedJobs />
+      <AllJobListings />
+      <WhyWorkSection />
+      <StepsSection />
+      <CareerCTA />
     </div>
   )
 }

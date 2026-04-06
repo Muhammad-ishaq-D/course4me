@@ -4,12 +4,7 @@ const CareerCTA = () => {
   return (
     <section className="relative overflow-hidden">
 
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1c2f44] via-[#0f2234] to-[#071a29]" />
-
-      {/* Radial Glow Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.35),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(34,197,94,0.25),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[#292929]" />
 
       <div className="relative max-w-4xl mx-auto px-6 py-28 text-center">
 
@@ -33,8 +28,7 @@ const CareerCTA = () => {
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
 
           {/* Primary Button */}
-          <button className="bg-[#F15A24]  text-[#0f2234] font-semibold px-8 py-4 rounded-full shadow-[0_8px_25px_rgba(185,255,90,0.4)] hover:brightness-105 transition flex items-center gap-3">
-            <Phone size={18} />
+          <button className="bg-[#F15A24] text-white font-semibold px-8 py-4 rounded-full transition flex items-center gap-3">            <Phone color="white" size={18} />
             Call 0800 XXX XXXX
           </button>
 
