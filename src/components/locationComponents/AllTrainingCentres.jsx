@@ -22,7 +22,7 @@ const centres = [
     address: "123 Oxford Street, London, W1D 2HG",
     hours: "Mon-Sun: 8:00 AM - 8:00 PM",
     next: "Tomorrow",
-    courses: ["Door Supervisor", "Security Guard", "CCTV Operator"],
+    courses: ["Door Supervisor", "Security Guard"],
     facilities: ["WiFi Access", "Public Transport", "Disabled Access"],
     phone: "020 7123 4567",
     email: "london@getlicensed.co.uk",
@@ -37,7 +37,7 @@ const centres = [
     address: "45 Deansgate, Manchester, M3 2AY",
     hours: "Mon-Sat: 8:00 AM - 7:00 PM",
     next: "Today",
-    courses: ["Door Supervisor", "Security Guard", "CCTV Operator"],
+    courses: ["Door Supervisor", "Security Guard"],
     facilities: ["WiFi Access", "Parking Available", "Disabled Access"],
     phone: "0161 234 5678",
     email: "manchester@getlicensed.co.uk",
@@ -52,7 +52,7 @@ const centres = [
     address: "78 Broad Street, Birmingham, B1 2HP",
     hours: "Mon-Sun: 7:30 AM - 8:00 PM",
     next: "Tomorrow",
-    courses: ["Door Supervisor", "Security Guard", "CCTV Operator"],
+    courses: ["Door Supervisor", "Security Guard"],
     facilities: ["WiFi Access", "Public Transport", "Refreshments"],
     phone: "0121 234 5678",
     email: "birmingham@getlicensed.co.uk",
@@ -97,7 +97,7 @@ const centres = [
     address: "89 Sauchiehall Street, Glasgow, G2 3DE",
     hours: "Mon-Sun: 8:00 AM - 8:00 PM",
     next: "Today",
-    courses: ["Door Supervisor", "Security Guard", "CCTV Operator"],
+    courses: ["Door Supervisor", "Security Guard", ""],
     facilities: ["WiFi Access", "Public Transport", "Disabled Access"],
     phone: "0141 234 5678",
     email: "glasgow@getlicensed.co.uk",
@@ -112,7 +112,7 @@ const centres = [
     address: "12 Princes Street, Edinburgh, EH2 2AN",
     hours: "Mon-Sat: 8:00 AM - 7:00 PM",
     next: "Tomorrow",
-    courses: ["Door Supervisor", "Security Guard", "CCTV Operator"],
+    courses: ["Door Supervisor", "Security Guard", ""],
     facilities: ["WiFi Access", "Public Transport", "Disabled Access"],
     phone: "0131 234 5678",
     email: "edinburgh@getlicensed.co.uk",
@@ -155,12 +155,12 @@ const AllTrainingCentres = () => {
   const [selectedCentre, setSelectedCentre] = useState(null);
 
   return (
-    <section className="bg-[#f3f6f9] py-24 px-6 lg:px-12">
+    <section className="bg-[#f3f6f9] py-5 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
         <div className="mb-12">
-          <h2 className="text-4xl font-bold text-[#2f3a47]">
+          <h2 className="text-4xl font-bold text-black">
             All Training Centres
           </h2>
           <p className="text-gray-500 mt-2">
@@ -186,7 +186,7 @@ const AllTrainingCentres = () => {
                 />
 
                 {/* Rating Badge */}
-                <div className="absolute top-4 right-4 bg-black/70 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                <div className="absolute top-4 right-4 bg-black/70 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
                   <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                   {centre.rating}
                 </div>
@@ -202,34 +202,33 @@ const AllTrainingCentres = () => {
               {/* Content */}
               <div className="p-6 flex flex-col flex-grow">
 
-                <h4 className="font-semibold text-[#2f3a47] mb-3">
+                <h4 className="font-semibold text-[#364153] mb-3">
                   {centre.name}
                 </h4>
 
                 {/* Postcode */}
-                <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                <div className="flex items-center gap-2 text-sm text-[#4A5565] mb-2">
                   <MapPin className="w-4 h-4 text-[#F15A24] " />
                   {centre.postcode}
                 </div>
 
                 {/* Next Available */}
-                <div className={`flex items-center gap-2 text-sm font-medium mb-4 ${centre.nextColor}`}>
-                  <Calendar className="w-4 h-4" />
+                <div className="flex items-center gap-2 text-sm font-medium mb-4 text-[#00A63E]">                  <Calendar className="w-4 h-4" />
                   Next: {centre.next}
                 </div>
 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-6">
+                <div className="flex flex-nowrap items-center gap-2 mb-6 overflow-hidden">
                   {centre.courses.map((course, i) => (
                     <span
                       key={i}
-                      className="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full"
+                      className="bg-[#F3F4F6] text-[#4A5565] text-xs px-3 py-1 rounded-full whitespace-nowrap"
                     >
                       {course}
                     </span>
                   ))}
 
-                  <span className="bg-[#eafad1] text-[#2f3a47] text-xs px-3 py-1 rounded-full">
+                  <span className="bg-[#FFE9DC] text-black text-xs px-3 py-1 rounded-full font-bold whitespace-nowrap">
                     {centre.more}
                   </span>
                 </div>
@@ -237,7 +236,7 @@ const AllTrainingCentres = () => {
                 {/* Button */}
                 <button
                   onClick={() => setSelectedCentre(centre)}
-                  className="mt-auto bg-[#2f3a47] text-white py-3 rounded-full font-medium hover:bg-black transition"
+                  className="mt-auto bg-black text-white py-2 rounded-full font-medium hover:bg-black transition"
                 >
                   View Details →
                 </button>

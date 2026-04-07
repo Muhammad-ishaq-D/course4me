@@ -47,10 +47,10 @@ const StepsSection = () => {
 
         {/* Heading */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#2f3a47]">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#1E1E1E]">
             Start Your Career in 4 Simple Steps
           </h2>
-          <p className="text-gray-500 mt-4">
+          <p className="text-[#4A5565] mt-4">
             From training to employment in just a few weeks
           </p>
         </div>
@@ -79,16 +79,16 @@ const StepsSection = () => {
 
                 {/* Icon Container */}
                 <div className="mt-16 w-14 h-14 mx-auto rounded-xl bg-[#f1f3f6] flex items-center justify-center">
-                  <Icon size={24} className="text-[#2f3a47]" />
+                  <Icon size={24} className="text-[#1E1E1E]" />
                 </div>
 
                 {/* Title */}
-                <h3 className="mt-6 text-lg font-bold text-[#2f3a47]">
+                <h3 className="mt-6 text-lg font-bold text-[#1E1E1E]">
                   {step.title}
                 </h3>
 
                 {/* Description */}
-                <p className="mt-3 text-gray-600 text-sm leading-relaxed">
+                <p className="mt-3 text-[#4A5565] text-sm leading-relaxed">
                   {step.description}
                 </p>
 

@@ -13,6 +13,9 @@ const TrainingCentresSection = () => {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#243443] via-[#1f2f3f] to-[#16222c] py-24 px-6 lg:px-12">
 
+      {/* Small Glowing Orange Circle (Behind everything else) */}
+      <div className="absolute top-[-40px] right-[-40px] w-80 h-80 bg-[#F8510C] rounded-full blur-[110px] opacity-60 pointer-events-none" />
+
       {/* Background Glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#F15A24]  opacity-10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -22,7 +25,7 @@ const TrainingCentresSection = () => {
         <div>
 
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-[#F15A241A] border border-[#F15A24]  text-[#F15A24]  px-4 py-2 rounded-full text-sm font-semibold mb-8">
+          <div className="inline-flex items-center gap-2 bg-[#F15A241A] border border-[#F15A24]  text-[#F15A24]  px-4 py-2 rounded-full text-sm font-semibold mb-8 mt-24">
             <MapPin size={16} />
             Find Your Nearest Centre
           </div>
@@ -40,8 +43,7 @@ const TrainingCentresSection = () => {
           </p>
 
           {/* Search Bar */}
-          <div className="mt-10 flex items-center bg-[#2f3f50] border border-white/10 rounded-2xl p-2 shadow-lg">
-
+          <div className="mt-10 flex items-center bg-[#454F5D] border border-white/10 rounded-2xl p-2 shadow-lg">
             <div className="flex items-center gap-3 px-4 text-gray-400 w-full">
               <Search size={18} />
               <input
@@ -51,7 +53,7 @@ const TrainingCentresSection = () => {
               />
             </div>
 
-            <button className="bg-[#F15A24]  hover:bg-[#a4e649] text-[#1f2f3f] font-semibold px-6 py-3 rounded-xl transition">
+            <button className="bg-[#F15A24]  hover:bg-[#a4e649] text-[#FFFFFF] font-semibold px-6 py-3 rounded-xl transition">
               Search
             </button>
           </div>
@@ -59,12 +61,12 @@ const TrainingCentresSection = () => {
           {/* Secondary Buttons */}
           <div className="flex flex-wrap gap-5 mt-8">
 
-            <button className="border border-white/30 text-white px-6 py-3 rounded-full flex items-center gap-3 hover:bg-white/10 transition">
+            <button className="bg-[#454D59] border-2 border-[#7D838C] text-white px-6 py-3 rounded-full flex items-center gap-3 hover:bg-[#3b3f45] transition">
               <Navigation size={16} />
               Use My Location
             </button>
 
-            <button className="border border-white/30 text-white px-6 py-3 rounded-full flex items-center gap-3 hover:bg-white/10 transition">
+            <button className="bg-[#454D59] border-2 border-[#7D838C] text-white px-6 py-3 rounded-full flex items-center gap-3 hover:bg-[#3b3f45] transition">
               <Calendar size={16} />
               View Availability
             </button>

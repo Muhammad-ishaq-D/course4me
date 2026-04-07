@@ -8,11 +8,11 @@ const NationwideCoverage = () => {
       <div className="max-w-6xl mx-auto text-center">
 
         {/* Header */}
-        <h2 className="text-4xl md:text-5xl font-bold text-[#2f3a47]">
+        <h2 className="text-4xl md:text-5xl font-bold text-black">
           Nationwide Coverage
         </h2>
 
-        <p className="text-gray-600 mt-4 text-lg">
+        <p className="text-[#4A5565] mt-4 text-lg">
           From major cities to local communities, we're here for you
         </p>
 
@@ -20,17 +20,14 @@ const NationwideCoverage = () => {
         <div className="relative mt-16 rounded-3xl overflow-hidden shadow-2xl">
 
           {/* Dark Gradient Background */}
-          <div className="bg-gradient-to-br from-[#4a5663] via-[#3f4c5a] to-[#35424f] py-24 px-6">
-
+          <div className="bg-gradient-to-br from-[#1E1E1E]/80 to-[#333333]/80 py-24 px-6">
             {/* Soft Overlay for depth */}
             <div className="absolute inset-0 bg-black/10 pointer-events-none"></div>
 
             <div className="relative z-10 flex flex-col items-center text-center text-white">
 
               {/* Icon */}
-              <div className="w-20 h-20 bg-[#F15A24]  rounded-full flex items-center justify-center mb-8 shadow-lg">
-                <MapPin size={36} className="text-[#2f3a47]" />
-              </div>
+              <MapPin size={64} className="text-[#F8510C] mb-8" />
 
               {/* Title */}
               <h3 className="text-4xl md:text-5xl font-bold">
@@ -43,7 +40,7 @@ const NationwideCoverage = () => {
               </p>
 
               {/* Button */}
-              <button className="mt-10 bg-[#F15A24]  hover:bg-[#a6e64c] text-[#1f2f3f] font-semibold px-8 py-4 rounded-full shadow-lg transition">
+              <button className="mt-10 bg-[#F15A24]  hover:bg-[#a6e64c] text-white font-semibold px-8 py-4 rounded-full shadow-lg transition">
                 View Interactive Map
               </button>
 

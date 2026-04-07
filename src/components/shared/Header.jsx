@@ -68,7 +68,7 @@ const Header = () => {
 
             <Link
               to="/courses"
-              className="bg-[#F15A24]  text-[#2f3a47] font-semibold px-6 py-2.5 rounded-full shadow-md hover:brightness-95 transition"
+              className="bg-[#F15A24]  text-[#FFFFFF] font-semibold px-6 py-2.5 rounded-full shadow-md hover:brightness-95 transition"
             >
               Find Course
             </Link>

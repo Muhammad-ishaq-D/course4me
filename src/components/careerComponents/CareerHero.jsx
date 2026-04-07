@@ -2,17 +2,21 @@ import { Search, Briefcase } from "lucide-react";
 
 const CareerHero = () => {
   return (
-    <section className="relative overflow-hidden bg-[#0f1f2f]">
+    <section className="relative overflow-hidden bg-[#121212]">
 
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1b3b5f] via-[#14293d] to-[#0e1a26]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_70%,rgba(59,130,246,0.35),transparent_20%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(34,197,94,0.25),transparent_20%)]" />
+      {/* 🔥 Main Dark Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1E1E1E] via-[#2A2A2A] to-[#121212]" />
 
-      <div className="relative max-w-6xl mx-auto px-6 mt-20 md:mt-24 pb-32 text-center">
+      {/* 🔵 Blue Glow (Bottom Left) */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.35),transparent_30%)]" />
 
-        {/* Top Badge */}
-        <div className="inline-flex items-center gap-2 bg-[#2a3f33] text-[#a3ff5a] text-sm px-5 py-2 rounded-full border border-[#3c5e48]">
+      {/* 🟠 Orange Glow (Top Right) */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(248,81,12,0.4),transparent_30%)]" />
+
+      <div className="relative max-w-6xl mx-auto px-6 mt-36 md:mt-50 pb-32 text-center">
+
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 bg-[#F8510C1A] text-[#F8510C] text-sm px-5 py-2 rounded-full border border-[#F8510C]">
           <Briefcase size={16} />
           Start Your Security Career Today
         </div>
@@ -33,10 +37,10 @@ const CareerHero = () => {
 
         {/* Search Bar */}
         <div className="mt-10 max-w-3xl mx-auto">
-          <div className="flex items-center bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-2 shadow-lg">
+          <div className="flex items-center bg-[#2A2A2A]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-2 shadow-lg">
 
             <div className="flex items-center flex-1 px-4">
-              <Search size={18} className="text-gray-300" />
+              <Search size={18} className="text-gray-400" />
               <input
                 type="text"
                 placeholder="Job title or company..."
@@ -44,7 +48,7 @@ const CareerHero = () => {
               />
             </div>
 
-            <button className="bg-[#a3ff5a] text-[#0f1f2f] font-semibold px-6 py-3 rounded-xl hover:brightness-105 transition">
+            <button className="bg-[#F8510C] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#d9440a] transition">
               Search Jobs
             </button>
 
@@ -62,9 +66,9 @@ const CareerHero = () => {
           ].map((stat, i) => (
             <div
               key={i}
-              className="bg-white/5 border border-white/10 backdrop-blur-lg rounded-2xl px-8 py-10 text-center shadow-inner"
+              className="bg-[#2A2A2A]/70 border border-white/10 backdrop-blur-lg rounded-2xl px-8 py-10 text-center shadow-lg"
             >
-              <div className="text-[#a3ff5a] text-4xl font-bold">
+              <div className="text-[#F8510C] text-4xl font-bold">
                 {stat.value}
               </div>
               <div className="mt-3 text-gray-300 text-sm">

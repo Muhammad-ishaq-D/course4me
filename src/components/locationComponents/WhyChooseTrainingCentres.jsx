@@ -30,16 +30,16 @@ const features = [
 
 const WhyChooseTrainingCentres = () => {
   return (
-    <section className="bg-[#f4f6f8] py-24 px-6">
+    <section className="bg-[#f4f6f8] py-10 px-6">
 
       <div className="max-w-7xl mx-auto text-center">
 
         {/* Heading */}
-        <h2 className="text-4xl md:text-5xl font-bold text-[#2f3a47]">
+        <h2 className="text-4xl md:text-5xl font-bold text-black">
           Why Choose Our Training Centres?
         </h2>
 
-        <p className="text-gray-600 mt-4 text-lg">
+        <p className="text-[#4A5565] mt-4 text-lg">
           Consistent quality across all locations
         </p>
 
@@ -49,8 +49,7 @@ const WhyChooseTrainingCentres = () => {
           {features.map((item, index) => (
             <div
               key={index}
-              className="bg-white border border-gray-200 rounded-3xl p-8 text-left shadow-sm hover:shadow-md transition"
-            >
+              className="bg-gradient-to-br from-[#F9FAFB] to-[#FFFFFF] border border-gray-200 rounded-3xl p-8 text-left shadow-sm hover:shadow-md transition"            >
               {/* Icon */}
               <div
                 className={`${item.bg} w-16 h-16 rounded-2xl flex items-center justify-center text-white mb-6`}
@@ -59,12 +58,12 @@ const WhyChooseTrainingCentres = () => {
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-semibold text-[#2f3a47]">
+              <h3 className="text-xl font-bold text-[#1E1E1E]">
                 {item.title}
               </h3>
 
               {/* Description */}
-              <p className="text-gray-600 mt-4 leading-relaxed text-sm">
+              <p className="text-[#4A5565] mt-4 leading-relaxed text-sm">
                 {item.desc}
               </p>
             </div>

@@ -59,10 +59,10 @@ const WhyWorkSection = () => {
 
         {/* Heading */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#2f3a47]">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#1E1E1E]">
             Why Work in Security?
           </h2>
-          <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
+          <p className="text-[#4A5565] mt-4 max-w-2xl mx-auto">
             The security industry offers excellent benefits and opportunities
             for career advancement
           </p>
@@ -88,12 +88,12 @@ const WhyWorkSection = () => {
                 </div>
 
                 {/* Title */}
-                <h3 className="mt-6 text-xl font-bold text-[#2f3a47]">
+                <h3 className="mt-6 text-xl font-bold text-[#1E1E1E]">
                   {item.title}
                 </h3>
 
                 {/* Description */}
-                <p className="mt-3 text-gray-600 leading-relaxed">
+                <p className="mt-3 text-[#4A5565] leading-relaxed">
                   {item.description}
                 </p>
 
