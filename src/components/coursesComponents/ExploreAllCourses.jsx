@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import CourseCard from './CourseCard';
 
@@ -7,6 +8,7 @@ const categories = [
   "SIA Training", 
   "First Aid", 
   "Health & Safety", 
+  "Specialist",
   "Hospitality"
 ];
 
@@ -54,11 +56,40 @@ const allCourseData = [
     image: "https://images.unsplash.com/photo-1590402485284-a1419d4212d2?auto=format&fit=crop&q=80&w=800",
     badge: "Limited",
     price: "189.99"
+  },
+  {
+    id: 8,
+    title: "Close Protection Course",
+    category: "Specialist",
+    description: "Elite training for bodyguards and private security detail for high-profile clients.",
+    image: "https://images.unsplash.com/photo-1557597774-9d2739f05a76?auto=format&fit=crop&q=80&w=800",
+    badge: "Elite",
+    price: "1,500.00"
   }
 ];
 
 const ExploreAllCourses = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  
   const [activeCategory, setActiveCategory] = useState("All Courses");
+
+  useEffect(() => {
+    if (categoryParam && categories.includes(categoryParam)) {
+      setActiveCategory(categoryParam);
+    } else if (!categoryParam) {
+      setActiveCategory("All Courses");
+    }
+  }, [categoryParam]);
+
+  const handleCategoryChange = (category) => {
+    setActiveCategory(category);
+    if (category === "All Courses") {
+      setSearchParams({});
+    } else {
+      setSearchParams({ category });
+    }
+  };
 
   const filteredCourses = activeCategory === "All Courses" 
     ? allCourseData 
@@ -77,10 +108,10 @@ const ExploreAllCourses = () => {
           {categories.map((category) => (
             <button
               key={category}
-              onClick={() => setActiveCategory(category)}
+              onClick={() => handleCategoryChange(category)}
               className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all ${
                 activeCategory === category 
-                  ? "bg-[#141414] text-white" 
+                  ? "bg-[#141414] text-white shadow-lg" 
                   : "bg-white text-[#141414] border border-[#EEEEEE] hover:bg-[#F8FAFC]"
               }`}
             >
@@ -95,18 +126,28 @@ const ExploreAllCourses = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           <AnimatePresence mode="popLayout">
-            {filteredCourses.map((course) => (
-              <motion.div
-                layout
-                key={course.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
+            {filteredCourses.length > 0 ? (
+              filteredCourses.map((course) => (
+                <motion.div
+                  layout
+                  key={course.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <CourseCard {...course} />
+                </motion.div>
+              ))
+            ) : (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="col-span-full py-20 text-center"
               >
-                <CourseCard {...course} />
+                <p className="text-gray-400">No courses available for this category.</p>
               </motion.div>
-            ))}
+            )}
           </AnimatePresence>
         </motion.div>
       </div>

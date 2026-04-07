@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
     ArrowRight,
     Calendar,
@@ -13,6 +14,7 @@ import Blog5 from "../../assets/home/blog5.png";
 import Blog6 from "../../assets/home/blog6.png";
 
 export default function BlogSection() {
+    const navigate = useNavigate();
     return (
         <section className="bg-white py-24 px-6 relative overflow-hidden">
             {/* Decor */}
@@ -39,7 +41,10 @@ export default function BlogSection() {
                         </p>
                     </div>
 
-                    <button className="flex items-center gap-3 bg-[#1A1A1A] text-white px-8 py-4 rounded-full font-bold shadow-xl hover:opacity-90 transition-all transform hover:scale-105">
+                    <button
+                        onClick={() => navigate("/blog")}
+                        className="flex items-center gap-3 bg-[#1A1A1A] text-white px-8 py-4 rounded-full font-bold shadow-xl hover:opacity-90 transition-all transform hover:scale-105"
+                    >
                         View All Articles
                         <ArrowRight size={18} />
                     </button>
@@ -50,7 +55,7 @@ export default function BlogSection() {
                 <div className="grid lg:grid-cols-3 gap-10">
 
                     {/* Large Featured Card */}
-                    <div className="lg:col-span-2 relative rounded-[32px] overflow-hidden shadow-2xl group cursor-pointer">
+                    <div onClick={() => navigate("/blog")} className="lg:col-span-2 relative rounded-[32px] overflow-hidden shadow-2xl group cursor-pointer">
 
                         <img
                             src={Blog1}
@@ -99,6 +104,7 @@ export default function BlogSection() {
                             desc="The Security Industry Authority has announced important updates to licensing requirements."
                             date="Feb 22, 2026"
                             read="5 min read"
+                            onClick={() => navigate("/blog")}
                         />
 
                         <SmallArticle
@@ -108,6 +114,7 @@ export default function BlogSection() {
                             desc="New data reveals a 35% increase in demand for qualified CCTV Operators."
                             date="Feb 15, 2026"
                             read="4 min read"
+                            onClick={() => navigate("/blog")}
                         />
 
                     </div>
@@ -125,6 +132,7 @@ export default function BlogSection() {
                         desc="Our top instructors share proven study techniques and insider tips."
                         date="Feb 10, 2026"
                         read="6 min read"
+                        onClick={() => navigate("/blog")}
                     />
 
                     <BottomCard
@@ -135,6 +143,7 @@ export default function BlogSection() {
                         desc="A detailed breakdown of average pay across security roles."
                         date="Feb 3, 2026"
                         read="7 min read"
+                        onClick={() => navigate("/blog")}
                     />
 
                     <BottomCard
@@ -145,6 +154,7 @@ export default function BlogSection() {
                         desc="Expanding our reach to serve more aspiring security professionals."
                         date="Jan 26, 2026"
                         read="3 min read"
+                        onClick={() => navigate("/blog")}
                     />
 
                 </div>
@@ -156,9 +166,9 @@ export default function BlogSection() {
 
 
 /* Small Article */
-function SmallArticle({ image, tag, title, desc, date, read }) {
+function SmallArticle({ image, tag, title, desc, date, read, onClick }) {
     return (
-        <div className="bg-white rounded-[24px] overflow-hidden flex shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group cursor-pointer">
+        <div onClick={onClick} className="bg-white rounded-[24px] overflow-hidden flex shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group cursor-pointer">
 
             <div className="w-40 h-full flex-shrink-0 overflow-hidden">
                 <img
@@ -202,9 +212,9 @@ function SmallArticle({ image, tag, title, desc, date, read }) {
 
 
 /* Bottom Card */
-function BottomCard({ image, tag, color, title, desc, date, read }) {
+function BottomCard({ image, tag, color, title, desc, date, read, onClick }) {
     return (
-        <div className="bg-white rounded-[28px] shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 group cursor-pointer flex flex-col">
+        <div onClick={onClick} className="bg-white rounded-[28px] shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 group cursor-pointer flex flex-col">
 
             <div className="h-56 overflow-hidden">
                 <img
