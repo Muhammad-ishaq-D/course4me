@@ -81,12 +81,12 @@ const ApplyModal = ({ job, onClose }) => {
             </div>
 
             {/* Button */}
-            {/* <button
+            <button
               onClick={onClose}
               className="mt-6 px-8 py-3 bg-[#1E293B] text-white rounded-full"
             >
               Close
-            </button> */}
+            </button>
 
           </div>
         </div>
