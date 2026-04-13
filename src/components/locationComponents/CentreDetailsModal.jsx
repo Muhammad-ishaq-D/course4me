@@ -8,33 +8,26 @@ import {
   Phone,
   Mail
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import BookCourseModal from "./BookCourseModal";
 
+const courseTitleToId = (title) => {
+  const t = title.toLowerCase();
+  if (t.includes("door supervisor")) return "door-supervisor";
+  if (t.includes("security guard")) return "security-guard";
+  if (t.includes("cctv")) return "cctv-training";
+  if (t.includes("first aid")) return "first-aid-at-work";
+  return "door-supervisor";
+};
+
 const CentreDetailsModal = ({ centre, onClose }) => {
+  const navigate = useNavigate();
   if (!centre) return null;
-  const [selectedCentre, setSelectedCentre] = useState(null);
-  const [showBookModal, setShowBookModal] = useState(false);
 
   const handleBookNow = () => {
-    setSelectedCentre(centre);
-    setShowBookModal(true);
+    const courseId = centre.courses.length > 0 ? courseTitleToId(centre.courses[0]) : "door-supervisor";
+    navigate(`/booking/course?courseid=${courseId}&postcode=${encodeURIComponent(centre.city)}`);
   };
-
-  const handleCloseBookModal = () => {
-    setShowBookModal(false);
-    setSelectedCentre(null);
-  };
-
-  // If showing book modal, don't render the details modal
-  if (showBookModal) {
-    return (
-      <BookCourseModal
-        centre={selectedCentre}
-        showModal={showBookModal}
-        onClose={handleCloseBookModal}
-      />
-    );
-  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-[1px] px-4">

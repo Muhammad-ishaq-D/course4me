@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, Navigate, useNavigate } from "react-router-dom";
+import { useParams, Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Search,
   MessageCircle,
@@ -16,9 +16,14 @@ import SearchModal from "../components/shared/SearchModal";
 
 const CourseBooking = () => {
   const navigate = useNavigate();
-  const { courseId } = useParams();
+  const { courseId: paramCourseId } = useParams();
+  const [searchParams] = useSearchParams();
+
+  // Unified course ID retrieval: URL param first, then query param, then default
+  const courseId = paramCourseId || searchParams.get("courseid") || "door-supervisor";
   const course = courses[courseId];
-  const [searchLocation, setSearchLocation] = useState("");
+
+  const [searchLocation, setSearchLocation] = useState(searchParams.get("postcode") || "");
   const [filter, setFilter] = useState("Closest");
   const [loadingStep, setLoadingStep] = useState(0); // 0: not loading, 1-3: steps
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -39,7 +44,8 @@ const CourseBooking = () => {
     setTimeout(() => setLoadingStep(2), 1200);
     setTimeout(() => setLoadingStep(3), 2400);
     setTimeout(() => {
-      navigate(`/booking/course?courseid=${courseId}&postcode=${loc}&sortby=distance&view=all`);
+      // Navigate to results page (unified path)
+      navigate(`/booking/results?courseid=${courseId}&postcode=${loc}&sortby=distance&view=all`);
     }, 3600);
   };
 

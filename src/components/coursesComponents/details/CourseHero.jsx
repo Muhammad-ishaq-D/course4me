@@ -17,7 +17,6 @@ const CourseHero = ({ course }) => {
 
   return (
     <>
-      {/* ✅ BREADCRUMB */}
       <section className="bg-[#F8FAFC] border-b mt-34 border-gray-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-3 text-[13px] text-gray-500">
           Home <span className="mx-2">›</span>
@@ -105,7 +104,7 @@ const CourseHero = ({ course }) => {
               {/* BUTTONS */}
               <div className="flex flex-wrap gap-3">
                 <button
-                  onClick={() => navigate(`/course/${course.id}/book`)}
+                  onClick={() => navigate(`/booking/course?courseid=${course.id}`)}
                   className="bg-[#F15A24] px-7 py-3 rounded-full font-semibold text-sm flex items-center gap-2 shadow-lg shadow-[#F15A24]/20 hover:brightness-110 transition"
                 >
                   Book This Course <ChevronRight size={16} />

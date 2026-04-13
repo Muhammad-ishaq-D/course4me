@@ -7,6 +7,16 @@ import {
   RefreshCcw,
   ChevronRight
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+const courseTitleToId = (title) => {
+  const t = title.toLowerCase();
+  if (t.includes("door supervisor")) return "door-supervisor";
+  if (t.includes("security guard")) return "security-guard";
+  if (t.includes("cctv")) return "cctv-training";
+  if (t.includes("first aid")) return "first-aid-at-work";
+  return "door-supervisor";
+};
 
 const licences = [
   {
@@ -62,6 +72,7 @@ const licences = [
 ];
 
 const CompareLicences = () => {
+  const navigate = useNavigate();
   return (
     <section className="bg-[#f3f6f9] py-24 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
@@ -136,7 +147,10 @@ const CompareLicences = () => {
 
                 {/* Action */}
                 <div className="text-right">
-                  <button className="bg-[#2f3a47] text-white px-7 py-3 rounded-full flex items-center gap-2 ml-auto hover:bg-black transition text-sm font-medium">
+                  <button
+                    onClick={() => navigate(`/booking/course?courseid=${courseTitleToId(item.title)}`)}
+                    className="bg-[#2f3a47] text-white px-7 py-3 rounded-full flex items-center gap-2 ml-auto hover:bg-black transition text-sm font-medium"
+                  >
                     Book Now
                     <ChevronRight size={16} />
                   </button>

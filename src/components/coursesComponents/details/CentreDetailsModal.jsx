@@ -1,8 +1,19 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { X, MapPin, Clock, Calendar, Phone, Mail, Star, Check } from 'lucide-react';
 
+const courseTitleToId = (title) => {
+  const t = title.toLowerCase();
+  if (t.includes("door supervisor")) return "door-supervisor";
+  if (t.includes("security guard")) return "security-guard";
+  if (t.includes("cctv")) return "cctv-training";
+  if (t.includes("first aid")) return "first-aid-at-work";
+  return "door-supervisor";
+};
+
 export default function CentreDetailsModal({ centre, onClose, onBookNow }) {
+  const navigate = useNavigate();
   if (!centre) return null;
 
   const facilities = [
@@ -116,7 +127,10 @@ export default function CentreDetailsModal({ centre, onClose, onBookNow }) {
         {/* Footer */}
         <div className="p-8 pt-4 flex gap-4 mt-auto border-t border-gray-100 bg-white shrink-0">
           <button
-            onClick={onBookNow}
+            onClick={() => {
+              const courseId = centre.courses && centre.courses.length > 0 ? courseTitleToId(centre.courses[0]) : "door-supervisor";
+              navigate(`/booking/course?courseid=${courseId}&postcode=${encodeURIComponent(centre.city || "")}`);
+            }}
             className="flex-1 bg-[#18181B] hover:bg-[#000000] text-white rounded-full py-5 px-6 flex items-center justify-center gap-2.5 font-black transition-all text-[16px] shadow-lg shadow-black/10 active:scale-[0.98]"
           >
             Book Now
