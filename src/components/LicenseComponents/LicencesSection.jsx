@@ -21,7 +21,6 @@ const iconMap = {
 
 const LicencesSection = () => {
   const navigate = useNavigate();
-  const IconComponent = iconMap[item?.icon];
   return (
     <section className="bg-[#f3f6f9] py-20 px-6">
       <div className="max-w-7xl mx-auto">

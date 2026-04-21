@@ -20,8 +20,8 @@ const BookCourseModal = ({ centre, onClose, showModal }) => {
         bg-white
         w-full
         max-w-[900px]
-        h-[90vh]
-        max-h-[90vh]
+        h-fit
+        max-h-[85vh]
         rounded-[32px]
         shadow-2xl
         relative

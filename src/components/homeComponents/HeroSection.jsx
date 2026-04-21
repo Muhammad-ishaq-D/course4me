@@ -143,11 +143,10 @@ const JourneyModal = ({ isOpen, onClose }) => {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-1.5 rounded-full text-[13px] font-semibold transition-all whitespace-nowrap ${
-                    activeTab === tab
-                      ? "bg-[#1C1C1C] text-white"
-                      : "border border-gray-200 text-gray-600 hover:border-gray-400"
-                  }`}
+                  className={`px-4 py-1.5 rounded-full text-[13px] font-semibold transition-all whitespace-nowrap ${activeTab === tab
+                    ? "bg-[#1C1C1C] text-white"
+                    : "border border-gray-200 text-gray-600 hover:border-gray-400"
+                    }`}
                 >
                   {tab}
                 </button>
@@ -235,24 +234,28 @@ const HeroSection = () => {
 
           {/* LEFT COLUMN */}
           <div>
-            <div className="inline-flex items-center bg-[#F3F4F6] text-gray-600 rounded-full px-4 py-2 text-sm font-semibold shadow-sm mb-6">
-              <TrendingUp className="w-4 h-4 mr-2 text-[#FF5421]" />
-              400,000+ Professionals Trained
+            <div className="inline-flex items-center bg-[#F8510C33] text-[#F8510C] rounded-full px-4 py-2 text-sm font-bold shadow-sm mb-6">
+              <TrendingUp className="w-4 h-4 mr-2 text-[#F8510C]" />
+              The UK's #1 Security Training provider
+              <div className="flex gap-0.5 ml-3">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={14} className="fill-[#F8510C] text-[#F8510C]" />
+                ))}
+              </div>
             </div>
 
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-              Get trained, <br />
-              licensed, and <br />
-              <span className="relative inline-block text-[#FF5421]">
-                ready to earn
+              From Zero to <br />
+              <span className="text-[#FF5421]">£25/Hour</span> <br />
+              Security Pro in <br />
+              <span className="relative inline-block text-[#00A3F4]">
+                3 Weeks
                 <img src={underlineStroke} className="absolute -bottom-2 left-6 sm:left-10 md:left-14 w-[60%]" />
               </span>
-              <br />in 3 weeks
             </h2>
 
             <p className="text-base sm:text-lg text-gray-500 mt-4 max-w-lg">
-              Earn <strong className="text-[#FF5421]">£14 to £25 an hour</strong> with flexible security jobs.
-              No experience needed. 95% pass rate, first time.
+              No experience? No problem. Thousands of people just like you are now earning great money in security. <span className="font-bold text-black">Your SIA licence is waiting — and we guarantee you'll pass.</span>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
@@ -260,9 +263,9 @@ const HeroSection = () => {
                 onClick={() => setIsModalOpen(true)}
                 className="bg-[#FF5421] hover:bg-[#E64A1A] text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300 transform hover:scale-105"
               >
-                Start Your Journey
+                Get Started
               </button>
-              <button 
+              <button
                 onClick={() => {
                   const element = document.getElementById('video-testimonials');
                   if (element) element.scrollIntoView({ behavior: 'smooth' });
@@ -270,27 +273,17 @@ const HeroSection = () => {
                 className="border-2 border-[#28262633] hover:border-gray-400 font-semibold py-3 px-8 rounded-full flex items-center gap-2 bg-[#FFFFFF1A] backdrop-blur-sm"
               >
                 <Play className="w-4 h-5 text-[#00A3FF]" />
-                Watch Success Stories
+                What We Do
               </button>
             </div>
 
             <div className="flex flex-wrap gap-4 mt-8 max-w-xl">
               <div className="flex items-center gap-3 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-full px-4 py-2">
                 <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#00A3FF1A]">
-                  <Zap size={16} className="text-[#00A3FF]" />
-                </div>
-                <div className="leading-tight">
-                  <div className="text-sm font-semibold text-gray-800">Fast</div>
-                  <div className="text-xs text-gray-500">Same-day results</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-full px-4 py-2">
-                <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#00A3FF1A]">
                   <CheckCircle2 size={16} className="text-[#00A3FF]" />
                 </div>
                 <div className="leading-tight">
-                  <div className="text-sm font-semibold text-gray-800">Proven</div>
-                  <div className="text-xs text-gray-500">95% pass rate</div>
+                  <div className="text-sm font-semibold text-gray-800">98% Pass Rate</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-full px-4 py-2">
@@ -298,8 +291,7 @@ const HeroSection = () => {
                   <Users size={16} className="text-[#00A3FF]" />
                 </div>
                 <div className="leading-tight">
-                  <div className="text-sm font-semibold text-gray-800">Trusted</div>
-                  <div className="text-xs text-gray-500">400,000+ trained</div>
+                  <div className="text-sm font-semibold text-gray-800">400k+ People Trained</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-full px-4 py-2">
@@ -307,8 +299,15 @@ const HeroSection = () => {
                   <MapPin size={16} className="text-[#00A3FF]" />
                 </div>
                 <div className="leading-tight">
-                  <div className="text-sm font-semibold text-gray-800">Clear</div>
-                  <div className="text-xs text-gray-500">Step-by-step support</div>
+                  <div className="text-sm font-semibold text-gray-800">100+ UK Training Centers</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-full px-4 py-2">
+                <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#00A3FF1A]">
+                  <Zap size={16} className="text-[#00A3FF]" />
+                </div>
+                <div className="leading-tight">
+                  <div className="text-sm font-semibold text-gray-800">SIA Approved Center</div>
                 </div>
               </div>
             </div>

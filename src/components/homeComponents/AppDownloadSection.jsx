@@ -35,13 +35,14 @@ const AppPromotionSection = () => {
             </div>
 
             {/* Heading */}
-            <h2 className="text-[36px] md:text-[48px] lg:text-[36px] font-bold leading-[1.1] mb-6 tracking-tight">
-              Find work, try mock <br /> tests and book courses <br /> from the UK's #1 app for <br /> security professionals
+            <h2 className="text-[36px] md:text-[48px] lg:text-[44px] font-bold leading-[1.1] mb-6 tracking-tight">
+              Start Your Security Career <br />
+              <span className="text-[#00A3FF]">Right From Your Pocket</span>
             </h2>
 
             {/* Sub-headline */}
             <p className="text-gray-400 text-lg mb-10 max-w-xl font-medium leading-relaxed">
-              Our team's got your back. Everything you need to launch and manage your security career — all in one place.
+              Download our app for exclusive job alerts and study materials. Everything you need to launch your career.
             </p>
 
             {/* Store buttons */}

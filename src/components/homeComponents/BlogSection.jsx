@@ -32,12 +32,13 @@ export default function BlogSection() {
                         </p>
 
                         <h2 className="text-[44px] md:text-[52px] font-bold text-[#1A1A1A] mb-6 leading-tight tracking-tight">
-                            Latest Insights & Updates
+                            Stay Sharp, Stay Ahead <br />
+                            of the Game
                         </h2>
 
                         <p className="text-gray-600 text-lg font-medium">
-                            Stay informed with the latest security industry news,
-                            career tips, and updates from Get Licensed.
+                            Expert tips, industry news, and career advice for <br />
+                            security professionals.
                         </p>
                     </div>
 
@@ -45,7 +46,7 @@ export default function BlogSection() {
                         onClick={() => navigate("/blog")}
                         className="flex items-center gap-3 bg-[#1A1A1A] text-white px-8 py-4 rounded-full font-bold shadow-xl hover:opacity-90 transition-all transform hover:scale-105"
                     >
-                        View All Articles
+                        View All Stories
                         <ArrowRight size={18} />
                     </button>
 
@@ -71,12 +72,11 @@ export default function BlogSection() {
                             </span>
 
                             <h3 className="text-3xl md:text-4xl font-bold mt-6 mb-4 leading-tight">
-                                How to Become a Door Supervisor in 2026: The Complete Guide
+                                Why Now is the Best Time to Start a Security Career
                             </h3>
 
                             <p className="text-gray-300 text-lg mb-8 max-w-2xl font-medium">
-                                Everything you need to know about getting your SIA Door Supervisor
-                                licence, from training requirements to career opportunities.
+                                The security industry is growing faster than ever. Discover why 2026 is the perfect year to get licensed and start earning.
                             </p>
 
                             <div className="flex items-center gap-8 text-sm text-gray-300 font-bold uppercase tracking-widest">
@@ -99,9 +99,9 @@ export default function BlogSection() {
 
                         <SmallArticle
                             image={Blog2}
-                            tag="Industry News"
-                            title="SIA Licence Changes 2026: What You Need to Know"
-                            desc="The Security Industry Authority has announced important updates to licensing requirements."
+                            tag="Expert Tips"
+                            title="Top 5 Conflict Management Tips for 2026"
+                            desc="Stay safe and professional on the job with these essential techniques from our lead instructors."
                             date="Feb 22, 2026"
                             read="5 min read"
                             onClick={() => navigate("/blog")}
@@ -109,9 +109,9 @@ export default function BlogSection() {
 
                         <SmallArticle
                             image={Blog3}
-                            tag="Industry News"
-                            title="CCTV Operator Demand Surges Across Major UK Cities"
-                            desc="New data reveals a 35% increase in demand for qualified CCTV Operators."
+                            tag="Exam Prep"
+                            title="How to Pass Your SIA Exam First Time"
+                            desc="Proven strategies and study tips to help you ace your certification on your first attempt."
                             date="Feb 15, 2026"
                             read="4 min read"
                             onClick={() => navigate("/blog")}
@@ -126,10 +126,10 @@ export default function BlogSection() {
 
                     <BottomCard
                         image={Blog4}
-                        tag="Study Tips"
+                        tag="Technology"
                         color="bg-purple-100 text-purple-600 border-purple-200"
-                        title="5 Tips to Pass Your SIA Exam on the First Attempt"
-                        desc="Our top instructors share proven study techniques and insider tips."
+                        title="The Future of AI in Modern CCTV Surveillance"
+                        desc="How artificial intelligence is changing the way we monitor and protect public spaces."
                         date="Feb 10, 2026"
                         read="6 min read"
                         onClick={() => navigate("/blog")}
@@ -137,10 +137,10 @@ export default function BlogSection() {
 
                     <BottomCard
                         image={Blog5}
-                        tag="Career Guide"
+                        tag="Business"
                         color="bg-[#00A3FF0A] text-[#00A3FF] border-[#00A3FF33]"
-                        title="Security Career Salaries in 2026: What to Expect"
-                        desc="A detailed breakdown of average pay across security roles."
+                        title="Starting Your Own Security Firm: A Step-by-Step Guide"
+                        desc="Ready to be your own boss? Learn the essentials of launching a security company."
                         date="Feb 3, 2026"
                         read="7 min read"
                         onClick={() => navigate("/blog")}
@@ -148,10 +148,10 @@ export default function BlogSection() {
 
                     <BottomCard
                         image={Blog6}
-                        tag="Company News"
+                        tag="Trends"
                         color="bg-[#00A3FF0A] text-[#00A3FF] border-[#00A3FF33]"
-                        title="Get Licensed Opens 10 New Training Centres Across the UK"
-                        desc="Expanding our reach to serve more aspiring security professionals."
+                        title="5 Key Security Trends to Watch Out for This Year"
+                        desc="Stay ahead of the curve with our analysis of the biggest trends in 2026."
                         date="Jan 26, 2026"
                         read="3 min read"
                         onClick={() => navigate("/blog")}

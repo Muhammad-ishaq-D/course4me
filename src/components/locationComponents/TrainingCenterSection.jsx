@@ -37,9 +37,7 @@ const TrainingCentresSection = () => {
 
           {/* Paragraph */}
           <p className="text-gray-300 mt-6 text-lg leading-relaxed max-w-xl">
-            With 85+ locations nationwide, there's a Get Licensed training
-            centre near you. All centres offer the same high-quality training
-            and expert instruction.
+            85+ professionally equipped training centres. Expert SIA-approved instructors. Same-day exam results. The same life-changing training — wherever you are in the UK.
           </p>
 
           {/* Search Bar */}

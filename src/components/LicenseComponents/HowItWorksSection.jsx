@@ -44,7 +44,7 @@ const HowItWorksSection = () => {
 
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#2f3a47]">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#1E1E1E]">
             How to Get Your SIA Licence
           </h2>
           <p className="text-gray-500 mt-4 text-lg">

@@ -11,6 +11,7 @@ import CourseBooking from "../pages/CourseBooking";
 import CourseResults from "../pages/CourseResults";
 import CoursePackages from "../pages/CoursePackages";
 import CourseCheckout from "../pages/CourseCheckout";
+import BlogArticle from "../pages/BlogArticle";
 
 
 const AppRoutes = () => {
@@ -26,6 +27,7 @@ const AppRoutes = () => {
       <Route path="/booking/checkout" element={<CourseCheckout />} />
       <Route path="/licences" element={<Licenses />} />
       <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/article" element={<BlogArticle />} />
       <Route path="/locations" element={<Locations />} />
       <Route path="/careers" element={<Careers />} />
     </Routes>

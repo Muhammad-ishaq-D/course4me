@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Award, Briefcase, Building2, Users } from "lucide-react";
+import { Award, Briefcase, Building2, Check, Users } from "lucide-react";
 
 const HiringTrainingSection = () => {
   const navigate = useNavigate();
@@ -15,29 +15,42 @@ const HiringTrainingSection = () => {
 
             {/* Small Label */}
             <div className="text-[#FF5421] text-xs font-bold tracking-[0.2em] uppercase">
-              Hiring & Training
+              Career Support
             </div>
 
             {/* Heading */}
-            <h2 className="text-[48px] md:text-[56px] leading-[1.05] font-bold text-[#1A1A1A] tracking-tight">
-              The complete <br />
-              solution for training <br />
-              and hiring, purpose- <br />
-              built for security <br />
-              employers.
+            <h2 className="text-4xl md:text-[56px] leading-[1.05] font-bold text-[#1A1A1A] tracking-tight">
+              We don't just <br />
+              train you. <br />
+              <span className="text-[#00A3F4] ">We Get You Hired.</span>
             </h2>
 
-            <p className="text-gray-500 text-lg font-medium leading-relaxed max-w-lg">
-              From training new recruits to upskilling existing teams, <br />
-              we help employers build world-class security operations.
+            <p className="text-[#5E5E5E] text-lg font-regular leading-relaxed max-w-lg">
+              Most training providers hand you a certificate and wish you good luck. We go further — our job-placement network means your new career starts the moment you graduate.
             </p>
+
+            {/* Features List */}
+            <div className="flex flex-col gap-5 -mt-2">
+              {[
+                "Direct referrals to 500+ hiring partners",
+                "CV building & interview coaching included",
+                "95% of graduates placed within 2 weeks"
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-3 text-lg font-regular text-gray-500">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00A3FF1A] flex items-center justify-center">
+                    <Check className="w-4 h-4 text-[#00A3FF]" strokeWidth={3} />
+                  </div>
+                  {item}
+                </div>
+              ))}
+            </div>
 
             {/* Button */}
             <button
               onClick={() => navigate("/careers")}
               className="mt-4 bg-[#1A1A1A] text-white px-10 py-4.5 rounded-full font-bold flex items-center gap-3 w-fit shadow-xl hover:bg-black transition-all"
             >
-              Learn More
+              View Career Support
               <span className="text-xl">→</span>
             </button>
 
@@ -56,24 +69,26 @@ const HiringTrainingSection = () => {
 
               {/* Title */}
               <h3 className="text-2xl font-bold mb-4 tracking-tight">
-                Partner with Industry Leaders
+                Trusted by Industry Giants
               </h3>
 
               {/* Description */}
               <p className="text-gray-500 font-medium mb-10 leading-relaxed">
-                Join 400,000+ professionals trained through our <br />
-                comprehensive programs
-              </p>
+                Our graduates work for the biggest names in security. Your licence opens these doors.              </p>
 
               {/* Chips */}
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col gap-4">
                 {[
-                  "O2 Arena", "Wembley Stadium", "Premier League",
-                  "Westfield", "NHS", "Amazon", "G4S", "Securitas"
-                ].map((chip) => (
-                  <span key={chip} className="bg-[#F8F9FA] px-5 py-2.5 rounded-full text-xs font-bold text-gray-500 border border-gray-100">
-                    {chip}
-                  </span>
+                  "Lifetime Career Support",
+                  "Job Interview Preparation",
+                  "Exclusive Job Board Access"
+                ].map((item) => (
+                  <div key={item} className="flex items-center gap-3 text-sm font-bold text-gray-700">
+                    <div className="w-5 h-5 rounded-full bg-[#00A3FF1A] flex items-center justify-center">
+                      <span className="text-[#00A3FF] text-[10px]">✓</span>
+                    </div>
+                    {item}
+                  </div>
                 ))}
               </div>
 
@@ -85,22 +100,22 @@ const HiringTrainingSection = () => {
               {/* 500+ Partner Companies Card */}
               <div className="bg-white rounded-[24px] p-8 shadow-sm border border-gray-100 flex flex-col items-center text-center">
                 <Users className="w-8 h-8 text-[#00A3FF] mb-3" />
-                <div className="text-[32px] font-bold text-[#1A1A1A] tracking-tight leading-none">500+</div>
-                <div className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-2">Partner Companies</div>
+                <div className="text-[32px] font-bold text-[#1A1A1A] tracking-tight leading-none">850+</div>
+                <div className="text-gray-400 text-[10px] font-regular uppercase tracking-widest mt-2">Hiring Partners</div>
               </div>
 
-              {/* Approved Centre SIA Card */}
+              {/* 15k+ Jobs Posted Card */}
               <div className="bg-white rounded-[24px] p-8 shadow-sm border border-gray-100 flex flex-col items-center text-center">
                 <Award className="w-8 h-8 text-[#00A3FF] mb-3" />
                 <div className="text-[32px] font-bold text-[#1A1A1A] tracking-tight leading-none">SIA</div>
-                <div className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-2">Approved Centre</div>
+                <div className="text-gray-400 text-[10px] font-regular uppercase tracking-widest mt-2">Approved Centre</div>
               </div>
 
-              {/* 95% Placement Rate Card */}
+              {/* £30k Avg. Salary Card */}
               <div className="bg-white rounded-[24px] p-8 shadow-sm border border-gray-100 flex flex-col items-center text-center">
                 <Briefcase className="w-8 h-8 text-[#FF5421] mb-3" />
                 <div className="text-[32px] font-bold text-[#1A1A1A] tracking-tight leading-none">95%</div>
-                <div className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-2">Placement Rate</div>
+                <div className="text-gray-400 text-[10px] font-regular uppercase tracking-widest mt-2">Placement Rate</div>
               </div>
 
             </div>

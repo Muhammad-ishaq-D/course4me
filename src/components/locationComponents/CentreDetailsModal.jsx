@@ -38,8 +38,8 @@ const CentreDetailsModal = ({ centre, onClose }) => {
         w-full
         max-w-[520px]
         md:max-w-[600px]
-        h-[93vh]
-        max-h-[93vh]
+        h-fit
+        max-h-[85vh]
         rounded-[28px]
         shadow-2xl
         relative
@@ -61,7 +61,7 @@ const CentreDetailsModal = ({ centre, onClose }) => {
           {centre.name}
         </h2>
 
-        <div className="max-h-[65vh] overflow-y-auto pr-4 md:pr-1 custom-scroll">
+        <div className="max-h-[60vh] overflow-y-auto pr-4 md:pr-1 custom-scroll">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
 
             {/* LEFT SIDE */}

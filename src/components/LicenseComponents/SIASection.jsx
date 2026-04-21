@@ -32,9 +32,7 @@ const SIASection = () => {
 
             {/* Paragraph */}
             <p className="text-gray-300 mt-6 text-lg leading-relaxed max-w-xl">
-              Choose from our range of Security Industry Authority (SIA)
-              licences. All training includes expert instruction, same-day
-              exam results, and 3-year licence validity.
+              From zero experience to a fully licensed security professional in as little as 3 weeks. Expert training, same-day results, and a 3-year licence that opens doors across the UK.
             </p>
 
             {/* Stats Pills */}
@@ -60,11 +58,11 @@ const SIASection = () => {
             {/* Buttons */}
             <div className="flex flex-wrap gap-5 mt-10">
               <button className="bg-[#F15A24]  hover:bg-[#a02e05] text-[#ffffff] font-semibold px-8 py-4 rounded-full shadow-lg transition">
-                Book Your Training
+                Book My Training Now
               </button>
 
               <button className="border border-white/30 font-semibold text-white px-8 py-4 rounded-full hover:bg-white/10 transition">
-                Free Advice
+                Get Free Advice
               </button>
             </div>
 
