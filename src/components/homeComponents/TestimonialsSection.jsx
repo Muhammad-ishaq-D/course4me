@@ -17,12 +17,11 @@ const TestimonialsSection = () => {
         {/* Header */}
         <div className="text-center mb-20">
           <h2 className="text-[44px] md:text-[56px] font-bold text-[#1A1A1A] mb-5 leading-[1.05] tracking-tight">
-            They've done the job. They <br className="hidden md:block" />
-            know how to get you ready <br className="hidden md:block" />
-            to work in security.
+            People Just Like You <br className="hidden md:block" />
+            <span className="text-[#FF5421]">Changed Their Lives</span>
           </h2>
           <p className="text-gray-500 text-base sm:text-lg font-medium">
-            Real stories from real students and instructors
+            Join 400,000+ people who have started their career with us.
           </p>
         </div>
 
@@ -36,13 +35,11 @@ const TestimonialsSection = () => {
             </div>
 
             <div className="mb-8 p-3 bg-[#E6F4FF] rounded-2xl w-fit">
-               <Quote size={28} className="text-[#00A3FF] fill-[#00A3FF] opacity-30" />
+              <Quote size={28} className="text-[#00A3FF] fill-[#00A3FF] opacity-30" />
             </div>
 
             <p className="text-[#1A1A1A] text-xl font-medium leading-relaxed mb-12 flex-1">
-              "Ben was genuinely brilliant. He made the course fun and engaging,
-              and I felt completely prepared for the exam. The same-day results
-              were amazing — I started applying for jobs that evening!"
+              "I was looking for a fresh start. Within 3 weeks of starting my Door Supervisor course, I had my license and my first job at a top venue. The support was incredible!"
             </p>
 
             <div className="border-t border-gray-50 pt-8 w-full">
@@ -71,7 +68,7 @@ const TestimonialsSection = () => {
                     Mr. John Redfern
                   </h4>
                   <div className="inline-flex items-center bg-[#00A3FF] text-white px-3 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest">
-                     US Army Veteran
+                    US Army Veteran
                   </div>
                   <p className="text-gray-400 text-xs font-bold mt-2">
                     Lead Security Instructor

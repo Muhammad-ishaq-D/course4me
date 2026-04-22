@@ -105,7 +105,7 @@ export default function TrainersSection() {
 
                 <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12 text-lg font-medium">
                     Industry veterans and certified professionals who are passionate
-                    about launching your career in security. Every trainer is 5-star rated.
+                    about launching your career in security.
                 </p>
 
                 {/* Stats */}
@@ -216,9 +216,9 @@ function TrainerCard({ trainer, onClick }) {
                 </div>
 
                 {/* Button */}
-                <button 
-                  onClick={onClick}
-                  className="group w-full border-2 border-gray-100 rounded-full py-3.5 text-sm font-bold text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 flex items-center justify-center gap-2"
+                <button
+                    onClick={onClick}
+                    className="group w-full border-2 border-gray-100 rounded-full py-3.5 text-sm font-bold text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 flex items-center justify-center gap-2"
                 >
                     View Full Profile
                     <ChevronRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />

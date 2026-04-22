@@ -6,8 +6,13 @@ import {
   Star,
   ArrowRight
 } from "lucide-react";
+import { useState } from "react";
+import ApplyModal from "./ApplyModal";
 
 const FeaturedJobs = () => {
+
+  const [selectedJob, setSelectedJob] = useState(null);
+
   const jobs = [
     {
       title: "Security Guard - Retail",
@@ -151,8 +156,11 @@ const FeaturedJobs = () => {
                 </div>
               </div>
 
-              {/* Button */}
-              <button className="mt-7 w-full bg-[#1E1E1E] text-white py-3 rounded-full font-medium flex items-center justify-center gap-2 hover:bg-black transition">
+              {/* ✅ BUTTON FIX */}
+              <button
+                onClick={() => setSelectedJob(job)}
+                className="mt-7 w-full bg-[#1E1E1E] text-white py-3 rounded-full font-medium flex items-center justify-center gap-2 hover:bg-black transition"
+              >
                 Apply Now
                 <ArrowRight size={16} />
               </button>
@@ -161,6 +169,15 @@ const FeaturedJobs = () => {
           ))}
 
         </div>
+
+        {/* ✅ MODAL SHOW HERE (IMPORTANT) */}
+        {selectedJob && (
+          <ApplyModal
+            job={selectedJob}
+            onClose={() => setSelectedJob(null)}
+          />
+        )}
+
       </div>
     </section>
   );

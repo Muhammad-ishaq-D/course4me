@@ -1,9 +1,10 @@
 import React from "react";
-import { 
-  CheckCircle2, 
-  Users, 
-  AlertCircle, 
-  HelpCircle, 
+import { useNavigate } from "react-router-dom";
+import {
+  CheckCircle2,
+  Users,
+  AlertCircle,
+  HelpCircle,
   Phone,
   ArrowRight,
   Calendar,
@@ -14,6 +15,8 @@ import {
 } from "lucide-react";
 
 const CourseMainContent = ({ course }) => {
+  const navigate = useNavigate();
+
   if (!course) return null;
 
   return (
@@ -22,7 +25,7 @@ const CourseMainContent = ({ course }) => {
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Main Content Area */}
           <div className="w-full lg:w-2/3 space-y-16">
-            
+
             {/* About This Course */}
             <div>
               <h2 className="text-3xl font-bold text-[#1E293B] mb-6">About This Course</h2>
@@ -90,7 +93,10 @@ const CourseMainContent = ({ course }) => {
                   </div>
 
                   <div className="space-y-4 mb-8">
-                    <button className="w-full bg-[#F15A24] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#F15A24]/20 hover:brightness-110 transition-all flex items-center justify-center gap-2 group">
+                    <button
+                      onClick={() => navigate(`/booking/course?courseid=${course.id}`)}
+                      className="w-full bg-[#F15A24] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#F15A24]/20 hover:brightness-110 transition-all flex items-center justify-center gap-2 group"
+                    >
                       Book Now <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
                     <button className="w-full bg-[#1E293B] text-white font-bold py-4 rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-2">

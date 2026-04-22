@@ -69,7 +69,7 @@ const POPULAR_LICENCES = [
   },
 ];
 
-const CATEGORIES = ["All Courses", "Security", "First Aid", "Alcohol", "Construction"];
+const CATEGORIES = ["Most Popular", "SIA Licenses", "Top-Up Courses", "Specialist"];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -103,10 +103,10 @@ const ItemCard = ({ icon: Icon, title, description, onClick }) => (
 
 const CoursesLicencesSection = () => {
   const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState("All Courses");
+  const [activeCategory, setActiveCategory] = useState("Most Popular");
 
   const filteredCourses =
-    activeCategory === "All Courses"
+    activeCategory === "Most Popular"
       ? POPULAR_COURSES
       : POPULAR_COURSES.filter((c) => c.category === activeCategory);
 
@@ -116,19 +116,21 @@ const CoursesLicencesSection = () => {
 
         {/* CATEGORIES FILTER */}
         <div className="mb-16">
-          <h2 className="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase mb-6">
-            Categories
+          <h2 className="text-[#FF5421] text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
+            Our Courses
+          </h2>
+          <h2 className="text-[44px] md:text-[52px] font-bold text-[#1A1A1A] mb-6 tracking-tight leading-none">
+            Pick Your Course. <span className="text-[#FF5421]">Change Your Life.</span>
           </h2>
           <div className="flex flex-wrap items-center gap-3">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-7 py-3 font-bold rounded-full transition-all text-sm ${
-                  activeCategory === cat
-                    ? "bg-[#00A3FF] text-white shadow-lg shadow-[#00A3FF]/20 hover:opacity-90"
-                    : "bg-[#F8F9FA] text-gray-500 border border-gray-100 hover:bg-gray-100"
-                }`}
+                className={`px-7 py-3 font-bold rounded-full transition-all text-sm ${activeCategory === cat
+                  ? "bg-[#00A3FF] text-white shadow-lg shadow-[#00A3FF]/20 hover:opacity-90"
+                  : "bg-[#F8F9FA] text-gray-500 border border-gray-100 hover:bg-gray-100"
+                  }`}
               >
                 {cat}
               </button>

@@ -40,7 +40,7 @@ const RealStories = () => {
       <div className="max-w-7xl mx-auto">
 
         {/* TITLE */}
-        <h2 className="text-[34px] font-extrabold text-[#F65B15] mb-12">
+        <h2 className="text-[34px] font-bold text-[#1A1A1A] mb-12">
           Real stories from real people
         </h2>
 

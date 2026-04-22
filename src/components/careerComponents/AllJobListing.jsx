@@ -5,7 +5,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { useState } from "react";
-import ApplyModal from "./ApplyModalNew";
+import ApplyModal from "./ApplyModal";
 const AllJobListings = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   const jobs = [
@@ -16,7 +16,7 @@ const AllJobListings = () => {
       salary: "£24,000 - £26,000",
       posted: "2 days ago",
       type: "Full-time",
-      role: "Security Guard",
+      role: "Security Guards",
       description:
         "Busy shopping centre requires experienced SIA licensed security guards for day and night shifts.",
       requirements: [

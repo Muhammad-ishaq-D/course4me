@@ -67,16 +67,15 @@ const TrainingPreviewSection = () => {
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#E6F4FF] rounded-full border border-[#00A3FF33] mb-6">
                     <BookOpen className="w-3.5 h-3.5 text-[#00A3FF]" />
                     <span className="text-[#00A3FF] text-[11px] font-bold uppercase tracking-wider">
-                        Course Previews
+                        MEET THE EXPERTS
                     </span>
                 </div>
 
                 <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
                     {/* Title & Desc */}
                     <div className="max-w-2xl">
-                        <h1 className="text-[44px] sm:text-[52px] md:text-[60px] font-bold text-[#1A1A1A] mb-5 leading-[1.05] tracking-tight">
-                            Watch Before You{" "}
-                            <span className="relative inline-block whitespace-nowrap">
+                        <h1 className="text-[40px] sm:text-[52px] md:text-[60px] font-bold text-[#1A1A1A] mb-5 leading-[1.05] tracking-tight">
+                            See Inside Before You <span className="relative inline-block whitespace-nowrap">
                                 Enrol
                                 <img
                                     src={underlineStroke}
@@ -85,9 +84,8 @@ const TrainingPreviewSection = () => {
                             </span>
                         </h1>
 
-                        <p className="text-gray-500 text-base sm:text-lg font-medium leading-relaxed">
-                            Get an inside look at our training sessions. See the quality, <br className="hidden md:block" />
-                            meet the instructors, and understand what to expect.
+                        <p className="text-gray-500 text-base sm:text-lg font-regular leading-relaxed">
+                            No surprises. Get a real look at our courses, meet the instructors, and understand exactly what you're signing up for — before you spend a penny.
                         </p>
                     </div>
 
@@ -97,11 +95,10 @@ const TrainingPreviewSection = () => {
                             <button
                                 key={f}
                                 onClick={() => setActiveFilter(f)}
-                                className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all ${
-                                    activeFilter === f
-                                        ? "bg-[#1A1A1A] text-white shadow-md"
-                                        : "text-gray-400 hover:text-gray-600"
-                                }`}
+                                className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all ${activeFilter === f
+                                    ? "bg-[#1A1A1A] text-white shadow-md"
+                                    : "text-gray-400 hover:text-gray-600"
+                                    }`}
                             >
                                 {f}
                             </button>
@@ -145,12 +142,11 @@ const TrainingPreviewSection = () => {
                     {/* Content Section */}
                     <div className="relative z-20 p-8 sm:p-10">
                         <h3 className="text-3xl sm:text-3xl font-bold text-white mb-4 tracking-tight">
-                            Door Supervisor Training
+                            Mr. John Redfern
                         </h3>
 
                         <p className="text-gray-300 text-sm sm:text-base mb-6 leading-relaxed max-w-md opacity-90">
-                            Comprehensive SIA Door Supervisor training covering conflict
-                            management, physical intervention, and venue security.
+                            Learn from the best. John brings 20+ years of security experience to every training session.
                         </p>
 
                         <div className="flex flex-wrap items-center gap-5 mb-6 text-white/90 text-[13px] font-bold">
@@ -206,7 +202,7 @@ const TrainingPreviewSection = () => {
 
                                 <div className="flex-1 flex flex-col py-1">
                                     <h4 className="text-lg font-bold text-[#1A1A1A] mb-1.5 tracking-tight group-hover:text-[#FF5421] transition-colors">
-                                        {course.title}
+                                        Instructor: {course.id === 'cctv-training' ? 'Richard Clarke' : course.id === 'security-guard' ? 'Sarah Mitchell' : 'David Okonkwo'}
                                     </h4>
 
                                     <p className="text-gray-500 text-sm mb-4 leading-relaxed font-medium line-clamp-2">
@@ -270,7 +266,7 @@ const TrainingPreviewSection = () => {
                         className="px-10 py-5 bg-white/5 hover:bg-white/10 text-white rounded-full text-base font-bold transition-all border border-white/10 flex items-center gap-3 backdrop-blur-sm active:scale-95"
                     >
                         <Play className="w-5 h-5 fill-white" />
-                        Watch More
+                        VIEW ALL REVIEWS
                     </button>
                 </div>
             </div>

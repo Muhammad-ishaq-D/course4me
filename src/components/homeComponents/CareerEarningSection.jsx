@@ -43,13 +43,13 @@ const RoleCard = ({ icon: Icon, title, description, rate, training, shift }) => 
     {/* Wage Display */}
     <div className="mb-8">
       <p className="text-gray-400 text-[11px] font-bold uppercase tracking-wider mb-2">
-        Earn up to:
+        Average Salary:
       </p>
       <div className="text-[#FF5421] text-4xl font-bold tracking-tight leading-none mb-1">
         {rate}
       </div>
       <p className="text-gray-400 text-[11px] font-bold">
-        per hour
+        per month
       </p>
     </div>
 
@@ -88,10 +88,10 @@ const CareerEarningSection = () => {
             Career Paths
           </div>
           <h2 className="text-[44px] sm:text-[52px] font-bold text-[#1A1A1A] mb-6 tracking-tight leading-none">
-            Your Security Career Paths
+            Choose Your Path. <span className="text-[#FF5421]">Start Earning Today.</span>
           </h2>
           <p className="text-gray-500 text-base sm:text-lg font-medium max-w-2xl mx-auto leading-relaxed">
-            Explore the different security roles and find the one that fits your lifestyle
+            Explore the different security roles available and their earning potential.
           </p>
         </div>
 
@@ -102,7 +102,7 @@ const CareerEarningSection = () => {
             icon={Shield}
             title="Door Supervisor"
             description="Work at pubs, clubs, events, shops, and offices. Best choice for flexible, higher-paying jobs."
-            rate="£13-£25"
+            rate="£2.5k"
             training="Door Supervisor Training"
             shift="20 to 48 hours a week (usually includes weekends)"
           />
@@ -111,7 +111,7 @@ const CareerEarningSection = () => {
             icon={Users}
             title="Security Guard"
             description="Ideal for static guarding at offices, shops, and warehouses. No door work or nightlife covered."
-            rate="£12-£15"
+            rate="£2.1k"
             training="Security Guard Training"
             shift="Flexible shifts available"
           />
@@ -120,7 +120,7 @@ const CareerEarningSection = () => {
             icon={Camera}
             title="CCTV Operator"
             description="Monitor shops, offices, warehouses from control rooms. Ideal for those preferring indoor desk-based roles."
-            rate="£13-£17"
+            rate="£2.2k"
             training="CCTV Training"
             shift="24/7 shift patterns available"
           />
@@ -129,7 +129,7 @@ const CareerEarningSection = () => {
             icon={Briefcase}
             title="Close Protection"
             description="Get licensed to work as a Bodyguard for VIPs, celebrities, and high-profile clients. Exclusive, high-paying security work."
-            rate="£12-£17"
+            rate="£3.5k"
             training="Close Protection Training"
             shift="Variable - project based"
           />

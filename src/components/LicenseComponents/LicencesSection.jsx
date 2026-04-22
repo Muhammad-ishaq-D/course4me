@@ -1,5 +1,15 @@
 import { licences } from "./licences";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight, Briefcase, Calendar, Camera, Clock, DollarSign, Info, RefreshCcw, Shield, Star, TrendingUp, UserCheck } from "lucide-react";
+
+const courseTitleToId = (title) => {
+  const t = title.toLowerCase();
+  if (t.includes("door supervisor")) return "door-supervisor";
+  if (t.includes("security guard")) return "security-guard";
+  if (t.includes("cctv")) return "cctv-training";
+  if (t.includes("first aid")) return "first-aid-at-work";
+  return "door-supervisor";
+};
 
 const iconMap = {
   shield: Shield,
@@ -10,7 +20,7 @@ const iconMap = {
 };
 
 const LicencesSection = () => {
-  const IconComponent = iconMap[item.icon];
+  const navigate = useNavigate();
   return (
     <section className="bg-[#f3f6f9] py-20 px-6">
       <div className="max-w-7xl mx-auto">
@@ -119,7 +129,10 @@ const LicencesSection = () => {
                       </div>
                     </div>
 
-                    <button className="bg-[#2f3a47] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-black transition flex items-center gap-2">
+                    <button
+                      onClick={() => navigate(`/booking/course?courseid=${courseTitleToId(item.title)}`)}
+                      className="bg-[#2f3a47] text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-black transition flex items-center gap-2"
+                    >
                       Book Now
                       <ArrowRight size={16} />
                     </button>

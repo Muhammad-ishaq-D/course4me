@@ -11,6 +11,7 @@ import BlogSection from '../components/homeComponents/BlogSection'
 import TrainingPreviewSection from '../components/homeComponents/TrainingPreviewSection'
 import VideoTestimonials from '../components/homeComponents/VideoTestimonials'
 import AppPromotionSection from '../components/homeComponents/AppPromotionSection'
+import StatsBar from '../components/homeComponents/StatsBar'
 
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
     <div className="">
 
       <HeroSection />
+      <StatsBar />
       <HiringTrainingSection />
       <CoursesLicencesSection />
       <TrainingPreviewSection />

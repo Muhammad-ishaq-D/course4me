@@ -8,33 +8,26 @@ import {
   Phone,
   Mail
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import BookCourseModal from "./BookCourseModal";
 
+const courseTitleToId = (title) => {
+  const t = title.toLowerCase();
+  if (t.includes("door supervisor")) return "door-supervisor";
+  if (t.includes("security guard")) return "security-guard";
+  if (t.includes("cctv")) return "cctv-training";
+  if (t.includes("first aid")) return "first-aid-at-work";
+  return "door-supervisor";
+};
+
 const CentreDetailsModal = ({ centre, onClose }) => {
+  const navigate = useNavigate();
   if (!centre) return null;
-  const [selectedCentre, setSelectedCentre] = useState(null);
-  const [showBookModal, setShowBookModal] = useState(false);
 
   const handleBookNow = () => {
-    setSelectedCentre(centre);
-    setShowBookModal(true);
+    const courseId = centre.courses.length > 0 ? courseTitleToId(centre.courses[0]) : "door-supervisor";
+    navigate(`/booking/course?courseid=${courseId}&postcode=${encodeURIComponent(centre.city)}`);
   };
-
-  const handleCloseBookModal = () => {
-    setShowBookModal(false);
-    setSelectedCentre(null);
-  };
-
-  // If showing book modal, don't render the details modal
-  if (showBookModal) {
-    return (
-      <BookCourseModal
-        centre={selectedCentre}
-        showModal={showBookModal}
-        onClose={handleCloseBookModal}
-      />
-    );
-  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-[1px] px-4">
@@ -45,8 +38,8 @@ const CentreDetailsModal = ({ centre, onClose }) => {
         w-full
         max-w-[520px]
         md:max-w-[600px]
-        h-[93vh]
-        max-h-[93vh]
+        h-fit
+        max-h-[85vh]
         rounded-[28px]
         shadow-2xl
         relative
@@ -68,7 +61,7 @@ const CentreDetailsModal = ({ centre, onClose }) => {
           {centre.name}
         </h2>
 
-        <div className="max-h-[65vh] overflow-y-auto pr-4 md:pr-1 custom-scroll">
+        <div className="max-h-[60vh] overflow-y-auto pr-4 md:pr-1 custom-scroll">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
 
             {/* LEFT SIDE */}

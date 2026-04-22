@@ -3,6 +3,16 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+const courseTitleToId = (title) => {
+  if (!title) return "door-supervisor";
+  const t = title.toLowerCase();
+  if (t.includes("door supervisor")) return "door-supervisor";
+  if (t.includes("security guard")) return "security-guard";
+  if (t.includes("cctv")) return "cctv-training";
+  if (t.includes("first aid")) return "first-aid-at-work";
+  return "door-supervisor";
+};
+
 const CourseCard = ({
   id,
   image,
@@ -77,14 +87,17 @@ const CourseCard = ({
 
         {/* BUTTONS */}
         <div className="flex gap-3 mt-auto">
-          <button 
-            onClick={() => navigate(`/course/${id}/book`)}
+          <button
+            onClick={() => {
+              const courseId = courseTitleToId(title);
+              navigate(`/booking/course?courseid=${courseId}`);
+            }}
             className="flex-1 bg-[#F65B15] hover:bg-[#e25512] text-white text-sm font-semibold py-2.5 rounded-lg transition"
           >
             Book Now
           </button>
 
-          <button 
+          <button
             onClick={() => navigate(`/course/${id}`)}
             className="flex items-center justify-center gap-1 border border-white/10 text-white/80 text-sm px-4 rounded-lg hover:bg-white/5 transition"
           >

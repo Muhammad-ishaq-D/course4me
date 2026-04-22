@@ -46,10 +46,10 @@ export default function VideoTestimonials() {
     ];
 
     const stats = [
-        { number: "400,000+", label: "Professionals Trained" },
-        { number: "95%", label: "First-Time Pass Rate" },
-        { number: "4.9★", label: "Average Rating" },
-        { number: "85+", label: "UK Locations" }
+        { number: "2k+", label: "Students Success" },
+        { number: "95%", label: "Placement Rate" },
+        { number: "4.8/5", label: "Course Rating" },
+        { number: "10k+", label: "Monthly Learners" }
     ];
 
     return (
@@ -64,14 +64,14 @@ export default function VideoTestimonials() {
                 <div className="flex justify-center mb-6">
                     <div className="flex items-center gap-2 border border-[#00A3FF33] bg-[#00A3FF0A] text-[#00A3FF] px-5 py-2 rounded-full text-sm font-bold shadow-sm">
                         <Play size={14} className="fill-[#00A3FF]" />
-                        Video Testimonials
+                        Success Stories
                     </div>
                 </div>
 
                 {/* Heading */}
                 <h2 className="text-center text-[48px] font-bold mb-5 leading-tight">
-                    Hear From Our{" "}
-                    <span className="text-[#FF5421]">Success Stories</span>
+                    Watch How They Went From <br />
+                    <span className="text-[#FF5421]">Zero to Paid</span>
                 </h2>
 
                 {/* Subtitle */}

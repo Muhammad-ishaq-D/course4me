@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Sparkles,
   MapPin,
@@ -12,7 +13,15 @@ import londonImg from "../../assets/locations/London.png";
 import manchesterImg from "../../assets/locations/Manchester.png";
 import birminghamImg from "../../assets/locations/Birmingham.png";
 import glasgowImg from "../../assets/locations/Glasgow.png";
-import BookCourseModal from "./BookCourseModal";
+
+const courseTitleToId = (title) => {
+  const t = title.toLowerCase();
+  if (t.includes("door supervisor")) return "door-supervisor";
+  if (t.includes("security guard")) return "security-guard";
+  if (t.includes("cctv")) return "cctv-training";
+  if (t.includes("first aid")) return "first-aid-at-work";
+  return "door-supervisor";
+};
 
 const centres = [
   {
@@ -70,7 +79,8 @@ const centres = [
 ];
 
 const FeaturedCentres = () => {
-  const [selectedCentre, setSelectedCentre] = useState(null);
+  const navigate = useNavigate();
+
   return (
     <section className="bg-[#f3f6f9] py-24 px-6 lg:px-12">
       <div className="max-w-[1400px] mx-auto">
@@ -152,12 +162,13 @@ const FeaturedCentres = () => {
                   </div>
 
                   <div className="flex flex-nowrap gap-2 mb-2 overflow-hidden">
-                    {centre.courses.map((course, i) => (
+                    {centre.courses.map((courseName, i) => (
                       <span
                         key={i}
-                        className="bg-gray-100 text-gray-700 text-[11px] font-medium px-3 py-1 rounded-full whitespace-nowrap"
+                        onClick={() => navigate(`/booking/course?courseid=${courseTitleToId(courseName)}&postcode=${encodeURIComponent(centre.city)}`)}
+                        className="bg-gray-100 text-gray-700 text-[11px] font-medium px-3 py-1 rounded-full whitespace-nowrap cursor-pointer hover:bg-[#F15A24]/10 hover:text-[#F15A24] transition-colors"
                       >
-                        {course}
+                        {courseName}
                       </span>
                     ))}
                   </div>
@@ -171,7 +182,10 @@ const FeaturedCentres = () => {
                 {/* Action Buttons */}
                 <div className="mt-auto flex items-center gap-3">
                   <button
-                    onClick={() => setSelectedCentre(centre)}
+                    onClick={() => {
+                      const courseId = centre.courses.length > 0 ? courseTitleToId(centre.courses[0]) : "door-supervisor";
+                      navigate(`/booking/course?courseid=${courseId}&postcode=${encodeURIComponent(centre.city)}`);
+                    }}
                     className="flex-1 bg-[#1C1C1C] text-white py-3.5 rounded-full font-bold text-sm hover:bg-black transition flex items-center justify-center gap-2"
                   >
                     Book Now <span className="text-lg">→</span>
@@ -187,10 +201,6 @@ const FeaturedCentres = () => {
           ))}
 
         </div>
-        <BookCourseModal
-          centre={selectedCentre}
-          onClose={() => setSelectedCentre(null)}
-        />
       </div>
     </section>
   );

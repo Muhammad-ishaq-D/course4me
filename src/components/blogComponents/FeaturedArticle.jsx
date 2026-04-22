@@ -1,12 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight, Calendar, Clock, User } from "lucide-react";
 import Blog1 from "../../assets/home/blog1.png";
 
 const FeaturedArticle = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="px-6 -mt-10 mb-16 relative z-20">
       <div className="max-w-[1185px] mx-auto">
-        <div className="bg-white rounded-[40px] shadow-2xl overflow-hidden border border-gray-100 flex flex-col lg:flex-row group cursor-pointer transition-transform hover:translate-y-[-4px]">
+        <div
+          onClick={() => navigate('/blog/article')}
+          className="bg-white rounded-[40px] shadow-2xl overflow-hidden border border-gray-100 flex flex-col lg:flex-row group cursor-pointer transition-transform hover:translate-y-[-4px]"
+        >
           {/* Image Section */}
           <div className="lg:w-1/2 h-[400px] lg:h-auto overflow-hidden">
             <img
