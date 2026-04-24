@@ -290,7 +290,7 @@ const CourseResults = () => {
                           <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
                             <p className="font-bold text-[#1C1C1C]">£{date.price}</p>
                             <Link
-                              to={`/booking/course?courseid=${courseId}&postcode=${encodeURIComponent(loc.name)}`}
+                              to={`/booking/packages?course_name=${courseId}&postcode=${encodeURIComponent(loc.name)}`}
                               className="bg-[#F15A24] text-white px-6 py-2 rounded-lg text-xs font-black hover:brightness-110 shadow-md shadow-[#F15A24]/10 transition-all"
                             >
                               Book Now
