@@ -1,16 +1,16 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
-import Courses from "../pages/Courses";
+import Courses from "../pages/courses/Courses";
 import Licenses from "../pages/License";
 import Locations from "../pages/Locations";
 import Careers from "../pages/Careers";
 import Blog from "../pages/Blog";
-import CourseDetail from "../pages/CourseDetail";
-import CourseBooking from "../pages/CourseBooking";
-import CourseResults from "../pages/CourseResults";
-import CoursePackages from "../pages/CoursePackages";
-import CourseCheckout from "../pages/CourseCheckout";
+import CourseDetail from "../pages/courses/CourseDetail";
+import CourseBooking from "../pages/courses/CourseBooking";
+import CourseResults from "../pages/courses/CourseResults";
+import CoursePackages from "../pages/courses/CoursePackages";
+import CourseCheckout from "../pages/courses/CourseCheckout";
 import BlogArticle from "../pages/BlogArticle";
 
 

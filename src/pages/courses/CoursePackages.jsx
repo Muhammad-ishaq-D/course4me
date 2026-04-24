@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { CheckCircle2, ChevronDown, ChevronUp, Star, Phone, ArrowLeft, ShieldCheck, Check, X as XIcon, Users } from "lucide-react";
-import { courses } from "../data/courseData";
+import { courses } from "../../data/courseData";
 
 const CoursePackages = () => {
   const [searchParams] = useSearchParams();
@@ -176,7 +176,7 @@ const CoursePackages = () => {
                 <div className="flex gap-2 items-start"><XIcon size={14} className="shrink-0 mt-0.5" /> <p>You will have to <b className="font-bold border-b border-red-600">pay up to £49</b> for unlimited resits if you fail the exam</p></div>
                 <div className="flex gap-2 items-start"><XIcon size={14} className="shrink-0 mt-0.5" /> <p>You are missing out on the <b className="font-bold border-b border-red-600">Free Name Change Guarantee and Zero Risk Refund Guarantee</b></p></div>
               </div>
-              <button 
+              <button
                 onClick={() => navigate('/booking/checkout?e_q=TmpNeU5UZz0%3D&ex_e_q=TmpBM01EVT0%3D&plan_id=TVRFPQ%3D%3D&from=TDJKdmIydHBibWN2Y0dGamEyRm5aWE09&active_step=CheckoutStep1')}
                 className="w-full py-4 rounded-xl border-2 border-gray-200 text-[#1C1C1C] font-black text-sm hover:border-[#F15A24] hover:text-[#F15A24] active:scale-95 transition-all">
                 Select Saver
@@ -233,7 +233,7 @@ const CoursePackages = () => {
             </div>
 
             <div className="p-8 pt-0 mt-auto border-t border-gray-50/50">
-              <button 
+              <button
                 onClick={() => navigate('/booking/checkout?e_q=TmpNeU5UZz0%3D&ex_e_q=TmpBM01EVT0%3D&plan_id=TVRFPQ%3D%3D&from=TDJKdmIydHBibWN2Y0dGamEyRm5aWE09&active_step=CheckoutStep1')}
                 className="w-full py-4 rounded-xl bg-[#F15A24] text-white font-black text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#F15A24]/20">
                 Select Flexi+
@@ -274,7 +274,7 @@ const CoursePackages = () => {
             </div>
 
             <div className="p-8 pt-0 mt-auto border-t border-gray-50/50">
-              <button 
+              <button
                 onClick={() => navigate('/booking/checkout?e_q=TmpNeU5UZz0%3D&ex_e_q=TmpBM01EVT0%3D&plan_id=TVRFPQ%3D%3D&from=TDJKdmIydHBibWN2Y0dGamEyRm5aWE09&active_step=CheckoutStep1')}
                 className="w-full py-4 rounded-xl bg-[#7344ff] text-white font-black text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#7344ff]/20">
                 Select Premium

@@ -20,8 +20,8 @@ import {
   Wind,
   Navigation
 } from "lucide-react";
-import { courses } from "../data/courseData";
-import SearchModal from "../components/shared/SearchModal";
+import { courses } from "../../data/courseData";
+import SearchModal from "../../components/shared/SearchModal";
 
 const CourseResults = () => {
   const [searchParams] = useSearchParams();

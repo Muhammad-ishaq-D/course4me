@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import CourseHero from "../components/coursesComponents/details/CourseHero";
-import CourseMainContent from "../components/coursesComponents/details/CourseMainContent";
-import RelatedCourses from "../components/coursesComponents/details/RelatedCourses";
-import CourseCTA from "../components/coursesComponents/details/CourseCTA";
-import { courses } from "../data/courseData";
+import CourseHero from "../../components/coursesComponents/details/CourseHero";
+import CourseMainContent from "../../components/coursesComponents/details/CourseMainContent";
+import RelatedCourses from "../../components/coursesComponents/details/RelatedCourses";
+import CourseCTA from "../../components/coursesComponents/details/CourseCTA";
+import { courses } from "../../data/courseData";
 import { BookOpen, Calendar, FileText, HelpCircle, Star } from "lucide-react";
 
 const CourseDetail = () => {
