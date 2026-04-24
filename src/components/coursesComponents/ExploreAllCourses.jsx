@@ -4,10 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import CourseCard from './CourseCard';
 
 const categories = [
-  "All Courses", 
-  "SIA Training", 
-  "First Aid", 
-  "Health & Safety", 
+  "All Courses",
+  "SIA Training",
+  "First Aid",
+  "Health & Safety",
   "Specialist",
   "Hospitality"
 ];
@@ -45,7 +45,7 @@ const allCourseData = [
     title: "Security Guard Refresher Course",
     category: "SIA Training",
     description: "Essential refresher for SIA security guard license holders.",
-    image: "https://images.unsplash.com/photo-1557597774-9d2739f05a76?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1485230405346-71acb9518d9c?q=80&w=1194&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     price: "149.99"
   },
   {
@@ -53,16 +53,16 @@ const allCourseData = [
     title: "Door Supervisor Training",
     category: "SIA Training",
     description: "The standard course for working in high-risk venues.",
-    image: "https://images.unsplash.com/photo-1590402485284-a1419d4212d2?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1770529933902-d2f7851be31c?auto=format&fit=crop&q=80&w=800",
     badge: "Limited",
     price: "189.99"
   },
   {
-    id: 8,
+    id: 6,
     title: "Close Protection Course",
     category: "Specialist",
     description: "Elite training for bodyguards and private security detail for high-profile clients.",
-    image: "https://images.unsplash.com/photo-1557597774-9d2739f05a76?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1775531501706-ad733d12d0e7?auto=format&fit=crop&q=80&w=800",
     badge: "Elite",
     price: "1,500.00"
   }
@@ -71,7 +71,7 @@ const allCourseData = [
 const ExploreAllCourses = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get('category');
-  
+
   const [activeCategory, setActiveCategory] = useState("All Courses");
 
   useEffect(() => {
@@ -91,8 +91,8 @@ const ExploreAllCourses = () => {
     }
   };
 
-  const filteredCourses = activeCategory === "All Courses" 
-    ? allCourseData 
+  const filteredCourses = activeCategory === "All Courses"
+    ? allCourseData
     : allCourseData.filter(course => course.category === activeCategory);
 
   return (
@@ -109,11 +109,10 @@ const ExploreAllCourses = () => {
             <button
               key={category}
               onClick={() => handleCategoryChange(category)}
-              className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all ${
-                activeCategory === category 
-                  ? "bg-[#141414] text-white shadow-lg" 
-                  : "bg-white text-[#141414] border border-[#EEEEEE] hover:bg-[#F8FAFC]"
-              }`}
+              className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all ${activeCategory === category
+                ? "bg-[#141414] text-white shadow-lg"
+                : "bg-white text-[#141414] border border-[#EEEEEE] hover:bg-[#F8FAFC]"
+                }`}
             >
               {category}
             </button>
@@ -121,7 +120,7 @@ const ExploreAllCourses = () => {
         </div>
 
         {/* Filtered Grid */}
-        <motion.div 
+        <motion.div
           layout
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
@@ -140,7 +139,7 @@ const ExploreAllCourses = () => {
                 </motion.div>
               ))
             ) : (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="col-span-full py-20 text-center"

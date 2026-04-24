@@ -14,7 +14,7 @@ const ExploreSiaCourses = () => {
       description:
         "Become a certified door supervisor with comprehensive training in conflict management, physical intervention, and legal responsibilities.",
       image:
-        "https://images.unsplash.com/photo-1590402485284-a1419d4212d2?auto=format&fit=crop&q=80&w=800",
+        "https://media.istockphoto.com/id/2166573804/photo/on-the-job-portrait-of-security-staff-at-media-event.jpg?s=1024x1024&w=is&k=20&c=m27UTDaDCsk1sGV9BJgKORqNamF0B4v-de4pKR6YsGM=",
       badge: "Popular",
       price: "165.00",
       date: "16th Mar 2026",
@@ -26,7 +26,7 @@ const ExploreSiaCourses = () => {
       description:
         "Attend two days of classes online and one day for the exam. Get licensed to operate CCTV systems.",
       image:
-        "https://images.unsplash.com/photo-1557597774-9d2739f05a76?auto=format&fit=crop&q=80&w=800",
+        "https://plus.unsplash.com/premium_photo-1748853983673-6e48199324fe?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       badge: "Popular",
       tag: "Online",
       price: "299.99",
@@ -92,7 +92,7 @@ const ExploreSiaCourses = () => {
     }
   ];
 
-  const filteredCourses = categoryParam 
+  const filteredCourses = categoryParam
     ? allCourses.filter(course => course.category === categoryParam)
     : allCourses.filter(course => course.category === "SIA Training"); // Default to SIA Training
 
