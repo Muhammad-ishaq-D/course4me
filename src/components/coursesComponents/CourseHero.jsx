@@ -7,7 +7,7 @@ import hospitalityImg from '../../assets/courses/hero/hospitality.png';
 import firstAidImg from '../../assets/courses/hero/first_aid.png';
 import healthSafetyImg from '../../assets/courses/hero/health_safety.png';
 
-const CourseHero = () => {
+const CourseHero = ({ activeTab, setActiveTab }) => {
   return (
     <>
       <section className="bg-[#141414] pt-40 pb-20 px-6 lg:px-16 overflow-hidden">
@@ -132,13 +132,31 @@ const CourseHero = () => {
       {/* Navigation Tabs */}
       <div className="bg-white border-b border-[#EEEEEE] px-6 lg:px-16">
         <div className="max-w-7xl mx-auto flex items-center gap-8">
-          <button className="text-[#F65B15] font-semibold text-sm py-4 border-b-2 border-[#F65B15]">
+          <button
+            onClick={() => setActiveTab('popular')}
+            className={`${activeTab === 'popular'
+                ? "text-[#F65B15] border-[#F65B15]"
+                : "text-[#141414]/60 border-transparent hover:text-[#141414]"
+              } font-semibold text-sm py-4 border-b-2 transition-all`}
+          >
             Popular Courses
           </button>
-          <button className="text-[#141414]/60 font-medium text-sm py-4 border-b-2 border-transparent hover:text-[#141414] transition-colors">
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`${activeTab === 'all'
+                ? "text-[#F65B15] border-[#F65B15]"
+                : "text-[#141414]/60 border-transparent hover:text-[#141414]"
+              } font-medium text-sm py-4 border-b-2 transition-all`}
+          >
             All Courses
           </button>
-          <button className="text-[#141414]/60 font-medium text-sm py-4 border-b-2 border-transparent hover:text-[#141414] transition-colors">
+          <button
+            onClick={() => setActiveTab('reviews')}
+            className={`${activeTab === 'reviews'
+                ? "text-[#F65B15] border-[#F65B15]"
+                : "text-[#141414]/60 border-transparent hover:text-[#141414]"
+              } font-medium text-sm py-4 border-b-2 transition-all`}
+          >
             Reviews
           </button>
         </div>
