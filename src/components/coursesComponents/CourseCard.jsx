@@ -31,10 +31,10 @@ const CourseCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4 }}
-      className="bg-[#1C1C1C] rounded-2xl overflow-hidden border border-white/[0.05] shadow-sm group"
+      className="bg-[#1C1C1C] rounded-2xl overflow-hidden border border-white/[0.05] shadow-sm group flex flex-col h-full"
     >
       {/* IMAGE */}
-      <div className="relative h-[200px] overflow-hidden">
+      <div className="relative h-[200px] flex-shrink-0 overflow-hidden">
         <img
           src={image}
           alt={title}
@@ -61,7 +61,7 @@ const CourseCard = ({
       </div>
 
       {/* CONTENT */}
-      <div className="p-5 flex flex-col">
+      <div className="p-5 flex flex-col flex-1">
         {/* TITLE */}
         <h3 className="text-white text-[15px] font-semibold leading-snug mb-2">
           {title}
@@ -72,38 +72,41 @@ const CourseCard = ({
           {description}
         </p>
 
-        {/* PRICE */}
-        <p className="text-white text-[13px] mb-1">
-          Starting at just{" "}
-          <span className="font-semibold">£{price}</span>
-        </p>
-
-        {/* DATE */}
-        {date && (
-          <p className="text-[#F65B15] text-[12px] mb-5">
-            Skills Start Date: {date}
+        {/* PRICE & DATE AREA - Push to bottom */}
+        <div className="mt-auto">
+          {/* PRICE */}
+          <p className="text-white text-[13px] mb-1">
+            Starting at just{" "}
+            <span className="font-semibold">£{price}</span>
           </p>
-        )}
 
-        {/* BUTTONS */}
-        <div className="flex gap-3 mt-auto">
-          <button
-            onClick={() => {
-              const courseId = courseTitleToId(title);
-              navigate(`/booking/course?courseid=${courseId}`);
-            }}
-            className="flex-1 bg-[#F65B15] hover:bg-[#e25512] text-white text-sm font-semibold py-2.5 rounded-lg transition"
-          >
-            Book Now
-          </button>
+          {/* DATE */}
+          {date && (
+            <p className="text-[#F65B15] text-[12px] mb-5">
+              Skills Start Date: {date}
+            </p>
+          )}
 
-          <button
-            onClick={() => navigate(`/course/${id}`)}
-            className="flex items-center justify-center gap-1 border border-white/10 text-white/80 text-sm px-4 rounded-lg hover:bg-white/5 transition"
-          >
-            Learn More
-            <ArrowRight size={14} />
-          </button>
+          {/* BUTTONS */}
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                const courseId = courseTitleToId(title);
+                navigate(`/booking/course?courseid=${courseId}`);
+              }}
+              className="flex-1 bg-[#F65B15] hover:bg-[#e25512] text-white text-sm font-semibold py-2.5 rounded-lg transition"
+            >
+              Book Now
+            </button>
+
+            <button
+              onClick={() => navigate(`/course/${id}`)}
+              className="flex items-center justify-center gap-1 border border-white/10 text-white/80 text-sm px-4 rounded-lg hover:bg-white/5 transition"
+            >
+              Learn More
+              <ArrowRight size={14} />
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>
