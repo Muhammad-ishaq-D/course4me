@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import courseService from "../../api/services/courseService";
 import {
   Shield,
   Activity,
@@ -10,73 +11,90 @@ import {
   ArrowUpRight,
   X
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-// Standardizing images from assets
+// Standardizing images from assets (Still used for fallback or icons if needed)
 import doorImg from "../../assets/courses/door.png";
-import cctvImg from "../../assets/courses/cctv.png";
-import firstAidImg from "../../assets/courses/first-aid.png";
 
-const categories = [
+const categoryTemplates = [
   {
     icon: <Shield className="w-6 h-6" />,
     name: "SIA Training",
-    count: "5 courses",
     color: "bg-[#FF3B30]",
     id: "SIA Training"
   },
   {
     icon: <Activity className="w-6 h-6" />,
     name: "First Aid",
-    count: "1 course",
     color: "bg-[#34C759]",
     id: "First Aid"
   },
   {
     icon: <Shield className="w-6 h-6" />,
     name: "Health & Safety",
-    count: "2 courses",
     color: "bg-[#007AFF]",
     id: "Health & Safety"
   },
   {
     icon: <Briefcase className="w-6 h-6" />,
     name: "Specialist",
-    count: "2 courses",
     color: "bg-[#5856D6]",
     id: "Specialist"
   }
 ];
 
-const popularCourses = [
-  {
-    title: "Door Supervisor Training",
-    rating: "4.9",
-    duration: "4 days",
-    price: "£185.00",
-    image: doorImg,
-    id: "door-supervisor"
-  },
-  {
-    title: "CCTV Training",
-    rating: "4.9",
-    duration: "4 days",
-    price: "£185.00",
-    image: cctvImg,
-    id: "cctv-training"
-  },
-  {
-    title: "First Aid at Work",
-    rating: "4.9",
-    duration: "4 days",
-    price: "£185.00",
-    image: firstAidImg,
-    id: "first-aid-at-work"
-  }
-];
-
 const BrowseCoursesModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [dynamicCategories, setDynamicCategories] = useState(categoryTemplates.map(cat => ({ ...cat, count: "0 courses" })));
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isOpen) return;
+      
+      try {
+        setLoading(true);
+        
+        // Fetch Courses for "Popular" section (Limited to 4 for modal)
+        const courseRes = await courseService.getAllCourses({ limit: 4 });
+        const courseData = courseRes.data?.data || [];
+        
+        setCourses(courseData.map(course => ({
+          id: course._id,
+          title: course.title,
+          rating: course.rating || "4.9", 
+          duration: course.duration || "4 days",
+          price: `£${course.pricing?.basePrice}`,
+          image: course.thumbnail || doorImg,
+          reviews: course.reviewsCount,
+          booked: course.bookedCount,
+        })));
+
+        // Fetch Category Statistics
+        const statsRes = await courseService.getCategoryStats();
+        const statsData = statsRes.data?.data || [];
+        
+        const updatedCategories = categoryTemplates.map(cat => {
+          const stat = statsData.find(s => s._id === cat.id);
+          const count = stat ? stat.count : 0;
+          return {
+            ...cat,
+            count: `${count} course${count !== 1 ? 's' : ''}`
+          };
+        });
+
+        setDynamicCategories(updatedCategories);
+
+      } catch (error) {
+        console.error('Error fetching modal data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -115,13 +133,6 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
               <h2 className="text-lg md:text-2xl font-bold text-[#1E293B] uppercase tracking-wide">
                 Browse Courses
               </h2>
-              {/* <Link
-                to="/courses"
-                onClick={onClose}
-                className="flex items-center gap-1 md:gap-2 text-[#F15A24] font-semibold hover:underline"
-              >
-                View All Courses <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
-              </Link> */}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
@@ -131,7 +142,7 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
                   Categories
                 </h3>
                 <div className="space-y-3 md:space-y-4">
-                  {categories.map((cat, idx) => (
+                  {dynamicCategories.map((cat, idx) => (
                     <div
                       key={idx}
                       onClick={() => handleCategoryClick(cat.id)}
@@ -159,37 +170,45 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
                   Popular Courses
                 </h3>
                 <div className="space-y-4 md:space-y-6">
-                  {popularCourses.map((course, idx) => (
-                    <div
-                      key={idx}
-                      onClick={() => handleCourseClick(course.id)}
-                      className="flex items-center gap-3 md:gap-4 cursor-pointer group"
-                    >
-                      <div className="w-16 h-14 md:w-20 md:h-16 rounded-xl overflow-hidden shrink-0 shadow-md">
-                        <img
-                          src={course.image}
-                          alt={course.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                      </div>
-                      <div className="grow">
-                        <h4 className="font-bold text-[#1E293B] group-hover:text-[#F15A24] transition-colors leading-tight mb-1">
-                          {course.title}
-                        </h4>
-                        <div className="flex items-center gap-4 text-xs text-[#64748B]">
-                          <span className="flex items-center gap-1 text-[#F59E0B] font-bold">
-                            <Star className="w-3 h-3 fill-current" /> {course.rating}
-                          </span>
-                          <span className="flex items-center gap-1 font-medium">
-                            <Clock className="w-3 h-3" /> {course.duration}
-                          </span>
-                          <span className="text-[#F15A24] font-bold text-sm">
-                            {course.price}
-                          </span>
+                  {loading ? (
+                    <div className="flex flex-col items-center justify-center py-10">
+                      <div className="w-8 h-8 border-3 border-[#F15A24]/20 border-t-[#F15A24] rounded-full animate-spin"></div>
+                    </div>
+                  ) : courses.length > 0 ? (
+                    courses.map((course, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => handleCourseClick(course.id)}
+                        className="flex items-center gap-3 md:gap-4 cursor-pointer group"
+                      >
+                        <div className="w-16 h-14 md:w-20 md:h-16 rounded-xl overflow-hidden shrink-0 shadow-md bg-gray-100">
+                          <img
+                            src={course.image}
+                            alt={course.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        </div>
+                        <div className="grow">
+                          <h4 className="font-bold text-[#1E293B] group-hover:text-[#F15A24] transition-colors leading-tight mb-1">
+                            {course.title}
+                          </h4>
+                          <div className="flex items-center gap-4 text-xs text-[#64748B]">
+                            <span className="flex items-center gap-1 text-[#F59E0B] font-bold">
+                              <Star className="w-3 h-3 fill-current" /> {course.rating}
+                            </span>
+                            <span className="flex items-center gap-1 font-medium">
+                              <Clock className="w-3 h-3" /> {course.duration}
+                            </span>
+                            <span className="text-[#F15A24] font-bold text-sm">
+                              {course.price}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-center text-gray-400 py-10">No courses found</p>
+                  )}
                 </div>
 
                 {/* Explore Button */}

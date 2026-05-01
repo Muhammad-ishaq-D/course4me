@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import courseService from "../../api/services/courseService";
 import {
   Shield,
   Camera,
@@ -8,48 +9,21 @@ import {
   Briefcase,
   CheckSquare,
   ArrowRight,
-  Lock
+  Lock,
+  BookOpen
 } from "lucide-react";
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const POPULAR_COURSES = [
-  {
-    id: "door-supervisor",
-    icon: Shield,
-    title: "Door Supervisor Training",
-    description: "SIA Licence · 6 Days",
-    category: "Security",
-  },
-  {
-    id: "cctv-training",
-    icon: Camera,
-    title: "CCTV Training",
-    description: "SIA Licence · 3 Days",
-    category: "Security",
-  },
-  {
-    id: "door-supervisor",
-    icon: Shield,
-    title: "Door Supervisor Refresher Course",
-    description: "SIA Refresher · 1 Day",
-    category: "Security",
-  },
-  {
-    id: "first-aid-at-work",
-    icon: Heart,
-    title: "First Aid at Work (FAW) — Level 3",
-    description: "HSE Certified · 3 Days",
-    category: "First Aid",
-  },
-  {
-    id: "security-guard",
-    icon: Users,
-    title: "Security Guard Training",
-    description: "SIA Licence · 4 Days",
-    category: "Security",
-  },
-];
+const getCategoryIcon = (category) => {
+  switch (category) {
+    case 'SIA Training': return Shield;
+    case 'First Aid': return Heart;
+    case 'Health & Safety': return Shield; // Or a specific H&S icon
+    case 'Specialist': return Lock;
+    default: return BookOpen;
+  }
+};
 
 const POPULAR_LICENCES = [
   {
@@ -104,11 +78,48 @@ const ItemCard = ({ icon: Icon, title, description, onClick }) => (
 const CoursesLicencesSection = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("Most Popular");
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredCourses =
-    activeCategory === "Most Popular"
-      ? POPULAR_COURSES
-      : POPULAR_COURSES.filter((c) => c.category === activeCategory);
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        const params = { status: 'Published' };
+        
+        // If not 'Most Popular', filter by category
+        // Note: The UI categories don't perfectly match backend categories yet
+        // For now, let's just fetch all and filter in memory or adjust backend call
+        const response = await courseService.getAllCourses(params);
+        const data = response.data?.data || [];
+        
+        const mappedCourses = data.map(course => ({
+          id: course._id,
+          icon: getCategoryIcon(course.category),
+          title: course.title,
+          description: `${course.subtitle || course.category} · ${course.duration || 'N/A'}`,
+          category: course.category
+        }));
+
+        setCourses(mappedCourses);
+      } catch (error) {
+        console.error('Error fetching popular courses:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  // Filter based on UI categories
+  const filteredCourses = activeCategory === "Most Popular"
+    ? courses.slice(0, 5) // Show top 5
+    : courses.filter(c => {
+        if (activeCategory === "SIA Licenses") return c.category === "SIA Training";
+        if (activeCategory === "Specialist") return c.category === "Specialist";
+        return true; // Default or other categories
+      });
 
   return (
     <section className="bg-white py-24 font-sans">
@@ -155,7 +166,11 @@ const CoursesLicencesSection = () => {
             </div>
 
             <div className="space-y-4">
-              {filteredCourses.length > 0 ? (
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-10">
+                  <div className="w-8 h-8 border-3 border-[#00A3FF]/20 border-t-[#00A3FF] rounded-full animate-spin"></div>
+                </div>
+              ) : filteredCourses.length > 0 ? (
                 filteredCourses.map((course, idx) => (
                   <ItemCard
                     key={`${course.id}-${idx}`}

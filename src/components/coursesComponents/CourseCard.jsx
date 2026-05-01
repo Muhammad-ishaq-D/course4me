@@ -1,17 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-const courseTitleToId = (title) => {
-  if (!title) return "door-supervisor";
-  const t = title.toLowerCase();
-  if (t.includes("door supervisor")) return "door-supervisor";
-  if (t.includes("security guard")) return "security-guard";
-  if (t.includes("cctv")) return "cctv-training";
-  if (t.includes("first aid")) return "first-aid-at-work";
-  return "door-supervisor";
-};
 
 const CourseCard = ({
   id,
@@ -22,89 +12,81 @@ const CourseCard = ({
   price,
   date,
   category,
+  duration,
+  isOnline = false
 }) => {
   const navigate = useNavigate();
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 25 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
-      className="bg-[#1C1C1C] rounded-2xl overflow-hidden border border-white/[0.05] shadow-sm group flex flex-col h-full"
+      transition={{ duration: 0.5 }}
+      className="bg-[#1A1A1A] rounded-[24px] overflow-hidden border border-white/5 flex flex-col h-full shadow-2xl"
     >
-      {/* IMAGE */}
-      <div className="relative h-[200px] flex-shrink-0 overflow-hidden">
+      {/* Image Section */}
+      <div className="relative h-[220px] overflow-hidden">
         <img
           src={image}
           alt={title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
-
-        {/* GRADIENT OVERLAY (IMPORTANT) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-
-        {/* BADGES */}
-        <div className="absolute top-3 left-3 flex gap-2">
-          {badge && (
-            <span className="bg-[#F65B15] text-white text-[10px] font-semibold px-2.5 py-1 rounded-md uppercase">
-              {badge}
-            </span>
-          )}
-
-          {category && (
-            <span className="bg-[#3B82F6] text-white text-[10px] font-semibold px-2.5 py-1 rounded-md uppercase">
-              {category}
-            </span>
-          )}
+        
+        {/* Badges */}
+        <div className="absolute top-4 left-4 flex gap-2">
+          <div className="bg-[#FF5C1B] text-white text-[10px] font-black px-3 py-1.5 rounded-lg flex items-center gap-1.5 uppercase tracking-tighter">
+            <TrendingUp size={12} strokeWidth={3} />
+            POPULAR
+          </div>
         </div>
+
+        {isOnline && (
+          <div className="absolute top-4 right-4 bg-[#00A3FF] text-white text-[10px] font-black px-3 py-1.5 rounded-lg uppercase tracking-tighter">
+            ONLINE
+          </div>
+        )}
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent opacity-80" />
       </div>
 
-      {/* CONTENT */}
-      <div className="p-5 flex flex-col flex-1">
-        {/* TITLE */}
-        <h3 className="text-white text-[15px] font-semibold leading-snug mb-2">
+      {/* Content Section */}
+      <div className="p-6 flex flex-col flex-1">
+        <h3 className="text-white text-[20px] font-bold mb-3 tracking-tight leading-tight">
           {title}
         </h3>
-
-        {/* DESCRIPTION */}
-        <p className="text-white/50 text-[13px] leading-relaxed mb-4 line-clamp-3">
+        
+        <p className="text-[#A1A1A1] text-[14px] leading-[1.6] mb-6 line-clamp-3">
           {description}
         </p>
 
-        {/* PRICE & DATE AREA - Push to bottom */}
-        <div className="mt-auto">
-          {/* PRICE */}
-          <p className="text-white text-[13px] mb-1">
-            Starting at just{" "}
-            <span className="font-semibold">£{price}</span>
-          </p>
-
-          {/* DATE */}
-          {date && (
-            <p className="text-[#F65B15] text-[12px] mb-5">
-              Skills Start Date: {date}
+        {/* Info & CTA Area */}
+        <div className="mt-auto space-y-5">
+          <div className="space-y-1">
+            <p className="text-[#FFFFFF] text-[14px] font-medium">
+              Starting at just <span className="font-bold">£{price}</span>
             </p>
-          )}
+            {date && (
+              <p className="text-[#717171] text-[13px] font-medium">
+                Next Available: <span className="text-[#FF5C1B] font-bold">{date}</span>
+              </p>
+            )}
+          </div>
 
-          {/* BUTTONS */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 pt-1">
             <button
-              onClick={() => {
-                const courseId = courseTitleToId(title);
-                navigate(`/booking/course?courseid=${courseId}`);
-              }}
-              className="flex-1 bg-[#F65B15] hover:bg-[#e25512] text-white text-sm font-semibold py-2.5 rounded-lg transition"
+              onClick={() => navigate(`/booking/course?courseid=${id}`)}
+              className="flex-1 bg-[#FF5C1B] hover:bg-[#E84A0F] text-white text-[14px] font-extrabold py-3.5 rounded-xl transition-all active:scale-[0.98]"
             >
               Book Now
             </button>
-
             <button
               onClick={() => navigate(`/course/${id}`)}
-              className="flex items-center justify-center gap-1 border border-white/10 text-white/80 text-sm px-4 rounded-lg hover:bg-white/5 transition"
+              className="flex-1 flex items-center justify-center gap-2 border border-[#333333] hover:bg-white/5 text-white text-[14px] font-extrabold py-3.5 rounded-xl transition-all"
             >
               Learn More
-              <ArrowRight size={14} />
+              <ArrowRight size={16} />
             </button>
           </div>
         </div>
