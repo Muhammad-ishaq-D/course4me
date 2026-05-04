@@ -19,6 +19,12 @@ const CourseMainContent = ({ course }) => {
 
   if (!course) return null;
 
+  // Formatting backend data
+  const displayPrice = course.pricing?.basePrice ? `£${course.pricing.basePrice}` : "N/A";
+  const displayLearn = course.learningPoints || [];
+  const displayWhoFor = course.targetAudience || [];
+  const displayRequirements = course.requirements || [];
+
   return (
     <section className="py-16 md:py-24 bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -29,56 +35,63 @@ const CourseMainContent = ({ course }) => {
             {/* About This Course */}
             <div>
               <h2 className="text-3xl font-bold text-[#1E293B] mb-6">About This Course</h2>
-              <p className="text-[#64748B] text-lg leading-relaxed mb-6">
-                {course.about}
-              </p>
+              <div 
+                className="text-[#64748B] text-lg leading-relaxed mb-6 prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: course.fullDescription }}
+              />
             </div>
 
             {/* What You'll Learn */}
-            <div>
-              <h2 className="text-3xl font-bold text-[#1E293B] mb-8">What You'll Learn</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {course.learn.map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                    <CheckCircle2 className="w-5 h-5 text-[#34C759] shrink-0" />
-                    <span className="text-[#475569] font-medium text-sm">{item}</span>
-                  </div>
-                ))}
+            {displayLearn.length > 0 && (
+              <div>
+                <h2 className="text-3xl font-bold text-[#1E293B] mb-8">What You'll Learn</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {displayLearn.map((item, i) => (
+                    <div key={i} className="flex items-center gap-3 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                      <CheckCircle2 className="w-5 h-5 text-[#34C759] shrink-0" />
+                      <span className="text-[#475569] font-medium text-sm">{item}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Who Is This Course For? */}
-            <div>
-              <h2 className="text-3xl font-bold text-[#1E293B] mb-8">Who Is This Course For?</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {course.whoFor.map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
-                    <div className="text-[#F15A24] bg-[#F15A24]/10 p-2 rounded-lg">
-                      <Users />
+            {displayWhoFor.length > 0 && (
+              <div>
+                <h2 className="text-3xl font-bold text-[#1E293B] mb-8">Who Is This Course For?</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {displayWhoFor.map((item, i) => (
+                    <div key={i} className="flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+                      <div className="text-[#F15A24] bg-[#F15A24]/10 p-2 rounded-lg">
+                        <Users />
+                      </div>
+                      <span className="text-[#475569] font-medium text-sm">{item}</span>
                     </div>
-                    <span className="text-[#475569] font-medium text-sm">{item}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Entry Requirements */}
-            <div className="bg-[#FEF3C7]/40 border border-[#F59E0B]/20 p-8 rounded-3xl">
-              <h2 className="text-2xl font-bold text-[#92400E] mb-6 flex items-center gap-3">
-                <AlertCircle className="w-6 h-6" /> Entry Requirements
-              </h2>
-              <p className="text-[#B45309] font-medium mb-6">Before you book, please check:</p>
-              <ul className="space-y-4">
-                {course.requirements.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full bg-[#F59E0B] text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
-                      {i + 1}
-                    </div>
-                    <span className="text-[#92400E] font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {displayRequirements.length > 0 && (
+              <div className="bg-[#FEF3C7]/40 border border-[#F59E0B]/20 p-8 rounded-3xl">
+                <h2 className="text-2xl font-bold text-[#92400E] mb-6 flex items-center gap-3">
+                  <AlertCircle className="w-6 h-6" /> Entry Requirements
+                </h2>
+                <p className="text-[#B45309] font-medium mb-6">Before you book, please check:</p>
+                <ul className="space-y-4">
+                  {displayRequirements.map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-[#F59E0B] text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                        {i + 1}
+                      </div>
+                      <span className="text-[#92400E] font-medium">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Sticky Sidebar */}
@@ -89,17 +102,23 @@ const CourseMainContent = ({ course }) => {
                 <div className="p-8">
                   <div className="text-[#64748B] font-medium mb-2">From</div>
                   <div className="flex items-baseline gap-2 mb-8">
-                    <span className="text-5xl font-extrabold text-[#1E293B]">{course.price}</span>
+                    <span className="text-5xl font-extrabold text-[#1E293B]">{displayPrice}</span>
                   </div>
 
                   <div className="space-y-4 mb-8">
                     <button
-                      onClick={() => navigate(`/booking/course?courseid=${course.id}`)}
+                      onClick={() => navigate(`/course/${course._id}/book`)}
                       className="w-full bg-[#F15A24] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#F15A24]/20 hover:brightness-110 transition-all flex items-center justify-center gap-2 group"
                     >
                       Book Now <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
-                    <button className="w-full bg-[#1E293B] text-white font-bold py-4 rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-2">
+                    <button 
+                      onClick={() => {
+                        const element = document.getElementById('dates');
+                        if (element) element.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="w-full bg-[#1E293B] text-white font-bold py-4 rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-2"
+                    >
                       <Calendar className="w-5 h-5" /> View All Dates
                     </button>
                   </div>

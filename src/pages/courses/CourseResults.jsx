@@ -18,94 +18,86 @@ import {
   Info,
   Car,
   Wind,
-  Navigation
+  Navigation,
+  Loader2
 } from "lucide-react";
-import { courses } from "../../data/courseData";
+import courseService from "../../api/services/courseService";
+import { courses as fallbackCourses } from "../../data/courseData";
 import SearchModal from "../../components/shared/SearchModal";
+import { useEffect } from "react";
 
 const CourseResults = () => {
   const [searchParams] = useSearchParams();
-  const postcode = searchParams.get("postcode") || "Andover";
-  const courseId = searchParams.get("courseid") || "door-supervisor";
+  const postcode = searchParams.get("postcode") || "";
+  const courseId = searchParams.get("courseid");
+
+  const [course, setCourse] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
   const [expandedCard, setExpandedCard] = useState("");
   const [filter, setFilter] = useState("Closest");
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-  const course = courses[courseId] || courses["door-supervisor"];
-  const basePrice = course.price.replace('£', '');
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        if (!courseId) {
+          setIsLoading(false);
+          return;
+        }
+        const response = await courseService.getCourseById(courseId);
+        setCourse(response.data.data);
+      } catch (err) {
+        console.error("Error fetching course:", err);
+        setError("Failed to load results");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCourse();
+  }, [courseId]);
 
-  const locations = [
-    {
-      id: "London-Central",
-      name: "London-Central",
-      recommended: true,
-      address: "City Business Centre, 15 Farringdon Rd - EC1M 3HA",
-      distance: "Near you",
-      parking: "Street parking available (charges apply)",
-      walk: "3 mins walk from Farringdon",
-      duration: course.duration,
-      booked: "3,847 times",
-      price: basePrice,
-      nextDate: course.nextDate,
-      dates: [
-        { range: "Mon 16th Mar 2026 - Thu 19th Mar 2026", price: basePrice, bookingFee: true },
-        { range: "Mon 23rd Mar 2026 - Thu 26th Mar 2026", price: basePrice },
-        { range: "Mon 30th Mar 2026 - Thu 2nd Apr 2026", price: (parseFloat(basePrice) + 14).toFixed(2) }
-      ]
-    },
-    {
-      id: "London-Ilford-CP",
-      name: "London Ilford-CP",
-      address: "Glyncor Community Centre, 75 - SE18 7LB",
-      distance: "12 miles from you",
-      parking: "Parking available (charges apply)",
-      walk: "11 mins walk from Plumstead (National Rail)",
-      drive: "45 mins drive from your location",
-      duration: course.duration,
-      booked: "3,847 times",
-      price: basePrice,
-      nextDate: "23rd Mar 2026"
-    },
-    {
-      id: "Bristol",
-      name: "Bristol",
-      address: "Future Inn Bristol - BS2 9SY",
-      distance: "120 miles from you",
-      parking: "Free on-site parking",
-      walk: "12 mins walk from Bristol Temple Meads",
-      drive: "2 hrs drive from your location",
-      duration: course.duration,
-      booked: "3,847 times",
-      price: basePrice,
-      nextDate: "23rd Mar 2026"
-    },
-    {
-      id: "Birmingham",
-      name: "Birmingham",
-      address: "Holiday Inn Birmingham City Centre - B1 1BT",
-      distance: "120 miles from you",
-      parking: "NCP car park adjacent (charges apply)",
-      walk: "8 mins walk from Birmingham New Street",
-      drive: "2 hrs drive from your location",
-      duration: course.duration,
-      booked: "3,847 times",
-      price: (parseFloat(basePrice) + 4).toFixed(2),
-      nextDate: "23rd Mar 2026"
-    },
-    {
-      id: "Leeds",
-      name: "Leeds",
-      address: "Novotel Leeds Centre - LS1 4BR",
-      distance: "195 miles from you",
-      parking: "On-site parking available (£2.50/day)",
-      walk: "10 mins walk from Leeds",
-      drive: "3.5 hrs drive from your location",
-      duration: course.duration,
-      booked: "3,847 times",
-      price: basePrice,
-      nextDate: "30th Mar 2026"
-    }
-  ];
+  // Map Backend Hierarchy to UI Format
+  const locations = React.useMemo(() => {
+    if (!course?.locations) return [];
+
+    const flatLocations = [];
+    course.locations.forEach(loc => {
+      flatLocations.push({
+        id: loc._id,
+        name: loc.name,
+        recommended: loc.name.includes("Central") || loc.name.includes("Ilford"),
+        address: loc.name,
+        distance: "Calculating...", // Placeholder for real distance logic
+        parking: "Parking available nearby",
+        walk: "Short walk from station",
+        duration: course.duration,
+        booked: "500+",
+        price: course.pricing?.basePrice || 139.99,
+        nextDate: loc.schedules?.[0]?.startDate ? new Date(loc.schedules[0].startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : "TBA",
+        dates: loc.schedules.map(sch => ({
+          id: sch._id,
+          range: `${new Date(sch.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} - ${new Date(sch.endDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`,
+          price: sch.price || course.pricing?.basePrice,
+          bookingFee: sch.seatsAvailable < 5
+        }))
+      });
+    });
+    return flatLocations;
+  }, [course]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC]">
+        <Loader2 className="animate-spin text-[#F15A24] mb-4" size={48} />
+        <p className="text-gray-500 font-bold">Finding the best courses for you...</p>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return <div className="min-h-screen flex items-center justify-center">Course not found</div>;
+  }
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen mt-28 font-sans">
@@ -258,7 +250,7 @@ const CourseResults = () => {
                         <span className="block text-gray-400 font-medium text-[11px] mt-0.5">Instalment plans available</span>
                       </p>
                       <div className="mt-4">
-                        <p className="text-xs text-gray-400 font-bold mb-1 uppercase tracking-wider">From <span className="text-2xl text-[#1a1a1a] font-black">£{loc.price.split('.')[0]}</span>.00</p>
+                        <p className="text-xs text-gray-400 font-bold mb-1 uppercase tracking-wider">From <span className="text-2xl text-[#1a1a1a] font-black">£{Math.floor(loc.price)}</span>.00</p>
                         <button
                           onClick={() => setExpandedCard(expandedCard === loc.id ? null : loc.id)}
                           className={`w-full md:w-auto px-4 py-3 rounded-lg font-black text-sm flex items-center justify-center gap-2 transition-all ${expandedCard === loc.id ? 'bg-[#f67243] text-white' : 'bg-[#eb4408] text-white hover:brightness-110 shadow-lg shadow-[#F15A24]/20'}`}
@@ -290,7 +282,7 @@ const CourseResults = () => {
                           <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
                             <p className="font-bold text-[#1C1C1C]">£{date.price}</p>
                             <Link
-                              to={`/booking/packages?course_name=${courseId}&postcode=${encodeURIComponent(loc.name)}`}
+                              to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
                               className="bg-[#F15A24] text-white px-6 py-2 rounded-lg text-xs font-black hover:brightness-110 shadow-md shadow-[#F15A24]/10 transition-all"
                             >
                               Book Now

@@ -1,28 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { CheckCircle2, ChevronDown, ChevronUp, Star, Phone, ArrowLeft, ShieldCheck, Check, X as XIcon, Users } from "lucide-react";
-import { courses } from "../../data/courseData";
+import { CheckCircle2, ChevronDown, ChevronUp, Star, Phone, ArrowLeft, ShieldCheck, Check, X as XIcon, Users, Loader2 } from "lucide-react";
+import { courses as fallbackCourses } from "../../data/courseData";
+import courseService from "../../api/services/courseService";
 
 const CoursePackages = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const courseParam = searchParams.get("course_name");
 
   const [isLoading, setIsLoading] = useState(true);
   const [openFaq, setOpenFaq] = useState(null);
 
-  // Derive course details dynamically, fallback to door-supervisor
-  const courseId = courseParam ? courseParam.replace(/\+/g, '-') : "door-supervisor";
-  const course = courses[courseId] || courses["door-supervisor"];
-  const baseTitle = course.title;
+  // Derive course details dynamically
+  const courseId = searchParams.get("courseId");
+  const scheduleId = searchParams.get("scheduleId");
+  
+  const [course, setCourse] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      window.scrollTo(0, 0);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+    const fetchCourse = async () => {
+      try {
+        if (!courseId) {
+          setIsLoading(false);
+          return;
+        }
+        const response = await courseService.getCourseById(courseId);
+        setCourse(response.data.data);
+      } catch (err) {
+        console.error("Error fetching course:", err);
+        setError("Course not found");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCourse();
+    window.scrollTo(0, 0);
+  }, [courseId]);
 
   const features = {
     saver: [
@@ -98,6 +112,16 @@ const CoursePackages = () => {
     );
   }
 
+  if (!course && !isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Course not found</div>;
+  }
+
+  const baseTitle = course?.title || "Course";
+  const basePriceValue = course?.pricing?.basePrice || 139.99;
+  const saverPrice = (basePriceValue - 40).toFixed(2);
+  const flexiPrice = basePriceValue.toFixed(2);
+  const premiumPrice = (basePriceValue + 120).toFixed(2);
+
   return (
     <div className="font-sans min-h-screen bg-[#F8FAFC]">
       {/* Dark Header */}
@@ -151,7 +175,7 @@ const CoursePackages = () => {
               <p className="text-xs text-gray-400 font-medium mb-6">If you strictly need to complete the course</p>
 
               <div className="mb-6">
-                <span className="text-3xl font-black text-[#1C1C1C]">£99.99</span>
+                <span className="text-3xl font-black text-[#1C1C1C]">£{saverPrice}</span>
                 <span className="text-xs text-gray-400 font-medium ml-1">/ Inc VAT</span>
               </div>
 
@@ -177,7 +201,7 @@ const CoursePackages = () => {
                 <div className="flex gap-2 items-start"><XIcon size={14} className="shrink-0 mt-0.5" /> <p>You are missing out on the <b className="font-bold border-b border-red-600">Free Name Change Guarantee and Zero Risk Refund Guarantee</b></p></div>
               </div>
               <button
-                onClick={() => navigate('/booking/checkout?e_q=TmpNeU5UZz0%3D&ex_e_q=TmpBM01EVT0%3D&plan_id=TVRFPQ%3D%3D&from=TDJKdmIydHBibWN2Y0dGamEyRm5aWE09&active_step=CheckoutStep1')}
+                onClick={() => navigate(`/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Saver`)}
                 className="w-full py-4 rounded-xl border-2 border-gray-200 text-[#1C1C1C] font-black text-sm hover:border-[#F15A24] hover:text-[#F15A24] active:scale-95 transition-all">
                 Select Saver
               </button>
@@ -195,7 +219,7 @@ const CoursePackages = () => {
               <p className="text-xs text-gray-400 font-medium mb-6">Guaranteed pass or your money back</p>
 
               <div className="mb-6">
-                <span className="text-3xl font-black text-[#1C1C1C]">£139.99</span>
+                <span className="text-3xl font-black text-[#1C1C1C]">£{flexiPrice}</span>
                 <span className="text-xs text-gray-400 font-medium ml-1">/ Inc VAT</span>
               </div>
 
@@ -234,7 +258,7 @@ const CoursePackages = () => {
 
             <div className="p-8 pt-0 mt-auto border-t border-gray-50/50">
               <button
-                onClick={() => navigate('/booking/checkout?e_q=TmpNeU5UZz0%3D&ex_e_q=TmpBM01EVT0%3D&plan_id=TVRFPQ%3D%3D&from=TDJKdmIydHBibWN2Y0dGamEyRm5aWE09&active_step=CheckoutStep1')}
+                onClick={() => navigate(`/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi+`)}
                 className="w-full py-4 rounded-xl bg-[#F15A24] text-white font-black text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#F15A24]/20">
                 Select Flexi+
               </button>
@@ -249,7 +273,7 @@ const CoursePackages = () => {
               <p className="text-xs text-gray-400 font-medium mb-6">VIP treatment & exclusive privileges</p>
 
               <div className="mb-6">
-                <span className="text-3xl font-black text-[#1C1C1C]">£259.99</span>
+                <span className="text-3xl font-black text-[#1C1C1C]">£{premiumPrice}</span>
                 <span className="text-xs text-gray-400 font-medium ml-1">/ Inc VAT</span>
               </div>
 
@@ -275,7 +299,7 @@ const CoursePackages = () => {
 
             <div className="p-8 pt-0 mt-auto border-t border-gray-50/50">
               <button
-                onClick={() => navigate('/booking/checkout?e_q=TmpNeU5UZz0%3D&ex_e_q=TmpBM01EVT0%3D&plan_id=TVRFPQ%3D%3D&from=TDJKdmIydHBibWN2Y0dGamEyRm5aWE09&active_step=CheckoutStep1')}
+                onClick={() => navigate(`/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Premium`)}
                 className="w-full py-4 rounded-xl bg-[#7344ff] text-white font-black text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#7344ff]/20">
                 Select Premium
               </button>
@@ -396,9 +420,9 @@ const CoursePackages = () => {
               <tbody>
                 <tr>
                   <td className="p-4 text-gray-600 font-bold border border-gray-100">Total Price</td>
-                  <td className="p-4 text-center text-[#1C1C1C] font-black border border-gray-100">£99.99</td>
-                  <td className="p-4 text-center text-[#F15A24] font-black border border-gray-100">£139.99</td>
-                  <td className="p-4 text-center text-[#7344ff] font-black border border-gray-100">£259.99</td>
+                  <td className="p-4 text-center text-[#1C1C1C] font-black border border-gray-100">£{saverPrice}</td>
+                  <td className="p-4 text-center text-[#F15A24] font-black border border-gray-100">£{flexiPrice}</td>
+                  <td className="p-4 text-center text-[#7344ff] font-black border border-gray-100">£{premiumPrice}</td>
                 </tr>
                 <tr className="bg-gray-50/50">
                   <td className="p-4 text-[#F15A24] font-bold border border-gray-100 text-[11px] uppercase tracking-wider">Top features rating summary</td>
@@ -436,13 +460,13 @@ const CoursePackages = () => {
                 <tr>
                   <td className="p-4 border border-gray-100 rounded-bl-xl bg-gray-50"></td>
                   <td className="p-4 text-center border border-gray-100 bg-gray-50">
-                    <button onClick={() => navigate('/booking/checkout?e_q=TmpNeU5UZz0%3D&ex_e_q=TmpBM01EVT0%3D&plan_id=TVRFPQ%3D%3D&from=TDJKdmIydHBibWN2Y0dGamEyRm5aWE09&active_step=CheckoutStep1')} className="px-4 py-2 bg-white text-[#1C1C1C] border border-gray-200 rounded font-black text-xs hover:border-[#F15A24] transition-colors">Select</button>
+                    <button onClick={() => navigate(`/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Saver`)} className="px-4 py-2 bg-white text-[#1C1C1C] border border-gray-200 rounded font-black text-xs hover:border-[#F15A24] transition-colors">Select</button>
                   </td>
                   <td className="p-4 text-center border border-gray-100 bg-[#FFF5F1]">
-                    <button onClick={() => navigate('/booking/checkout?e_q=TmpNeU5UZz0%3D&ex_e_q=TmpBM01EVT0%3D&plan_id=TVRFPQ%3D%3D&from=TDJKdmIydHBibWN2Y0dGamEyRm5aWE09&active_step=CheckoutStep1')} className="px-4 py-2 bg-[#F15A24] text-white rounded font-black text-xs hover:brightness-110 transition-colors">Select</button>
+                    <button onClick={() => navigate(`/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi+`)} className="px-4 py-2 bg-[#F15A24] text-white rounded font-black text-xs hover:brightness-110 transition-colors">Select</button>
                   </td>
                   <td className="p-4 text-center border border-gray-100 bg-purple-50 rounded-br-xl">
-                    <button onClick={() => navigate('/booking/checkout?e_q=TmpNeU5UZz0%3D&ex_e_q=TmpBM01EVT0%3D&plan_id=TVRFPQ%3D%3D&from=TDJKdmIydHBibWN2Y0dGamEyRm5aWE09&active_step=CheckoutStep1')} className="px-4 py-2 bg-[#7344ff] text-white rounded font-black text-xs hover:brightness-110 transition-colors">Select</button>
+                    <button onClick={() => navigate(`/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Premium`)} className="px-4 py-2 bg-[#7344ff] text-white rounded font-black text-xs hover:brightness-110 transition-colors">Select</button>
                   </td>
                 </tr>
               </tbody>

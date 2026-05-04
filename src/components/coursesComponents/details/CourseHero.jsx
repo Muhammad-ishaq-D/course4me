@@ -15,6 +15,15 @@ const CourseHero = ({ course }) => {
   const navigate = useNavigate();
   if (!course) return null;
 
+  // Formatting backend data
+  const displayPrice = course.pricing?.basePrice ? `£${course.pricing.basePrice}` : "N/A";
+  const displayRating = "4.9"; // Fallback as backend doesn't have it yet
+  const displayReviews = course.reviewsCount || "1,000+";
+  const displayBooked = course.bookedCount || "500+";
+  const displayPassRate = course.passRate || "98%";
+  const displayImage = course.thumbnail || "/assets/courses/door.png";
+  const displayHighlights = course.highlights || [];
+
   return (
     <>
       <section className="bg-[#F8FAFC] border-b mt-34 border-gray-200">
@@ -47,9 +56,11 @@ const CourseHero = ({ course }) => {
                   <CheckCircle2 size={12} /> In-Person
                 </span>
 
-                <span className="bg-orange-500/10 text-orange-400 px-3 py-1 rounded-full text-xs">
-                  Popular
-                </span>
+                {course.isPopular && (
+                  <span className="bg-orange-500/10 text-orange-400 px-3 py-1 rounded-full text-xs">
+                    Popular
+                  </span>
+                )}
 
                 <span className="bg-white/10 px-3 py-1 rounded-full text-xs flex items-center gap-1">
                   <ShieldCheck size={12} /> SIA Approved
@@ -74,26 +85,26 @@ const CourseHero = ({ course }) => {
                       <Star key={i} size={14} fill="currentColor" />
                     ))}
                   </div>
-                  <span className="font-semibold">{course.rating}</span>
+                  <span className="font-semibold">{displayRating}</span>
                   <span className="text-white/40">
-                    ({course.reviews} reviews)
+                    ({displayReviews} reviews)
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2 text-white/50">
                   <Clock size={14} />
-                  3-day course from 9am to 5pm
+                  Course duration: {course.duration}
                 </div>
 
                 <div className="flex items-center gap-2 text-white/50">
                   <Users size={14} />
-                  {course.booked} booked
+                  {displayBooked} booked
                 </div>
               </div>
 
               {/* FEATURES */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 mb-8 text-sm text-white/70">
-                {course.highlights.map((item, i) => (
+                {displayHighlights.map((item, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00A3F4]" />
                     {item}
@@ -104,13 +115,19 @@ const CourseHero = ({ course }) => {
               {/* BUTTONS */}
               <div className="flex flex-wrap gap-3">
                 <button
-                  onClick={() => navigate(`/booking/course?courseid=${course.id}`)}
+                  onClick={() => navigate(`/course/${course._id}/book`)}
                   className="bg-[#F15A24] px-7 py-3 rounded-full font-semibold text-sm flex items-center gap-2 shadow-lg shadow-[#F15A24]/20 hover:brightness-110 transition"
                 >
                   Book This Course <ChevronRight size={16} />
                 </button>
 
-                <button className="border border-white/20 px-7 py-3 rounded-full text-sm text-white/80 hover:bg-white/5 transition flex items-center gap-2">
+                <button 
+                  onClick={() => {
+                    const element = document.getElementById('dates');
+                    if (element) element.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="border border-white/20 px-7 py-3 rounded-full text-sm text-white/80 hover:bg-white/5 transition flex items-center gap-2"
+                >
                   <Calendar size={16} /> View Dates
                 </button>
               </div>
@@ -126,7 +143,8 @@ const CourseHero = ({ course }) => {
                 {/* IMAGE */}
                 <div className="relative rounded-xl overflow-hidden">
                   <img
-                    src={course.heroImage}
+                    src={displayImage}
+                    alt={course.title}
                     className="w-full h-[200px] object-cover"
                   />
 
@@ -137,7 +155,7 @@ const CourseHero = ({ course }) => {
                   </button>
 
                   <div className="absolute bottom-3 right-3 bg-black/50 px-3 py-1 rounded-full text-xs">
-                    {course.passRate} pass rate
+                    {displayPassRate} pass rate
                   </div>
                 </div>
 
@@ -146,7 +164,7 @@ const CourseHero = ({ course }) => {
                   <p className="text-white/50 text-xs">Price from</p>
 
                   <h2 className="text-[24px] font-bold mt-1">
-                    {course.price}
+                    {displayPrice}
                     <span className="text-sm text-white/40 ml-1">
                       per person
                     </span>
@@ -166,21 +184,25 @@ const CourseHero = ({ course }) => {
                       <div className="flex items-center gap-2 text-white/50">
                         <Calendar size={14} /> Next Date
                       </div>
-                      <span className="text-white">{course.nextDate}</span>
+                      <span className="text-white">
+                        {course.sessions?.find(s => s.availabilityStatus !== 'Sold Out')?.startDate 
+                          ? new Date(course.sessions.find(s => s.availabilityStatus !== 'Sold Out').startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+                          : "TBC"}
+                      </span>
                     </div>
 
                     <div className="flex justify-between">
                       <div className="flex items-center gap-2 text-white/50">
                         <CheckCircle2 size={14} /> Format
                       </div>
-                      <span className="text-white">{course.format}</span>
+                      <span className="text-white">In-Person</span>
                     </div>
 
                     <div className="flex justify-between">
                       <div className="flex items-center gap-2 text-white/50">
                         <Users size={14} /> Pass Rate
                       </div>
-                      <span className="text-white">{course.passRate}</span>
+                      <span className="text-white">{displayPassRate}</span>
                     </div>
 
                   </div>
@@ -191,10 +213,10 @@ const CourseHero = ({ course }) => {
                       <ShieldCheck size={16} className="text-[#00A3F4]" />
                       <div>
                         <p className="text-sm font-semibold text-white">
-                          Training Guarantee
+                          {course.guarantee?.title || "Training Guarantee"}
                         </p>
                         <p className="text-xs text-white/50">
-                          Free exam retakes if you don't pass first time
+                          {course.guarantee?.description || "Free exam retakes if you don't pass first time"}
                         </p>
                       </div>
                     </div>

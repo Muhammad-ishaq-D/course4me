@@ -5,8 +5,11 @@ import {
   CreditCard, ChevronDown, Check, ShieldCheck,
   Star, Phone, Mail, Calendar, Edit2, Copy,
   Download, ArrowRight, BookOpen, Smartphone,
-  Award, CheckCircle
+  Award, CheckCircle, AlertCircle, Loader2
 } from "lucide-react";
+import bookingService from "../../api/services/bookingService";
+import courseService from "../../api/services/courseService";
+import { useSearchParams } from "react-router-dom";
 
 /* ─── helpers ─── */
 const StepCheck = () => (
@@ -282,24 +285,81 @@ const BookingConfirmed = ({ name, navigate }) => {
 /* ═══════════════════════════════════════════════════════ */
 const CourseCheckout = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [error, setError] = useState("");
   const [timeLeft, setTimeLeft] = useState(14 * 60 + 12);
 
+  // Dynamic Data
+  const courseId = searchParams.get("courseId");
+  const scheduleId = searchParams.get("scheduleId");
+  const plan = searchParams.get("plan") || "Flexi+";
+  
+  const [courseData, setCourseData] = useState(null);
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [price, setPrice] = useState(0);
+
   // Form state
-  const [details, setDetails] = useState({ firstName: "", lastName: "", email: "", mobile: "", dob: "" });
+  const [details, setDetails] = useState({ 
+    firstName: "", 
+    lastName: "", 
+    email: "", 
+    mobile: "", 
+    dob: "",
+    password: "",
+    confirmPassword: ""
+  });
   const [billing, setBilling] = useState({ postcode: "", addr1: "", addr2: "", city: "" });
   const [easyApply, setEasyApply] = useState("get"); // "get" | "self"
-  const [boltOns, setBoltOns] = useState({ fire: false, leadership: false });
   const [payment, setPayment] = useState("card");
   const [agree1, setAgree1] = useState(true);
   const [agree2, setAgree2] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => { setIsLoading(false); window.scrollTo(0, 0); }, 2000);
-    return () => clearTimeout(t);
-  }, []);
+    const fetchData = async () => {
+      try {
+        if (!courseId) {
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await courseService.getCourseById(courseId);
+        const course = response.data.data;
+        setCourseData(course);
+
+        // Find selected schedule
+        let foundSchedule = null;
+        if (scheduleId) {
+          for (const loc of course.locations) {
+            const sch = loc.schedules.find(s => s._id === scheduleId);
+            if (sch) {
+              foundSchedule = { ...sch, locationName: loc.name };
+              break;
+            }
+          }
+        }
+        setSelectedSchedule(foundSchedule);
+        
+        // Calculate Price
+        let basePrice = foundSchedule?.price || course.pricing?.basePrice || 139.99;
+        if (plan === "Saver") basePrice -= 40;
+        if (plan === "Premium") basePrice += 120;
+        setPrice(basePrice);
+
+      } catch (err) {
+        console.error("Error fetching course data:", err);
+        setError("Could not load course details. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+    window.scrollTo(0, 0);
+  }, [courseId, scheduleId, plan]);
 
   useEffect(() => {
     if (isLoading || isConfirmed) return;
@@ -308,6 +368,61 @@ const CourseCheckout = () => {
   }, [isLoading, isConfirmed]);
 
   const fmt = s => `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
+
+  const handlePayment = async () => {
+    if (!agree2) {
+      alert("Please agree to the Terms of Service.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setError("");
+
+      const bookingPayload = {
+        courseId: courseData._id,
+        session: {
+          scheduleId: selectedSchedule?._id,
+          location: selectedSchedule?.locationName || "Online",
+          startDate: selectedSchedule?.startDate,
+        },
+        customerDetails: {
+          firstName: details.firstName,
+          lastName: details.lastName,
+          email: details.email,
+          phone: details.mobile,
+          dob: details.dob,
+          password: details.password
+        },
+        billingAddress: {
+          postcode: billing.postcode,
+          line1: billing.addr1,
+          line2: billing.addr2,
+          city: billing.city
+        },
+        packageName: plan,
+        options: {
+          easyApply: easyApply === "get"
+        },
+        paymentMethod: payment,
+        totalAmount: price + (easyApply === "get" ? 149.99 : 0)
+      };
+
+      const response = await bookingService.createBooking(bookingPayload);
+      
+      if (response.data.success) {
+        window.scrollTo(0, 0);
+        setIsConfirmed(true);
+      } else {
+        setError(response.data.message || "Failed to create booking.");
+      }
+    } catch (err) {
+      console.error("Booking Error:", err);
+      setError(err.response?.data?.message || "An error occurred during booking. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   /* ── Skeleton ── */
   if (isLoading) {
@@ -435,6 +550,12 @@ const CourseCheckout = () => {
                   <FieldInput label="Email address" placeholder="Email address" type="email" value={details.email} onChange={v => setDetails(d => ({ ...d, email: v }))} icon={Mail} />
                   <FieldInput label="Mobile number" placeholder="Mobile number" type="tel" value={details.mobile} onChange={v => setDetails(d => ({ ...d, mobile: v }))} icon={Phone} />
                   <FieldInput label="Date of birth" placeholder="DD/MM/YYYY" value={details.dob} onChange={v => setDetails(d => ({ ...d, dob: v }))} icon={Calendar} />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FieldInput label="Create Password" placeholder="••••••••" type="password" value={details.password} onChange={v => setDetails(d => ({ ...d, password: v }))} icon={Lock} />
+                    <FieldInput label="Confirm Password" placeholder="••••••••" type="password" value={details.confirmPassword} onChange={v => setDetails(d => ({ ...d, confirmPassword: v }))} icon={Lock} />
+                  </div>
+                  
                   <SaveBtn onClick={() => setActiveStep(2)} />
                 </div>
               </div>
@@ -529,57 +650,11 @@ const CourseCheckout = () => {
               <CollapsedStep stepNum={3} title="Zero-Hassle Application Service - EasyApply™" badge="Recommended" />
             )}
 
-            {/* ── Step 4: Bolt-On ── */}
-            {activeStep > 4 ? (
-              <CompletedStep stepNum={4} title="Bolt-On" onEdit={() => setActiveStep(4)}
-                summary={[Object.values(boltOns).some(Boolean) ? Object.entries(boltOns).filter(([, v]) => v).map(([k]) => k === "fire" ? "Fire Marshal Course" : "Leadership Course").join(", ") : "No bolt-ons selected"]} />
-            ) : activeStep === 4 ? (
+            {/* ── Step 4: Payment ── */}
+            {activeStep === 4 && (
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-50">
                   <StepNumber n={4} active />
-                  <span className="text-[14px] font-black text-[#1C1C1C]">Bolt-On</span>
-                </div>
-                <div className="p-6 space-y-4">
-                  <p className="text-[13px] text-gray-500">Popular add-ons frequently bought together with your course.</p>
-                  {[
-                    { key: "fire", recommended: true, title: "Fire Marshal Course", desc: "Boost your safety credentials with our online CPD-approved Fire Marshal course—add it now for comprehensive fire safety training.", price: "£19" },
-                    { key: "leadership", recommended: false, title: "Leadership Course", desc: "Enhance your CV and set yourself up to be an outstanding leader with this CPD-accredited course.", price: "£19" },
-                  ].map(addon => (
-                    <div key={addon.key} className="rounded-xl border border-gray-200 p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
-                          <Award size={16} className="text-[#1C1C1C]" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          {addon.recommended && (
-                            <div className="flex items-center gap-1.5 mb-1">
-                              <Check size={11} className="text-[#F15A24]" />
-                              <span className="text-[10px] text-[#F15A24] font-black uppercase tracking-wider">We recommend</span>
-                            </div>
-                          )}
-                          <p className="text-[13px] font-black text-[#1C1C1C]">{addon.title}</p>
-                          <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">{addon.desc}</p>
-                        </div>
-                        <div className="flex items-center gap-3 shrink-0">
-                          <span className="text-[13px] font-black text-[#1C1C1C]">{addon.price}</span>
-                          <input type="checkbox" checked={boltOns[addon.key]} onChange={e => setBoltOns(b => ({ ...b, [addon.key]: e.target.checked }))}
-                            className="w-4 h-4 accent-[#F15A24] cursor-pointer" />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  <SaveBtn onClick={() => setActiveStep(5)} label="Continue To Payment" />
-                </div>
-              </div>
-            ) : (
-              <CollapsedStep stepNum={4} title="Bolt-On" />
-            )}
-
-            {/* ── Step 5: Payment ── */}
-            {activeStep === 5 && (
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-                <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-50">
-                  <StepNumber n={5} active />
                   <span className="text-[14px] font-black text-[#1C1C1C]">Payment</span>
                 </div>
                 <div className="p-6 space-y-4">
@@ -626,17 +701,32 @@ const CourseCheckout = () => {
                     </label>
                   </div>
 
+                  {error && (
+                    <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3 text-red-600 text-sm">
+                      <AlertCircle size={18} className="shrink-0 mt-0.5" />
+                      <p>{error}</p>
+                    </div>
+                  )}
+
                   <button
-                    onClick={() => { window.scrollTo(0, 0); setIsConfirmed(true); }}
-                    className="w-full py-4 bg-[#F15A24] text-white rounded-xl font-black text-base hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#F15A24]/20 mt-2"
+                    onClick={handlePayment}
+                    disabled={isSubmitting}
+                    className="w-full py-4 bg-[#F15A24] text-white rounded-xl font-black text-base hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#F15A24]/20 mt-2 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Submit Payment
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="animate-spin" size={20} />
+                        Processing...
+                      </>
+                    ) : (
+                      'Submit Payment'
+                    )}
                   </button>
                 </div>
               </div>
             )}
 
-            {activeStep < 5 && <CollapsedStep stepNum={5} title="Payment" />}
+            {activeStep < 4 && <CollapsedStep stepNum={4} title="Payment" />}
           </div>
 
           {/* ══ RIGHT SIDEBAR ══ */}

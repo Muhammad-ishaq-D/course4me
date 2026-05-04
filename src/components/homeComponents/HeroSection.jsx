@@ -4,6 +4,7 @@ import {
   X, Search, Star, Shield, Camera, Heart, Users, ChevronRight
 } from "lucide-react";
 import { courses } from "../../data/courseData";
+import courseService from "../../api/services/courseService";
 import liveTrainingVideo from "../../assets/home/live-training.mp4";
 import doorSupervisorVideo from "../../assets/home/security_guard.mp4";
 import cctvVideo from "../../assets/home/cctv-operations.mp4";
@@ -16,61 +17,15 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-/* ─── Course icon map ─── */
-const courseConfig = [
-  {
-    id: "door-supervisor",
-    label: "Door Supervisor Training",
-    popular: true,
-    duration: "4 days",
-    rating: "4.9",
-    price: "£185.00",
-    icon: Shield,
-    iconBg: "bg-blue-600",
-    category: ["All Courses", "SIA Courses"],
-  },
-  {
-    id: "cctv-training",
-    label: "CCTV Training",
-    popular: true,
-    duration: "3 days",
-    rating: "4.8",
-    price: "£299.99",
-    icon: Camera,
-    iconBg: "bg-purple-600",
-    category: ["All Courses", "SIA Courses"],
-  },
-  {
-    id: "first-aid-at-work",
-    label: "First Aid at Work",
-    popular: true,
-    duration: "3 days",
-    rating: "4.9",
-    price: "£150.00",
-    icon: Heart,
-    iconBg: "bg-red-500",
-    category: ["All Courses", "First Aid", "Health & Safety"],
-  },
-  {
-    id: "security-guard",
-    label: "Security Guard Training",
-    popular: false,
-    duration: "4 days",
-    rating: "4.7",
-    price: "£175.00",
-    icon: Users,
-    iconBg: "bg-green-600",
-    category: ["All Courses", "SIA Courses"],
-  },
-];
-
-const TABS = ["All Courses", "SIA Courses", "First Aid", "Health & Safety", "Specialist"];
+const TABS = ["All Courses", "Popular", "SIA Training", "First Aid", "Health & Safety", "Specialist"];
 
 /* ─── Journey Modal ─── */
 const JourneyModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("All Courses");
+  const [coursesList, setCoursesList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Lock body scroll
   useEffect(() => {
@@ -79,11 +34,44 @@ const JourneyModal = ({ isOpen, onClose }) => {
     return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setIsLoading(true);
+        const response = await courseService.getAllCourses();
+        // The API returns { success: true, count: N, data: [...] }
+        setCoursesList(response.data.data || []);
+      } catch (err) {
+        console.error("Error fetching courses:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (isOpen) {
+      fetchCourses();
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
-  const filtered = courseConfig.filter(c => {
-    const matchesTab = c.category.includes(activeTab);
-    const matchesSearch = c.label.toLowerCase().includes(search.toLowerCase());
+  // Map icons to categories
+  const getIconForCategory = (category) => {
+    switch (category) {
+      case "SIA Training": return { icon: Shield, bg: "bg-blue-600" };
+      case "First Aid": return { icon: Heart, bg: "bg-red-500" };
+      case "Health & Safety": return { icon: Users, bg: "bg-green-600" };
+      case "Specialist": return { icon: Camera, bg: "bg-purple-600" };
+      default: return { icon: Shield, bg: "bg-gray-600" };
+    }
+  };
+
+  const filtered = (coursesList || []).filter(c => {
+    if (!c) return false;
+    const matchesTab = 
+      activeTab === "All Courses" || 
+      (activeTab === "Popular" && c.isPopular) ||
+      c.category === activeTab;
+    const matchesSearch = (c.title || "").toLowerCase().includes(search.toLowerCase());
     return matchesTab && matchesSearch;
   });
 
@@ -155,21 +143,25 @@ const JourneyModal = ({ isOpen, onClose }) => {
 
             {/* Course List */}
             <div className="space-y-3">
-              {filtered.length === 0 ? (
+              {isLoading ? (
+                <div className="text-center py-10 text-gray-400 text-sm">
+                  Loading courses...
+                </div>
+              ) : filtered.length === 0 ? (
                 <div className="text-center py-10 text-gray-400 text-sm">
                   No courses found matching "<span className="font-bold">{search}</span>"
                 </div>
               ) : (
                 filtered.map(course => {
-                  const Icon = course.icon;
+                  const { icon: Icon, bg: iconBg } = getIconForCategory(course.category);
                   return (
                     <button
-                      key={course.id}
-                      onClick={() => handleCourseClick(course.id)}
+                      key={course._id}
+                      onClick={() => handleCourseClick(course._id)}
                       className="w-full flex items-center gap-4 border border-gray-150 rounded-xl px-4 py-3.5 hover:border-gray-300 hover:shadow-sm transition-all group text-left"
                     >
                       {/* Icon */}
-                      <div className={`w-12 h-12 rounded-xl ${course.iconBg} flex items-center justify-center shrink-0`}>
+                      <div className={`w-12 h-12 rounded-xl ${iconBg} flex items-center justify-center shrink-0`}>
                         <Icon size={22} className="text-white" />
                       </div>
 
@@ -177,9 +169,9 @@ const JourneyModal = ({ isOpen, onClose }) => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center flex-wrap gap-2 mb-1">
                           <span className="text-[14px] font-extrabold text-[#1C1C1C]">
-                            {course.label}
+                            {course.title}
                           </span>
-                          {course.popular && (
+                          {course.isPopular && (
                             <span className="inline-block bg-[#FF5421] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full">
                               Popular
                             </span>
@@ -189,9 +181,9 @@ const JourneyModal = ({ isOpen, onClose }) => {
                           <span>{course.duration}</span>
                           <span className="text-gray-300">•</span>
                           <Star size={12} className="text-yellow-400 fill-yellow-400" />
-                          <span className="font-semibold text-gray-700">{course.rating}</span>
+                          <span className="font-semibold text-gray-700">4.9</span>
                           <span className="text-gray-300">•</span>
-                          <span className="text-[#FF5421] font-bold">from {course.price}</span>
+                          <span className="text-[#FF5421] font-bold">from £{course.pricing?.basePrice}</span>
                         </div>
                       </div>
 

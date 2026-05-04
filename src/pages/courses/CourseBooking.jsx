@@ -13,21 +13,50 @@ import {
 } from "lucide-react";
 import { courses } from "../../data/courseData";
 import SearchModal from "../../components/shared/SearchModal";
+import courseService from "../../api/services/courseService";
 
 const CourseBooking = () => {
   const navigate = useNavigate();
   const { courseId: paramCourseId } = useParams();
   const [searchParams] = useSearchParams();
 
-  // Unified course ID retrieval: URL param first, then query param, then default
-  const courseId = paramCourseId || searchParams.get("courseid") || "door-supervisor";
-  const course = courses[courseId];
+  // Unified course ID retrieval: URL param first, then query param
+  const courseIdFromUrl = paramCourseId || searchParams.get("courseid");
+  
+  const [course, setCourse] = useState(null);
+  const [error, setError] = useState("");
+  const [isLoadingCourse, setIsLoadingCourse] = useState(true);
 
   const [searchLocation, setSearchLocation] = useState(searchParams.get("postcode") || "");
   const [filter, setFilter] = useState("Closest");
   const [loadingStep, setLoadingStep] = useState(0); // 0: not loading, 1-3: steps
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+
+  // Extract all location names from the course data
+  const availableLocations = React.useMemo(() => {
+    if (!course?.locations) return [];
+    return course.locations.map(loc => loc.name);
+  }, [course]);
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      if (!courseIdFromUrl) {
+        setIsLoadingCourse(false);
+        return;
+      }
+      try {
+        const response = await courseService.getCourseById(courseIdFromUrl);
+        setCourse(response.data.data);
+      } catch (err) {
+        console.error("Error fetching course:", err);
+        setError("Course not found");
+      } finally {
+        setIsLoadingCourse(false);
+      }
+    };
+    fetchCourse();
+  }, [courseIdFromUrl]);
 
   useEffect(() => {
     if (loadingStep > 0) {
@@ -45,18 +74,18 @@ const CourseBooking = () => {
     setTimeout(() => setLoadingStep(3), 2400);
     setTimeout(() => {
       // Navigate to results page (unified path)
-      navigate(`/booking/results?courseid=${courseId}&postcode=${loc}&sortby=distance&view=all`);
+      navigate(`/booking/results?courseid=${course._id}&postcode=${loc}&sortby=distance&view=all`);
     }, 3600);
   };
+
+  if (isLoadingCourse) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   if (!course) {
     return <Navigate to="/courses" replace />;
   }
 
-  const locations = [
-    "London Central", "Manchester", "Birmingham", "Leeds",
-    "Bristol", "Liverpool", "Glasgow", "Edinburgh"
-  ];
 
   if (loadingStep > 0) {
     const steps = [
@@ -176,7 +205,7 @@ const CourseBooking = () => {
           <ChevronRight size={14} />
           <Link to="/courses" className="hover:text-gray-600">Courses</Link>
           <ChevronRight size={14} />
-          <Link to={`/course/${courseId}`} className="hover:text-gray-600">{course.title}</Link>
+          <Link to={`/course/${course._id}`} className="hover:text-gray-600">{course.title}</Link>
           <ChevronRight size={14} />
           <span className="text-[#F15A24] font-medium">Book</span>
         </nav>
@@ -233,7 +262,7 @@ const CourseBooking = () => {
                   />
                   {showSuggestions && searchLocation === "" && (
                     <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-gray-100 shadow-xl z-10 py-2 max-h-[300px] overflow-y-auto">
-                      {locations.map((loc) => (
+                      {availableLocations.map((loc) => (
                         <div
                           key={loc}
                           onClick={() => {
@@ -268,7 +297,7 @@ const CourseBooking = () => {
                 <div className="bg-[#FFF5F1] text-[#F15A24] px-4 py-3 rounded-lg text-sm font-bold flex items-center justify-start cursor-pointer w-fit pr-20">
                   All
                 </div>
-                {locations.map((loc) => (
+                {availableLocations.map((loc) => (
                   <div
                     key={loc}
                     onClick={() => {
@@ -281,22 +310,11 @@ const CourseBooking = () => {
                   </div>
                 ))}
               </div>
-              {/* Add remaining locations manually to match grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 mt-0">
-                <div className="text-gray-700 hover:text-[#F15A24] px-4 py-3 text-sm font-medium cursor-pointer transition-colors">London Ilford-CP</div>
-                <div className="text-gray-700 hover:text-[#F15A24] px-4 py-3 text-sm font-medium cursor-pointer transition-colors">Manchester</div>
-                <div className="text-gray-700 hover:text-[#F15A24] px-4 py-3 text-sm font-medium cursor-pointer transition-colors">Birmingham</div>
-                <div className="text-gray-700 hover:text-[#F15A24] px-4 py-3 text-sm font-medium cursor-pointer transition-colors">Leeds</div>
-                <div className="text-gray-700 hover:text-[#F15A24] px-4 py-3 text-sm font-medium cursor-pointer transition-colors">Bristol</div>
-                <div className="text-gray-700 hover:text-[#F15A24] px-4 py-3 text-sm font-medium cursor-pointer transition-colors">Liverpool</div>
-                <div className="text-gray-700 hover:text-[#F15A24] px-4 py-3 text-sm font-medium cursor-pointer transition-colors">Glasgow</div>
-                <div className="text-gray-700 hover:text-[#F15A24] px-4 py-3 text-sm font-medium cursor-pointer transition-colors">Edinburgh</div>
-              </div>
             </div>
 
             {/* Back link */}
             <div className="flex justify-center pt-8">
-              <Link to={`/course/${courseId}`} className="flex items-center gap-2 group">
+              <Link to={`/course/${course._id}`} className="flex items-center gap-2 group">
                 <ChevronLeft size={16} className="text-gray-300 group-hover:text-[#F15A24] transition-colors" />
                 <span className="text-sm font-medium text-gray-400 group-hover:text-[#F15A24] transition-colors">
                   Back to {course.title}
