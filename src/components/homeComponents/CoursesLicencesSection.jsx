@@ -189,7 +189,7 @@ const CoursesLicencesSection = () => {
               {/* Filler slots to maintain consistent height when full list */}
               {filteredCourses.length > 0 &&
                 Array.from({
-                  length: Math.max(0, 2 - (filteredCourses.length - POPULAR_COURSES.length + 2)),
+                  length: Math.max(0, 5 - filteredCourses.length),
                 }).map((_, i) => (
                   <div
                     key={`filler-${i}`}
