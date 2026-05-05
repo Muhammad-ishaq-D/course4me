@@ -3,7 +3,7 @@ import { Smartphone, Download, ArrowRight, Apple, Play } from "lucide-react";
 
 // Note: The provided image mentions a specific asset "Get Licensed App.png".
 // This import path should point to your actual image file.
-import GetLicensedApp from "../../assets/home/Courses4Me App.png";
+import courses4meApp from "../../assets/home/Courses4Me App.png";
 
 const AppPromotionSection = () => {
   return (
@@ -19,7 +19,7 @@ const AppPromotionSection = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-[#FF5421] opacity-20 blur-[80px] rounded-full"></div>
               <img
-                src={GetLicensedApp}
+                src={courses4meApp}
                 alt="Get Licensed App mobile phone mockup"
                 className="w-72 md:w-80 lg:w-[420px] h-auto object-contain relative z-10"
               />

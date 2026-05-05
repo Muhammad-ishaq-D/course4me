@@ -25,7 +25,7 @@ const centres = [
     courses: ["Door Supervisor", "Security Guard"],
     facilities: ["WiFi Access", "Public Transport", "Disabled Access"],
     phone: "020 7123 4567",
-    email: "london@getlicensed.co.uk",
+    email: "london@courses4me.co.uk",
     more: "+3"
   },
   {
@@ -40,7 +40,7 @@ const centres = [
     courses: ["Door Supervisor", "Security Guard"],
     facilities: ["WiFi Access", "Parking Available", "Disabled Access"],
     phone: "0161 234 5678",
-    email: "manchester@getlicensed.co.uk",
+    email: "manchester@courses4me.co.uk",
     more: "+2"
   },
   {
@@ -55,7 +55,7 @@ const centres = [
     courses: ["Door Supervisor", "Security Guard"],
     facilities: ["WiFi Access", "Public Transport", "Refreshments"],
     phone: "0121 234 5678",
-    email: "birmingham@getlicensed.co.uk",
+    email: "birmingham@courses4me.co.uk",
     more: "+4"
   },
   {
@@ -70,7 +70,7 @@ const centres = [
     courses: ["Door Supervisor", "Security Guard"],
     facilities: ["WiFi Access", "Public Transport"],
     phone: "0113 234 5678",
-    email: "leeds@getlicensed.co.uk",
+    email: "leeds@courses4me.co.uk",
     more: "+2"
   },
   {
@@ -85,7 +85,7 @@ const centres = [
     courses: ["Door Supervisor", "Security Guard"],
     facilities: ["WiFi Access", "Parking Available"],
     phone: "0117 234 5678",
-    email: "bristol@getlicensed.co.uk",
+    email: "bristol@courses4me.co.uk",
     more: "+1"
   },
   {
@@ -100,7 +100,7 @@ const centres = [
     courses: ["Door Supervisor", "Security Guard", ""],
     facilities: ["WiFi Access", "Public Transport", "Disabled Access"],
     phone: "0141 234 5678",
-    email: "glasgow@getlicensed.co.uk",
+    email: "glasgow@courses4me.co.uk",
     more: "+3"
   },
   {
@@ -115,7 +115,7 @@ const centres = [
     courses: ["Door Supervisor", "Security Guard", ""],
     facilities: ["WiFi Access", "Public Transport", "Disabled Access"],
     phone: "0131 234 5678",
-    email: "edinburgh@getlicensed.co.uk",
+    email: "edinburgh@courses4me.co.uk",
     more: "+2"
   },
   {
@@ -130,7 +130,7 @@ const centres = [
     courses: ["Door Supervisor", "Security Guard"],
     facilities: ["WiFi Access", "Public Transport"],
     phone: "0151 234 5678",
-    email: "liverpool@getlicensed.co.uk",
+    email: "liverpool@courses4me.co.uk",
     more: "+1"
   },
   {
@@ -145,7 +145,7 @@ const centres = [
     courses: ["Door Supervisor", "Security Guard"],
     facilities: ["WiFi Access", "Disabled Access"],
     phone: "029 2345 6789",
-    email: "cardiff@getlicensed.co.uk",
+    email: "cardiff@courses4me.co.uk",
     more: "+2"
   }
 ];

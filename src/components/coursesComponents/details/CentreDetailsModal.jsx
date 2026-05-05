@@ -97,9 +97,9 @@ export default function CentreDetailsModal({ centre, onClose, onBookNow }) {
                     <Phone size={18} className="text-[#F15A24]" />
                     020 1234 5678
                   </a>
-                  <a href="mailto:london@getlicensed.co.uk" className="flex items-center gap-3 text-[#52525B] hover:text-[#F15A24] transition-colors text-[15px] font-semibold">
+                  <a href="mailto:london@courses4me.co.uk" className="flex items-center gap-3 text-[#52525B] hover:text-[#F15A24] transition-colors text-[15px] font-semibold">
                     <Mail size={18} className="text-[#F15A24]" />
-                    london@getlicensed.co.uk
+                    london@courses4me.co.uk
                   </a>
                 </div>
               </div>

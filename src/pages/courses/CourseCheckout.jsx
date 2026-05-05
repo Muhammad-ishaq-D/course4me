@@ -5,11 +5,14 @@ import {
   CreditCard, ChevronDown, Check, ShieldCheck,
   Star, Phone, Mail, Calendar, Edit2, Copy,
   Download, ArrowRight, BookOpen, Smartphone,
-  Award, CheckCircle, AlertCircle, Loader2
+  Award, CheckCircle, AlertCircle, Loader2,
+  Eye, EyeOff
 } from "lucide-react";
 import bookingService from "../../api/services/bookingService";
 import courseService from "../../api/services/courseService";
 import { useSearchParams } from "react-router-dom";
+import { checkoutDetailsSchema, checkoutBillingSchema, validateAll, validateField } from "../../utils/validationSchemas";
+import authService from "../../api/services/authService";
 
 /* ─── helpers ─── */
 const StepCheck = () => (
@@ -25,27 +28,51 @@ const StepNumber = ({ n, active }) => (
   </div>
 );
 
-const FieldInput = ({ label, placeholder, value, onChange, type = "text", icon: Icon }) => (
-  <div>
-    <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">{label}</label>
-    <div className="relative">
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        className="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-[#1C1C1C] outline-none focus:ring-2 focus:ring-[#F15A24]/40 focus:border-[#F15A24] transition-all placeholder:text-gray-300"
-      />
-      {Icon && <Icon size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300" />}
-    </div>
-  </div>
-);
+const FieldInput = ({ label, placeholder, value, onChange, onBlur, type = "text", icon: Icon, error }) => {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const isPassword = type === "password";
+  const inputType = isPassword ? (showPassword ? "text" : "password") : type;
 
-const SaveBtn = ({ onClick, label = "Save & Continue" }) => (
+  return (
+    <div>
+      <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">{label}</label>
+      <div className="relative">
+        {Icon && !isPassword && (
+          <Icon size={14} className={`absolute left-3 top-1/2 -translate-y-1/2 ${error ? "text-red-400" : "text-gray-400"}`} />
+        )}
+        <input
+          type={inputType}
+          placeholder={placeholder}
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          onBlur={onBlur}
+          className={`w-full border rounded-lg py-3 text-[14px] text-[#1C1C1C] outline-none focus:ring-2 transition-all placeholder:text-gray-300 ${Icon && !isPassword ? 'pl-10 pr-4' : 'px-4'} ${error
+              ? "border-red-400 focus:ring-red-400/40 focus:border-red-400 bg-red-50/30"
+              : "border-gray-200 focus:ring-[#F15A24]/40 focus:border-[#F15A24]"
+            }`}
+        />
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        )}
+      </div>
+      {error && <p className="text-red-500 text-[11px] font-semibold mt-1 ml-0.5">{error}</p>}
+    </div>
+  );
+};
+
+const SaveBtn = ({ onClick, label = "Save & Continue", loading, fullWidth }) => (
   <button
     onClick={onClick}
-    className="bg-[#1C1C1C] text-white px-8 py-3.5 rounded-lg font-black text-sm hover:bg-black active:scale-95 transition-all mt-2"
+    disabled={loading}
+    className={`${fullWidth ? 'w-full' : 'px-8'} bg-[#1C1C1C] text-white py-3.5 rounded-lg font-black text-sm hover:bg-black active:scale-95 transition-all mt-2 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed`}
   >
+    {loading && <Loader2 size={16} className="animate-spin" />}
     {label}
   </button>
 );
@@ -297,17 +324,17 @@ const CourseCheckout = () => {
   const courseId = searchParams.get("courseId");
   const scheduleId = searchParams.get("scheduleId");
   const plan = searchParams.get("plan") || "Flexi+";
-  
+
   const [courseData, setCourseData] = useState(null);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [price, setPrice] = useState(0);
 
   // Form state
-  const [details, setDetails] = useState({ 
-    firstName: "", 
-    lastName: "", 
-    email: "", 
-    mobile: "", 
+  const [details, setDetails] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobile: "",
     dob: "",
     password: "",
     confirmPassword: ""
@@ -317,6 +344,108 @@ const CourseCheckout = () => {
   const [payment, setPayment] = useState("card");
   const [agree1, setAgree1] = useState(true);
   const [agree2, setAgree2] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [checkingEmail, setCheckingEmail] = useState(false);
+
+  // Validation state
+  const [detailsErrors, setDetailsErrors] = useState({});
+  const [billingErrors, setBillingErrors] = useState({});
+
+  // Clear individual detail error on change
+  const updateDetail = (field, value) => {
+    setDetails(d => ({ ...d, [field]: value }));
+    if (detailsErrors[field]) {
+      setDetailsErrors(prev => ({ ...prev, [field]: undefined }));
+    }
+    // Also clear alreadyRegistered if email changes
+    if (field === 'email' && detailsErrors.alreadyRegistered) {
+      setDetailsErrors(prev => ({ ...prev, alreadyRegistered: undefined }));
+    }
+  };
+
+  // Clear individual billing error on change
+  const updateBilling = (field, value) => {
+    setBilling(b => ({ ...b, [field]: value }));
+    if (billingErrors[field]) {
+      setBillingErrors(prev => ({ ...prev, [field]: undefined }));
+    }
+  };
+
+  // Check email availability in real-time
+  const checkEmailAvailability = async (email) => {
+    if (!email || !/^\S+@\S+\.\S+$/.test(email.trim())) return;
+    try {
+      console.log("Checking email availability for:", email.trim());
+      const res = await authService.checkEmail(email.trim());
+      console.log("Email check result:", res.data);
+      if (res.data?.exists) {
+        setDetailsErrors(prev => ({ ...prev, alreadyRegistered: true }));
+      } else {
+        setDetailsErrors(prev => ({ ...prev, alreadyRegistered: undefined }));
+      }
+    } catch (e) {
+      console.error("Email check failed:", e);
+    }
+  };
+
+  // Handle Inline Login
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setDetailsErrors({});
+    setLoading(true);
+    try {
+      const res = await authService.login(loginForm);
+      if (res.data.success) {
+        const { user } = res.data;
+        setDetails(prev => ({
+          ...prev,
+          firstName: user.name.split(' ')[0] || prev.firstName,
+          lastName: user.name.split(' ').slice(1).join(' ') || prev.lastName,
+          email: user.email
+        }));
+        setActiveStep(2);
+      }
+    } catch (err) {
+      setDetailsErrors({ login: err.response?.data?.message || "Invalid email or password" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Validate a step before progressing
+  const validateStep = async (step) => {
+    if (step === 1) {
+      if (isLoggingIn) return true;
+
+      const errs = await validateAll(checkoutDetailsSchema, details);
+      
+      if (details.email && /^\S+@\S+\.\S+$/.test(details.email.trim())) {
+        setCheckingEmail(true);
+        try {
+          const res = await authService.checkEmail(details.email.trim());
+          if (res.data?.exists) {
+            errs.alreadyRegistered = true;
+            errs.email = "This email is already registered. Please login.";
+          }
+        } catch (e) {
+          console.error("Check email error:", e);
+        } finally {
+          setCheckingEmail(false);
+        }
+      }
+
+      setDetailsErrors(errs);
+      return Object.keys(errs).length === 0;
+    }
+    if (step === 2) {
+      const errs = await validateAll(checkoutBillingSchema, billing);
+      setBillingErrors(errs);
+      return Object.keys(errs).length === 0;
+    }
+    return true;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -342,7 +471,7 @@ const CourseCheckout = () => {
           }
         }
         setSelectedSchedule(foundSchedule);
-        
+
         // Calculate Price
         let basePrice = foundSchedule?.price || course.pricing?.basePrice || 139.99;
         if (plan === "Saver") basePrice -= 40;
@@ -371,7 +500,7 @@ const CourseCheckout = () => {
 
   const handlePayment = async () => {
     if (!agree2) {
-      alert("Please agree to the Terms of Service.");
+      setError("Please agree to the Terms of Service before proceeding.");
       return;
     }
 
@@ -409,7 +538,7 @@ const CourseCheckout = () => {
       };
 
       const response = await bookingService.createBooking(bookingPayload);
-      
+
       if (response.data.success) {
         window.scrollTo(0, 0);
         setIsConfirmed(true);
@@ -543,20 +672,94 @@ const CourseCheckout = () => {
                   <span className="text-[14px] font-black text-[#1C1C1C]">Your Details</span>
                 </div>
                 <div className="p-6 space-y-4">
-                  <div className="flex gap-4">
-                    <FieldInput label="First name" placeholder="First name" value={details.firstName} onChange={v => setDetails(d => ({ ...d, firstName: v }))} icon={User} />
-                    <FieldInput label="Last name" placeholder="Last name" value={details.lastName} onChange={v => setDetails(d => ({ ...d, lastName: v }))} icon={User} />
-                  </div>
-                  <FieldInput label="Email address" placeholder="Email address" type="email" value={details.email} onChange={v => setDetails(d => ({ ...d, email: v }))} icon={Mail} />
-                  <FieldInput label="Mobile number" placeholder="Mobile number" type="tel" value={details.mobile} onChange={v => setDetails(d => ({ ...d, mobile: v }))} icon={Phone} />
-                  <FieldInput label="Date of birth" placeholder="DD/MM/YYYY" value={details.dob} onChange={v => setDetails(d => ({ ...d, dob: v }))} icon={Calendar} />
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FieldInput label="Create Password" placeholder="••••••••" type="password" value={details.password} onChange={v => setDetails(d => ({ ...d, password: v }))} icon={Lock} />
-                    <FieldInput label="Confirm Password" placeholder="••••••••" type="password" value={details.confirmPassword} onChange={v => setDetails(d => ({ ...d, confirmPassword: v }))} icon={Lock} />
-                  </div>
-                  
-                  <SaveBtn onClick={() => setActiveStep(2)} />
+                  {detailsErrors.alreadyRegistered && (
+                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-[13px] font-medium flex items-center gap-2 mb-2">
+                      <AlertCircle size={16} />
+                      User already registered. Please login to proceed.
+                    </div>
+                  )}
+
+                  {isLoggingIn ? (
+                    /* ── Inline Login Fields ── */
+                    <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
+                        <p className="text-[13px] text-blue-700 font-semibold">Login to your account to proceed with your booking.</p>
+                      </div>
+                      <FieldInput
+                        label="Email address"
+                        placeholder="john.smith@email.com"
+                        type="email"
+                        value={loginForm.email}
+                        onChange={v => setLoginForm(prev => ({ ...prev, email: v }))}
+                        icon={Mail}
+                        error={detailsErrors.email}
+                      />
+                      <FieldInput
+                        label="Password"
+                        placeholder="••••••••"
+                        type="password"
+                        value={loginForm.password}
+                        onChange={v => setLoginForm(prev => ({ ...prev, password: v }))}
+                        icon={Lock}
+                        error={detailsErrors.password}
+                      />
+                      <div className="flex flex-col gap-3 pt-2">
+                        {detailsErrors.login && (
+                          <p className="text-red-500 text-xs font-bold text-center">{detailsErrors.login}</p>
+                        )}
+                        <button
+                          onClick={handleLogin}
+                          disabled={loading}
+                          className="bg-[#1C1C1C] text-white px-8 py-3.5 rounded-lg font-black text-sm hover:bg-black active:scale-95 transition-all mt-2 flex items-center justify-center gap-2 disabled:opacity-70"
+                        >
+                          {loading && <Loader2 size={16} className="animate-spin" />}
+                          Login & Continue
+                        </button>
+                        <button
+                          onClick={() => setIsLoggingIn(false)}
+                          className="text-[13px] text-gray-500 font-bold hover:text-[#F15A24] transition-colors"
+                        >
+                          Don't have an account? Register here
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    /* ── Registration Fields ── */
+                    <>
+                      <div className="flex gap-4">
+                        <FieldInput label="First name" placeholder="First name" value={details.firstName} onChange={v => updateDetail('firstName', v)} icon={User} error={detailsErrors.firstName} />
+                        <FieldInput label="Last name" placeholder="Last name" value={details.lastName} onChange={v => updateDetail('lastName', v)} icon={User} error={detailsErrors.lastName} />
+                      </div>
+                      <FieldInput 
+                        label="Email address" 
+                        placeholder="Email address" 
+                        type="email" 
+                        value={details.email} 
+                        onChange={v => updateDetail('email', v)} 
+                        onBlur={() => checkEmailAvailability(details.email)}
+                        icon={Mail} 
+                        error={detailsErrors.email} 
+                      />
+                      <FieldInput label="Mobile number" placeholder="Mobile number" type="tel" value={details.mobile} onChange={v => updateDetail('mobile', v)} icon={Phone} error={detailsErrors.mobile} />
+                      <FieldInput label="Date of birth" type="date" value={details.dob} onChange={v => updateDetail('dob', v)} icon={Calendar} error={detailsErrors.dob} />
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FieldInput label="Create Password" placeholder="••••••••" type="password" value={details.password} onChange={v => updateDetail('password', v)} icon={Lock} error={detailsErrors.password} />
+                        <FieldInput label="Confirm Password" placeholder="••••••••" type="password" value={details.confirmPassword} onChange={v => updateDetail('confirmPassword', v)} icon={Lock} error={detailsErrors.confirmPassword} />
+                      </div>
+
+                      <SaveBtn 
+                        loading={checkingEmail} 
+                        onClick={async () => { if (await validateStep(1)) setActiveStep(2); }} 
+                      />
+
+                      <div className="text-center pt-2">
+                        <p className="text-[13px] text-gray-500 font-medium">
+                          Already registered? <button onClick={() => setIsLoggingIn(true)} className="text-[#F15A24] font-bold hover:underline">Please sign in</button>
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             )}
@@ -573,11 +776,11 @@ const CourseCheckout = () => {
                 </div>
                 <div className="p-6 space-y-4">
                   <p className="text-[13px] text-gray-500">Enter your postcode and select your address.</p>
-                  <FieldInput label="Post code" placeholder="Post code" value={billing.postcode} onChange={v => setBilling(b => ({ ...b, postcode: v }))} icon={MapPin} />
-                  <FieldInput label="Address line 1" placeholder="Address line 1" value={billing.addr1} onChange={v => setBilling(b => ({ ...b, addr1: v }))} />
-                  <FieldInput label="Address line 2" placeholder="Address line 2" value={billing.addr2} onChange={v => setBilling(b => ({ ...b, addr2: v }))} />
-                  <FieldInput label="City / Town" placeholder="City / Town" value={billing.city} onChange={v => setBilling(b => ({ ...b, city: v }))} icon={MapPin} />
-                  <SaveBtn onClick={() => setActiveStep(3)} />
+                  <FieldInput label="Post code" placeholder="Post code" value={billing.postcode} onChange={v => updateBilling('postcode', v)} icon={MapPin} error={billingErrors.postcode} />
+                  <FieldInput label="Address line 1" placeholder="Address line 1" value={billing.addr1} onChange={v => updateBilling('addr1', v)} error={billingErrors.addr1} />
+                  <FieldInput label="Address line 2" placeholder="Address line 2" value={billing.addr2} onChange={v => updateBilling('addr2', v)} />
+                  <FieldInput label="City / Town" placeholder="City / Town" value={billing.city} onChange={v => updateBilling('city', v)} icon={MapPin} error={billingErrors.city} />
+                  <SaveBtn onClick={async () => { if (await validateStep(2)) setActiveStep(3); }} />
                 </div>
               </div>
             ) : (
@@ -616,7 +819,7 @@ const CourseCheckout = () => {
                       </div>
                     </div>
                     <ul className="space-y-1.5">
-                      {["Includes all fees including £37 licence fee and £36 DBS fees","100% money-back guarantee (No licence - No fee promise)","A dedicated licence manager will prepare your application","Avoids delays in processing time","Complete peace of mind - we take all the risks"].map((f, i) => (
+                      {["Includes all fees including £37 licence fee and £36 DBS fees", "100% money-back guarantee (No licence - No fee promise)", "A dedicated licence manager will prepare your application", "Avoids delays in processing time", "Complete peace of mind - we take all the risks"].map((f, i) => (
                         <li key={i} className="flex items-center gap-2 text-[12px] text-gray-600"><Check size={12} className="text-[#00b67a] shrink-0" /> {f}</li>
                       ))}
                     </ul>
@@ -634,7 +837,7 @@ const CourseCheckout = () => {
                       <span className="text-[14px] font-black text-[#1C1C1C]">I will apply myself</span>
                     </div>
                     <ul className="space-y-1.5">
-                      {["You take all the risk of the application","You will have to arrange a valid DBS check","You will need a solicitor or a person of standing in the community to endorse your photographs","Your application is not checked by an expert before submission"].map((f, i) => (
+                      {["You take all the risk of the application", "You will have to arrange a valid DBS check", "You will need a solicitor or a person of standing in the community to endorse your photographs", "Your application is not checked by an expert before submission"].map((f, i) => (
                         <li key={i} className="flex items-start gap-2 text-[12px] text-gray-500"><span className="mt-1 w-1.5 h-1.5 rounded-full bg-gray-400 shrink-0" /> {f}</li>
                       ))}
                     </ul>
@@ -643,7 +846,7 @@ const CourseCheckout = () => {
                   <button className="flex items-center gap-2 text-[#F15A24] text-[12px] font-bold hover:underline">
                     <span className="text-base">💬</span> Not Sure? <span className="underline">Chat with us</span>
                   </button>
-                  <SaveBtn onClick={() => setActiveStep(4)} />
+                  <SaveBtn loading={isSubmitting} onClick={() => setActiveStep(4)} />
                 </div>
               </div>
             ) : (
@@ -708,20 +911,12 @@ const CourseCheckout = () => {
                     </div>
                   )}
 
-                  <button
+                  <SaveBtn 
+                    loading={isSubmitting}
                     onClick={handlePayment}
-                    disabled={isSubmitting}
-                    className="w-full py-4 bg-[#F15A24] text-white rounded-xl font-black text-base hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#F15A24]/20 mt-2 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="animate-spin" size={20} />
-                        Processing...
-                      </>
-                    ) : (
-                      'Submit Payment'
-                    )}
-                  </button>
+                    fullWidth
+                    label={isSubmitting ? "Processing..." : "Submit Payment"}
+                  />
                 </div>
               </div>
             )}

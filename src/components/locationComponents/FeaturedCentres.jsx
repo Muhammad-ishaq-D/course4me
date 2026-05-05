@@ -33,7 +33,7 @@ const centres = [
     hours: "Mon-Sun: 8:00 AM - 8:00 PM",
     next: "Tomorrow",
     phone: "020 7123 4567",
-    email: "london@getlicensed.co.uk",
+    email: "london@courses4me.co.uk",
     courses: ["Door Supervisor", "Security Guard", "CCTV Operator"],
     more: "+2 more"
   },
@@ -46,7 +46,7 @@ const centres = [
     hours: "Mon-Sat: 8:00 AM - 7:00 PM",
     next: "Today",
     phone: "0161 234 5678",
-    email: "manchester@getlicensed.co.uk",
+    email: "manchester@courses4me.co.uk",
     courses: ["Door Supervisor", "Security Guard", "CCTV Operator"],
     more: "+1 more"
   },
@@ -59,7 +59,7 @@ const centres = [
     hours: "Mon-Sun: 7:30 AM - 8:00 PM",
     next: "Tomorrow",
     phone: "0121 234 5678",
-    email: "birmingham@getlicensed.co.uk",
+    email: "birmingham@courses4me.co.uk",
     courses: ["Door Supervisor", "Security Guard", "CCTV Operator"],
     more: "+3 more"
   },
@@ -72,7 +72,7 @@ const centres = [
     hours: "Mon-Sun: 8:00 AM - 8:00 PM",
     next: "Today",
     phone: "0141 234 5678",
-    email: "glasgow@getlicensed.co.uk",
+    email: "glasgow@courses4me.co.uk",
     courses: ["Door Supervisor", "Security Guard", "CCTV Operator"],
     more: "+2 more"
   }

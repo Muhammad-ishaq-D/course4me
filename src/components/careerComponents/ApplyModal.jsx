@@ -9,6 +9,7 @@ import {
   Check,
   User
 } from "lucide-react";
+import { applyModalSchema, validateAll } from "../../utils/validationSchemas";
 
 const ApplyModal = ({ job, onClose }) => {
   const [form, setForm] = useState({
@@ -26,31 +27,31 @@ const ApplyModal = ({ job, onClose }) => {
   });
 
   const [errors, setErrors] = useState({});
-  const [successOpen, setSuccessOpen] = useState(false); // ✅ HERE
+  const [successOpen, setSuccessOpen] = useState(false);
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    // Clear error for this field on change
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
-  const validate = () => {
-    let newErrors = {};
-
-    if (!form.firstName) newErrors.firstName = "Required";
-    if (!form.lastName) newErrors.lastName = "Required";
-    if (!form.email) newErrors.email = "Required";
-    if (!form.phone) newErrors.phone = "Required";
-    if (!form.address) newErrors.address = "Required";
-    if (!form.city) newErrors.city = "Required";
-    if (!form.postcode) newErrors.postcode = "Required";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = () => {
-    if (validate()) {
+  const handleSubmit = async () => {
+    const errs = await validateAll(applyModalSchema, form);
+    setErrors(errs);
+    if (Object.keys(errs).length === 0) {
       setSuccessOpen(true);
     }
   };
+
+  const inputClass = (field) =>
+    `w-full border rounded-xl px-4 py-3 text-sm outline-none transition-all ${
+      errors[field]
+        ? "border-red-400 focus:ring-2 focus:ring-red-400/40 bg-red-50/30"
+        : "focus:ring-2 focus:ring-[#F8510C]"
+    }`;
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
@@ -182,12 +183,14 @@ const ApplyModal = ({ job, onClose }) => {
                 <div>
                   <label className="text-sm font-semibold text-[#1E293B]">First Name *</label>
                   <input name="firstName" placeholder="John" onChange={handleChange}
-                    className="w-full border rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#F8510C] transition-all" />
+                    className={inputClass('firstName')} />
+                  {errors.firstName && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.firstName}</p>}
                 </div>
                 <div>
                   <label className="text-sm font-semibold text-[#1E293B]">Last Name *</label>
                   <input name="lastName" placeholder="Smith" onChange={handleChange}
-                    className="w-full border rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#F8510C] transition-all" />
+                    className={inputClass('lastName')} />
+                  {errors.lastName && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.lastName}</p>}
                 </div>
               </div>
 
@@ -195,31 +198,36 @@ const ApplyModal = ({ job, onClose }) => {
                 <div>
                   <label className="text-sm font-semibold text-[#1E293B]">Email Address *</label>
                   <input name="email" placeholder="john.smith@email.com" onChange={handleChange}
-                    className="w-full border rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#F8510C] transition-all" />
+                    className={inputClass('email')} />
+                  {errors.email && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.email}</p>}
                 </div>
                 <div>
                   <label className="text-sm font-semibold text-[#1E293B]">Phone Number *</label>
                   <input name="phone" placeholder="07XXX XXX XXX" onChange={handleChange}
-                    className="w-full border rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#F8510C] transition-all" />
+                    className={inputClass('phone')} />
+                  {errors.phone && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.phone}</p>}
                 </div>
               </div>
 
               <div>
                 <label className="text-sm font-semibold text-[#1E293B]">Address *</label>
                 <input name="address" placeholder="123 Main Street" onChange={handleChange}
-                  className="w-full border rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#F8510C] transition-all" />
+                  className={inputClass('address')} />
+                {errors.address && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.address}</p>}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-semibold text-[#1E293B]">City *</label>
                   <input name="city" placeholder="London" onChange={handleChange}
-                    className="w-full border rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#F8510C] transition-all" />
+                    className={inputClass('city')} />
+                  {errors.city && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.city}</p>}
                 </div>
                 <div>
                   <label className="text-sm font-semibold text-[#1E293B]">Postcode *</label>
                   <input name="postcode" placeholder="SW1A 1AA" onChange={handleChange}
-                    className="w-full border rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#F8510C] transition-all" />
+                    className={inputClass('postcode')} />
+                  {errors.postcode && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.postcode}</p>}
                 </div>
               </div>
 

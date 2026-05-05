@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, MapPin, Clock, Calendar, Phone, Mail, User, BookOpen, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { bookingModalSchema, validateAll } from '../../../utils/validationSchemas';
 
 export default function BookingModal({ centre, onClose, onSubmit }) {
   if (!centre) return null;
+
+  const [form, setForm] = useState({
+    firstName: '', lastName: '', email: '', phone: '', course: '', date: ''
+  });
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (field, value) => {
+    setForm(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }));
+  };
+
+  const handleSubmitClick = async () => {
+    const errs = await validateAll(bookingModalSchema, form);
+    setErrors(errs);
+    if (Object.keys(errs).length === 0) {
+      onSubmit(form);
+    }
+  };
+
+  const inputClass = (field) =>
+    `w-full bg-white border rounded-[14px] px-4 py-3.5 text-[14px] focus:outline-none focus:ring-2 transition-all ${errors[field]
+      ? 'border-red-400 focus:ring-red-400/10 focus:border-red-400 bg-red-50/30'
+      : 'border-gray-200 focus:ring-[#F15A24]/10 focus:border-[#F15A24]'
+    }`;
 
   return createPortal(
     <div className="fixed inset-0 bg-[#00000066] backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
@@ -15,10 +40,7 @@ export default function BookingModal({ centre, onClose, onSubmit }) {
             <h2 className="text-[32px] font-black text-[#1E293B] leading-tight mb-1">Book Your Course</h2>
             <p className="text-[#64748B] text-[16px] font-medium">{centre.subtitle}</p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors text-[#64748B]"
-          >
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-[#64748B]">
             <X size={24} />
           </button>
         </div>
@@ -43,38 +65,24 @@ export default function BookingModal({ centre, onClose, onSubmit }) {
                   {/* Info List */}
                   <div className="space-y-6">
                     <div className="flex gap-4">
-                      <div className="bg-[#F15A2415] p-2.5 rounded-xl shrink-0 h-fit">
-                        <MapPin size={18} className="text-[#F15A24]" />
-                      </div>
+                      <div className="bg-[#F15A2415] p-2.5 rounded-xl shrink-0 h-fit"><MapPin size={18} className="text-[#F15A24]" /></div>
                       <div>
                         <h4 className="text-[11px] font-bold text-[#A1A1AA] uppercase tracking-wider mb-1">LOCATION</h4>
-                        <p className="text-[#3F3F46] text-[13px] font-semibold leading-relaxed">
-                          123 Oxford Street, London, <br />W1D 2HG
-                        </p>
+                        <p className="text-[#3F3F46] text-[13px] font-semibold leading-relaxed">123 Oxford Street, London, <br />W1D 2HG</p>
                       </div>
                     </div>
-
                     <div className="flex gap-4">
-                      <div className="bg-[#F15A2415] p-2.5 rounded-xl shrink-0 h-fit">
-                        <Clock size={18} className="text-[#F15A24]" />
-                      </div>
+                      <div className="bg-[#F15A2415] p-2.5 rounded-xl shrink-0 h-fit"><Clock size={18} className="text-[#F15A24]" /></div>
                       <div>
                         <h4 className="text-[11px] font-bold text-[#A1A1AA] uppercase tracking-wider mb-1">OPENING HOURS</h4>
-                        <p className="text-[#3F3F46] text-[13px] font-semibold leading-relaxed">
-                          Mon-Sun: 8:00 AM - 8:00 PM
-                        </p>
+                        <p className="text-[#3F3F46] text-[13px] font-semibold leading-relaxed">Mon-Sun: 8:00 AM - 8:00 PM</p>
                       </div>
                     </div>
-
                     <div className="flex gap-4">
-                      <div className="bg-[#22C55E15] p-2.5 rounded-xl shrink-0 h-fit">
-                        <Calendar size={18} className="text-[#22C55E]" />
-                      </div>
+                      <div className="bg-[#22C55E15] p-2.5 rounded-xl shrink-0 h-fit"><Calendar size={18} className="text-[#22C55E]" /></div>
                       <div>
                         <h4 className="text-[11px] font-bold text-[#A1A1AA] uppercase tracking-wider mb-1">AVAILABILITY</h4>
-                        <p className="text-[#22C55E] text-[13px] font-bold leading-relaxed">
-                          Next available: Tomorrow
-                        </p>
+                        <p className="text-[#22C55E] text-[13px] font-bold leading-relaxed">Next available: Tomorrow</p>
                       </div>
                     </div>
                   </div>
@@ -83,12 +91,10 @@ export default function BookingModal({ centre, onClose, onSubmit }) {
                     <h4 className="text-[11px] font-bold text-[#A1A1AA] uppercase tracking-wider mb-4">NEED HELP?</h4>
                     <div className="space-y-3">
                       <a href="tel:02012345678" className="flex items-center gap-2.5 text-[#3F3F46] hover:text-[#F15A24] transition-colors text-[13px] font-bold">
-                        <Phone size={16} />
-                        020 1234 5678
+                        <Phone size={16} /> 020 1234 5678
                       </a>
-                      <a href="mailto:london@getlicensed.co.uk" className="flex items-center gap-2.5 text-[#3F3F46] hover:text-[#F15A24] transition-colors text-[13px] font-bold">
-                        <Mail size={16} />
-                        london@getlicensed.co.uk
+                      <a href="mailto:london@courses4me.co.uk" className="flex items-center gap-2.5 text-[#3F3F46] hover:text-[#F15A24] transition-colors text-[13px] font-bold">
+                        <Mail size={16} /> london@courses4me.co.uk
                       </a>
                     </div>
                   </div>
@@ -97,7 +103,7 @@ export default function BookingModal({ centre, onClose, onSubmit }) {
 
               {/* Right Main - Form */}
               <div className="flex-1 mt-40">
-                <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="space-y-8">
+                <form onSubmit={(e) => { e.preventDefault(); handleSubmitClick(); }} className="space-y-8">
 
                   {/* Personal Information */}
                   <div>
@@ -108,39 +114,31 @@ export default function BookingModal({ centre, onClose, onSubmit }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="space-y-2">
                         <label className="text-[14px] font-bold text-[#3F3F46]">First Name *</label>
-                        <input
-                          type="text"
-                          placeholder="John"
-                          className="w-full bg-white border border-gray-200 rounded-[14px] px-4 py-3.5 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#F15A24]/10 focus:border-[#F15A24] transition-all"
-                          required
-                        />
+                        <input type="text" placeholder="John" value={form.firstName}
+                          onChange={e => handleChange('firstName', e.target.value)}
+                          className={inputClass('firstName')} />
+                        {errors.firstName && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.firstName}</p>}
                       </div>
                       <div className="space-y-2">
                         <label className="text-[14px] font-bold text-[#3F3F46]">Last Name *</label>
-                        <input
-                          type="text"
-                          placeholder="Smith"
-                          className="w-full bg-white border border-gray-200 rounded-[14px] px-4 py-3.5 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#F15A24]/10 focus:border-[#F15A24] transition-all"
-                          required
-                        />
+                        <input type="text" placeholder="Smith" value={form.lastName}
+                          onChange={e => handleChange('lastName', e.target.value)}
+                          className={inputClass('lastName')} />
+                        {errors.lastName && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.lastName}</p>}
                       </div>
                       <div className="space-y-2">
                         <label className="text-[14px] font-bold text-[#3F3F46]">Email Address *</label>
-                        <input
-                          type="email"
-                          placeholder="john.smith@email.com"
-                          className="w-full bg-white border border-gray-200 rounded-[14px] px-4 py-3.5 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#F15A24]/10 focus:border-[#F15A24] transition-all"
-                          required
-                        />
+                        <input type="email" placeholder="john.smith@email.com" value={form.email}
+                          onChange={e => handleChange('email', e.target.value)}
+                          className={inputClass('email')} />
+                        {errors.email && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.email}</p>}
                       </div>
                       <div className="space-y-2">
                         <label className="text-[14px] font-bold text-[#3F3F46]">Phone Number *</label>
-                        <input
-                          type="tel"
-                          placeholder="07XXX XXX XXX"
-                          className="w-full bg-white border border-gray-200 rounded-[14px] px-4 py-3.5 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#F15A24]/10 focus:border-[#F15A24] transition-all"
-                          required
-                        />
+                        <input type="tel" placeholder="07XXX XXX XXX" value={form.phone}
+                          onChange={e => handleChange('phone', e.target.value)}
+                          className={inputClass('phone')} />
+                        {errors.phone && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.phone}</p>}
                       </div>
                     </div>
                   </div>
@@ -154,20 +152,21 @@ export default function BookingModal({ centre, onClose, onSubmit }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="space-y-2">
                         <label className="text-[14px] font-bold text-[#3F3F46]">Select Course *</label>
-                        <select className="w-full bg-white border border-gray-200 rounded-[14px] px-4 py-3.5 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#F15A24]/10 focus:border-[#F15A24] transition-all appearance-none cursor-pointer">
+                        <select value={form.course} onChange={e => handleChange('course', e.target.value)}
+                          className={`${inputClass('course')} appearance-none cursor-pointer`}>
                           <option value="">Select a course</option>
                           {centre.courses.map((c, i) => (
                             <option key={i} value={c}>{c}</option>
                           ))}
                         </select>
+                        {errors.course && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.course}</p>}
                       </div>
                       <div className="space-y-2">
                         <label className="text-[14px] font-bold text-[#3F3F46]">Preferred Start Date *</label>
-                        <input
-                          type="date"
-                          className="w-full bg-white border border-gray-200 rounded-[14px] px-4 py-3.5 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#F15A24]/10 focus:border-[#F15A24] transition-all cursor-pointer"
-                          required
-                        />
+                        <input type="date" value={form.date}
+                          onChange={e => handleChange('date', e.target.value)}
+                          className={`${inputClass('date')} cursor-pointer`} />
+                        {errors.date && <p className="text-red-500 text-[11px] font-semibold mt-1">{errors.date}</p>}
                       </div>
                     </div>
                   </div>
@@ -208,18 +207,12 @@ export default function BookingModal({ centre, onClose, onSubmit }) {
 
         {/* Footer */}
         <div className="p-8 pt-4 border-t border-gray-100 flex justify-end items-center gap-4 bg-gray-50/50">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-10 py-3.5 rounded-full text-[15px] font-bold text-[#3F3F46] hover:bg-gray-100 transition-colors"
-          >
+          <button type="button" onClick={onClose}
+            className="px-10 py-3.5 rounded-full text-[15px] font-bold text-[#3F3F46] hover:bg-gray-100 transition-colors">
             Cancel
           </button>
-          <button
-            type="button"
-            onClick={onSubmit}
-            className="bg-[#2D3339] hover:bg-[#1E2429] text-white px-10 py-3.5 rounded-full text-[15px] font-bold flex items-center gap-2 transition-all shadow-lg shadow-black/10"
-          >
+          <button type="button" onClick={handleSubmitClick}
+            className="bg-[#2D3339] hover:bg-[#1E2429] text-white px-10 py-3.5 rounded-full text-[15px] font-bold flex items-center gap-2 transition-all shadow-lg shadow-black/10">
             Submit Booking
             <ChevronRight size={20} />
           </button>
