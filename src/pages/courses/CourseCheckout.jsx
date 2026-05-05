@@ -323,7 +323,7 @@ const CourseCheckout = () => {
   // Dynamic Data
   const courseId = searchParams.get("courseId");
   const scheduleId = searchParams.get("scheduleId");
-  const plan = searchParams.get("plan") || "Flexi+";
+  const plan = (searchParams.get("plan") || "Flexi+").trim();
 
   const [courseData, setCourseData] = useState(null);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
@@ -399,13 +399,26 @@ const CourseCheckout = () => {
       const res = await authService.login(loginForm);
       if (res.data.success) {
         const { user } = res.data;
-        setDetails(prev => ({
-          ...prev,
-          firstName: user.name.split(' ')[0] || prev.firstName,
-          lastName: user.name.split(' ').slice(1).join(' ') || prev.lastName,
-          email: user.email
-        }));
-        setActiveStep(2);
+        const updatedDetails = {
+          ...details,
+          firstName: user.name?.split(' ')[0] || details.firstName,
+          lastName: user.name?.split(' ').slice(1).join(' ') || details.lastName,
+          email: user.email,
+          mobile: user.phone || details.mobile,
+          dob: user.dob || details.dob
+        };
+        setDetails(updatedDetails);
+
+        // If profile is incomplete, stay on step 1 to let them fill missing info
+        if (!updatedDetails.mobile || !updatedDetails.dob) {
+          setIsLoggingIn(false); // Switch back to details view but with fields populated
+          setDetailsErrors({ 
+            mobile: !updatedDetails.mobile ? "Mobile number is missing in your profile" : null,
+            dob: !updatedDetails.dob ? "Date of birth is missing in your profile" : null
+          });
+        } else {
+          setActiveStep(2);
+        }
       }
     } catch (err) {
       setDetailsErrors({ login: err.response?.data?.message || "Invalid email or password" });
@@ -414,14 +427,11 @@ const CourseCheckout = () => {
     }
   };
 
-  // Validate a step before progressing
   const validateStep = async (step) => {
     if (step === 1) {
-      if (isLoggingIn) return true;
-
       const errs = await validateAll(checkoutDetailsSchema, details);
       
-      if (details.email && /^\S+@\S+\.\S+$/.test(details.email.trim())) {
+      if (details.email && /^\S+@\S+\.\S+$/.test(details.email.trim()) && !localStorage.getItem('token')) {
         setCheckingEmail(true);
         try {
           const res = await authService.checkEmail(details.email.trim());
@@ -463,7 +473,7 @@ const CourseCheckout = () => {
         let foundSchedule = null;
         if (scheduleId) {
           for (const loc of course.locations) {
-            const sch = loc.schedules.find(s => s._id === scheduleId);
+            const sch = loc.schedules.find(s => s._id.toString() === scheduleId.toString());
             if (sch) {
               foundSchedule = { ...sch, locationName: loc.name };
               break;
@@ -672,6 +682,12 @@ const CourseCheckout = () => {
                   <span className="text-[14px] font-black text-[#1C1C1C]">Your Details</span>
                 </div>
                 <div className="p-6 space-y-4">
+                  {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-[13px] font-medium flex items-center gap-2 mb-2">
+                      <AlertCircle size={16} />
+                      {error}
+                    </div>
+                  )}
                   {detailsErrors.alreadyRegistered && (
                     <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-[13px] font-medium flex items-center gap-2 mb-2">
                       <AlertCircle size={16} />
