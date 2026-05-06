@@ -3,14 +3,16 @@ import { Search, TrendingUp } from "lucide-react";
 
 const BlogHero = () => {
   return (
-    <section className="bg-[#0A192F] mt-20 md:mt-24 pb-20 relative overflow-hidden text-white">
+    <section className="bg-[#0A192F]  pb-20 relative overflow-hidden text-white">
       {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-linear-to-b from-[#00A3FF1A] to-transparent pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12 md:py-20 relative z-10">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-sm font-medium mb-8">
-          <span className="text-gray-400 hover:text-white cursor-pointer transition">Home</span>
+          <span className="text-gray-400 hover:text-white cursor-pointer transition">
+            Home
+          </span>
           <span className="text-gray-600">/</span>
           <span className="text-[#FF5421]">Blog & News</span>
         </nav>

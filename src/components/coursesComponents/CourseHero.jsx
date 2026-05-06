@@ -1,25 +1,23 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Search, Download, CheckCircle, Star, Shield } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { Search, Download, CheckCircle, Star, Shield } from "lucide-react";
 
-import securityImg from '../../assets/courses/hero/security.png';
-import hospitalityImg from '../../assets/courses/hero/hospitality.png';
-import firstAidImg from '../../assets/courses/hero/first_aid.png';
-import healthSafetyImg from '../../assets/courses/hero/health_safety.png';
+import securityImg from "../../assets/courses/hero/security.png";
+import hospitalityImg from "../../assets/courses/hero/hospitality.png";
+import firstAidImg from "../../assets/courses/hero/first_aid.png";
+import healthSafetyImg from "../../assets/courses/hero/health_safety.png";
 
 const CourseHero = ({ activeTab, setActiveTab }) => {
   return (
     <>
-      <section className="bg-[#141414] pt-40 pb-20 px-6 lg:px-16 overflow-hidden">
+      <section className="bg-[#141414] pt-20 pb-20 px-6 lg:px-16 overflow-hidden">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
           {/* LEFT CONTENT */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-
             {/* Badge */}
             <div className="inline-flex items-center bg-[#F65B15]/10 border border-[#F65B15]/30 rounded-full px-5 py-2 mb-6">
               <span className="text-[#F65B15] text-sm font-medium">
@@ -31,13 +29,14 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
             <h1 className="text-[40px] md:text-[56px] lg:text-[64px] leading-[1.05] font-extrabold text-white tracking-[-0.5px] mb-6">
               Training for <span className="text-[#F65B15]">Security</span>,{" "}
               <span className="text-[#F65B15]">Hospitality</span>,{" "}
-              <span className="text-[#F65B15]">Health & Safety</span>,{" "}
-              and <span className="text-[#F65B15]">First Aid</span>
+              <span className="text-[#F65B15]">Health & Safety</span>, and{" "}
+              <span className="text-[#F65B15]">First Aid</span>
             </h1>
 
             {/* Description */}
             <p className="text-white/50 text-[16px] leading-relaxed mb-8 max-w-[520px]">
-              Get certified and job-ready with training built for in-demand careers.
+              Get certified and job-ready with training built for in-demand
+              careers.
             </p>
 
             {/* Search Bar */}
@@ -62,7 +61,6 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
               <Download size={16} />
               Download career guide
             </button>
-
           </motion.div>
 
           {/* RIGHT CONTENT (IMAGE GRID UNCHANGED) */}
@@ -75,19 +73,35 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
             <div className="grid grid-cols-2 gap-5">
               <div className="space-y-5">
                 <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-white/10">
-                  <img src={securityImg} alt="Security" className="w-full h-full object-cover" />
+                  <img
+                    src={securityImg}
+                    alt="Security"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-white/10 opacity-80">
-                  <img src={hospitalityImg} alt="Hospitality" className="w-full h-full object-cover" />
+                  <img
+                    src={hospitalityImg}
+                    alt="Hospitality"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
 
               <div className="space-y-5 pt-10">
                 <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-white/10">
-                  <img src={healthSafetyImg} alt="Health & Safety" className="w-full h-full object-cover" />
+                  <img
+                    src={healthSafetyImg}
+                    alt="Health & Safety"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-white/10">
-                  <img src={firstAidImg} alt="First Aid" className="w-full h-full object-cover" />
+                  <img
+                    src={firstAidImg}
+                    alt="First Aid"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
             </div>
@@ -100,7 +114,6 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
         {/* BOTTOM STATS (FIXED INLINE STRIP) */}
         <div className="mt-16 pt-6 border-t border-white/[0.08]">
           <div className="flex flex-wrap items-center justify-between gap-6 text-sm">
-
             <div className="flex items-center gap-2">
               <CheckCircle size={16} className="text-[#F65B15]" />
               <span className="font-semibold text-white">Real</span>
@@ -124,7 +137,6 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
               <span className="font-semibold text-white">Zero risk</span>
               <span className="text-white/40">Step-by-step support</span>
             </div>
-
           </div>
         </div>
       </section>
@@ -133,29 +145,32 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
       <div className="bg-white border-b border-[#EEEEEE] px-6 lg:px-16">
         <div className="max-w-7xl mx-auto flex items-center gap-8">
           <button
-            onClick={() => setActiveTab('all')}
-            className={`${activeTab === 'all'
-              ? "text-[#F65B15] border-[#F65B15]"
-              : "text-[#141414]/60 border-transparent hover:text-[#141414]"
-              } font-medium text-sm py-4 border-b-2 transition-all`}
+            onClick={() => setActiveTab("all")}
+            className={`${
+              activeTab === "all"
+                ? "text-[#F65B15] border-[#F65B15]"
+                : "text-[#141414]/60 border-transparent hover:text-[#141414]"
+            } font-medium text-sm py-4 border-b-2 transition-all`}
           >
             All Courses
           </button>
           <button
-            onClick={() => setActiveTab('popular')}
-            className={`${activeTab === 'popular'
-              ? "text-[#F65B15] border-[#F65B15]"
-              : "text-[#141414]/60 border-transparent hover:text-[#141414]"
-              } font-semibold text-sm py-4 border-b-2 transition-all`}
+            onClick={() => setActiveTab("popular")}
+            className={`${
+              activeTab === "popular"
+                ? "text-[#F65B15] border-[#F65B15]"
+                : "text-[#141414]/60 border-transparent hover:text-[#141414]"
+            } font-semibold text-sm py-4 border-b-2 transition-all`}
           >
             Popular Courses
           </button>
           <button
-            onClick={() => setActiveTab('reviews')}
-            className={`${activeTab === 'reviews'
-              ? "text-[#F65B15] border-[#F65B15]"
-              : "text-[#141414]/60 border-transparent hover:text-[#141414]"
-              } font-medium text-sm py-4 border-b-2 transition-all`}
+            onClick={() => setActiveTab("reviews")}
+            className={`${
+              activeTab === "reviews"
+                ? "text-[#F65B15] border-[#F65B15]"
+                : "text-[#141414]/60 border-transparent hover:text-[#141414]"
+            } font-medium text-sm py-4 border-b-2 transition-all`}
           >
             Reviews
           </button>

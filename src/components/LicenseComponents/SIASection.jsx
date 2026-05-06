@@ -7,18 +7,14 @@ import siaImage from "../../assets/license/sia.png";
 
 const SIASection = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#243443] via-[#1f2f3f] to-[#16222c] py-20 px-6 lg:px-12 mt-20 md:mt-24">
-
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#243443] via-[#1f2f3f] to-[#16222c] py-20 px-6 lg:px-12 ">
       {/* Soft Background Glow */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#F15A24]  opacity-10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto">
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-
           {/* ================= LEFT SIDE ================= */}
           <div>
-
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-[#F15A241A] border border-[#F15A24]  text-[#F15A24]  px-4 py-2 rounded-full text-sm font-semibold mb-6">
               <img src={badgeIcon1} className="w-4 h-4 text-[#F15A24]" />
@@ -32,27 +28,31 @@ const SIASection = () => {
 
             {/* Paragraph */}
             <p className="text-gray-300 mt-6 text-lg leading-relaxed max-w-xl">
-              From zero experience to a fully licensed security professional in as little as 3 weeks. Expert training, same-day results, and a 3-year licence that opens doors across the UK.
+              From zero experience to a fully licensed security professional in
+              as little as 3 weeks. Expert training, same-day results, and a
+              3-year licence that opens doors across the UK.
             </p>
 
             {/* Stats Pills */}
             <div className="flex flex-wrap gap-4 mt-8">
-
               <div className="bg-[#2f3f50] border border-white/10 rounded-2xl px-6 py-4 text-center min-w-[140px]">
                 <div className="text-[#F15A24]  text-2xl font-bold">95%</div>
                 <div className="text-gray-400 text-sm mt-1">Pass Rate</div>
               </div>
 
               <div className="bg-[#2f3f50] border border-white/10 rounded-2xl px-6 py-4 text-center min-w-[140px]">
-                <div className="text-[#F15A24]  text-2xl font-bold">24 – 48h</div>
+                <div className="text-[#F15A24]  text-2xl font-bold">
+                  24 – 48h
+                </div>
                 <div className="text-gray-400 text-sm mt-1">Processing</div>
               </div>
 
               <div className="bg-[#2f3f50] border border-white/10 rounded-2xl px-6 py-4 text-center min-w-[140px]">
-                <div className="text-[#F15A24]  text-2xl font-bold">3 Years</div>
+                <div className="text-[#F15A24]  text-2xl font-bold">
+                  3 Years
+                </div>
                 <div className="text-gray-400 text-sm mt-1">Validity</div>
               </div>
-
             </div>
 
             {/* Buttons */}
@@ -65,15 +65,12 @@ const SIASection = () => {
                 Get Free Advice
               </button>
             </div>
-
           </div>
 
           {/* ================= RIGHT SIDE ================= */}
           <div className="space-y-6">
-
             {/* Top Large Glass Card */}
             <div className="relative overflow-hidden rounded-3xl bg-white/10 backdrop-blur-xl border border-white/10 p-8">
-
               <img
                 src={siaImage}
                 className="absolute inset-0 w-full h-full object-cover opacity-20"
@@ -96,16 +93,13 @@ const SIASection = () => {
 
             {/* Bottom 2 Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
               <div className="rounded-3xl bg-gradient-to-br from-[#2a4f7c] to-[#1f3c5c] p-8 text-white">
                 <div className="w-10 h-10  flex items-center justify-center mb-4">
                   <img src={starIcon} className="w-8 h-8" />
                 </div>
 
                 <div className="text-3xl font-bold">85+</div>
-                <div className="text-gray-300 mt-1">
-                  UK Training Locations
-                </div>
+                <div className="text-gray-300 mt-1">UK Training Locations</div>
               </div>
 
               <div className="rounded-3xl bg-gradient-to-br from-[#4c2b72] to-[#352055] p-8 text-white">
@@ -114,15 +108,10 @@ const SIASection = () => {
                 </div>
 
                 <div className="text-3xl font-bold">400K+</div>
-                <div className="text-gray-300 mt-1">
-                  People Licensed
-                </div>
+                <div className="text-gray-300 mt-1">People Licensed</div>
               </div>
-
             </div>
-
           </div>
-
         </div>
       </div>
     </section>

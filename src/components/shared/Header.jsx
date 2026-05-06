@@ -14,15 +14,12 @@ const Header = () => {
       : "text-[#2f3a47] font-medium hover:text-black transition";
 
   const mobileNavLinkClasses = ({ isActive }) =>
-    isActive
-      ? "text-[#F15A24]  font-semibold"
-      : "hover:text-black transition";
+    isActive ? "text-[#F15A24]  font-semibold" : "hover:text-black transition";
 
   return (
-    <header className="fixed top-10 left-0 w-full z-50 bg-white shadow-md">
+    <header className="sticky top-10 left-0 w-full z-50 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-[72px]">
-
           {/* LOGO */}
           <Link to="/">
             <img src={Logo} alt="courses4me" className="w-26 md:w-48" />
@@ -80,16 +77,19 @@ const Header = () => {
             className="lg:hidden flex flex-col justify-center items-center w-8 h-8 relative"
           >
             <span
-              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${open ? "rotate-45 translate-y-1.5" : ""
-                }`}
+              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${
+                open ? "rotate-45 translate-y-1.5" : ""
+              }`}
             />
             <span
-              className={`h-0.5 w-6 bg-[#2f3a47] rounded my-1 transition-all duration-300 ${open ? "opacity-0" : ""
-                }`}
+              className={`h-0.5 w-6 bg-[#2f3a47] rounded my-1 transition-all duration-300 ${
+                open ? "opacity-0" : ""
+              }`}
             />
             <span
-              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${open ? "-rotate-45 -translate-y-1.5" : ""
-                }`}
+              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${
+                open ? "-rotate-45 -translate-y-1.5" : ""
+              }`}
             />
           </button>
         </div>
@@ -97,11 +97,11 @@ const Header = () => {
 
       {/* MOBILE MENU */}
       <div
-        className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-lg transition-all duration-300 overflow-hidden ${open ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
-          }`}
+        className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-lg transition-all duration-300 overflow-hidden ${
+          open ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+        }`}
       >
         <div className="flex flex-col px-6 py-6 space-y-5 text-[#2f3a47]">
-
           <NavLink
             to="/"
             end
@@ -169,7 +169,6 @@ const Header = () => {
               Find Course
             </Link>
           </div>
-
         </div>
       </div>
       <BrowseCoursesModal

@@ -12,7 +12,7 @@ import CourseResults from "../pages/courses/CourseResults";
 import CoursePackages from "../pages/courses/CoursePackages";
 import CourseCheckout from "../pages/courses/CourseCheckout";
 import BlogArticle from "../pages/BlogArticle";
-
+import Signin from "../pages/Authentication/Signin";
 
 const AppRoutes = () => {
   return (
@@ -30,6 +30,7 @@ const AppRoutes = () => {
       <Route path="/blog/article" element={<BlogArticle />} />
       <Route path="/locations" element={<Locations />} />
       <Route path="/careers" element={<Careers />} />
+      <Route path="/signin" element={<Signin />} />
     </Routes>
   );
 };

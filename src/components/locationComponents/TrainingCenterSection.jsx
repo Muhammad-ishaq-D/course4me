@@ -6,13 +6,12 @@ import {
   Award,
   Search,
   Navigation,
-  Calendar
+  Calendar,
 } from "lucide-react";
 
 const TrainingCentresSection = () => {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#243443] via-[#1f2f3f] to-[#16222c] py-24 px-6 lg:px-12">
-
       {/* Small Glowing Orange Circle (Behind everything else) */}
       <div className="absolute top-[-40px] right-[-40px] w-80 h-80 bg-[#F8510C] rounded-full blur-[110px] opacity-60 pointer-events-none" />
 
@@ -20,12 +19,10 @@ const TrainingCentresSection = () => {
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#F15A24]  opacity-10 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
         {/* ================= LEFT SIDE ================= */}
         <div>
-
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-[#F15A241A] border border-[#F15A24]  text-[#F15A24]  px-4 py-2 rounded-full text-sm font-semibold mb-8 mt-24">
+          <div className="inline-flex items-center gap-2 bg-[#F15A241A] border border-[#F15A24]  text-[#F15A24]  px-4 py-2 rounded-full text-sm font-semibold mb-8 ">
             <MapPin size={16} />
             Find Your Nearest Centre
           </div>
@@ -37,7 +34,9 @@ const TrainingCentresSection = () => {
 
           {/* Paragraph */}
           <p className="text-gray-300 mt-6 text-lg leading-relaxed max-w-xl">
-            85+ professionally equipped training centres. Expert SIA-approved instructors. Same-day exam results. The same life-changing training — wherever you are in the UK.
+            85+ professionally equipped training centres. Expert SIA-approved
+            instructors. Same-day exam results. The same life-changing training
+            — wherever you are in the UK.
           </p>
 
           {/* Search Bar */}
@@ -58,7 +57,6 @@ const TrainingCentresSection = () => {
 
           {/* Secondary Buttons */}
           <div className="flex flex-wrap gap-5 mt-8">
-
             <button className="bg-[#454D59] border-2 border-[#7D838C] text-white px-6 py-3 rounded-full flex items-center gap-3 hover:bg-[#3b3f45] transition">
               <Navigation size={16} />
               Use My Location
@@ -68,14 +66,11 @@ const TrainingCentresSection = () => {
               <Calendar size={16} />
               View Availability
             </button>
-
           </div>
-
         </div>
 
         {/* ================= RIGHT SIDE ================= */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
           {/* Card 1 */}
           <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-8 text-white">
             <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-6">
@@ -119,9 +114,7 @@ const TrainingCentresSection = () => {
               Industry professionals
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
   );
