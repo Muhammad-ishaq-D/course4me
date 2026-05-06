@@ -22,7 +22,7 @@ const CourseBooking = () => {
 
   // Unified course ID retrieval: URL param first, then query param
   const courseIdFromUrl = paramCourseId || searchParams.get("courseid");
-  
+
   const [course, setCourse] = useState(null);
   const [error, setError] = useState("");
   const [isLoadingCourse, setIsLoadingCourse] = useState(true);
@@ -409,7 +409,7 @@ const CourseBooking = () => {
                 <h3 className="font-bold text-[#1C1C1C] text-[15px]">Need Help?</h3>
               </div>
               <p className="text-[15px] font-extrabold text-[#F15A24] cursor-pointer hover:underline">
-                Call 0204 572 5828
+                Call 08006894621
               </p>
             </div>
           </aside>

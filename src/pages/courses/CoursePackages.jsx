@@ -14,7 +14,7 @@ const CoursePackages = () => {
   // Derive course details dynamically
   const courseId = searchParams.get("courseId");
   const scheduleId = searchParams.get("scheduleId");
-  
+
   const [course, setCourse] = useState(null);
   const [error, setError] = useState("");
 
@@ -482,7 +482,7 @@ const CoursePackages = () => {
           <p className="text-[12px] text-gray-400 font-medium mb-6">Our teams are available Monday-Friday 9am to 6pm, helping you choose the right course.</p>
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
             <button className="bg-[#F15A24] text-white px-8 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all w-full sm:w-auto">
-              <Phone size={16} className="fill-current" /> Call 0204 572 5828
+              <Phone size={16} className="fill-current" /> Call 08006894621
             </button>
             <button className="bg-white text-[#1C1C1C] px-8 py-3 rounded-xl font-black text-sm hover:bg-gray-100 active:scale-95 transition-all w-full sm:w-auto">
               Chat with us

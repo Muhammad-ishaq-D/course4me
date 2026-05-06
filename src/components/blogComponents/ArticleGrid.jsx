@@ -46,9 +46,9 @@ const articles = [
   {
     image: Blog6,
     category: "Company News",
-    title: "Get Licensed Opens 10 New Training Centres Across the UK",
+    title: "Courses4Me Opens 10 New Training Centres Across the UK",
     excerpt: "Expanding our reach to serve more aspiring security professionals, with new locations in Manchester, Birmingham, Leeds, and beyond.",
-    author: "Get Licensed Team",
+    author: "Courses4Me Team",
     date: "Jan 26, 2026",
     readTime: "3 min read",
   },

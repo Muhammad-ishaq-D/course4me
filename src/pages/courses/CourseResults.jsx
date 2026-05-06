@@ -408,7 +408,7 @@ const CourseResults = () => {
                 </div>
               </div>
               <p className="text-xl font-black text-[#F15A24] cursor-pointer hover:underline">
-                Call 0204 572 5828
+                Call 08006894621
               </p>
             </div>
 

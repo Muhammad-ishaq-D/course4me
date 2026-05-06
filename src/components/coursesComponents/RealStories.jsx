@@ -5,7 +5,7 @@ const testimonials = [
   {
     name: "Paul Taylor",
     role: "Door Supervisor Training · January 2026",
-    text: "2 months ago I was working in a warehouse. Today, I am working as a security guard in Harrow earning a lot more than I was sorting boxes! I am glad I chose Get Licensed for my SIA training.",
+    text: "2 months ago I was working in a warehouse. Today, I am working as a security guard in Harrow earning a lot more than I was sorting boxes! I am glad I chose Courses4Me for my SIA training.",
   },
   {
     name: "Sarah Johnson",

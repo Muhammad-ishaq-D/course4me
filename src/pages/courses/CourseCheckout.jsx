@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import {
   ArrowLeft, Lock, Clock, User, MapPin, Briefcase,
   CreditCard, ChevronDown, Check, ShieldCheck,
@@ -47,8 +49,8 @@ const FieldInput = ({ label, placeholder, value, onChange, onBlur, type = "text"
           onChange={e => onChange(e.target.value)}
           onBlur={onBlur}
           className={`w-full border rounded-lg py-3 text-[14px] text-[#1C1C1C] outline-none focus:ring-2 transition-all placeholder:text-gray-300 ${Icon && !isPassword ? 'pl-10 pr-4' : 'px-4'} ${error
-              ? "border-red-400 focus:ring-red-400/40 focus:border-red-400 bg-red-50/30"
-              : "border-gray-200 focus:ring-[#F15A24]/40 focus:border-[#F15A24]"
+            ? "border-red-400 focus:ring-red-400/40 focus:border-red-400 bg-red-50/30"
+            : "border-gray-200 focus:ring-[#F15A24]/40 focus:border-[#F15A24]"
             }`}
         />
         {isPassword && (
@@ -178,9 +180,30 @@ const RightSidebar = () => (
 );
 
 /* ─── Booking Confirmed Page ─── */
-const BookingConfirmed = ({ name, navigate }) => {
+const BookingConfirmed = ({ name, email, mobile, billing, courseName, plan, price, date, easyApply, bookingRef, navigate }) => {
   const [copied, setCopied] = useState(false);
-  const ref = "GL-LDSTL6";
+  const [isDownloading, setIsDownloading] = useState(false);
+  const receiptRef = useRef(null);
+  const ref = bookingRef || "GL-PENDING";
+
+  const handleDownloadReceipt = async () => {
+    if (!receiptRef.current) return;
+    try {
+      setIsDownloading(true);
+      const canvas = await html2canvas(receiptRef.current, { scale: 2, useCORS: true, logging: false });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`Receipt_${ref}.pdf`);
+    } catch (err) {
+      console.error("PDF generation failed", err);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans pt-[90px]">
@@ -190,15 +213,17 @@ const BookingConfirmed = ({ name, navigate }) => {
           <Check className="text-white" size={32} strokeWidth={3} />
         </div>
         <h1 className="text-3xl font-black text-white mb-2">Booking Confirmed!</h1>
-        <p className="text-gray-400 text-sm mb-6">Thank you, <span className="text-white font-bold">{name || "a a"}</span>. Your place has been secured.</p>
-        <button
-          onClick={() => { navigator.clipboard.writeText(ref); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-          className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-white/20 transition-all"
-        >
-          <span className="text-gray-400 text-xs">Booking Reference</span>
-          <span className="font-black">{ref}</span>
-          <Copy size={14} className={copied ? "text-[#00b67a]" : "text-gray-400"} />
-        </button>
+        <p className="text-gray-400 text-sm mb-6">Thank you, <span className="text-white font-bold">{name}</span>. Your place has been secured.</p>
+        <div className="flex items-center justify-center gap-3">
+          <button
+            onClick={() => { navigator.clipboard.writeText(ref); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+            className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-white/20 transition-all"
+          >
+            <span className="text-gray-400 text-xs">Booking Reference</span>
+            <span className="font-black">{ref}</span>
+            <Copy size={14} className={copied ? "text-[#00b67a]" : "text-gray-400"} />
+          </button>
+        </div>
       </div>
 
       <div className="max-w-[1000px] mx-auto px-4 md:px-6 py-10">
@@ -218,16 +243,18 @@ const BookingConfirmed = ({ name, navigate }) => {
                       <ShieldCheck className="text-white" size={16} />
                     </div>
                     <div>
-                      <p className="text-[13px] font-black text-[#1C1C1C]">Security Guard Training</p>
-                      <p className="text-[11px] text-gray-400">Flexi+ Package</p>
+                      <p className="text-[13px] font-black text-[#1C1C1C]">{courseName}</p>
+                      <p className="text-[11px] text-gray-400">{plan} Package</p>
                     </div>
                   </div>
-                  <span className="text-[14px] font-black text-[#1C1C1C]">£289.98</span>
+                  <span className="text-[14px] font-black text-[#1C1C1C]">£{price?.toFixed(2)}</span>
                 </div>
                 <div className="h-px bg-gray-100" />
-                <div className="flex items-center gap-3 text-[12px] text-gray-500"><Calendar size={14} className="text-gray-400" /> <span>Course Date: <b className="text-[#1C1C1C]">Friday 3rd Apr 2026</b></span></div>
-                <div className="flex items-center gap-3 text-[12px] text-gray-500"><Mail size={14} className="text-gray-400" /> <span>Confirmation sent to: <b className="text-[#F15A24]">a@gmail.com</b></span></div>
-                <div className="flex items-center gap-3 text-[12px] text-[#00b67a] font-bold"><Check size={14} /> EasyApply™ included — we'll handle your licence application</div>
+                <div className="flex items-center gap-3 text-[12px] text-gray-500"><Calendar size={14} className="text-gray-400" /> <span>Course Date: <b className="text-[#1C1C1C]">{date}</b></span></div>
+                <div className="flex items-center gap-3 text-[12px] text-gray-500"><Mail size={14} className="text-gray-400" /> <span>Confirmation sent to: <b className="text-[#F15A24]">{email}</b></span></div>
+                {easyApply && (
+                  <div className="flex items-center gap-3 text-[12px] text-[#00b67a] font-bold"><Check size={14} /> EasyApply™ included — we'll handle your licence application</div>
+                )}
               </div>
             </div>
 
@@ -238,7 +265,7 @@ const BookingConfirmed = ({ name, navigate }) => {
                 {[
                   { icon: Mail, label: "Check Your Email", badge: "Within 5 minutes", badgeColor: "bg-gray-100 text-gray-600", desc: "A confirmation email with your booking details, course materials access link, and venue information has been sent to your inbox." },
                   { icon: Smartphone, label: "Download the GuardPass App", badge: "Available Now", badgeColor: "bg-[#E8F5E9] text-[#00b67a]", desc: "Access your eLearning materials, mock exams, and revision content immediately through our 5-star rated app." },
-                  { icon: BookOpen, label: "Attend Your Course", badge: "Friday 3rd Apr 2026", badgeColor: "bg-[#FFF5F1] text-[#F15A24]", desc: "Arrive at the venue on your course date with valid photo ID. Our instructor will guide you through everything." },
+                  { icon: BookOpen, label: "Attend Your Course", badge: date, badgeColor: "bg-[#FFF5F1] text-[#F15A24]", desc: "Arrive at the venue on your course date with valid photo ID. Our instructor will guide you through everything." },
                   { icon: Award, label: "Get Your Results & Licence", badge: "1 working day", badgeColor: "bg-gray-100 text-gray-600", desc: "Results available within 1 working day. Our team will handle your licence application." },
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-start gap-4">
@@ -259,8 +286,13 @@ const BookingConfirmed = ({ name, navigate }) => {
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <button className="flex items-center justify-center gap-2 border-2 border-gray-200 text-[#1C1C1C] px-6 py-3 rounded-xl font-black text-sm hover:border-gray-300 transition-all">
-                <Download size={16} /> Download Receipt
+              <button
+                onClick={handleDownloadReceipt}
+                disabled={isDownloading}
+                className="flex items-center justify-center gap-2 border-2 border-gray-200 text-[#1C1C1C] px-6 py-3 rounded-xl font-black text-sm hover:border-gray-300 transition-all"
+              >
+                {isDownloading ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
+                {isDownloading ? "Generating..." : "Download Receipt"}
               </button>
               <button onClick={() => navigate("/courses")} className="flex items-center justify-center gap-2 bg-[#F15A24] text-white px-6 py-3 rounded-xl font-black text-sm hover:brightness-110 transition-all">
                 Browse More Courses <ArrowRight size={16} />
@@ -284,7 +316,7 @@ const BookingConfirmed = ({ name, navigate }) => {
               <p className="text-white font-black text-sm mb-1">Need Help?</p>
               <p className="text-gray-400 text-[11px] mb-4">Our team is here to assist you with any questions about your booking.</p>
               <button className="w-full bg-[#F15A24] text-white px-4 py-2.5 rounded-lg font-black text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all">
-                <Phone size={14} className="fill-current" /> Call 0204 572 5828
+                <Phone size={14} className="fill-current" /> Call 08006894621
               </button>
             </div>
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 text-center">
@@ -301,7 +333,7 @@ const BookingConfirmed = ({ name, navigate }) => {
 
       {/* Footer */}
       <div className="bg-[#1C1C1C] py-4 mt-8">
-        <p className="text-center text-[11px] text-gray-500">Get Licensed is a registered trademark of Get Licensed Limited. Get Licensed is a training &amp; staffing platform — we help people book training courses with approved providers and help them find work.</p>
+        <p className="text-center text-[11px] text-gray-500">Courses4Me is a registered trademark of Courses4Me Limited. Courses4Me is a training &amp; staffing platform — we help people book training courses with approved providers and help them find work.</p>
       </div>
     </div>
   );
@@ -317,6 +349,7 @@ const CourseCheckout = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [bookingRef, setBookingRef] = useState("");
   const [error, setError] = useState("");
   const [timeLeft, setTimeLeft] = useState(14 * 60 + 12);
 
@@ -412,7 +445,7 @@ const CourseCheckout = () => {
         // If profile is incomplete, stay on step 1 to let them fill missing info
         if (!updatedDetails.mobile || !updatedDetails.dob) {
           setIsLoggingIn(false); // Switch back to details view but with fields populated
-          setDetailsErrors({ 
+          setDetailsErrors({
             mobile: !updatedDetails.mobile ? "Mobile number is missing in your profile" : null,
             dob: !updatedDetails.dob ? "Date of birth is missing in your profile" : null
           });
@@ -430,7 +463,7 @@ const CourseCheckout = () => {
   const validateStep = async (step) => {
     if (step === 1) {
       const errs = await validateAll(checkoutDetailsSchema, details);
-      
+
       if (details.email && /^\S+@\S+\.\S+$/.test(details.email.trim()) && !localStorage.getItem('token')) {
         setCheckingEmail(true);
         try {
@@ -550,6 +583,7 @@ const CourseCheckout = () => {
       const response = await bookingService.createBooking(bookingPayload);
 
       if (response.data.success) {
+        setBookingRef(response.data.data?.bookingReference || "");
         window.scrollTo(0, 0);
         setIsConfirmed(true);
       } else {
@@ -619,7 +653,23 @@ const CourseCheckout = () => {
     );
   }
 
-  if (isConfirmed) return <BookingConfirmed name={`${details.firstName} ${details.lastName}`} navigate={navigate} />;
+  if (isConfirmed) {
+    const formattedDate = selectedSchedule?.startDate
+      ? new Date(selectedSchedule.startDate).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' })
+      : "Pending Date";
+
+    return <BookingConfirmed
+      name={`${details.firstName} ${details.lastName}`}
+      email={details.email}
+      courseName={courseData?.title || "Course Details Pending"}
+      plan={plan}
+      price={price + (easyApply === "get" ? 149.99 : 0)}
+      date={formattedDate}
+      easyApply={easyApply === "get"}
+      bookingRef={bookingRef}
+      navigate={navigate}
+    />;
+  }
 
   /* ── Completed step header ── */
   const CompletedStep = ({ stepNum, title, summary, onEdit }) => (
@@ -746,15 +796,15 @@ const CourseCheckout = () => {
                         <FieldInput label="First name" placeholder="First name" value={details.firstName} onChange={v => updateDetail('firstName', v)} icon={User} error={detailsErrors.firstName} />
                         <FieldInput label="Last name" placeholder="Last name" value={details.lastName} onChange={v => updateDetail('lastName', v)} icon={User} error={detailsErrors.lastName} />
                       </div>
-                      <FieldInput 
-                        label="Email address" 
-                        placeholder="Email address" 
-                        type="email" 
-                        value={details.email} 
-                        onChange={v => updateDetail('email', v)} 
+                      <FieldInput
+                        label="Email address"
+                        placeholder="Email address"
+                        type="email"
+                        value={details.email}
+                        onChange={v => updateDetail('email', v)}
                         onBlur={() => checkEmailAvailability(details.email)}
-                        icon={Mail} 
-                        error={detailsErrors.email} 
+                        icon={Mail}
+                        error={detailsErrors.email}
                       />
                       <FieldInput label="Mobile number" placeholder="Mobile number" type="tel" value={details.mobile} onChange={v => updateDetail('mobile', v)} icon={Phone} error={detailsErrors.mobile} />
                       <FieldInput label="Date of birth" type="date" value={details.dob} onChange={v => updateDetail('dob', v)} icon={Calendar} error={detailsErrors.dob} />
@@ -764,9 +814,9 @@ const CourseCheckout = () => {
                         <FieldInput label="Confirm Password" placeholder="••••••••" type="password" value={details.confirmPassword} onChange={v => updateDetail('confirmPassword', v)} icon={Lock} error={detailsErrors.confirmPassword} />
                       </div>
 
-                      <SaveBtn 
-                        loading={checkingEmail} 
-                        onClick={async () => { if (await validateStep(1)) setActiveStep(2); }} 
+                      <SaveBtn
+                        loading={checkingEmail}
+                        onClick={async () => { if (await validateStep(1)) setActiveStep(2); }}
                       />
 
                       <div className="text-center pt-2">
@@ -916,7 +966,7 @@ const CourseCheckout = () => {
                     </label>
                     <label className="flex items-start gap-3 cursor-pointer">
                       <input type="checkbox" checked={agree2} onChange={e => setAgree2(e.target.checked)} className="mt-0.5 w-4 h-4 accent-[#F15A24]" />
-                      <span className="text-[12px] text-gray-600">I agree to the Get Licensed <span className="text-[#F15A24] underline cursor-pointer">Privacy Policy</span> and <span className="text-[#F15A24] underline cursor-pointer">Terms of service</span></span>
+                      <span className="text-[12px] text-gray-600">I agree to the Courses4Me <span className="text-[#F15A24] underline cursor-pointer">Privacy Policy</span> and <span className="text-[#F15A24] underline cursor-pointer">Terms of service</span></span>
                     </label>
                   </div>
 
@@ -927,7 +977,7 @@ const CourseCheckout = () => {
                     </div>
                   )}
 
-                  <SaveBtn 
+                  <SaveBtn
                     loading={isSubmitting}
                     onClick={handlePayment}
                     fullWidth
@@ -947,7 +997,7 @@ const CourseCheckout = () => {
 
       {/* Bottom strip */}
       <div className="bg-[#F0F0F0] py-3 mt-8">
-        <p className="text-center text-[11px] text-gray-500 px-4">Get Licensed is a registered trademark of Get Licensed Limited. Get Licensed is a training &amp; staffing platform — we help people book training courses with approved providers and help them find work.</p>
+        <p className="text-center text-[11px] text-gray-500 px-4">Courses4Me is a registered trademark of Courses4Me Limited. Courses4Me is a training &amp; staffing platform — we help people book training courses with approved providers and help them find work.</p>
       </div>
     </div>
   );

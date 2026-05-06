@@ -76,7 +76,7 @@ export default function BlogSection() {
                             </h3>
 
                             <p className="text-gray-300 text-lg mb-8 max-w-2xl font-medium">
-                                The security industry is growing faster than ever. Discover why 2026 is the perfect year to get licensed and start earning.
+                                The security industry is growing faster than ever. Discover why 2026 is the perfect year to Courses4Me and start earning.
                             </p>
 
                             <div className="flex items-center gap-8 text-sm text-gray-300 font-bold uppercase tracking-widest">
