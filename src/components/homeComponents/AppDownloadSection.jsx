@@ -1,7 +1,7 @@
 import React from "react";
 import { Smartphone, Download, ArrowRight, Apple, Play } from "lucide-react";
 
-// Note: The provided image mentions a specific asset "Get Licensed App.png".
+// Note: The provided image mentions a specific asset "Courses4Me App.png".
 // This import path should point to your actual image file.
 import courses4meApp from "../../assets/home/Courses4Me App.png";
 
@@ -20,7 +20,7 @@ const AppPromotionSection = () => {
               <div className="absolute inset-0 bg-[#FF5421] opacity-20 blur-[80px] rounded-full"></div>
               <img
                 src={courses4meApp}
-                alt="Get Licensed App mobile phone mockup"
+                alt="Courses4Me App mobile phone mockup"
                 className="w-72 md:w-80 lg:w-[420px] h-auto object-contain relative z-10"
               />
             </div>

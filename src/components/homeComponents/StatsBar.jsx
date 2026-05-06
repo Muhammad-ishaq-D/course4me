@@ -19,7 +19,7 @@ const StatsBar = () => {
         },
         {
             number: "3 weeks",
-            label: "To Get Licensed",
+            label: "To Courses4Me",
             numberColor: "text-[#FF5421]"
         }
     ];

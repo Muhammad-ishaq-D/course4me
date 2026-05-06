@@ -35,7 +35,7 @@ const CourseMainContent = ({ course }) => {
             {/* About This Course */}
             <div>
               <h2 className="text-3xl font-bold text-[#1E293B] mb-6">About This Course</h2>
-              <div 
+              <div
                 className="text-[#64748B] text-lg leading-relaxed mb-6 prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: course.fullDescription }}
               />
@@ -112,7 +112,7 @@ const CourseMainContent = ({ course }) => {
                     >
                       Book Now <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
-                    <button 
+                    <button
                       onClick={() => {
                         const element = document.getElementById('dates');
                         if (element) element.scrollIntoView({ behavior: 'smooth' });
@@ -150,7 +150,7 @@ const CourseMainContent = ({ course }) => {
                   Our advisors are available Mon-Fri 9am-6pm to help you choose the right course.
                 </p>
                 <a href="tel:08001234567" className="text-2xl font-black text-[#00A3F4] hover:underline flex items-center gap-2">
-                  <Phone className="w-6 h-6" /> 0800 123 4567
+                  <Phone className="w-6 h-6" /> 08006894621
                 </a>
               </div>
             </div>

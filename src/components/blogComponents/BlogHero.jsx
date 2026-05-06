@@ -31,7 +31,7 @@ const BlogHero = () => {
         {/* Subheading */}
         <p className="text-lg text-gray-400 max-w-2xl mb-12">
           Stay informed with the latest security industry news, career guides,
-          study tips, and updates from the Get Licensed team.
+          study tips, and updates from the Courses4Me team.
         </p>
 
         {/* Search Bar */}

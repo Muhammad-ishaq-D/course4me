@@ -128,7 +128,7 @@ const CareerEarningSection = () => {
           <RoleCard
             icon={Briefcase}
             title="Close Protection"
-            description="Get licensed to work as a Bodyguard for VIPs, celebrities, and high-profile clients. Exclusive, high-paying security work."
+            description="Courses4Me to work as a Bodyguard for VIPs, celebrities, and high-profile clients. Exclusive, high-paying security work."
             rate="£3.5k"
             training="Close Protection Training"
             shift="Variable - project based"

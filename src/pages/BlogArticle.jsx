@@ -140,7 +140,7 @@ const BlogArticle = () => {
 
                         <h2 className="text-3xl font-bold text-[#1A1A1A] mb-6 tracking-tight">How Long Does It Take?</h2>
                         <p className="mb-10">
-                            Most door supervisor courses run for 4-6 days, with exams taken on the final day. At Get Licensed, we offer same-day results so you can start applying for your licence immediately.
+                            Most door supervisor courses run for 4-6 days, with exams taken on the final day. At Courses4Me, we offer same-day results so you can start applying for your licence immediately.
                         </p>
 
                         <h2 className="text-3xl font-bold text-[#1A1A1A] mb-6 tracking-tight">Expected Salaries</h2>
