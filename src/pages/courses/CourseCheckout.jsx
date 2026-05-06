@@ -190,14 +190,118 @@ const BookingConfirmed = ({ name, email, mobile, billing, courseName, plan, pric
     if (!receiptRef.current) return;
     try {
       setIsDownloading(true);
-      const canvas = await html2canvas(receiptRef.current, { scale: 2, useCORS: true, logging: false });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Receipt_${ref}.pdf`);
+      const saveTextReceiptPdf = () => {
+        const pdf = new jsPDF("p", "mm", "a4");
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const margin = 14;
+        let y = 18;
+
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(16);
+        pdf.text("Receipt", margin, y);
+
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(`Ref: ${ref}`, pageWidth - margin, y, { align: "right" });
+        y += 10;
+
+        pdf.setDrawColor(220);
+        pdf.line(margin, y, pageWidth - margin, y);
+        y += 8;
+
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Billed To", margin, y);
+        pdf.text("Total Paid", pageWidth - margin, y, { align: "right" });
+        y += 6;
+
+        pdf.setFont("helvetica", "normal");
+        const billedLines = [
+          name,
+          email,
+          mobile || null,
+          billing?.addr1 || null,
+          billing?.addr2 || null,
+          [billing?.city, billing?.postcode].filter(Boolean).join(", ") || null,
+        ].filter(Boolean);
+
+        billedLines.forEach((line) => {
+          pdf.text(String(line), margin, y);
+          y += 5.2;
+        });
+
+        const totalText = `£${Number(price || 0).toFixed(2)}`;
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(14);
+        pdf.text(totalText, pageWidth - margin, 42, { align: "right" });
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "normal");
+        pdf.text(`Date: ${date}`, pageWidth - margin, 48, { align: "right" });
+
+        y += 4;
+        pdf.setDrawColor(220);
+        pdf.line(margin, y, pageWidth - margin, y);
+        y += 10;
+
+        pdf.setFont("helvetica", "bold");
+        pdf.text("Item", margin, y);
+        pdf.text("Amount", pageWidth - margin, y, { align: "right" });
+        y += 6;
+
+        pdf.setFont("helvetica", "normal");
+        const itemLines = pdf.splitTextToSize(String(courseName || "Course"), pageWidth - margin * 2 - 40);
+        itemLines.forEach((line) => {
+          pdf.text(line, margin, y);
+          y += 5.2;
+        });
+        pdf.setFontSize(9);
+        pdf.text(`${plan} Package`, margin, y);
+        y += 5.2;
+        if (easyApply) {
+          pdf.setTextColor(0, 182, 122);
+          pdf.setFont("helvetica", "bold");
+          pdf.text("EasyApply™ included", margin, y);
+          pdf.setTextColor(0, 0, 0);
+        }
+
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "bold");
+        pdf.text(totalText, pageWidth - margin,  y - (easyApply ? 5.2 : 10.4), { align: "right" });
+
+        pdf.save(`Receipt_${ref}.pdf`);
+      };
+
+      try {
+        const canvas = await html2canvas(receiptRef.current, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: "#ffffff",
+        });
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+        pdf.save(`Receipt_${ref}.pdf`);
+      } catch (canvasErr) {
+        // Some browsers expose computed colors as `oklab(...)`, which html2canvas can't parse.
+        console.warn("Canvas receipt generation failed; falling back to text PDF.", canvasErr);
+        saveTextReceiptPdf();
+      }
     } catch (err) {
       console.error("PDF generation failed", err);
     } finally {
@@ -231,6 +335,55 @@ const BookingConfirmed = ({ name, email, mobile, billing, courseName, plan, pric
 
           {/* Left col */}
           <div className="flex-1 space-y-6">
+            {/* Receipt area (captured for PDF) */}
+            <div ref={receiptRef} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+              <div className="bg-[#1C1C1C] px-5 py-3 flex items-center justify-between">
+                <span className="text-white font-black text-[13px]">Receipt</span>
+                <span className="text-white/70 text-[11px] font-bold">Ref: {ref}</span>
+              </div>
+              <div className="p-5 space-y-4">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Billed To</p>
+                    <p className="text-[14px] font-black text-[#1C1C1C] truncate">{name}</p>
+                    <p className="text-[12px] text-gray-600 break-all">{email}</p>
+                    {mobile && <p className="text-[12px] text-gray-600">{mobile}</p>}
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Total Paid</p>
+                    <p className="text-[18px] font-black text-[#F15A24]">£{Number(price || 0).toFixed(2)}</p>
+                    <p className="text-[11px] text-gray-500">Date: {date}</p>
+                  </div>
+                </div>
+
+                {billing && (billing.addr1 || billing.city || billing.postcode) && (
+                  <div>
+                    <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider mb-1">Billing Address</p>
+                    <div className="text-[12px] text-gray-600 space-y-0.5">
+                      {billing.addr1 && <p>{billing.addr1}</p>}
+                      {billing.addr2 && <p>{billing.addr2}</p>}
+                      {(billing.city || billing.postcode) && <p>{[billing.city, billing.postcode].filter(Boolean).join(", ")}</p>}
+                    </div>
+                  </div>
+                )}
+
+                <div className="h-px bg-gray-100" />
+
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Item</p>
+                    <p className="text-[13px] font-black text-[#1C1C1C]">{courseName}</p>
+                    <p className="text-[11px] text-gray-500">{plan} Package</p>
+                    {easyApply && <p className="text-[11px] font-bold text-[#00b67a] mt-1">EasyApply™ included</p>}
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">Amount</p>
+                    <p className="text-[13px] font-black text-[#1C1C1C]">£{Number(price || 0).toFixed(2)}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Order Details */}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="bg-[#F15A24] px-5 py-3">
@@ -661,6 +814,8 @@ const CourseCheckout = () => {
     return <BookingConfirmed
       name={`${details.firstName} ${details.lastName}`}
       email={details.email}
+      mobile={details.mobile}
+      billing={billing}
       courseName={courseData?.title || "Course Details Pending"}
       plan={plan}
       price={price + (easyApply === "get" ? 149.99 : 0)}
