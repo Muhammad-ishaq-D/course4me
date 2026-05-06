@@ -10,17 +10,18 @@ import ScrollToTop from './components/shared/ScrollToTop'
 
 const AppContent = () => {
   const location = useLocation();
-  const isBookingPage = location.pathname.includes('/book') || 
-                        location.pathname.startsWith('/booking');
+  const isBookingPage = location.pathname.includes('/book') ||
+    location.pathname.startsWith('/booking');
 
   return (
-    <>
+    <div className="h-screen flex flex-col overflow-hidden">
       <ScrollToTop />
-      <TopNav />
       <Header />
-      <AppRoutes />
-      <Footer />
-    </>
+      <main id="main-scroll-container" className="flex-1 overflow-y-auto">
+        <AppRoutes />
+        <Footer />
+      </main>
+    </div>
   );
 }
 
