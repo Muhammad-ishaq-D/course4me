@@ -6,11 +6,19 @@ import {
   Briefcase,
   ArrowRight,
   GraduationCap,
-  Clock
+  Clock,
 } from "lucide-react";
 
-const RoleCard = ({ icon: Icon, title, description, rate, training, shift }) => (
-  <div className="
+const RoleCard = ({
+  icon: Icon,
+  title,
+  description,
+  rate,
+  training,
+  shift,
+}) => (
+  <div
+    className="
     bg-white
     rounded-[32px]
     p-8
@@ -23,8 +31,8 @@ const RoleCard = ({ icon: Icon, title, description, rate, training, shift }) => 
     hover:shadow-[0_40px_80px_rgba(0,0,0,0.08)]
     cursor-default
     group
-  ">
-
+  "
+  >
     {/* Header & Icon */}
     <div className="mb-8">
       <div className="w-12 h-12 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-xl flex items-center justify-center mb-6">
@@ -48,20 +56,22 @@ const RoleCard = ({ icon: Icon, title, description, rate, training, shift }) => 
       <div className="text-[#FF5421] text-4xl font-bold tracking-tight leading-none mb-1">
         {rate}
       </div>
-      <p className="text-gray-400 text-[11px] font-bold">
-        per month
-      </p>
+      <p className="text-gray-400 text-[11px] font-bold">per month</p>
     </div>
 
     <div className="border-t border-gray-50 pt-6 mt-auto">
       <div className="space-y-3 mb-8">
         <div className="flex items-center gap-2">
           <GraduationCap className="w-4 h-4 text-[#00A3FF]" />
-          <span className="text-gray-500 text-xs font-medium leading-tight">{training}</span>
+          <span className="text-gray-500 text-xs font-medium leading-tight">
+            {training}
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-[#00A3FF]" />
-          <span className="text-gray-500 text-xs font-medium leading-tight">{shift}</span>
+          <span className="text-gray-500 text-xs font-medium leading-tight">
+            {shift}
+          </span>
         </div>
       </div>
 
@@ -73,31 +83,30 @@ const RoleCard = ({ icon: Icon, title, description, rate, training, shift }) => 
         <ArrowRight className="w-4 h-4" />
       </a>
     </div>
-
   </div>
 );
 
 const CareerEarningSection = () => {
   return (
-    <section className="bg-white py-24 font-sans">
+    <section className="bg-white py-24 ">
       <div className="max-w-[1240px] mx-auto px-6">
-
         {/* Header */}
         <div className="text-center mb-16">
           <div className="text-[#FF5421] text-xs font-bold tracking-[0.2em] uppercase mb-4">
             Career Paths
           </div>
           <h2 className="text-[44px] sm:text-[52px] font-bold text-[#1A1A1A] mb-6 tracking-tight leading-none">
-            Choose Your Path. <span className="text-[#FF5421]">Start Earning Today.</span>
+            Choose Your Path.{" "}
+            <span className="text-[#FF5421]">Start Earning Today.</span>
           </h2>
           <p className="text-gray-500 text-base sm:text-lg font-medium max-w-2xl mx-auto leading-relaxed">
-            Explore the different security roles available and their earning potential.
+            Explore the different security roles available and their earning
+            potential.
           </p>
         </div>
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
           <RoleCard
             icon={Shield}
             title="Door Supervisor"
@@ -133,7 +142,6 @@ const CareerEarningSection = () => {
             training="Close Protection Training"
             shift="Variable - project based"
           />
-
         </div>
       </div>
     </section>

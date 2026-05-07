@@ -32,17 +32,15 @@ const features = [
     iconBg: "bg-[#00A3FF1A]",
     iconColor: "text-[#00A3FF]",
     title: "Modern Facilities",
-    description:
-      "State-of-the-art training rooms with the latest equipment",
+    description: "State-of-the-art training rooms with the latest equipment",
   },
 ];
 
 const WhyChooseTrainingCentres = () => {
   const navigate = useNavigate();
   return (
-    <section className="bg-[#F9FAFB] py-24 font-sans">
+    <section className="bg-[#F9FAFB] py-24">
       <div className="max-w-[1300px] mx-auto px-6">
-
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-[40px] md:text-[48px] font-bold text-[#1A1A1A] tracking-tight">
@@ -55,7 +53,6 @@ const WhyChooseTrainingCentres = () => {
 
         {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-
           {features.map((item, index) => {
             const Icon = item.icon;
 
@@ -72,7 +69,6 @@ const WhyChooseTrainingCentres = () => {
                   transition-all duration-300
                 "
               >
-
                 {/* Icon */}
                 <div
                   className={`${item.iconBg} w-16 h-16 rounded-2xl flex items-center justify-center mb-8 border border-[#00A3FF1A]`}
@@ -89,11 +85,9 @@ const WhyChooseTrainingCentres = () => {
                 <p className="text-gray-500 text-sm leading-relaxed font-medium">
                   {item.description}
                 </p>
-
               </div>
             );
           })}
-
         </div>
 
         {/* Bottom CTA */}

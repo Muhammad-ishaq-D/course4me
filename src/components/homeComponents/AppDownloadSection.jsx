@@ -7,13 +7,12 @@ import courses4meApp from "../../assets/home/Courses4Me App.png";
 
 const AppPromotionSection = () => {
   return (
-    <section className="w-full bg-[#1A1A1A] py-24 font-sans relative overflow-hidden">
+    <section className="w-full bg-[#1A1A1A] py-24 relative overflow-hidden">
       {/* Decor */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF5421] opacity-5 blur-[100px] -mr-48 -mt-48"></div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-
           {/* LEFT: Phone Mockup Image */}
           <div className="flex-1 flex justify-center lg:justify-end">
             <div className="relative">
@@ -42,7 +41,8 @@ const AppPromotionSection = () => {
 
             {/* Sub-headline */}
             <p className="text-gray-400 text-lg mb-10 max-w-xl font-medium leading-relaxed">
-              Download our app for exclusive job alerts and study materials. Everything you need to launch your career.
+              Download our app for exclusive job alerts and study materials.
+              Everything you need to launch your career.
             </p>
 
             {/* Store buttons */}
@@ -66,7 +66,8 @@ const AppPromotionSection = () => {
             {/* PDF download section */}
             <div className="flex flex-col pt-10 items-start gap-6 border-t border-white/10">
               <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">
-                Enter your details below to instantly download the career guide PDF
+                Enter your details below to instantly download the career guide
+                PDF
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 w-full max-w-2xl">
