@@ -13,6 +13,9 @@ import CoursePackages from "../pages/courses/CoursePackages";
 import CourseCheckout from "../pages/courses/CourseCheckout";
 import BlogArticle from "../pages/BlogArticle";
 import Signin from "../pages/Authentication/Signin";
+import ResetPassword from "../pages/Authentication/ResetPassword";
+import UserDashboard from "../pages/Authentication/UserDashboard";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -31,6 +34,15 @@ const AppRoutes = () => {
       <Route path="/locations" element={<Locations />} />
       <Route path="/careers" element={<Careers />} />
       <Route path="/signin" element={<Signin />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <UserDashboard />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 };

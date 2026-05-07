@@ -122,7 +122,7 @@ const Footer = () => {
                     <Phone className="text-[#FF5421]" size={18} />
                   </div>
                   <span className="text-white font-bold text-[15px]">
-                    Call Us 01472 730 150
+                    Call Us 08006894621
                   </span>
                 </div>
 

@@ -71,7 +71,7 @@ const centres = [
     address: "89 Sauchiehall Street, Glasgow, G2 3DE",
     hours: "Mon-Sun: 8:00 AM - 8:00 PM",
     next: "Today",
-    phone: "0141 234 5678",
+    phone: "08006894621",
     email: "glasgow@courses4me.co.uk",
     courses: ["Door Supervisor", "Security Guard", "CCTV Operator"],
     more: "+2 more"

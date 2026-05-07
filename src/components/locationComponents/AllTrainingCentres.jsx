@@ -99,7 +99,7 @@ const centres = [
     next: "Today",
     courses: ["Door Supervisor", "Security Guard", ""],
     facilities: ["WiFi Access", "Public Transport", "Disabled Access"],
-    phone: "0141 234 5678",
+    phone: "08006894621",
     email: "glasgow@courses4me.co.uk",
     more: "+3"
   },

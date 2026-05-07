@@ -8,6 +8,8 @@ import Footer from './components/shared/Footer'
 import TopNav from './components/shared/TopNav'
 import ScrollToTop from './components/shared/ScrollToTop'
 
+import { AuthProvider } from './context/AuthContext'
+
 const AppContent = () => {
   const location = useLocation();
   const isBookingPage = location.pathname.includes('/book') ||
@@ -28,7 +30,9 @@ const AppContent = () => {
 function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </BrowserRouter>
   )
 }
