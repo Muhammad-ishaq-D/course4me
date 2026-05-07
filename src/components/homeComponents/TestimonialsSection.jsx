@@ -11,9 +11,8 @@ const Stars = ({ color = "#FF5421" }) => (
 
 const TestimonialsSection = () => {
   return (
-    <section className="bg-white py-24 font-sans">
+    <section className="bg-white py-24 ">
       <div className="max-w-[1240px] mx-auto px-6 lg:px-8">
-
         {/* Header */}
         <div className="text-center mb-20">
           <h2 className="text-[44px] md:text-[56px] font-bold text-[#1A1A1A] mb-5 leading-[1.05] tracking-tight">
@@ -27,7 +26,6 @@ const TestimonialsSection = () => {
 
         {/* Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-
           {/* LEFT - Main Student Testimonial (Ben) */}
           <div className="bg-white rounded-[32px] p-10 border border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.03)] flex flex-col items-start h-full">
             <div className="mb-6">
@@ -35,11 +33,16 @@ const TestimonialsSection = () => {
             </div>
 
             <div className="mb-8 p-3 bg-[#E6F4FF] rounded-2xl w-fit">
-              <Quote size={28} className="text-[#00A3FF] fill-[#00A3FF] opacity-30" />
+              <Quote
+                size={28}
+                className="text-[#00A3FF] fill-[#00A3FF] opacity-30"
+              />
             </div>
 
             <p className="text-[#1A1A1A] text-xl font-medium leading-relaxed mb-12 flex-1">
-              "I was looking for a fresh start. Within 3 weeks of starting my Door Supervisor course, I had my license and my first job at a top venue. The support was incredible!"
+              "I was looking for a fresh start. Within 3 weeks of starting my
+              Door Supervisor course, I had my license and my first job at a top
+              venue. The support was incredible!"
             </p>
 
             <div className="border-t border-gray-50 pt-8 w-full">
@@ -54,7 +57,6 @@ const TestimonialsSection = () => {
 
           {/* RIGHT COLUMN */}
           <div className="flex flex-col gap-6">
-
             {/* Instructor Card */}
             <div className="bg-[#F8F9FA] rounded-[32px] p-10 border border-gray-100 flex flex-col gap-8">
               <div className="flex items-center gap-6">
@@ -78,8 +80,8 @@ const TestimonialsSection = () => {
 
               <p className="text-gray-500 leading-relaxed font-medium text-base">
                 20+ years of real-world security experience across military and
-                civilian roles. Passionate about preparing the next generation of
-                security professionals with practical, hands-on training.
+                civilian roles. Passionate about preparing the next generation
+                of security professionals with practical, hands-on training.
               </p>
             </div>
 
@@ -87,13 +89,16 @@ const TestimonialsSection = () => {
             <div className="bg-white border border-gray-100 rounded-[32px] p-10 shadow-[0_10px_30px_rgba(0,0,0,0.02)]">
               <div className="flex items-center gap-3 mb-8">
                 <Stars />
-                <span className="text-[#1A1A1A] text-xs font-bold ml-1">Excellent</span>
+                <span className="text-[#1A1A1A] text-xs font-bold ml-1">
+                  Excellent
+                </span>
               </div>
 
               <p className="text-gray-500 text-base font-medium leading-relaxed mb-10 italic">
-                "The instructors were professional and knowledgeable. They shared
-                real stories from their careers which really helped put everything into
-                context. The training quality is second to none. Highly recommend!"
+                "The instructors were professional and knowledgeable. They
+                shared real stories from their careers which really helped put
+                everything into context. The training quality is second to none.
+                Highly recommend!"
               </p>
 
               <div>
@@ -105,9 +110,7 @@ const TestimonialsSection = () => {
                 </p>
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
     </section>

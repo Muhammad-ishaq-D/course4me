@@ -10,18 +10,23 @@ import {
   CheckSquare,
   ArrowRight,
   Lock,
-  BookOpen
+  BookOpen,
 } from "lucide-react";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const getCategoryIcon = (category) => {
   switch (category) {
-    case 'SIA Training': return Shield;
-    case 'First Aid': return Heart;
-    case 'Health & Safety': return Shield; // Or a specific H&S icon
-    case 'Specialist': return Lock;
-    default: return BookOpen;
+    case "SIA Training":
+      return Shield;
+    case "First Aid":
+      return Heart;
+    case "Health & Safety":
+      return Shield; // Or a specific H&S icon
+    case "Specialist":
+      return Lock;
+    default:
+      return BookOpen;
   }
 };
 
@@ -43,7 +48,12 @@ const POPULAR_LICENCES = [
   },
 ];
 
-const CATEGORIES = ["Most Popular", "SIA Licenses", "Top-Up Courses", "Specialist"];
+const CATEGORIES = [
+  "Most Popular",
+  "SIA Licenses",
+  "Top-Up Courses",
+  "Specialist",
+];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -85,25 +95,25 @@ const CoursesLicencesSection = () => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const params = { status: 'Published' };
-        
+        const params = { status: "Published" };
+
         // If not 'Most Popular', filter by category
         // Note: The UI categories don't perfectly match backend categories yet
         // For now, let's just fetch all and filter in memory or adjust backend call
         const response = await courseService.getAllCourses(params);
         const data = response.data?.data || [];
-        
-        const mappedCourses = data.map(course => ({
+
+        const mappedCourses = data.map((course) => ({
           id: course._id,
           icon: getCategoryIcon(course.category),
           title: course.title,
-          description: `${course.subtitle || course.category} · ${course.duration || 'N/A'}`,
-          category: course.category
+          description: `${course.subtitle || course.category} · ${course.duration || "N/A"}`,
+          category: course.category,
         }));
 
         setCourses(mappedCourses);
       } catch (error) {
-        console.error('Error fetching popular courses:', error);
+        console.error("Error fetching popular courses:", error);
       } finally {
         setLoading(false);
       }
@@ -113,35 +123,39 @@ const CoursesLicencesSection = () => {
   }, []);
 
   // Filter based on UI categories
-  const filteredCourses = activeCategory === "Most Popular"
-    ? courses.slice(0, 5) // Show top 5
-    : courses.filter(c => {
-        if (activeCategory === "SIA Licenses") return c.category === "SIA Training";
-        if (activeCategory === "Specialist") return c.category === "Specialist";
-        return true; // Default or other categories
-      });
+  const filteredCourses =
+    activeCategory === "Most Popular"
+      ? courses.slice(0, 5) // Show top 5
+      : courses.filter((c) => {
+          if (activeCategory === "SIA Licenses")
+            return c.category === "SIA Training";
+          if (activeCategory === "Specialist")
+            return c.category === "Specialist";
+          return true; // Default or other categories
+        });
 
   return (
-    <section className="bg-white py-24 font-sans">
+    <section className="bg-white py-24 ">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-
         {/* CATEGORIES FILTER */}
         <div className="mb-16">
           <h2 className="text-[#FF5421] text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
             Our Courses
           </h2>
           <h2 className="text-[44px] md:text-[52px] font-bold text-[#1A1A1A] mb-6 tracking-tight leading-none">
-            Pick Your Course. <span className="text-[#FF5421]">Change Your Life.</span>
+            Pick Your Course.{" "}
+            <span className="text-[#FF5421]">Change Your Life.</span>
           </h2>
           <div className="flex flex-wrap items-center gap-3">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-7 py-3 font-bold rounded-full transition-all text-sm ${activeCategory === cat
-                  ? "bg-[#00A3FF] text-white shadow-lg shadow-[#00A3FF]/20 hover:opacity-90"
-                  : "bg-[#F8F9FA] text-gray-500 border border-gray-100 hover:bg-gray-100"
-                  }`}
+                className={`px-7 py-3 font-bold rounded-full transition-all text-sm ${
+                  activeCategory === cat
+                    ? "bg-[#00A3FF] text-white shadow-lg shadow-[#00A3FF]/20 hover:opacity-90"
+                    : "bg-[#F8F9FA] text-gray-500 border border-gray-100 hover:bg-gray-100"
+                }`}
               >
                 {cat}
               </button>
@@ -150,7 +164,6 @@ const CoursesLicencesSection = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-
           {/* LEFT COLUMN — Popular Courses */}
           <div>
             <div className="flex items-center justify-between mb-10">
@@ -250,16 +263,15 @@ const CoursesLicencesSection = () => {
                     SIA Licence Required
                   </h4>
                   <p className="text-gray-400 text-sm leading-relaxed font-medium">
-                    Mandatory requirement to work in security roles. An SIA licence is legally
-                    required to work in the private security industry in the UK.
+                    Mandatory requirement to work in security roles. An SIA
+                    licence is legally required to work in the private security
+                    industry in the UK.
                   </p>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
   );

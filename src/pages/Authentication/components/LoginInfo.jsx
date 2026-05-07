@@ -32,7 +32,7 @@ const LoginInfo = () => {
             🎓 Student Access
           </span>
           <h1 className="text-white text-5xl md:text-7xl font-bold mb-6 tracking-tight leading-tight">
-            Student <br /> <span className="text-orange-500">Portal</span>
+            Student <span className="text-orange-500">Portal</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-md leading-relaxed opacity-80">
             Access your courses, results, certificates, and manage your bookings

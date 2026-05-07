@@ -8,7 +8,7 @@ import {
   ChevronRight,
   ShieldCheck,
   Calendar,
-  Heart
+  Heart,
 } from "lucide-react";
 
 const CourseHero = ({ course }) => {
@@ -16,7 +16,9 @@ const CourseHero = ({ course }) => {
   if (!course) return null;
 
   // Formatting backend data
-  const displayPrice = course.pricing?.basePrice ? `£${course.pricing.basePrice}` : "N/A";
+  const displayPrice = course.pricing?.basePrice
+    ? `£${course.pricing.basePrice}`
+    : "N/A";
   const displayRating = "4.9"; // Fallback as backend doesn't have it yet
   const displayReviews = course.reviewsCount || "1,000+";
   const displayBooked = course.bookedCount || "500+";
@@ -26,30 +28,24 @@ const CourseHero = ({ course }) => {
 
   return (
     <>
-      <section className="bg-[#F8FAFC] border-b mt-34 border-gray-200">
+      <section className="bg-[#F8FAFC] border-b mt-5 border-gray-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-3 text-[13px] text-gray-500">
           Home <span className="mx-2">›</span>
           All Courses <span className="mx-2">›</span>
-          <span className="text-gray-900 font-medium">
-            {course.title}
-          </span>
+          <span className="text-gray-900 font-medium">{course.title}</span>
         </div>
       </section>
 
       {/* 🔥 HERO */}
       <section className="relative text-white py-10 lg:py-12 overflow-hidden bg-[#141414]">
-
         {/* BACKGROUND */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,#1e3a8a40,transparent_40%),radial-gradient(circle_at_80%_20%,#F15A2430,transparent_40%)]" />
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-
           {/* GRID */}
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
-
             {/* ✅ LEFT (FORCED LEFT ALIGN) */}
             <div className="text-left">
-
               {/* TAGS */}
               <div className="flex gap-2 mb-5 flex-wrap">
                 <span className="bg-green-500/10 text-green-400 px-3 py-1 rounded-full text-xs flex items-center gap-1">
@@ -120,26 +116,14 @@ const CourseHero = ({ course }) => {
                 >
                   Book This Course <ChevronRight size={16} />
                 </button>
-
-                <button 
-                  onClick={() => {
-                    const element = document.getElementById('dates');
-                    if (element) element.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="border border-white/20 px-7 py-3 rounded-full text-sm text-white/80 hover:bg-white/5 transition flex items-center gap-2"
-                >
-                  <Calendar size={16} /> View Dates
-                </button>
               </div>
             </div>
 
             {/* ✅ RIGHT CARD (FIXED POSITION) */}
             <div className="relative w-full flex justify-center lg:justify-end">
-
               <div className="absolute -inset-8 bg-orange-500/10 blur-3xl rounded-3xl hidden lg:block" />
 
               <div className="relative w-full max-w-[380px] rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-
                 {/* IMAGE */}
                 <div className="relative rounded-xl overflow-hidden">
                   <img
@@ -172,7 +156,6 @@ const CourseHero = ({ course }) => {
 
                   {/* INFO */}
                   <div className="mt-4 space-y-3 text-sm">
-
                     <div className="flex justify-between">
                       <div className="flex items-center gap-2 text-white/50">
                         <Clock size={14} /> Duration
@@ -185,8 +168,17 @@ const CourseHero = ({ course }) => {
                         <Calendar size={14} /> Next Date
                       </div>
                       <span className="text-white">
-                        {course.sessions?.find(s => s.availabilityStatus !== 'Sold Out')?.startDate 
-                          ? new Date(course.sessions.find(s => s.availabilityStatus !== 'Sold Out').startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+                        {course.sessions?.find(
+                          (s) => s.availabilityStatus !== "Sold Out",
+                        )?.startDate
+                          ? new Date(
+                              course.sessions.find(
+                                (s) => s.availabilityStatus !== "Sold Out",
+                              ).startDate,
+                            ).toLocaleDateString("en-GB", {
+                              day: "numeric",
+                              month: "short",
+                            })
                           : "TBC"}
                       </span>
                     </div>
@@ -204,7 +196,6 @@ const CourseHero = ({ course }) => {
                       </div>
                       <span className="text-white">{displayPassRate}</span>
                     </div>
-
                   </div>
 
                   {/* GUARANTEE */}
@@ -216,16 +207,15 @@ const CourseHero = ({ course }) => {
                           {course.guarantee?.title || "Training Guarantee"}
                         </p>
                         <p className="text-xs text-white/50">
-                          {course.guarantee?.description || "Free exam retakes if you don't pass first time"}
+                          {course.guarantee?.description ||
+                            "Free exam retakes if you don't pass first time"}
                         </p>
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </section>
