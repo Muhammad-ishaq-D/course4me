@@ -44,7 +44,7 @@ const SettingsTab = () => {
     return String(email)
       .toLowerCase()
       .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       );
   };
 
@@ -60,7 +60,8 @@ const SettingsTab = () => {
     } else if (!validateEmail(personalInfo.email)) {
       newErrors.email = "Invalid email format";
     }
-    if (!personalInfo.phone.trim()) newErrors.phone = "Phone number is required";
+    if (!personalInfo.phone.trim())
+      newErrors.phone = "Phone number is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -74,7 +75,9 @@ const SettingsTab = () => {
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       console.error("Update profile error:", err);
-      setErrors({ api: err.response?.data?.message || "Failed to update profile" });
+      setErrors({
+        api: err.response?.data?.message || "Failed to update profile",
+      });
     } finally {
       setLoading({ ...loading, personal: false });
     }
@@ -112,7 +115,9 @@ const SettingsTab = () => {
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
       console.error("Update password error:", err);
-      setErrors({ passApi: err.response?.data?.message || "Failed to update password" });
+      setErrors({
+        passApi: err.response?.data?.message || "Failed to update password",
+      });
     } finally {
       setLoading({ ...loading, password: false });
     }
@@ -120,16 +125,19 @@ const SettingsTab = () => {
 
   const inputClasses = (error) => `
     w-full px-4 py-3 rounded-xl border transition-all duration-200 outline-none
-    ${error 
-      ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100" 
-      : "border-gray-200 bg-gray-50 focus:border-[#F15A24] focus:ring-4 focus:ring-orange-50 focus:bg-white"
+    ${
+      error
+        ? "border-red-300 bg-red-50 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+        : "border-gray-200 bg-gray-50 focus:border-[#F15A24] focus:ring-4 focus:ring-orange-50 focus:bg-white"
     }
   `;
 
   return (
     <div className="max-w-4xl mx-auto space-y-10">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Account Settings</h2>
+        <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+          Account Settings
+        </h2>
         {success && (
           <div className="bg-green-100 text-green-700 px-4 py-2 rounded-lg font-medium animate-bounce shadow-sm">
             {success}
@@ -145,50 +153,82 @@ const SettingsTab = () => {
               <User size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-900">Personal Information</h3>
-              <p className="text-gray-500 text-sm mt-0.5">Update your contact details and profile info</p>
+              <h3 className="text-xl font-bold text-gray-900">
+                Personal Information
+              </h3>
+              <p className="text-gray-500 text-sm mt-0.5">
+                Update your contact details and profile info
+              </p>
             </div>
           </div>
         </div>
 
         <form onSubmit={handlePersonalInfoSubmit} className="p-8 space-y-8">
-          {errors.api && <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium">{errors.api}</div>}
-          
+          {errors.api && (
+            <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium">
+              {errors.api}
+            </div>
+          )}
+
           <div className="space-y-2">
-            <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Full Name</label>
+            <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">
+              Full Name
+            </label>
             <input
               type="text"
               value={personalInfo.name}
-              onChange={(e) => setPersonalInfo({ ...personalInfo, name: e.target.value })}
+              onChange={(e) =>
+                setPersonalInfo({ ...personalInfo, name: e.target.value })
+              }
               className={inputClasses(errors.name)}
               placeholder="James Mitchell"
             />
-            {errors.name && <p className="text-red-500 text-xs font-semibold ml-1">{errors.name}</p>}
+            {errors.name && (
+              <p className="text-red-500 text-xs font-semibold ml-1">
+                {errors.name}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Email Address</label>
+              <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">
+                Email Address
+              </label>
               <input
                 type="email"
                 value={personalInfo.email}
-                onChange={(e) => setPersonalInfo({ ...personalInfo, email: e.target.value })}
+                onChange={(e) =>
+                  setPersonalInfo({ ...personalInfo, email: e.target.value })
+                }
                 className={inputClasses(errors.email)}
                 placeholder="james.mitchell@email.com"
               />
-              {errors.email && <p className="text-red-500 text-xs font-semibold ml-1">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-xs font-semibold ml-1">
+                  {errors.email}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Phone Number</label>
+              <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">
+                Phone Number
+              </label>
               <input
                 type="tel"
                 value={personalInfo.phone}
-                onChange={(e) => setPersonalInfo({ ...personalInfo, phone: e.target.value })}
+                onChange={(e) =>
+                  setPersonalInfo({ ...personalInfo, phone: e.target.value })
+                }
                 className={inputClasses(errors.phone)}
                 placeholder="07911 234 567"
               />
-              {errors.phone && <p className="text-red-500 text-xs font-semibold ml-1">{errors.phone}</p>}
+              {errors.phone && (
+                <p className="text-red-500 text-xs font-semibold ml-1">
+                  {errors.phone}
+                </p>
+              )}
             </div>
           </div>
 
@@ -198,7 +238,11 @@ const SettingsTab = () => {
               disabled={loading.personal}
               className="bg-[#F15A24] hover:bg-[#D94E1F] disabled:bg-orange-300 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-orange-100 transition-all flex items-center justify-center gap-2 active:scale-95"
             >
-              {loading.personal ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
+              {loading.personal ? (
+                <Loader2 className="animate-spin" size={20} />
+              ) : (
+                <Save size={20} />
+              )}
               {loading.personal ? "Saving..." : "Save Changes"}
             </button>
           </div>
@@ -213,43 +257,65 @@ const SettingsTab = () => {
               <Lock size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-900">Change Password</h3>
-              <p className="text-gray-500 text-sm mt-0.5">Ensure your account is using a long, random password</p>
+              <h3 className="text-xl font-bold text-gray-900">
+                Change Password
+              </h3>
+              <p className="text-gray-500 text-sm mt-0.5">
+                Ensure your account is using a long, random password
+              </p>
             </div>
           </div>
         </div>
 
         <form onSubmit={handlePasswordSubmit} className="p-8 space-y-6">
-          {errors.passApi && <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium">{errors.passApi}</div>}
-          
+          {errors.passApi && (
+            <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium">
+              {errors.passApi}
+            </div>
+          )}
+
           <div className="space-y-2">
-            <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Current Password</label>
+            <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">
+              Current Password
+            </label>
             <div className="relative">
               <input
                 type={showPass.current ? "text" : "password"}
                 value={passwords.current}
-                onChange={(e) => setPasswords({ ...passwords, current: e.target.value })}
+                onChange={(e) =>
+                  setPasswords({ ...passwords, current: e.target.value })
+                }
                 className={inputClasses(errors.current)}
                 placeholder="••••••••"
               />
               <button
                 type="button"
-                onClick={() => setShowPass({ ...showPass, current: !showPass.current })}
+                onClick={() =>
+                  setShowPass({ ...showPass, current: !showPass.current })
+                }
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
                 {showPass.current ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
-            {errors.current && <p className="text-red-500 text-xs font-semibold ml-1">{errors.current}</p>}
+            {errors.current && (
+              <p className="text-red-500 text-xs font-semibold ml-1">
+                {errors.current}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">New Password</label>
+            <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">
+              New Password
+            </label>
             <div className="relative">
               <input
                 type={showPass.new ? "text" : "password"}
                 value={passwords.new}
-                onChange={(e) => setPasswords({ ...passwords, new: e.target.value })}
+                onChange={(e) =>
+                  setPasswords({ ...passwords, new: e.target.value })
+                }
                 className={inputClasses(errors.new)}
                 placeholder="••••••••"
               />
@@ -261,28 +327,42 @@ const SettingsTab = () => {
                 {showPass.new ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
-            {errors.new && <p className="text-red-500 text-xs font-semibold ml-1">{errors.new}</p>}
+            {errors.new && (
+              <p className="text-red-500 text-xs font-semibold ml-1">
+                {errors.new}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Confirm New Password</label>
+            <label className="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">
+              Confirm New Password
+            </label>
             <div className="relative">
               <input
                 type={showPass.confirm ? "text" : "password"}
                 value={passwords.confirm}
-                onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })}
+                onChange={(e) =>
+                  setPasswords({ ...passwords, confirm: e.target.value })
+                }
                 className={inputClasses(errors.confirm)}
                 placeholder="••••••••"
               />
               <button
                 type="button"
-                onClick={() => setShowPass({ ...showPass, confirm: !showPass.confirm })}
+                onClick={() =>
+                  setShowPass({ ...showPass, confirm: !showPass.confirm })
+                }
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
                 {showPass.confirm ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
-            {errors.confirm && <p className="text-red-500 text-xs font-semibold ml-1">{errors.confirm}</p>}
+            {errors.confirm && (
+              <p className="text-red-500 text-xs font-semibold ml-1">
+                {errors.confirm}
+              </p>
+            )}
           </div>
 
           <div className="pt-4">
@@ -291,7 +371,11 @@ const SettingsTab = () => {
               disabled={loading.password}
               className="bg-[#2D2D2D] hover:bg-black disabled:bg-gray-400 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-gray-100 transition-all flex items-center justify-center gap-2 active:scale-95"
             >
-              {loading.password ? <Loader2 className="animate-spin" size={20} /> : <KeyRound size={20} />}
+              {loading.password ? (
+                <Loader2 className="animate-spin" size={20} />
+              ) : (
+                <KeyRound size={20} />
+              )}
               {loading.password ? "Updating..." : "Update Password"}
             </button>
           </div>

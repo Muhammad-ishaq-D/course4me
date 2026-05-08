@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   X,
   Search,
@@ -11,7 +10,6 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { courses } from "../../data/courseData";
-import courseService from "../../api/services/courseService";
 import liveTrainingVideo from "../../assets/home/live-training.mp4";
 import doorSupervisorVideo from "../../assets/home/security_guard.mp4";
 import cctvVideo from "../../assets/home/cctv-operations.mp4";
@@ -28,229 +26,7 @@ import {
   Zap,
 } from "lucide-react";
 import { motion } from "framer-motion";
-
-const TABS = [
-  "All Courses",
-  "Popular",
-  "SIA Training",
-  "First Aid",
-  "Health & Safety",
-  "Specialist",
-];
-
-/* ─── Journey Modal ─── */
-const JourneyModal = ({ isOpen, onClose }) => {
-  const navigate = useNavigate();
-  const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("All Courses");
-  const [coursesList, setCoursesList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Lock body scroll
-  useEffect(() => {
-    if (isOpen) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        setIsLoading(true);
-        const response = await courseService.getAllCourses();
-        // The API returns { success: true, count: N, data: [...] }
-        setCoursesList(response.data.data || []);
-      } catch (err) {
-        console.error("Error fetching courses:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    if (isOpen) {
-      fetchCourses();
-    }
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
-  // Map icons to categories
-  const getIconForCategory = (category) => {
-    switch (category) {
-      case "SIA Training":
-        return { icon: Shield, bg: "bg-blue-600" };
-      case "First Aid":
-        return { icon: Heart, bg: "bg-red-500" };
-      case "Health & Safety":
-        return { icon: Users, bg: "bg-green-600" };
-      case "Specialist":
-        return { icon: Camera, bg: "bg-purple-600" };
-      default:
-        return { icon: Shield, bg: "bg-gray-600" };
-    }
-  };
-
-  const filtered = (coursesList || []).filter((c) => {
-    if (!c) return false;
-    const matchesTab =
-      activeTab === "All Courses" ||
-      (activeTab === "Popular" && c.isPopular) ||
-      c.category === activeTab;
-    const matchesSearch = (c.title || "")
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    return matchesTab && matchesSearch;
-  });
-
-  const handleCourseClick = (courseId) => {
-    onClose();
-    navigate(`/course/${courseId}/book`);
-  };
-
-  return (
-    <>
-      {/* Overlay */}
-      <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998]"
-        onClick={onClose}
-      />
-
-      {/* Modal */}
-      <div
-        className="fixed inset-x-0 top-1/2 -translate-y-1/2 mx-auto z-[9999] w-full max-w-[650px] px-4"
-        style={{ maxHeight: "90vh" }}
-      >
-        <div
-          className="bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col"
-          style={{ maxHeight: "90vh" }}
-        >
-          {/* Dark Header */}
-          <div className="bg-[#1C1C1C] px-7 py-5 flex items-start justify-between shrink-0">
-            <div>
-              <h2 className="text-xl font-extrabold text-white">
-                Start Your Journey
-              </h2>
-              <p className="text-gray-400 text-sm mt-0.5">
-                Find your perfect course in 4 easy steps
-              </p>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-white transition-colors mt-0.5"
-            >
-              <X size={22} />
-            </button>
-          </div>
-
-          {/* Body */}
-          <div className="overflow-y-auto flex-1 px-6 py-5">
-            {/* Search */}
-            <div className="relative mb-5">
-              <Search
-                size={16}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search courses..."
-                className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl text-[14px] text-[#1C1C1C] outline-none focus:ring-2 focus:ring-[#FF5421]/30 focus:border-[#FF5421] placeholder:text-gray-400 transition-all"
-              />
-            </div>
-
-            {/* Category Tabs */}
-            <div className="flex items-center gap-2 flex-wrap mb-6">
-              {TABS.map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-1.5 rounded-full text-[13px] font-semibold transition-all whitespace-nowrap ${
-                    activeTab === tab
-                      ? "bg-[#1C1C1C] text-white"
-                      : "border border-gray-200 text-gray-600 hover:border-gray-400"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            {/* Course List */}
-            <div className="space-y-3">
-              {isLoading ? (
-                <div className="text-center py-10 text-gray-400 text-sm">
-                  Loading courses...
-                </div>
-              ) : filtered.length === 0 ? (
-                <div className="text-center py-10 text-gray-400 text-sm">
-                  No courses found matching "
-                  <span className="font-bold">{search}</span>"
-                </div>
-              ) : (
-                filtered.map((course) => {
-                  const { icon: Icon, bg: iconBg } = getIconForCategory(
-                    course.category,
-                  );
-                  return (
-                    <button
-                      key={course._id}
-                      onClick={() => handleCourseClick(course._id)}
-                      className="w-full flex items-center gap-4 border border-gray-150 rounded-xl px-4 py-3.5 hover:border-gray-300 hover:shadow-sm transition-all group text-left"
-                    >
-                      {/* Icon */}
-                      <div
-                        className={`w-12 h-12 rounded-xl ${iconBg} flex items-center justify-center shrink-0`}
-                      >
-                        <Icon size={22} className="text-white" />
-                      </div>
-
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center flex-wrap gap-2 mb-1">
-                          <span className="text-[14px] font-extrabold text-[#1C1C1C]">
-                            {course.title}
-                          </span>
-                          {course.isPopular && (
-                            <span className="inline-block bg-[#FF5421] text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full">
-                              Popular
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2 text-[13px] text-gray-500">
-                          <span>{course.duration}</span>
-                          <span className="text-gray-300">•</span>
-                          <Star
-                            size={12}
-                            className="text-yellow-400 fill-yellow-400"
-                          />
-                          <span className="font-semibold text-gray-700">
-                            4.9
-                          </span>
-                          <span className="text-gray-300">•</span>
-                          <span className="text-[#FF5421] font-bold">
-                            from £{course.pricing?.basePrice}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Arrow */}
-                      <ChevronRight
-                        size={18}
-                        className="text-gray-300 group-hover:text-[#FF5421] transition-colors shrink-0"
-                      />
-                    </button>
-                  );
-                })
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+import JourneyModal from "../modals/JourneyModal";
 
 /* ─── Video Player ─── */
 const VideoPlayer = ({ src, label, className = "" }) => (
@@ -325,7 +101,7 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-[#FF5421] hover:bg-[#E64A1A] text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300 transform hover:scale-105"
+                className="bg-[#FF5421] cursor-pointer hover:bg-[#E64A1A] text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300 transform hover:scale-105"
               >
                 Get Started
               </button>
@@ -334,7 +110,7 @@ const HeroSection = () => {
                   const element = document.getElementById("video-testimonials");
                   if (element) element.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="border-2 border-[#28262633] hover:border-gray-400 font-semibold py-3 px-8 rounded-full flex items-center gap-2 bg-[#FFFFFF1A] backdrop-blur-sm"
+                className="border-2 cursor-pointer border-[#28262633] hover:border-gray-400 font-semibold py-3 px-8 rounded-full flex items-center gap-2 bg-[#FFFFFF1A] backdrop-blur-sm"
               >
                 <Play className="w-4 h-5 text-[#00A3FF]" />
                 What We Do

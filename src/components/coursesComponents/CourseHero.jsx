@@ -51,13 +51,13 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
                 className="w-full h-[58px] bg-gradient-to-r from-white/[0.03] to-white/[0.02] border border-white/[0.06] rounded-xl pl-12 pr-36 text-white placeholder:text-white/30 focus:outline-none"
               />
 
-              <button className="absolute right-2 top-1/2 -translate-y-1/2 h-[46px] px-7 bg-[#F65B15] text-white rounded-lg text-sm font-semibold hover:bg-[#e25512] transition">
+              <button className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 h-[46px] px-7 bg-[#F65B15] text-white rounded-lg text-sm font-semibold hover:bg-[#e25512] transition">
                 Search
               </button>
             </div>
 
             {/* Download Button */}
-            <button className="flex items-center gap-2 border border-white/15 text-white/80 px-5 py-3 rounded-lg text-sm bg-white/[0.02] hover:bg-white/5 transition mb-10">
+            <button className="flex items-center cursor-pointer gap-2 border border-white/15 text-white/80 px-5 py-3 rounded-lg text-sm bg-white/[0.02] hover:bg-white/5 transition mb-10">
               <Download size={16} />
               Download career guide
             </button>
@@ -150,7 +150,7 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
               activeTab === "all"
                 ? "text-[#F65B15] border-[#F65B15]"
                 : "text-[#141414]/60 border-transparent hover:text-[#141414]"
-            } font-medium text-sm py-4 border-b-2 transition-all`}
+            } font-medium text-sm py-4 cursor-pointer border-b-2 transition-all`}
           >
             All Courses
           </button>
@@ -160,7 +160,7 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
               activeTab === "popular"
                 ? "text-[#F65B15] border-[#F65B15]"
                 : "text-[#141414]/60 border-transparent hover:text-[#141414]"
-            } font-semibold text-sm py-4 border-b-2 transition-all`}
+            } font-semibold text-sm py-4 cursor-pointer border-b-2 transition-all`}
           >
             Popular Courses
           </button>
@@ -170,7 +170,7 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
               activeTab === "reviews"
                 ? "text-[#F65B15] border-[#F65B15]"
                 : "text-[#141414]/60 border-transparent hover:text-[#141414]"
-            } font-medium text-sm py-4 border-b-2 transition-all`}
+            } font-medium text-sm py-4 cursor-pointer  border-b-2 transition-all`}
           >
             Reviews
           </button>

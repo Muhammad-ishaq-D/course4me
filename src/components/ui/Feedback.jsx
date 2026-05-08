@@ -41,32 +41,37 @@ const Feedback = () => {
   return (
     <aside className="w-full lg:w-[300px] space-y-5">
       {/* 1. Guarantee Box */}
-      <div className="bg-[#F15A24] rounded-[24px] p-6 text-white relative overflow-hidden group shadow-xl shadow-[#F15A24]/20">
+      <div className="bg-[#F15A24] rounded-[24px] p-7 text-white relative overflow-hidden group shadow-xl shadow-[#F15A24]/20 border border-white/10">
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-3">
-            <ShieldCheck size={18} className="text-white/80" />
-            <span className="text-[10px] font-black uppercase tracking-[2px] text-white/80">
-              SIA Protection
+          {/* Top Label */}
+          <div className="flex items-center gap-2 mb-4">
+            <ShieldCheck size={16} className="text-white/90" />
+            <span className="text-[11px] font-bold uppercase tracking-[1.5px] text-white/90">
+              SIA Gold Standard
             </span>
           </div>
 
-          <h3 className="text-[20px] font-black leading-[1.2] mb-5">
-            Zero Risk <br />
-            <span className="text-white/90 font-medium text-[16px]">
-              Training Guarantee
-            </span>
+          {/* Main Heading */}
+          <h3 className="text-[24px] font-black leading-tight mb-2 tracking-tight">
+            Zero Risk Training
           </h3>
 
-          <button className="bg-white text-[#F15A24] text-[12px] font-black px-6 py-3 rounded-xl active:scale-95 transition-all shadow-lg">
-            LEARN MORE
+          {/* Supporting Text */}
+          <p className="text-white/80 text-[14px] font-medium mb-6 leading-relaxed max-w-[180px]">
+            Your success is guaranteed, or we'll train you for free.
+          </p>
+
+          {/* CTA Button */}
+          <button className="bg-white text-[#F15A24] hover:bg-[#FFF5F2] text-[12px] font-bold px-7 py-3.5 rounded-xl active:scale-95 transition-all shadow-md flex items-center gap-2">
+            VIEW GUARANTEE
           </button>
         </div>
 
-        <div className="absolute -bottom-4 -right-4 text-white/10 rotate-12 transition-transform group-hover:scale-110 duration-500">
-          <CheckCircle2 size={120} strokeWidth={1} />
+        {/* Background Decor Icon */}
+        <div className="absolute -bottom-6 -right-6 text-white/10 -rotate-12 transition-transform group-hover:rotate-0 group-hover:scale-110 duration-700">
+          <ShieldCheck size={160} strokeWidth={0.5} />
         </div>
       </div>
-
       {/* 2. Testimonial Slider */}
       <div className="bg-white rounded-[24px] border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all duration-500">
         <div className="text-[#F15A24] mb-4">
@@ -173,12 +178,30 @@ const Feedback = () => {
             <Phone size={20} fill="currentColor" />
           </div>
 
-          <div>
-            <h3 className="font-bold text-white text-[15px]">Need Help?</h3>
+          <div className="space-y-3">
+            <h3 className="font-bold text-white text-[15px] mb-2">
+              Need Help?
+            </h3>
 
-            <p className="text-[16px] font-black text-[#F15A24]">
-              0800 689 4621
-            </p>
+            <div className="space-y-2">
+              <button
+                // href="tel:08006894621"
+                className="flex items-center gap-2 group"
+              >
+                <span className="text-[18px] font-black text-[#F15A24] group-hover:text-[#ff7241] transition-colors">
+                  0800 689 4621
+                </span>
+              </button>
+
+              <button
+                // href="mailto:info@courses4me.co.uk"
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
+              >
+                <span className="text-[14px] font-medium border-b border-transparent group-hover:border-white/20 pb-0.5">
+                  info@courses4me.co.uk
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

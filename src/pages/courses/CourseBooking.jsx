@@ -190,44 +190,56 @@ const CourseBooking = () => {
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* 4. Left Sidebar (Filters) */}
-          <aside className="w-full lg:w-50 shrink-0">
-            <h3 className="text-xs font-bold text-[#1C1C1C] tracking-wider uppercase mb-5">
-              FILTERS
+          <aside className="w-full lg:w-64 shrink-0">
+            <h3 className="text-[11px] font-black text-gray-400 tracking-[2px] uppercase mb-5">
+              Sort Results By
             </h3>
-            <div className="space-y-4">
-              {["Closest", "Cheapest", "Earliest"].map((option) => (
-                <label
-                  key={option}
-                  className="flex items-center gap-4 cursor-pointer group"
-                >
-                  <div
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${filter === option ? "border-[#F15A24]" : "border-gray-200 group-hover:border-gray-300"}`}
+
+            <div className="flex flex-col gap-2">
+              {["Closest", "Cheapest", "Earliest"].map((option) => {
+                const isActive = filter === option;
+                return (
+                  <button
+                    key={option}
+                    onClick={() => setFilter(option)}
+                    className={`flex items-center justify-between px-5 py-4 rounded-2xl border-2 transition-all duration-300 group ${
+                      isActive
+                        ? "border-[#F15A24] bg-[#F15A24]/5 shadow-sm"
+                        : "border-gray-100 bg-white hover:border-gray-200"
+                    }`}
                   >
-                    {filter === option && (
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
-                    )}
-                  </div>
-                  <input
-                    type="radio"
-                    name="filter"
-                    className="hidden"
-                    checked={filter === option}
-                    onChange={() => setFilter(option)}
-                  />
-                  <span
-                    className={`text-[15px] font-bold ${filter === option ? "text-[#F15A24]" : "text-gray-600"}`}
-                  >
-                    {option}
-                  </span>
-                </label>
-              ))}
+                    <span
+                      className={`text-[15px] font-bold ${isActive ? "text-[#F15A24]" : "text-gray-600"}`}
+                    >
+                      {option}
+                    </span>
+
+                    {/* Custom Radio Indicator */}
+                    <div
+                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                        isActive
+                          ? "border-[#F15A24] bg-[#F15A24]"
+                          : "border-gray-200"
+                      }`}
+                    >
+                      {isActive && (
+                        <div className="w-2 h-2 rounded-full bg-white" />
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-            <p className="text-[13px] text-[#F15A24] mt-8 leading-relaxed">
-              <span className="cursor-pointer hover:underline">
-                Add your postcode
-              </span>{" "}
-              to enable filters
-            </p>
+
+            {/* Postcode Alert Box */}
+            <div className="mt-8 p-4 rounded-2xl bg-gray-50 border border-dashed border-gray-200">
+              <p className="text-[13px] text-gray-500 leading-relaxed">
+                <button className="text-[#F15A24] font-bold hover:underline">
+                  Add your postcode
+                </button>{" "}
+                to unlock distance-based filters.
+              </p>
+            </div>
           </aside>
 
           {/* 5. Center Content (Search & Locations) */}

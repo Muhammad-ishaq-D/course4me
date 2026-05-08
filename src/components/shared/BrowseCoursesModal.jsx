@@ -222,7 +222,7 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
                     navigate("/courses");
                     onClose();
                   }}
-                  className="w-full mt-6 md:mt-8 bg-[#F15A24] text-white font-bold py-3 md:py-4 rounded-full shadow-lg hover:shadow-[#F15A24]/30 hover:brightness-110 transition-all active:scale-95"
+                  className="w-full mt-6 md:mt-8 cursor-pointer bg-[#F15A24] text-white font-bold py-3 md:py-4 rounded-full shadow-lg hover:shadow-[#F15A24]/30 hover:brightness-110 transition-all active:scale-95"
                 >
                   Explore All Courses
                 </button>

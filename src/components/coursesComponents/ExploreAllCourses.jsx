@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import CourseCard from './CourseCard';
-import courseService from '../../api/services/courseService';
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import CourseCard from "./CourseCard";
+import courseService from "../../api/services/courseService";
+import Loader from "../ui/Loader";
 
 const categories = [
   "All Courses",
@@ -10,12 +11,12 @@ const categories = [
   "First Aid",
   "Health & Safety",
   "Specialist",
-  "Hospitality"
+  "Hospitality",
 ];
 
 const ExploreAllCourses = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const categoryParam = searchParams.get('category');
+  const categoryParam = searchParams.get("category");
 
   const [activeCategory, setActiveCategory] = useState("All Courses");
   const [courses, setCourses] = useState([]);
@@ -35,9 +36,8 @@ const ExploreAllCourses = () => {
 
         const data = response.data?.data || [];
 
-
         // Map backend data to frontend requirements
-        const mappedCourses = data.map(course => ({
+        const mappedCourses = data.map((course) => ({
           id: course._id,
           title: course.title,
           category: course.category,
@@ -50,14 +50,23 @@ const ExploreAllCourses = () => {
           booked: course.bookedCount,
           passRate: course.passRate,
           // Find first available session for date
-          date: course.sessions?.find(s => s.availabilityStatus !== 'Sold Out')?.startDate
-            ? new Date(course.sessions.find(s => s.availabilityStatus !== 'Sold Out').startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-            : undefined
+          date: course.sessions?.find(
+            (s) => s.availabilityStatus !== "Sold Out",
+          )?.startDate
+            ? new Date(
+                course.sessions.find((s) => s.availabilityStatus !== "Sold Out")
+                  .startDate,
+              ).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+            : undefined,
         }));
 
         setCourses(mappedCourses);
       } catch (error) {
-        console.error('Error fetching courses:', error);
+        console.error("Error fetching courses:", error);
       } finally {
         setLoading(false);
       }
@@ -88,9 +97,12 @@ const ExploreAllCourses = () => {
   return (
     <section className="py-20 px-4 md:px-8 lg:px-16 bg-white">
       <div className="max-w-7xl mx-auto text-left">
-        <h2 className="text-3xl font-bold text-[#141414] mb-4">Explore all courses</h2>
+        <h2 className="text-3xl font-bold text-[#141414] mb-4">
+          Explore all courses
+        </h2>
         <p className="text-[#141414]/60 mb-10 max-w-2xl">
-          Browse our wide range of training courses across various industries to master professional skills.
+          Browse our wide range of training courses across various industries to
+          master professional skills.
         </p>
 
         {/* Categories */}
@@ -99,10 +111,11 @@ const ExploreAllCourses = () => {
             <button
               key={category}
               onClick={() => handleCategoryChange(category)}
-              className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all ${activeCategory === category
-                ? "bg-[#141414] text-white shadow-lg"
-                : "bg-white text-[#141414] border border-[#EEEEEE] hover:bg-[#F8FAFC]"
-                }`}
+              className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all ${
+                activeCategory === category
+                  ? "bg-[#141414] text-white shadow-lg"
+                  : "bg-white text-[#141414] cursor-pointer border border-[#EEEEEE] hover:bg-[#F8FAFC]"
+              }`}
             >
               {category}
             </button>
@@ -111,10 +124,7 @@ const ExploreAllCourses = () => {
 
         {/* Filtered Grid */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-12 h-12 border-4 border-[#141414]/20 border-t-[#141414] rounded-full animate-spin"></div>
-            <p className="mt-4 text-gray-500 font-medium">Loading courses...</p>
-          </div>
+          <Loader text="Loading Courses..." />
         ) : (
           <motion.div
             layout
@@ -140,7 +150,9 @@ const ExploreAllCourses = () => {
                   animate={{ opacity: 1 }}
                   className="col-span-full py-20 text-center"
                 >
-                  <p className="text-gray-400">No courses available for this category.</p>
+                  <p className="text-gray-400">
+                    No courses available for this category.
+                  </p>
                 </motion.div>
               )}
             </AnimatePresence>

@@ -5,10 +5,11 @@ import { useAuth } from "../../../context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const LoginForm = () => {
+  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,17 +25,52 @@ const LoginForm = () => {
     return <ForgotPassword onBack={() => setShowForgotPassword(false)} />;
   }
 
+  const validateForm = () => {
+    let newErrors = {};
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Please enter a valid email";
+    }
+
+    // Password validation
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least  8 characters";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
     setError("");
+
+    // frontend validation first
+    if (!validateForm()) return;
+
+    setLoading(true);
 
     try {
       await login(formData);
       navigate(from, { replace: true });
     } catch (err) {
       console.error("Login error:", err);
-      setError(err.response?.data?.message || "Invalid email or password");
+
+      const message = err.response?.data?.message;
+
+      if (message === "Invalid credentials") {
+        setError("Email or password is incorrect");
+      } else {
+        setError(message || "Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
@@ -82,11 +118,16 @@ const LoginForm = () => {
                   type="email"
                   required
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   placeholder="john@email.com"
                   className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-orange-500 outline-none transition-all"
                 />
               </div>
+              {errors.email && (
+                <p className="text-red-500 text-xs ml-1">{errors.email}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -99,7 +140,9 @@ const LoginForm = () => {
                   type={showPassword ? "text" : "password"}
                   required
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   placeholder="••••••••"
                   className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-orange-500 outline-none transition-all"
                 />
@@ -111,6 +154,9 @@ const LoginForm = () => {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-xs ml-1">{errors.password}</p>
+              )}
             </div>
 
             <div className="flex items-center justify-between text-sm">
@@ -134,7 +180,11 @@ const LoginForm = () => {
               disabled={loading}
               className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-orange-400 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-lg shadow-orange-200 active:scale-95"
             >
-              {loading ? <Loader2 className="animate-spin" size={20} /> : <User size={18} />}
+              {loading ? (
+                <Loader2 className="animate-spin" size={20} />
+              ) : (
+                <User size={18} />
+              )}
               {loading ? "Signing In..." : "Sign In"}
             </button>
           </form>

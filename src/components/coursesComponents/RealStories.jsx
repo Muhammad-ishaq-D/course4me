@@ -38,7 +38,6 @@ const RealStories = () => {
   return (
     <section className="py-20 px-6 lg:px-16 bg-[#F5F7FA]">
       <div className="max-w-7xl mx-auto">
-
         {/* TITLE */}
         <h2 className="text-[34px] font-bold text-[#1A1A1A] mb-12">
           Real stories from real people
@@ -46,41 +45,156 @@ const RealStories = () => {
 
         {/* TOP GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
-
           {/* TRUSTPILOT */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <span className="bg-[#FFEAEA] text-[#F65B15] text-[10px] px-2 py-1 rounded font-bold uppercase">
-              TOTAL
-            </span>
-            <h3 className="text-[32px] font-bold mt-4">34,032</h3>
-            <p className="text-sm text-gray-500 mb-3">reviews</p>
+          <div className="relative h-full min-h-80 bg-white rounded-[28px] border border-[#F3E3DC] p-7 overflow-hidden transition-all duration-300 hover:shadow-[0_18px_40px_rgba(241,90,36,0.12)]">
+            {/* GLOW */}
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F15A24]/5 rounded-full blur-3xl" />
 
-            <div className="flex items-center gap-1 mb-2">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={14} fill="#00b67a" color="#00b67a" />
-              ))}
-              <span className="text-sm font-medium ml-2">4.6 out of 5</span>
+            {/* HEADER */}
+            <div className="flex items-start justify-between relative z-10">
+              <div>
+                <span className="inline-flex items-center gap-2 bg-[#FFF3EE] text-[#F15A24] text-[11px] px-3 py-1.5 rounded-full font-semibold uppercase tracking-[0.15em]">
+                  Total Reviews
+                </span>
+
+                <h3 className="text-[44px] leading-none font-bold text-[#111111] mt-5">
+                  34,032
+                </h3>
+
+                <p className="text-sm text-[#8A8A8A] mt-1">
+                  Verified Student Reviews
+                </p>
+              </div>
+
+              {/* ICON */}
+              <div className="w-14 h-14 rounded-2xl bg-[#FFF4EF] border border-[#F15A24]/10 flex items-center justify-center shadow-sm">
+                <span className="text-[24px] font-bold text-[#F15A24]">★</span>
+              </div>
             </div>
 
-            <p className="text-xs text-gray-400">Excellent Trustpilot reviews</p>
+            {/* RATING */}
+            <div className="mt-8 relative z-10">
+              {/* STARS */}
+              <div className="flex items-center gap-1.5">
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-8 h-8 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-sm"
+                  >
+                    <Star
+                      size={15}
+                      fill="white"
+                      color="white"
+                      strokeWidth={2}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* SCORE BELOW STARS */}
+              <div className="mt-4">
+                <h4 className="text-[24px] font-bold text-[#111111] leading-none">
+                  4.6/5 Rating
+                </h4>
+
+                <p className="text-xs text-[#8A8A8A] mt-1">
+                  Based on verified students
+                </p>
+              </div>
+            </div>
+
+            {/* FOOTER */}
+            <div className="mt-7 pt-5 border-t border-[#F4E7E2] flex items-center justify-between relative z-10">
+              <div>
+                <p className="text-sm font-semibold text-[#1A1A1A]">
+                  Excellent Student Satisfaction
+                </p>
+
+                <p className="text-xs text-[#8A8A8A] mt-1">
+                  Trusted by thousands of learners
+                </p>
+              </div>
+
+              <div className="w-10 h-10 rounded-full bg-[#F15A24] text-white flex items-center justify-center text-sm font-bold shadow-lg">
+                ✓
+              </div>
+            </div>
           </div>
 
-          {/* GOOGLE */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <span className="bg-[#EAF2FF] text-[#2563EB] text-[10px] px-2 py-1 rounded font-bold uppercase">
-              GOOGLE
-            </span>
-            <h3 className="text-[32px] font-bold mt-4">9,511</h3>
-            <p className="text-sm text-gray-500 mb-3">reviews</p>
+          {/* GOOGLE REVIEWS */}
+          <div className="relative h-full min-h-80 bg-white rounded-[28px] border border-[#F3E3DC] p-7 overflow-hidden transition-all duration-300 hover:shadow-[0_18px_40px_rgba(241,90,36,0.12)]">
+            {/* GLOW */}
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F15A24]/5 rounded-full blur-3xl" />
 
-            <div className="flex items-center gap-1 mb-2">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={14} fill="#f59e0b" color="#f59e0b" />
-              ))}
-              <span className="text-sm font-medium ml-2">4.9 out of 5</span>
+            {/* HEADER */}
+            <div className="flex items-start justify-between relative z-10">
+              <div>
+                <span className="inline-flex items-center gap-2 bg-[#FFF3EE] text-[#F15A24] text-[11px] px-3 py-1.5 rounded-full font-semibold uppercase tracking-[0.15em]">
+                  Google Reviews
+                </span>
+
+                <h3 className="text-[44px] leading-none font-bold text-[#111111] mt-5">
+                  9,511
+                </h3>
+
+                <p className="text-sm text-[#8A8A8A] mt-1">
+                  Verified Student Reviews
+                </p>
+              </div>
+
+              {/* ICON */}
+              <div className="w-14 h-14 rounded-2xl bg-[#FFF4EF] border border-[#F15A24]/10 flex items-center justify-center shadow-sm">
+                <span className="text-[24px] font-bold text-[#F15A24]">G</span>
+              </div>
             </div>
 
-            <p className="text-xs text-gray-400">Go-getting</p>
+            {/* RATING */}
+            <div className="mt-8 relative z-10">
+              {/* STARS */}
+              <div className="flex items-center gap-1.5">
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-8 h-8 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-sm"
+                  >
+                    <Star
+                      size={15}
+                      fill="white"
+                      color="white"
+                      strokeWidth={2}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* SCORE BELOW STARS */}
+              <div className="mt-4">
+                <h4 className="text-[24px] font-bold text-[#111111] leading-none">
+                  4.9/5 Rating
+                </h4>
+
+                <p className="text-xs text-[#8A8A8A] mt-1">
+                  Average Student Feedback
+                </p>
+              </div>
+            </div>
+
+            {/* FOOTER */}
+            <div className="mt-7 pt-5 border-t border-[#F4E7E2] flex items-center justify-between relative z-10">
+              <div>
+                <p className="text-sm font-semibold text-[#1A1A1A]">
+                  Outstanding Learning Experience
+                </p>
+
+                <p className="text-xs text-[#8A8A8A] mt-1">
+                  Highly rated by our students
+                </p>
+              </div>
+
+              <div className="w-10 h-10 rounded-full bg-[#F15A24] text-white flex items-center justify-center text-sm font-bold shadow-lg">
+                ✓
+              </div>
+            </div>
           </div>
 
           {/* IMAGE 1 */}
@@ -107,27 +221,57 @@ const RealStories = () => {
         </div>
 
         {/* TESTIMONIALS */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {testimonials.map((t, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-gray-200 p-6">
+            <div
+              key={i}
+              className="relative bg-white rounded-[30px] p-6 pt-10 border border-[#F15A24]/10 shadow-[0_10px_30px_rgba(241,90,36,0.08)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(241,90,36,0.15)]"
+            >
+              {/* TOP RIGHT LETTER */}
+              <div className="absolute top-5 right-5">
+                <div className="w-[72px] h-[72px] rounded-full border-[6px] border-[#F15A24] bg-[#FFE7DE] flex items-center justify-center shadow-md">
+                  <span className="text-[28px] font-bold text-[#F15A24]">
+                    {t.name.charAt(0)}
+                  </span>
+                </div>
+              </div>
 
-              {/* STARS */}
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={14} fill="#00b67a" color="#00b67a" />
-                ))}
+              {/* CLIENT INFO */}
+              <div className="mb-5">
+                <h3 className="text-[22px] font-bold text-[#F15A24] leading-none">
+                  {t.name}
+                </h3>
+
+                <p className="text-[12px] text-[#8A8A8A] mt-2 font-medium">
+                  {t.role}
+                </p>
               </div>
 
               {/* TEXT */}
-              <p className="text-sm text-gray-700 leading-relaxed mb-6">
-                "{t.text}"
+              <p className="text-[13px] leading-[24px] text-[#666666] pr-3 min-h-[120px]">
+                {t.text}
               </p>
 
-              <div className="border-t pt-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gray-200" />
-                <div>
-                  <p className="font-semibold text-sm">{t.name}</p>
-                  <p className="text-xs text-gray-400">{t.role}</p>
+              {/* BOTTOM DESIGN */}
+              <div className="absolute left-0 bottom-0 flex items-end justify-between w-full">
+                {/* STARS SECTION */}
+                <div className="bg-[#F15A24] px-6 py-3 rounded-tr-[42px] flex items-center gap-1 shadow-lg">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      size={14}
+                      fill="#FFF"
+                      color="#FFF"
+                      strokeWidth={1.5}
+                    />
+                  ))}
+                </div>
+
+                {/* QUOTE */}
+                <div className="pr-5 pb-3">
+                  <span className="text-[#F15A24] text-[42px] font-black  block leading-none opacity-90">
+                    ❞
+                  </span>
                 </div>
               </div>
             </div>

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import CourseCard from './CourseCard';
-import courseService from '../../api/services/courseService';
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import CourseCard from "./CourseCard";
+import courseService from "../../api/services/courseService";
+import Loader from "../ui/Loader";
 
 const ExploreSiaCourses = () => {
   const [searchParams] = useSearchParams();
-  const categoryParam = searchParams.get('category');
-  
+  const categoryParam = searchParams.get("category");
+
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [counts, setCounts] = useState({});
@@ -16,15 +17,15 @@ const ExploreSiaCourses = () => {
       try {
         setLoading(true);
         const displayCategory = categoryParam || "SIA Training";
-        
-        const response = await courseService.getAllCourses({ 
+
+        const response = await courseService.getAllCourses({
           category: displayCategory,
-          status: 'Published'
+          status: "Published",
         });
-        
+
         const data = response.data?.data || [];
-        
-        const mappedCourses = data.map(course => ({
+
+        const mappedCourses = data.map((course) => ({
           id: course._id,
           title: course.title,
           category: course.category,
@@ -36,20 +37,29 @@ const ExploreSiaCourses = () => {
           reviews: course.reviewsCount,
           booked: course.bookedCount,
           passRate: course.passRate,
-          date: course.sessions?.find(s => s.availabilityStatus !== 'Sold Out')?.startDate 
-            ? new Date(course.sessions.find(s => s.availabilityStatus !== 'Sold Out').startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-            : undefined
+          date: course.sessions?.find(
+            (s) => s.availabilityStatus !== "Sold Out",
+          )?.startDate
+            ? new Date(
+                course.sessions.find((s) => s.availabilityStatus !== "Sold Out")
+                  .startDate,
+              ).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+            : undefined,
         }));
 
         setCourses(mappedCourses);
-        
+
         // Update count for display
-        setCounts(prev => ({
+        setCounts((prev) => ({
           ...prev,
-          [displayCategory]: `${data.length} ${data.length === 1 ? 'course' : 'courses'}`
+          [displayCategory]: `${data.length} ${data.length === 1 ? "course" : "courses"}`,
         }));
       } catch (error) {
-        console.error('Error fetching SIA courses:', error);
+        console.error("Error fetching SIA courses:", error);
       } finally {
         setLoading(false);
       }
@@ -74,10 +84,7 @@ const ExploreSiaCourses = () => {
         </h2>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-12 h-12 border-4 border-[#141414]/20 border-t-[#F65B15] rounded-full animate-spin"></div>
-            <p className="mt-4 text-gray-500 font-medium">Loading {displayCategory} courses...</p>
-          </div>
+          <Loader text="Loading Popular Courses..." />
         ) : courses.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
             {courses.map((course) => (
@@ -86,7 +93,9 @@ const ExploreSiaCourses = () => {
           </div>
         ) : (
           <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200">
-            <p className="text-gray-500 font-medium">No courses found in this category yet.</p>
+            <p className="text-gray-500 font-medium">
+              No courses found in this category yet.
+            </p>
           </div>
         )}
       </div>

@@ -1,7 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, TrendingUp } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, TrendingUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const CourseCard = ({
   id,
@@ -13,7 +13,7 @@ const CourseCard = ({
   date,
   category,
   duration,
-  isOnline = false
+  isOnline = false,
 }) => {
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const CourseCard = ({
           alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
-        
+
         {/* Badges */}
         <div className="absolute top-4 left-4 flex gap-2">
           <div className="bg-[#FF5C1B] text-white text-[10px] font-black px-3 py-1.5 rounded-lg flex items-center gap-1.5 uppercase tracking-tighter">
@@ -56,7 +56,7 @@ const CourseCard = ({
         <h3 className="text-white text-[20px] font-bold mb-3 tracking-tight leading-tight">
           {title}
         </h3>
-        
+
         <p className="text-[#A1A1A1] text-[14px] leading-[1.6] mb-6 line-clamp-3">
           {description}
         </p>
@@ -69,7 +69,8 @@ const CourseCard = ({
             </p>
             {date && (
               <p className="text-[#717171] text-[13px] font-medium">
-                Next Available: <span className="text-[#FF5C1B] font-bold">{date}</span>
+                Next Available:{" "}
+                <span className="text-[#FF5C1B] font-bold">{date}</span>
               </p>
             )}
           </div>
@@ -77,13 +78,13 @@ const CourseCard = ({
           <div className="flex gap-3 pt-1">
             <button
               onClick={() => navigate(`/booking/course?courseid=${id}`)}
-              className="flex-1 bg-[#FF5C1B] hover:bg-[#E84A0F] text-white text-[14px] font-extrabold py-3.5 rounded-xl transition-all active:scale-[0.98]"
+              className="flex-1 bg-[#FF5C1B] cursor-pointer hover:bg-[#E84A0F] text-white text-[14px] font-extrabold py-3.5 rounded-xl transition-all active:scale-[0.98]"
             >
               Book Now
             </button>
             <button
               onClick={() => navigate(`/course/${id}`)}
-              className="flex-1 flex items-center justify-center gap-2 border border-[#333333] hover:bg-white/5 text-white text-[14px] font-extrabold py-3.5 rounded-xl transition-all"
+              className="flex-1 flex items-center justify-center cursor-pointer gap-2 border border-[#333333] hover:bg-white/5 text-white text-[14px] font-extrabold py-3.5 rounded-xl transition-all"
             >
               Learn More
               <ArrowRight size={16} />
