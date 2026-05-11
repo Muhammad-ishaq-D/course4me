@@ -3,9 +3,11 @@ import { Mail, Lock, LogIn, User, Eye, EyeOff, Loader2 } from "lucide-react";
 import ForgotPassword from "./ForgotPassword";
 import { useAuth } from "../../../context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
+import SocialLogin from "./SocialLogin";
 
 const LoginForm = () => {
   const [error, setError] = useState("");
+  const [socialHint, setSocialHint] = useState(null); // 'google' | 'facebook' | null
   const [errors, setErrors] = useState({});
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -52,6 +54,7 @@ const LoginForm = () => {
     e.preventDefault();
 
     setError("");
+    setSocialHint(null);
 
     // frontend validation first
     if (!validateForm()) return;
@@ -64,9 +67,14 @@ const LoginForm = () => {
     } catch (err) {
       console.error("Login error:", err);
 
-      const message = err.response?.data?.message;
+      const data = err.response?.data;
+      const message = data?.message;
+      const provider = data?.socialProvider; // 'google' | 'facebook' | null
 
-      if (message === "Invalid credentials") {
+      if (provider) {
+        setSocialHint(provider);
+        setError(message);
+      } else if (message === "Invalid credentials") {
         setError("Email or password is incorrect");
       } else {
         setError(message || "Something went wrong");
@@ -76,12 +84,6 @@ const LoginForm = () => {
     }
   };
 
-  const handleSocialLogin = (platform) => {
-    // For production, these would redirect to the backend auth endpoints
-    console.log(`Logging in with ${platform}...`);
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-    window.location.href = `${apiUrl}/auth/${platform.toLowerCase()}`;
-  };
 
   return (
     <div className="flex justify-center lg:justify-end">
@@ -101,11 +103,46 @@ const LoginForm = () => {
             </div>
           </div>
 
-          {error && (
+          {/* Standard error */}
+          {error && !socialHint && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-2xl text-sm font-medium animate-in fade-in slide-in-from-top-2">
               {error}
             </div>
           )}
+
+          {/* Social provider hint */}
+          {error && socialHint && (
+            <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-2xl text-sm animate-in fade-in slide-in-from-top-2">
+              <p className="font-bold text-orange-700 mb-3">{error}</p>
+              <div className="flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+                    window.location.href = `${apiUrl}/auth/${socialHint}`;
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-white border border-orange-200 rounded-xl text-sm font-bold text-gray-700 hover:bg-orange-50 transition-all"
+                >
+                  <img
+                    src={socialHint === "google"
+                      ? "https://www.svgrepo.com/show/355037/google.svg"
+                      : "https://www.svgrepo.com/show/475647/facebook-color.svg"}
+                    className="w-4 h-4"
+                    alt={socialHint}
+                  />
+                  Sign in with {socialHint.charAt(0).toUpperCase() + socialHint.slice(1)}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-orange-600 font-bold text-xs hover:underline"
+                >
+                  Or use &quot;Forgot Password&quot; to set an email password
+                </button>
+              </div>
+            </div>
+          )}
+
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-1">
@@ -198,30 +235,7 @@ const LoginForm = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <button
-              onClick={() => handleSocialLogin("Google")}
-              className="flex items-center justify-center gap-3 py-3.5 border border-gray-200 rounded-2xl hover:bg-gray-50 transition-all font-semibold text-sm"
-            >
-              <img
-                src="https://www.svgrepo.com/show/355037/google.svg"
-                className="w-5 h-5"
-                alt="G"
-              />
-              Google
-            </button>
-            <button
-              onClick={() => handleSocialLogin("Facebook")}
-              className="flex items-center justify-center gap-3 py-3.5 bg-[#F0F5FF] text-[#1877F2] rounded-2xl hover:bg-[#E1EAFF] transition-all font-semibold text-sm"
-            >
-              <img
-                src="https://www.svgrepo.com/show/475647/facebook-color.svg"
-                className="w-5 h-5"
-                alt="F"
-              />
-              Facebook
-            </button>
-          </div>
+          <SocialLogin />
         </div>
       </div>
     </div>

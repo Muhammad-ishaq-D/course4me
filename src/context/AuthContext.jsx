@@ -15,8 +15,11 @@ export const AuthProvider = ({ children }) => {
             
             if (tokenFromUrl) {
                 localStorage.setItem('token', tokenFromUrl);
-                // Clean up URL
-                window.history.replaceState({}, document.title, window.location.pathname);
+                // Clean up only the token from URL to preserve other params (like courseId)
+                urlParams.delete('token');
+                const newSearch = urlParams.toString();
+                const newPath = window.location.pathname + (newSearch ? `?${newSearch}` : '');
+                window.history.replaceState({}, document.title, newPath);
             }
 
             const token = localStorage.getItem('token');
