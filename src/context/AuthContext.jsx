@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import authService from '../api/services/authService';
 
 const AuthContext = createContext();
@@ -6,15 +7,18 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkAuth = async () => {
             // Check for token in URL (from social auth redirect)
             const urlParams = new URLSearchParams(window.location.search);
             const tokenFromUrl = urlParams.get('token');
+            let shouldRedirect = false;
             
             if (tokenFromUrl) {
                 localStorage.setItem('token', tokenFromUrl);
+                shouldRedirect = true;
                 // Clean up only the token from URL to preserve other params (like courseId)
                 urlParams.delete('token');
                 const newSearch = urlParams.toString();
@@ -27,6 +31,11 @@ export const AuthProvider = ({ children }) => {
                 try {
                     const data = await authService.getProfile();
                     setUser(data.data || data.user || data);
+                    
+                    // If we just got the token from URL (social login), redirect to dashboard if on signin page
+                    if (shouldRedirect && window.location.pathname === '/signin') {
+                        navigate('/dashboard', { replace: true });
+                    }
                 } catch (error) {
                     console.error('Failed to fetch profile', error);
                     localStorage.removeItem('token');

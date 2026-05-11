@@ -7,10 +7,17 @@ const SocialLogin = ({ className = "" }) => {
   const handleSocialLogin = (platform) => {
     const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
     
-    // Pass current path as redirect so user comes back here
-    const currentPath = location.pathname + location.search;
-    const redirectParam = encodeURIComponent(currentPath);
+    // Use the 'from' path if redirected from ProtectedRoute, otherwise use current path
+    const destination = location.state?.from?.pathname || location.pathname;
+    const search = location.state?.from?.search || location.search;
     
+    // Default to /dashboard if we are on the signin page
+    let redirectPath = destination + search;
+    if (redirectPath === '/signin' || redirectPath === '/login') {
+      redirectPath = '/dashboard';
+    }
+    
+    const redirectParam = encodeURIComponent(redirectPath);
     window.location.href = `${apiUrl}/auth/${platform.toLowerCase()}?redirect=${redirectParam}`;
   };
 

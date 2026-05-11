@@ -13,22 +13,33 @@ import {
   Phone,
   Download,
   Loader2,
+  Activity,
+  PlayCircle,
+  AlertTriangle,
+  XCircle,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import courseService from "../../../api/services/courseService";
 import Loader from "../../../components/ui/Loader";
+import { useAuth } from "../../../context/AuthContext";
+import { downloadCertificate } from "../../../utils/certificateGenerator";
 
 const OverviewTab = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState(null); // ID of course being downloaded
   const [data, setData] = useState({
     upcoming: [],
+    ongoing: [],
     completed: [],
+    postponed: [],
+    cancelled: [],
     stats: [
       { label: "Upcoming", value: "0", color: "text-orange-500" },
+      { label: "Ongoing", value: "0", color: "text-blue-500" },
       { label: "Completed", value: "0", color: "text-green-500" },
-      { label: "Certificates", value: "0", color: "text-blue-500" },
-      { label: "Avg Score", value: "0%", color: "text-purple-500" },
+      { label: "Certificates", value: "0", color: "text-purple-500" },
     ],
   });
 
@@ -39,12 +50,20 @@ const OverviewTab = () => {
         if (result) {
           setData({
             upcoming: result.upcoming || [],
+            ongoing: result.ongoing || [],
             completed: result.completed || [],
+            postponed: result.postponed || [],
+            cancelled: result.cancelled || [],
             stats: [
               {
                 label: "Upcoming",
                 value: result.stats?.upcomingCount || "0",
                 color: "text-orange-500",
+              },
+              {
+                label: "Ongoing",
+                value: result.stats?.ongoingCount || "0",
+                color: "text-blue-500",
               },
               {
                 label: "Completed",
@@ -54,11 +73,6 @@ const OverviewTab = () => {
               {
                 label: "Certificates",
                 value: result.stats?.certificateCount || "0",
-                color: "text-blue-500",
-              },
-              {
-                label: "Avg Score",
-                value: `${result.stats?.avgScore || 0}%`,
                 color: "text-purple-500",
               },
             ],
@@ -73,6 +87,22 @@ const OverviewTab = () => {
 
     fetchData();
   }, []);
+
+  const handleDownloadCertificate = async (course) => {
+    try {
+      setDownloading(course.id);
+      await downloadCertificate({
+        userName: user?.name || "Valued Student",
+        courseTitle: course.title,
+        completionDate: course.endDateFormatted || course.date,
+        certificateId: `CERT-${course.id.substring(0, 8).toUpperCase()}-${Math.floor(Math.random() * 1000)}`
+      });
+    } catch (error) {
+      console.error("Download failed", error);
+    } finally {
+      setDownloading(null);
+    }
+  };
 
   if (loading) {
     return <Loader text="Loading your dashboard..." />;
@@ -131,6 +161,86 @@ const OverviewTab = () => {
           ))}
         </div>
 
+        {/* Ongoing Courses */}
+        {(data.ongoing.length > 0 || data.postponed.length > 0) && (
+          <section>
+            <div className="flex items-center gap-2 mb-4">
+              <Activity className="text-blue-500" size={20} />
+              <h2 className="text-xl font-bold text-gray-800">
+                Ongoing & Active Training
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {[...data.ongoing, ...data.postponed].map((course) => (
+                <div
+                  key={course.id}
+                  className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all space-y-4"
+                >
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-lg text-gray-900">
+                          {course.title}
+                        </h3>
+                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                          course.lifecycleStatus === "Extended" 
+                            ? "bg-purple-100 text-purple-700 animate-pulse" 
+                            : course.lifecycleStatus === "Postponed"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-blue-100 text-blue-700"
+                        }`}>
+                          {course.lifecycleStatus}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar size={14} /> Ends {course.endDateFormatted}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <MapPin size={14} /> {course.location}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="text-right hidden sm:block">
+                        <p className="text-xs font-bold text-gray-400 uppercase">Progress</p>
+                        <p className="text-lg font-black text-gray-900">{course.progress}%</p>
+                      </div>
+                      <button 
+                        onClick={() => navigate(`/dashboard/course/${course.id}`)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2"
+                      >
+                        <PlayCircle size={16} /> Continue
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Progress Bar */}
+                  <div className="relative pt-1">
+                    <div className="overflow-hidden h-2 text-xs flex rounded-full bg-blue-50">
+                      <div
+                        style={{ width: `${course.progress}%` }}
+                        className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-500"
+                      ></div>
+                    </div>
+                  </div>
+
+                  {course.lifecycleStatus === "Extended" && (
+                    <p className="text-[11px] font-bold text-purple-600 flex items-center gap-1">
+                      <Activity size={12} /> This course has been extended by the administrator.
+                    </p>
+                  )}
+                  {course.lifecycleStatus === "Postponed" && (
+                    <p className="text-[11px] font-bold text-yellow-600 flex items-center gap-1">
+                      <AlertTriangle size={12} /> This course is currently postponed. Check back for updates.
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Upcoming Courses */}
         <section>
           <div className="flex items-center gap-2 mb-4">
@@ -162,11 +272,16 @@ const OverviewTab = () => {
                       </span>
                     </div>
                   </div>
-                  <span
-                    className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide ${course.status === "Confirmed" ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"}`}
-                  >
-                    {course.status}
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide ${course.bookingStatus === "Confirmed" ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"}`}
+                    >
+                      {course.bookingStatus}
+                    </span>
+                    <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide bg-gray-100 text-gray-600">
+                      Upcoming
+                    </span>
+                  </div>
                 </div>
               ))
             ) : (
@@ -183,6 +298,33 @@ const OverviewTab = () => {
             )}
           </div>
         </section>
+
+        {/* Cancelled Courses */}
+        {data.cancelled.length > 0 && (
+          <section>
+            <div className="flex items-center gap-2 mb-4">
+              <XCircle className="text-red-500" size={20} />
+              <h2 className="text-xl font-bold text-gray-800">
+                Cancelled Bookings
+              </h2>
+            </div>
+            <div className="space-y-4 opacity-75">
+              {data.cancelled.map((course) => (
+                <div
+                  key={course.id}
+                  className="bg-gray-50 p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 grayscale"
+                >
+                  <div className="space-y-2">
+                    <h3 className="font-bold text-lg text-gray-400 line-through">
+                      {course.title}
+                    </h3>
+                    <p className="text-xs font-bold text-red-500 uppercase">Booking Cancelled</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Completed Courses */}
         <section>
@@ -216,8 +358,17 @@ const OverviewTab = () => {
                         <MapPin size={14} /> {course.location}
                       </span>
                     </div>
-                    <button className="mt-3 flex items-center gap-2 text-[#F15A24] font-semibold text-sm hover:underline">
-                      <Download size={14} /> Download Certificate
+                    <button 
+                      onClick={() => handleDownloadCertificate(course)}
+                      disabled={downloading === course.id}
+                      className="mt-3 flex items-center gap-2 text-[#F15A24] font-semibold text-sm hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {downloading === course.id ? (
+                        <Loader2 size={14} className="animate-spin" />
+                      ) : (
+                        <Download size={14} />
+                      )}
+                      {downloading === course.id ? "Generating..." : "Download Certificate"}
                     </button>
                   </div>
                 </div>
