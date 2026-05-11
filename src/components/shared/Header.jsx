@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Logo from "../../assets/Logo.svg";
-import { ChevronDown, UserCircle } from "lucide-react";
+import { ChevronDown, UserCircle, LogOut } from "lucide-react";
 import BrowseCoursesModal from "./BrowseCoursesModal";
 import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [isCoursesModalOpen, setIsCoursesModalOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const navLinkClasses = ({ isActive }) =>
     isActive
@@ -61,12 +62,24 @@ const Header = () => {
           {/* DESKTOP RIGHT SIDE */}
           <div className="hidden lg:flex items-center gap-6">
             {user ? (
-              <Link
-                to="/dashboard"
-                className="flex items-center gap-2 text-[#00A3F4] text-[18px] font-bold hover:text-[#F15A24] transition-all"
-              >
-                <UserCircle size={22} />
-              </Link>
+              <>
+                <Link
+                  to="/dashboard"
+                  className="flex items-center gap-2 text-[#00A3F4] text-[18px] font-bold hover:text-[#F15A24] transition-all"
+                >
+                  <UserCircle size={22} />
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    logout();
+                    navigate("/");
+                  }}
+                  className="flex items-center gap-1.5 text-gray-400 text-sm font-semibold hover:text-red-500 transition-all"
+                >
+                  <LogOut size={16} />
+                </button>
+              </>
             ) : (
               <Link
                 to="/signin"
@@ -167,14 +180,27 @@ const Header = () => {
 
           <div className="pt-4 border-t border-gray-200 flex flex-col gap-4">
             {user ? (
-              <Link
-                to="/dashboard"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-2 text-[#00A3F4] text-[18px] font-bold hover:text-[#F15A24] transition-all"
-              >
-                <UserCircle size={22} />
-                Dashboard
-              </Link>
+              <>
+                <Link
+                  to="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 text-[#00A3F4] text-[18px] font-bold hover:text-[#F15A24] transition-all"
+                >
+                  <UserCircle size={22} />
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    logout();
+                    navigate("/");
+                    setOpen(false);
+                  }}
+                  className="flex items-center gap-1.5 text-gray-400 text-sm font-semibold hover:text-red-500 transition-all"
+                >
+                  <LogOut size={16} />
+                  Sign Out
+                </button>
+              </>
             ) : (
               <Link
                 to="/signin"

@@ -36,6 +36,7 @@ import { useSearchParams } from "react-router-dom";
 import {
   checkoutDetailsSchema,
   checkoutBillingSchema,
+  checkoutSocialDetailsSchema,
   validateAll,
   validateField,
 } from "../../utils/validationSchemas";
@@ -44,6 +45,7 @@ import { useAuth } from "../../context/AuthContext";
 import CheckoutSkeleton from "../../components/ui/CheckoutSkeleton";
 import RightSidebar from "../../components/checkoutComponents/RightSidebar";
 import CardPaymentModal from "../../components/modals/CardPaymentModal";
+import SocialLogin from "../Authentication/components/SocialLogin";
 
 /* ─── helpers ─── */
 const StepCheck = () => (
@@ -616,7 +618,7 @@ const BookingConfirmed = ({
 /* ═══════════════════════════════════════════════════════ */
 const CourseCheckout = () => {
   const navigate = useNavigate();
-  const { login: authLogin } = useAuth();
+  const { login: authLogin, user } = useAuth();
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -756,6 +758,13 @@ const CourseCheckout = () => {
 
   const validateStep = async (step) => {
     if (step === 1) {
+      // If user is already logged in, only validate mobile & dob
+      if (user) {
+        const errs = await validateAll(checkoutSocialDetailsSchema, details);
+        setDetailsErrors(errs);
+        return Object.keys(errs).length === 0;
+      }
+
       const errs = await validateAll(checkoutDetailsSchema, details);
 
       if (
@@ -832,6 +841,26 @@ const CourseCheckout = () => {
     fetchData();
     window.scrollTo(0, 0);
   }, [courseId, scheduleId, plan]);
+  
+  // Sync user details if logged in (especially after social auth redirect)
+  useEffect(() => {
+    if (user) {
+      const updatedDetails = {
+        ...details,
+        firstName: user.name?.split(" ")[0] || details.firstName,
+        lastName: user.name?.split(" ").slice(1).join(" ") || details.lastName,
+        email: user.email || details.email,
+        mobile: user.phone || details.mobile,
+        dob: user.dob || details.dob,
+      };
+      setDetails(updatedDetails);
+
+      // If user has all required info, auto-advance to step 2 if we are on step 1
+      if (activeStep === 1 && updatedDetails.mobile && updatedDetails.dob && updatedDetails.firstName) {
+        setActiveStep(2);
+      }
+    }
+  }, [user]);
 
   useEffect(() => {
     if (isLoading || isConfirmed) return;
@@ -1035,7 +1064,55 @@ const CourseCheckout = () => {
                     </div>
                   )}
 
-                  {isLoggingIn ? (
+                  {user ? (
+                    <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
+                        <p className="text-[13px] text-blue-700 font-semibold">
+                          Please complete your profile with your mobile number and date of birth to proceed.
+                        </p>
+                      </div>
+                      <FieldInput
+                        label="Mobile number"
+                        placeholder="Mobile number"
+                        type="tel"
+                        value={details.mobile}
+                        onChange={(v) => updateDetail("mobile", v)}
+                        icon={Phone}
+                        error={detailsErrors.mobile}
+                      />
+                      <FieldInput
+                        label="Date of birth"
+                        type="date"
+                        value={details.dob}
+                        onChange={(v) => updateDetail("dob", v)}
+                        icon={Calendar}
+                        error={detailsErrors.dob}
+                      />
+                      <SaveBtn
+                        loading={checkingEmail}
+                        onClick={async () => {
+                          if (await validateStep(1)) setActiveStep(2);
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="mb-6">
+                        <p className="text-[13px] text-gray-500 font-bold mb-4 text-center uppercase tracking-wider">
+                          Quick sign-in with
+                        </p>
+                        <SocialLogin />
+                        <div className="relative my-6">
+                          <div className="absolute inset-0 flex items-center">
+                            <span className="w-full border-t border-gray-100"></span>
+                          </div>
+                          <div className="relative flex justify-center text-xs uppercase text-gray-400 font-bold">
+                            <span className="bg-white px-4 tracking-widest">or use email</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {isLoggingIn ? (
                     /* ── Inline Login Fields ── */
                     <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                       <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
@@ -1177,6 +1254,8 @@ const CourseCheckout = () => {
                           </button>
                         </p>
                       </div>
+                    </>
+                  )}
                     </>
                   )}
                 </div>

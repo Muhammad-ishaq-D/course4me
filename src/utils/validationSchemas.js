@@ -39,6 +39,15 @@ export const checkoutDetailsSchema = yup.object({
     .oneOf([yup.ref('password')], 'Passwords do not match'),
 });
 
+// ─── Checkout Step 1 (Social/Logged-in users): Only mobile & dob ───
+export const checkoutSocialDetailsSchema = yup.object({
+  mobile: phoneField(),
+  dob: yup.date()
+    .required('Date of birth is required')
+    .typeError('Please enter a valid date')
+    .max(new Date(new Date().setFullYear(new Date().getFullYear() - 18)), 'You must be at least 18 years old'),
+});
+
 // ─── Checkout Step 2: Billing Address ───
 export const checkoutBillingSchema = yup.object({
   postcode: yup.string()
