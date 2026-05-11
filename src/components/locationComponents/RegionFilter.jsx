@@ -1,54 +1,50 @@
-import React, { useState } from "react";
+import React from "react";
 import { Filter } from "lucide-react";
 
-const regions = [
-  "All UK (85)",
-  "London & South East (25)",
-  "Midlands (15)",
-  "North England (20)",
-  "Scotland (12)",
-  "Wales (8)",
-  "South West (5)"
-];
+const regions = ["All Centers", "Featured Centers", "Available Centers"];
 
-const RegionFilter = () => {
-  const [active, setActive] = useState("All UK (85)");
-
+const RegionFilter = ({ active, setActive }) => {
   return (
-    <div className="bg-[#f3f5f7] border border-gray-200 rounded-2xl px-6 py-5">
+    <div className=" relative overflow-hidden bg-white/80 backdrop-blur-xl border border-white shadow-[0_10px_40px_rgba(0,0,0,0.05)] rounded-[28px] p-5 sm:p-6">
+      {/* Glow */}
+      <div className="absolute top-[-40px] right-[-40px] w-40 h-40 bg-[#F15A24] opacity-10 blur-[80px] rounded-full pointer-events-none" />
 
-      <div className="flex flex-col md:flex-row md:items-center gap-4">
-
+      <div className="relative flex flex-col lg:flex-row lg:items-center gap-5">
         {/* Label */}
-        <div className="flex items-center gap-3 text-gray-600 font-medium whitespace-nowrap">
-          <Filter size={18} />
-          <span>Filter by region:</span>
+        <div className="flex items-center gap-3 whitespace-nowrap">
+          <div className="w-11 h-11 rounded-2xl bg-[#F15A2415] flex items-center justify-center border border-[#F15A24]/10">
+            <Filter size={18} className="text-[#F15A24]" />
+          </div>
+
+          <div>
+            <h3 className="text-[#243443] font-bold text-base">
+              Filter Centers
+            </h3>
+
+            <p className="text-gray-500 text-sm">Select training locations</p>
+          </div>
         </div>
 
         {/* Pills */}
-        <div className="flex gap-3 overflow-x-auto scrollbar-hide">
-
+        <div className="flex flex-wrap gap-3 overflow-x-auto scrollbar-hide pb-1">
           {regions.map((region) => (
             <button
               key={region}
               onClick={() => setActive(region)}
-              className={`
-                px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition
-                ${
-                  active === region
-                    ? "bg-[#2f3a47] text-white shadow-md"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }
-              `}
+              className={`relative px-5 py-3 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all duration-300 border
+            
+              ${
+                active === region
+                  ? "bg-[#F15A24] text-white border-[#F15A24] shadow-[0_12px_30px_rgba(241,90,36,0.35)]"
+                  : "bg-[#f8fafc] text-[#243443] border-[#edf1f5] hover:border-[#F15A24]/20 hover:bg-[#fff7f3]"
+              }
+            `}
             >
               {region}
             </button>
           ))}
-
         </div>
-
       </div>
-
     </div>
   );
 };

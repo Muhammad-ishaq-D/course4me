@@ -66,7 +66,6 @@ const Header = () => {
                 className="flex items-center gap-2 text-[#00A3F4] text-[18px] font-bold hover:text-[#F15A24] transition-all"
               >
                 <UserCircle size={22} />
-                Dashboard
               </Link>
             ) : (
               <Link
