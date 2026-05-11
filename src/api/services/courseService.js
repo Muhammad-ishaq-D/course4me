@@ -15,6 +15,11 @@ const courseService = {
     getUserCourses: async () => {
         const response = await axiosInstance.get('/courses/user/enrolled');
         return response.data;
+    },
+
+    // Get course count by category
+    getCategoryStats: async () => {
+        return await axiosInstance.get('/courses/stats/categories');
     }
 };
 

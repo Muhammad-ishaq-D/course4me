@@ -40,6 +40,7 @@ import {
   validateField,
 } from "../../utils/validationSchemas";
 import authService from "../../api/services/authService";
+import { useAuth } from "../../context/AuthContext";
 import CheckoutSkeleton from "../../components/ui/CheckoutSkeleton";
 import RightSidebar from "../../components/checkoutComponents/RightSidebar";
 import CardPaymentModal from "../../components/modals/CardPaymentModal";
@@ -615,6 +616,7 @@ const BookingConfirmed = ({
 /* ═══════════════════════════════════════════════════════ */
 const CourseCheckout = () => {
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -697,8 +699,8 @@ const CourseCheckout = () => {
     try {
       console.log("Checking email availability for:", email.trim());
       const res = await authService.checkEmail(email.trim());
-      console.log("Email check result:", res.data);
-      if (res.data?.exists) {
+      console.log("Email check result:", res);
+      if (res.exists) {
         setDetailsErrors((prev) => ({ ...prev, alreadyRegistered: true }));
       } else {
         setDetailsErrors((prev) => ({ ...prev, alreadyRegistered: undefined }));
@@ -714,9 +716,9 @@ const CourseCheckout = () => {
     setDetailsErrors({});
     setLoading(true);
     try {
-      const res = await authService.login(loginForm);
-      if (res.data.success) {
-        const { user } = res.data;
+      const res = await authLogin(loginForm);
+      if (res.success) {
+        const { user } = res;
         const updatedDetails = {
           ...details,
           firstName: user.name?.split(" ")[0] || details.firstName,
@@ -764,7 +766,7 @@ const CourseCheckout = () => {
         setCheckingEmail(true);
         try {
           const res = await authService.checkEmail(details.email.trim());
-          if (res.data?.exists) {
+          if (res.exists) {
             errs.alreadyRegistered = true;
             errs.email = "This email is already registered. Please login.";
           }
