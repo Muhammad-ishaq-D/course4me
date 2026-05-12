@@ -26,13 +26,13 @@ axiosInstance.interceptors.response.use(
             // Log out user if suspended or token expired
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            
+
             // Show alert with reason if provided
             if (error.response?.data?.message) {
                 alert(error.response.data.message);
             }
-            
-            window.location.href = '/login';
+
+            window.location.href = '/signin';
         }
         return Promise.reject(error);
     }
