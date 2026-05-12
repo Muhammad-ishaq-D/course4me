@@ -1,66 +1,127 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Calendar, Clock, User } from "lucide-react";
+import {
+  ArrowRight,
+  Calendar,
+  Clock,
+  User,
+  TrendingUp,
+  BookOpen,
+} from "lucide-react";
 import Blog1 from "../../assets/home/blog1.png";
 
 const FeaturedArticle = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="px-6 -mt-10 mb-16 relative z-20">
-      <div className="max-w-[1185px] mx-auto">
-        <div
-          onClick={() => navigate('/blog/article')}
-          className="bg-white rounded-[40px] shadow-2xl overflow-hidden border border-gray-100 flex flex-col lg:flex-row group cursor-pointer transition-transform hover:translate-y-[-4px]"
-        >
-          {/* Image Section */}
-          <div className="lg:w-1/2 h-[400px] lg:h-auto overflow-hidden">
-            <img
-              src={Blog1}
-              alt="Featured Article"
-              className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
-            />
-          </div>
+    <section className="relative px-4 sm:px-6 -mt-18 md:-mt-10 mb-20 z-20">
+      <div className="max-w-7xl mx-auto">
+        {/* ================= FEATURED CARD ================= */}
+        <div className="group relative overflow-hidden rounded-4xl lg:rounded-[40px] bg-white border border-gray-100 shadow-[0_25px_80px_rgba(0,0,0,0.08)] hover:shadow-[0_35px_100px_rgba(0,0,0,0.12)] transition-all duration-500 ">
+          {/* BACKGROUND GLOW */}
+          <div className="absolute -top-30 -right-25 w-65 h-65 bg-[#F15A24]/10 blur-[120px] rounded-full opacity-0 group-hover:opacity-100 transition duration-700" />
 
-          {/* Content Section */}
-          <div className="lg:w-1/2 p-10 lg:p-16 flex flex-col justify-center">
-            <div className="flex gap-4 mb-8 flex-wrap">
-              <span className="bg-[#00A3FF] text-white text-[10px] font-extrabold uppercase tracking-widest px-5 py-2.5 rounded-lg shadow-lg">
-                Career Guide
-              </span>
-              <span className="bg-[#1A1A1A] text-white text-[10px] font-extrabold uppercase tracking-widest px-5 py-2.5 rounded-lg shadow-lg">
-                Featured
-              </span>
+          <div className="grid lg:grid-cols-2">
+            {/* ================= IMAGE SIDE ================= */}
+            <div className="relative overflow-hidden h-70 sm:h-90 lg:h-full">
+              {/* IMAGE */}
+              <img
+                src={Blog1}
+                alt="Featured Article"
+                className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+              />
+
+              {/* DARK OVERLAY */}
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent" />
+
+              {/* FEATURED BADGE */}
+              <div className="absolute top-5 left-5 flex flex-wrap gap-3">
+                <span className="bg-[#F15A24] text-white text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-full shadow-lg">
+                  Featured Article
+                </span>
+              </div>
+
+              {/* IMAGE BOTTOM INFO */}
+              <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-4">
+                {/* AUTHOR */}
+                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/10 rounded-full px-4 py-2">
+                  <div className="w-10 h-10 rounded-full bg-[#F15A24] flex items-center justify-center text-white font-bold text-sm">
+                    SM
+                  </div>
+
+                  <div>
+                    <p className="text-white text-sm font-semibold">
+                      Sarah Mitchell
+                    </p>
+
+                    <span className="text-white/60 text-xs">
+                      Security Career Expert
+                    </span>
+                  </div>
+                </div>
+
+                {/* READ TIME */}
+                <div className="hidden sm:flex items-center gap-2 bg-black/30 backdrop-blur-md border border-white/10 rounded-full px-4 py-2 text-white text-sm font-semibold">
+                  <Clock size={15} />8 min read
+                </div>
+              </div>
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6 leading-tight group-hover:text-[#00A3FF] transition">
-              How to Become a Door Supervisor in 2026: The Complete Guide
-            </h2>
-
-            <p className="text-gray-500 text-lg mb-10 leading-relaxed font-medium">
-              Everything you need to know about getting your SIA Door Supervisor
-              licence, from training requirements to career opportunities and
-              expected salaries across the UK.
-            </p>
-
-            <div className="flex flex-wrap items-center gap- mb-10">
-              <div className="flex items-center gap-2 text-sm text-gray-500 font-bold uppercase tracking-widest">
-                <User size={18} className="text-[#00A3FF]" />
-                Sarah Mitchell
+            {/* ================= CONTENT SIDE ================= */}
+            <div className="relative p-6 sm:p-8 lg:p-12 flex flex-col justify-center">
+              {/* SMALL LABEL */}
+              <div className="inline-flex items-center gap-2 bg-[#FFF4EE] text-[#F15A24] border border-[#F15A24]/10 text-xs font-bold uppercase tracking-[0.2em] px-4 py-2 rounded-full w-fit">
+                <TrendingUp size={14} />
+                Trending Now
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500 font-bold uppercase tracking-widest border-l border-gray-200 pl-6">
-                <Calendar size={18} className="text-[#00A3FF]" />
-                Feb 28, 2026
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500 font-bold uppercase tracking-widest border-l border-gray-200 pl-6">
-                <Clock size={18} className="text-[#00A3FF]" />
-                8 min read
-              </div>
-            </div>
 
-            <div className="flex items-center gap-3 text-[#1A1A1A] font-extrabold uppercase tracking-widest text-sm border-t border-gray-50 pt-10 group/link">
-              Read Full Article
-              <ArrowRight size={20} className="group-hover/link:translate-x-2 transition" />
+              {/* TITLE */}
+              <h2 className="mt-7 text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.1] tracking-tight text-[#111827] group-hover:text-[#F15A24] transition duration-300">
+                How to Become a Door Supervisor in 2026
+              </h2>
+
+              {/* DESCRIPTION */}
+              <p className="mt-6 text-[#6B7280] text-base sm:text-lg leading-relaxed max-w-2xl">
+                Everything you need to know about getting your SIA Door
+                Supervisor licence — including training requirements, career
+                opportunities, salary expectations, and how to start working
+                quickly in the UK security industry.
+              </p>
+
+              {/* META INFO */}
+              <div className="flex flex-wrap items-center gap-5 mt-8">
+                {/* DATE */}
+                <div className="flex items-center gap-2 text-sm text-[#6B7280] font-semibold">
+                  <Calendar size={16} className="text-[#F15A24]" />
+                  Feb 28, 2026
+                </div>
+
+                {/* AUTHOR */}
+                <div className="flex items-center gap-2 text-sm text-[#6B7280] font-semibold">
+                  <User size={16} className="text-[#F15A24]" />
+                  Sarah Mitchell
+                </div>
+
+                {/* READ */}
+                <div className="flex items-center gap-2 text-sm text-[#6B7280] font-semibold">
+                  <BookOpen size={16} className="text-[#F15A24]" />
+                  Career Guide
+                </div>
+              </div>
+
+              {/* BUTTON */}
+              <div className="mt-10">
+                <button
+                  onClick={() => navigate("/blog/article")}
+                  className="group/button inline-flex items-center gap-3 bg-[#F15A24] cursor-pointer text-white px-7 sm:px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-[0_10px_40px_rgba(0,0,0,0.12)]"
+                >
+                  Read Full Article
+                  <ArrowRight
+                    size={18}
+                    className="group-hover/button:translate-x-1 transition"
+                  />
+                </button>
+              </div>
             </div>
           </div>
         </div>

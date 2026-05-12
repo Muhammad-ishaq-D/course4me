@@ -1,13 +1,11 @@
-import {
-  MapPin,
-  DollarSign,
-  Clock,
-  ArrowRight
-} from "lucide-react";
 import { useState } from "react";
 import ApplyModal from "./ApplyModal";
+import JobsCard from "../ui/JobsCard";
+
 const AllJobListings = () => {
   const [selectedJob, setSelectedJob] = useState(null);
+  const [activeFilter, setActiveFilter] = useState("All");
+
   const jobs = [
     {
       title: "Security Guard - Retail",
@@ -16,15 +14,16 @@ const AllJobListings = () => {
       salary: "£24,000 - £26,000",
       posted: "2 days ago",
       type: "Full-time",
-      role: "Security Guards",
+      role: "Security Guard",
       description:
         "Busy shopping centre requires experienced SIA licensed security guards for day and night shifts.",
       requirements: [
         "Valid SIA License",
         "Retail experience preferred",
-        "Customer service skills"
-      ]
+        "Customer service skills",
+      ],
     },
+
     {
       title: "Door Supervisor - Nightclub",
       company: "Elite Security Group",
@@ -38,11 +37,12 @@ const AllJobListings = () => {
       requirements: [
         "SIA Door Supervisor License",
         "Conflict management",
-        "Smart appearance"
-      ]
+        "Smart appearance",
+      ],
     },
+
     {
-      title: "CCTV Control Room Operator",
+      title: "CCTV Room Operator",
       company: "Guardian Security",
       location: "Birmingham",
       salary: "£22,000 - £24,000",
@@ -54,9 +54,10 @@ const AllJobListings = () => {
       requirements: [
         "SIA CCTV License",
         "Shift work available",
-        "Good IT skills"
-      ]
+        "Good IT skills",
+      ],
     },
+
     {
       title: "Close Protection Officer",
       company: "VIP Protection Services",
@@ -71,9 +72,10 @@ const AllJobListings = () => {
         "SIA CP License",
         "5+ years experience",
         "Advanced driving",
-        "Languages beneficial"
-      ]
+        "Languages beneficial",
+      ],
     },
+
     {
       title: "Security Officer - Corporate",
       company: "Corporate Guard Solutions",
@@ -87,9 +89,10 @@ const AllJobListings = () => {
       requirements: [
         "SIA License",
         "Corporate experience",
-        "Professional demeanor"
-      ]
+        "Professional demeanor",
+      ],
     },
+
     {
       title: "Mobile Security Patrol Officer",
       company: "Rapid Response Security",
@@ -103,162 +106,118 @@ const AllJobListings = () => {
       requirements: [
         "Full UK Driving License",
         "SIA License",
-        "Own transport initially"
-      ]
-    }
+        "Own transport initially",
+      ],
+    },
   ];
 
-  // Duplicate to make 12 cards
-  const allJobs = [...jobs, ...jobs];
-
+  // ===== FILTERS WITH COUNTS =====
   const filters = [
-    "All (12)",
-    "Security Guard (5)",
-    "Door Supervisor (3)",
-    "CCTV Operator (2)",
-    "Close Protection Officer (2)"
+    {
+      label: "All",
+      count: jobs.length,
+    },
+
+    {
+      label: "Security Guard",
+      count: jobs.filter((job) =>
+        job.role.toLowerCase().includes("security guard"),
+      ).length,
+    },
+
+    {
+      label: "Door Supervisor",
+      count: jobs.filter((job) =>
+        job.role.toLowerCase().includes("door supervisor"),
+      ).length,
+    },
+
+    {
+      label: "CCTV Operator",
+      count: jobs.filter((job) => job.role.toLowerCase().includes("cctv"))
+        .length,
+    },
+
+    {
+      label: "Close Protection Officer",
+      count: jobs.filter((job) =>
+        job.role.toLowerCase().includes("close protection"),
+      ).length,
+    },
   ];
 
-  const typeStyles = {
-    "Full-time": "bg-[#E3E9FF] text-[#2D5BFF]",
-    "Part-time": "bg-[#E3E9FF] text-[#2D5BFF]",
-    Contract: "bg-[#E3E9FF] text-[#2D5BFF]"
-  };
-
-  const roleStyles = {
-    "Security Guard": "bg-gradient-to-r from-[#155DFC] to-[#155DFC] text-white",
-    "Door Supervisor": "bg-[#9333EA] text-white",
-    "CCTV Operator": "bg-[#16A34A] text-white",
-    "Close Protection Officer": "bg-[#F59E0B] text-white"
-  };
+  // ===== FILTERED JOBS =====
+  const filteredJobs =
+    activeFilter === "All"
+      ? jobs
+      : jobs.filter((job) =>
+          job.role.toLowerCase().includes(activeFilter.toLowerCase()),
+        );
 
   return (
-    <section className="bg-[#F3F4F6] py-16 px-6">
+    <section className="bg-[#F3F4F6] py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-6">
-
+        {/* ===== HEADER ===== */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 mb-12">
+          {/* Left */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1E1E1E]">
+            <h2 className="text-4xl md:text-5xl font-bold text-[#111111]">
               All Job Listings
             </h2>
-            <p className="text-gray-500 mt-2">
-              Showing 12 jobs
+
+            <p className="text-gray-500 mt-3 text-lg">
+              Showing {filteredJobs.length} jobs
             </p>
           </div>
 
-          {/* Filters */}
+          {/* ===== FILTERS ===== */}
           <div className="flex flex-wrap gap-3">
-            {filters.map((item, i) => (
-              <div
-                key={i}
-                className={`px-5 py-2 rounded-full text-sm font-semibold cursor-pointer ${i === 0
-                  ? "bg-[#F8510C] text-white"
-                  : "bg-[#E5E7EB] text-[#374151]"
-                  }`}
-              >
-                {item}
-              </div>
-            ))}
+            {filters.map((item, i) => {
+              const isActive = activeFilter === item.label;
+
+              return (
+                <button
+                  key={i}
+                  onClick={() => setActiveFilter(item.label)}
+                  className={`relative px-5 py-3 rounded-full text-sm font-semibold transition-all duration-300 overflow-hidden
+                  
+                  ${
+                    isActive
+                      ? "bg-[#F8510C] text-white shadow-[0_10px_25px_rgba(248,81,12,0.30)]"
+                      : "bg-white border border-gray-200 text-[#374151] hover:border-[#F8510C]/30 hover:text-[#F8510C]"
+                  }
+                `}
+                >
+                  {/* Active Glow */}
+                  {isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#F8510C] to-orange-500 opacity-90" />
+                  )}
+
+                  <span className="relative z-10">
+                    {item.label} ({item.count})
+                  </span>
+                </button>
+              );
+            })}
           </div>
-
         </div>
 
-        {/* Grid */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
-
-          {allJobs.map((job, index) => (
-            <div
+        {/* ===== JOBS GRID ===== */}
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+          {filteredJobs.map((job, index) => (
+            <JobsCard
               key={index}
-              className="bg-[#F9FAFB] rounded-[22px] p-7 shadow-[0_6px_20px_rgba(0,0,0,0.05)] border border-transparent hover:border-[#F8510C] transition"
-            >
-
-              {/* Badges */}
-              <div className="flex items-center gap-2 mb-4 flex-wrap">
-
-                <div className={`text-xs font-semibold px-3 py-[6px] rounded-full ${typeStyles[job.type]}`}>
-                  {job.type}
-                </div>
-
-                <div className={`text-xs font-semibold px-3 py-[6px] rounded-full ${roleStyles[job.role]}`}>
-                  {job.role}
-                </div>
-
-              </div>
-
-              {/* Title */}
-              <h3 className="text-[20px] font-bold text-[#1E1E1E]">
-                {job.title}
-              </h3>
-
-              <p className="text-sm text-gray-500 mt-1">
-                {job.company}
-              </p>
-
-              {/* Meta */}
-              <div className="mt-4 space-y-2 text-sm">
-
-                <div className="flex items-center gap-2 text-gray-600">
-                  <MapPin size={16} className="text-[#F8510C]" />
-                  {job.location}
-                </div>
-
-                <div className="flex items-center gap-2 text-[#00A63E] font-semibold">
-                  <DollarSign size={16} />
-                  {job.salary}
-                </div>
-
-                <div className="flex items-center gap-2 text-gray-500">
-                  <Clock size={16} />
-                  Posted {job.posted}
-                </div>
-
-              </div>
-
-              {/* Description */}
-              <p className="text-sm text-gray-600 mt-5 leading-relaxed">
-                {job.description}
-              </p>
-
-              {/* Requirements */}
-              <div className="mt-6">
-                <div className="text-xs font-semibold text-gray-400 mb-3">
-                  KEY REQUIREMENTS
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {job.requirements.map((req, i) => (
-                    <span
-                      key={i}
-                      className="bg-[#EEF2F6] text-gray-600 text-xs px-3 py-1 rounded-full"
-                    >
-                      {req}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Button */}
-              <button
-                onClick={() => setSelectedJob(job)}
-                className="mt-7 w-full bg-[#1E1E1E] text-white py-3 rounded-full font-medium flex items-center justify-center gap-2 hover:bg-black transition"
-              >
-                Apply Now
-                <ArrowRight size={16} />
-              </button>
-
-            </div>
+              job={job}
+              index={index}
+              setSelectedJob={setSelectedJob}
+            />
           ))}
-
         </div>
-        {selectedJob && (
-          <ApplyModal
-            job={selectedJob}
-            onClose={() => setSelectedJob(null)}
-          />
-        )}
 
+        {/* ===== MODAL ===== */}
+        {selectedJob && (
+          <ApplyModal job={selectedJob} onClose={() => setSelectedJob(null)} />
+        )}
       </div>
     </section>
   );

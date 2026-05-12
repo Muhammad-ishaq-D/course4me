@@ -1,5 +1,6 @@
 import React from "react";
-import { Calendar, Clock, User, Tag } from "lucide-react";
+import { Calendar, Clock, User, Tag, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const getCategoryStyles = (category) => {
   switch (category) {
@@ -7,93 +8,138 @@ const getCategoryStyles = (category) => {
       return {
         bg: "bg-[#00A3FF0A]",
         text: "text-[#00A3FF]",
-        border: "border-[#00A3FF20]"
+        border: "border-[#00A3FF20]",
       };
     case "Industry News":
       return {
         bg: "bg-[#3B82F60A]",
         text: "text-[#3B82F6]",
-        border: "border-[#3B82F620]"
+        border: "border-[#3B82F620]",
       };
     case "Study Tips":
       return {
         bg: "bg-[#A855F70A]",
         text: "text-[#A855F7]",
-        border: "border-[#A855F720]"
+        border: "border-[#A855F720]",
       };
     case "Company News":
       return {
         bg: "bg-[#EA580C0A]",
         text: "text-[#EA580C]",
-        border: "border-[#EA580C20]"
+        border: "border-[#EA580C20]",
       };
     default:
       return {
         bg: "bg-gray-50",
         text: "text-gray-500",
-        border: "border-gray-100"
+        border: "border-gray-100",
       };
   }
 };
 
-const ArticleCard = ({ image, category, title, excerpt, author, date, readTime, isFeatured }) => {
+const ArticleCard = ({
+  image,
+  category,
+  title,
+  excerpt,
+  author,
+  date,
+  readTime,
+  isFeatured,
+}) => {
   const styles = getCategoryStyles(category);
+  const navigate = useNavigate();
 
   return (
-    <div className="bg-white  rounded-[32px] overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500 group cursor-pointer flex flex-col h-full transform hover:-translate-y-2">
-      {/* Image Container */}
-      <div className="h-[240px] overflow-hidden relative">
+    <div
+      onClick={() => navigate("/blog/article")}
+      className="group relative flex flex-col h-full overflow-hidden rounded-[30px] bg-white border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] hover:shadow-[0_25px_80px_rgba(0,0,0,0.10)] transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+    >
+      {/* HOVER GLOW */}
+      <div className="absolute top-[-100px] right-[-80px] w-[220px] h-[220px] bg-[#F15A24]/10 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition duration-700" />
+
+      {/* ================= IMAGE SECTION ================= */}
+      <div className="relative h-[240px] overflow-hidden">
+        {/* IMAGE */}
         <img
           src={image}
           alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
         />
-        {/* Featured Badge Overlay */}
-        {isFeatured && (
-          <div className="absolute top-4 right-4 animate-in fade-in zoom-in duration-500">
-            <span className="bg-[#1A1A1A99] backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg border border-white/20">
-              Featured
-            </span>
-          </div>
-        )}
-      </div>
 
-      {/* Content Section */}
-      <div className="p-8 flex-1 flex flex-col">
-        {/* Tag Below Image */}
-        <div className="mb-5 flex">
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest border ${styles.bg} ${styles.text} ${styles.border}`}>
-            <Tag size={12} className="opacity-80" />
+        {/* OVERLAY */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+
+        {/* CATEGORY */}
+        <div className="absolute top-5 left-5">
+          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/10 text-white px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider">
+            <Tag size={12} />
+
             {category}
           </div>
         </div>
 
-        <h3 className="text-[22px] font-bold text-[#1A1A1A] mb-4 leading-[1.3] group-hover:text-[#00A3FF] transition duration-300 line-clamp-2">
+        {/* FEATURED */}
+        {isFeatured && (
+          <div className="absolute top-5 right-5">
+            <div className="bg-[#F15A24] text-white px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-[0_10px_30px_rgba(241,90,36,0.35)]">
+              Featured
+            </div>
+          </div>
+        )}
+
+        {/* READ TIME */}
+        <div className="absolute bottom-5 right-5">
+          <div className="flex items-center gap-2 bg-black/30 backdrop-blur-md border border-white/10 text-white px-4 py-2 rounded-full text-[11px] font-semibold">
+            <Clock size={13} />
+
+            {readTime}
+          </div>
+        </div>
+      </div>
+
+      {/* ================= CONTENT ================= */}
+      <div className="relative flex flex-col flex-1 p-7">
+        {/* DATE */}
+        <div className="flex items-center gap-2 text-[#F15A24] text-xs font-bold uppercase tracking-[0.15em]">
+          <Calendar size={14} />
+
+          {date}
+        </div>
+
+        {/* TITLE */}
+        <h3 className="mt-5 text-[24px] font-black leading-[1.25] text-[#111827] group-hover:text-[#F15A24] transition duration-300 line-clamp-2">
           {title}
         </h3>
 
-        <p className="text-gray-500 text-sm mb-8 flex-1 leading-relaxed font-medium line-clamp-3">
+        {/* DESCRIPTION */}
+        <p className="mt-5 text-[#6B7280] text-[15px] leading-relaxed flex-1 line-clamp-3">
           {excerpt}
         </p>
 
-        {/* Metadata Stack */}
-        <div className="flex flex-col gap-5 pt-6 border-t border-gray-50">
-          {/* Author */}
-          <div className="flex items-center gap-2.5 text-[11px] text-gray-400 font-bold uppercase tracking-widest">
-            <User size={16} className="text-gray-400" />
-            {author}
+        {/* AUTHOR */}
+        <div className="mt-7 pt-6 border-t border-gray-100 flex items-center justify-between gap-4">
+          {/* AUTHOR INFO */}
+          <div className="flex items-center gap-3">
+            {/* AVATAR */}
+            <div className="w-11 h-11 rounded-full bg-[#FFF4EE] flex items-center justify-center text-[#F15A24] font-bold text-sm">
+              {author?.charAt(0)}
+            </div>
+
+            {/* NAME */}
+            <div>
+              <p className="text-[14px] font-bold text-[#111827]">{author}</p>
+
+              <span className="text-xs text-gray-400">Courses4me Team</span>
+            </div>
           </div>
 
-          {/* Date & Read Time */}
-          <div className="flex justify-between items-center text-[11px] text-gray-400 font-bold uppercase tracking-widest">
-            <span className="flex items-center gap-2">
-              <Calendar size={16} className="text-gray-400" />
-              {date}
-            </span>
-            <span className="flex items-center gap-2">
-              <Clock size={16} className="text-gray-400" />
-              {readTime}
-            </span>
+          {/* BUTTON */}
+          <div className="w-11 h-11 rounded-2xl bg-[#F8FAFC] border border-gray-100 flex items-center justify-center group-hover:bg-[#F15A24] group-hover:border-[#F15A24] transition-all duration-300">
+            <ArrowRight
+              size={18}
+              className="text-[#111827] group-hover:text-white group-hover:translate-x-0.5 transition-all duration-300"
+            />
           </div>
         </div>
       </div>

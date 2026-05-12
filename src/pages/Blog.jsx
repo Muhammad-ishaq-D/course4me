@@ -13,7 +13,7 @@ const Blog = () => {
       <FeaturedArticle />
       <CategoryFilters />
       <ArticleGrid />
-      <Pagination />
+      {/* <Pagination /> */}
       <NewsletterCTA />
     </div>
   );
