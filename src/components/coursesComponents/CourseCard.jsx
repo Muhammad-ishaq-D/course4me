@@ -13,6 +13,7 @@ const CourseCard = ({
   date,
   category,
   duration,
+  isPopular = false,
   isOnline = false,
 }) => {
   const navigate = useNavigate();
@@ -22,74 +23,86 @@ const CourseCard = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="bg-[#1A1A1A] rounded-[24px] overflow-hidden border border-white/5 flex flex-col h-full shadow-2xl"
+      transition={{ duration: 0.4 }}
+      className="group bg-white rounded-[24px] overflow-hidden border border-[#ECECEC] flex flex-col h-full shadow-[0_8px_30px_rgba(0,0,0,0.05)] hover:shadow-[0_15px_40px_rgba(241,90,36,0.12)] transition-all duration-300"
     >
-      {/* Image Section */}
-      <div className="relative h-[220px] overflow-hidden">
+      {/* IMAGE */}
+      <div className="relative h-[180px] overflow-hidden">
         <img
           src={image}
           alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
         />
 
-        {/* Badges */}
-        <div className="absolute top-4 left-4 flex gap-2">
-          <div className="bg-[#FF5C1B] text-white text-[10px] font-black px-3 py-1.5 rounded-lg flex items-center gap-1.5 uppercase tracking-tighter">
-            <TrendingUp size={12} strokeWidth={3} />
-            POPULAR
-          </div>
-        </div>
+        {/* OVERLAY */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
 
-        {isOnline && (
-          <div className="absolute top-4 right-4 bg-[#00A3FF] text-white text-[10px] font-black px-3 py-1.5 rounded-lg uppercase tracking-tighter">
-            ONLINE
+        {/* BADGES */}
+        {isPopular && (
+          <div className="absolute top-3 left-3 flex gap-2">
+            <div className="bg-black text-white text-[10px] font-bold px-3 py-1 rounded-lg flex items-center gap-1">
+              <TrendingUp size={11} />
+              Popular
+            </div>
           </div>
         )}
 
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent opacity-80" />
+        {isOnline && (
+          <div className="absolute top-3 right-3 bg-white text-[#F15A24] text-[10px] font-bold px-3 py-1 rounded-lg shadow-sm">
+            Online
+          </div>
+        )}
       </div>
 
-      {/* Content Section */}
-      <div className="p-6 flex flex-col flex-1">
-        <h3 className="text-white text-[20px] font-bold mb-3 tracking-tight leading-tight">
+      {/* CONTENT */}
+      <div className="p-4 flex flex-col flex-1">
+        {/* TITLE */}
+        <h3 className="text-[#141414] text-[22px] font-bold leading-snug mb-2 line-clamp-2 group-hover:text-[#F15A24] transition-colors duration-300">
           {title}
         </h3>
 
-        <p className="text-[#A1A1A1] text-[14px] leading-[1.6] mb-6 line-clamp-3">
+        {/* DESCRIPTION */}
+        <p className="text-[#666666] text-[15px] leading-[1.6] line-clamp-2 mb-4">
           {description}
         </p>
 
-        {/* Info & CTA Area */}
-        <div className="mt-auto space-y-5">
-          <div className="space-y-1">
-            <p className="text-[#FFFFFF] text-[14px] font-medium">
-              Starting at just <span className="font-bold">£{price}</span>
+        {/* PRICE + DATE */}
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="text-[13px] text-gray-400 font-medium">
+              Starting From
             </p>
-            {date && (
-              <p className="text-[#717171] text-[13px] font-medium">
-                Next Available:{" "}
-                <span className="text-[#FF5C1B] font-bold">{date}</span>
-              </p>
-            )}
+
+            <h4 className="text-[#141414] text-2xl font-black">£{price}</h4>
           </div>
 
-          <div className="flex gap-3 pt-1">
-            <button
-              onClick={() => navigate(`/booking/course?courseid=${id}`)}
-              className="flex-1 bg-[#FF5C1B] cursor-pointer hover:bg-[#E84A0F] text-white text-[14px] font-extrabold py-3.5 rounded-xl transition-all active:scale-[0.98]"
-            >
-              Book Now
-            </button>
-            <button
-              onClick={() => navigate(`/course/${id}`)}
-              className="flex-1 flex items-center justify-center cursor-pointer gap-2 border border-[#333333] hover:bg-white/5 text-white text-[14px] font-extrabold py-3.5 rounded-xl transition-all"
-            >
-              Learn More
-              <ArrowRight size={16} />
-            </button>
-          </div>
+          {date && (
+            <div className="text-right">
+              <p className="text-[13px] text-gray-400 font-medium">
+                Next Batch
+              </p>
+
+              <p className="text-[#F15A24] text-[15px] font-bold">{date}</p>
+            </div>
+          )}
+        </div>
+
+        {/* BUTTONS */}
+        <div className="flex gap-2 mt-auto">
+          <button
+            onClick={() => navigate(`/booking/course?courseid=${id}`)}
+            className="flex-1 h-11.5 rounded-xl cursor-pointer bg-[#F15A24] hover:bg-[#d94f1f] text-white text-[16px] font-bold transition-all duration-300"
+          >
+            Book Now
+          </button>
+
+          <button
+            onClick={() => navigate(`/course/${id}`)}
+            className="flex-1 h-11.5 rounded-xl border cursor-pointer border-[#E5E5E5] hover:border-[#F15A24]/30 hover:bg-black/90 hover:text-white text-[#141414]  text-[16px] font-bold flex items-center justify-center gap-1.5 transition-all duration-300"
+          >
+            Details
+            <ArrowRight size={14} />
+          </button>
         </div>
       </div>
     </motion.div>

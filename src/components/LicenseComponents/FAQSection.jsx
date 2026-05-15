@@ -3,29 +3,29 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    question: "What is an SIA Licence?",
+    question: "How do I enroll in a course or training program?",
     answer:
-      "An SIA (Security Industry Authority) licence is a mandatory credential required by law to work in the UK private security industry. It proves you've completed approved training and background checks.",
+      "You can enroll online by selecting your preferred course or training program and completing the registration process through our platform.",
   },
   {
-    question: "How long does the licence last?",
+    question: "How long are the certificates valid?",
     answer:
-      "All SIA licences are valid for 3 years from the date of issue. You'll need to complete a 1-day top-up training course to renew your licence before it expires.",
+      "Certificate validity depends on the specific course or qualification. Some certifications may require renewal or refresher training after a certain period.",
   },
   {
-    question: "How long does it take to get my licence?",
+    question: "How long does it take to receive certification?",
     answer:
-      "After passing your training and exam, it takes 24–48 hours to receive your certificate. The SIA licence application typically takes 4–6 weeks to process by the SIA.",
+      "After successfully completing your course and assessment, certificates are usually issued within 24–48 hours depending on the training provider.",
   },
   {
-    question: "Can I work immediately after training?",
+    question: "Can I start working immediately after completing training?",
     answer:
-      "You'll receive your training certificate same-day, but you must wait for your SIA licence card to arrive before you can legally work in a licensed role.",
+      "This depends on the course or industry requirements. Some roles may require additional approvals, licences, or employer verification before starting work.",
   },
   {
-    question: "What happens if I fail the exam?",
+    question: "What happens if I fail the assessment or exam?",
     answer:
-      "Don't worry! We offer free exam retakes. You can retake the exam at no additional cost until you pass.",
+      "Most training programs offer reassessment or retake options to help learners successfully complete their certification requirements.",
   },
 ];
 
@@ -63,7 +63,7 @@ const FAQSection = () => {
         </div>
 
         {/* ================= FAQ LIST ================= */}
-        <div className="space-y-5">
+        <div className="space-y-3">
           {faqs.map((item, index) => {
             const isOpen = activeIndex === index;
 

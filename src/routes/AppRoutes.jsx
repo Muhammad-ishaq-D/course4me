@@ -16,6 +16,7 @@ import Signin from "../pages/Authentication/Signin";
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import UserDashboard from "../pages/Authentication/UserDashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
+import LicenseDetails from "../pages/LicenseDetails";
 
 const AppRoutes = () => {
   return (
@@ -29,6 +30,7 @@ const AppRoutes = () => {
       <Route path="/booking/packages" element={<CoursePackages />} />
       <Route path="/booking/checkout" element={<CourseCheckout />} />
       <Route path="/licences" element={<Licenses />} />
+      <Route path="/licences/licencesdetails" element={<LicenseDetails />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog/article" element={<BlogArticle />} />
       <Route path="/locations" element={<Locations />} />

@@ -39,7 +39,7 @@ const RealStories = () => {
     <section className="py-20 px-6 lg:px-16 bg-[#F5F7FA]">
       <div className="max-w-7xl mx-auto">
         {/* TITLE */}
-        <h2 className="text-[34px] font-bold text-[#1A1A1A] mb-12">
+        <h2 className="text-[34px] font-bold text-[#1A1A1A] mb-5">
           Real stories from real people
         </h2>
 

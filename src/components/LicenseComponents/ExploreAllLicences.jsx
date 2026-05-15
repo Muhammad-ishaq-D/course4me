@@ -1,22 +1,22 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+
 import {
   Grid3X3,
   Flame,
   Shield,
-  ChevronRight,
-  Activity,
   ShieldCheck,
+  Activity,
   BriefcaseBusiness,
+  ChevronRight,
 } from "lucide-react";
 
-import CourseCard from "./CourseCard";
-import courseService from "../../api/services/courseService";
-import Loader from "../ui/Loader";
-import Searchbar from "../ui/Searchbar";
-import EmptyState from "../ui/EmptyState";
+import { licences } from "./licences";
+
 import ExploreSidebar from "../ui/ExploreSideBar";
+import LicenseCard from "../ui/LicenseCard";
+import EmptyState from "../ui/EmptyState";
 
 const categories = [
   {
@@ -44,137 +44,63 @@ const categories = [
   },
 ];
 
-const ExploreAllCourses = () => {
+const ExploreAllLicences = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const ALL_CATEGORY = "all";
   const categoryParam = searchParams.get("category") || ALL_CATEGORY;
-
   // =====================================================
   // STATES
   // =====================================================
-  const [allCourses, setAllCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // all | popular
   const [activeTab, setActiveTab] = useState("all");
 
-  //for filters model in sm and md screen
   const [openFilters, setOpenFilters] = useState(false);
 
-  //courses section refrence
   const coursesSectionRef = useRef(null);
-
-  // =====================================================
-  // FETCH COURSES
-  // =====================================================
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        setLoading(true);
-
-        const response = await courseService.getAllCourses({
-          status: "Published",
-        });
-
-        const data = response?.data?.data || [];
-
-        console.log("popular", data);
-
-        const mappedCourses = data.map((course) => ({
-          id: course._id,
-          title: course.title,
-          category: course.category,
-          description: course.shortDescription,
-          image: course.thumbnail,
-          price: course.pricing?.basePrice,
-          badge: course.level,
-          duration: course.duration,
-          reviews: course.reviewsCount,
-          booked: course.bookedCount,
-          passRate: course.passRate,
-          isPopular: course.isPopular,
-
-          date: course.sessions?.find(
-            (s) => s.availabilityStatus !== "Sold Out",
-          )?.startDate
-            ? new Date(
-                course.sessions.find((s) => s.availabilityStatus !== "Sold Out")
-                  .startDate,
-              ).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
-            : undefined,
-        }));
-
-        setAllCourses(mappedCourses);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCourses();
-  }, []);
 
   // =====================================================
   // CATEGORY FILTER
   // =====================================================
-  const categoryCourses = useMemo(() => {
+  const categoryLicences = useMemo(() => {
     if (categoryParam === ALL_CATEGORY) {
-      return allCourses;
+      return licences;
     }
 
-    return allCourses.filter((course) => {
-      const courseCategory = course.category?.trim()?.toLowerCase();
-
-      const selectedCategory = categoryParam?.trim()?.toLowerCase();
-
-      return courseCategory === selectedCategory;
+    return licences.filter((item) => {
+      return (
+        item.category?.trim()?.toLowerCase() ===
+        categoryParam?.trim()?.toLowerCase()
+      );
     });
-  }, [allCourses, categoryParam]);
+  }, [categoryParam]);
 
   // =====================================================
   // POPULAR FILTER
   // =====================================================
-  const filteredCourses = useMemo(() => {
+  const filteredLicences = useMemo(() => {
     if (activeTab === "popular") {
-      return categoryCourses.filter((course) => course.isPopular === true);
+      return categoryLicences.filter((item) => item.isPopular === true);
     }
 
-    return categoryCourses;
-  }, [categoryCourses, activeTab]);
+    return categoryLicences;
+  }, [categoryLicences, activeTab]);
 
   // =====================================================
   // CATEGORY COUNTS
   // =====================================================
   const getCategoryCount = (categoryName) => {
     if (categoryName === ALL_CATEGORY) {
-      return allCourses.length;
+      return licences.length;
     }
 
-    return allCourses.filter((course) => {
+    return licences.filter((item) => {
       return (
-        course.category?.trim()?.toLowerCase() ===
+        item.category?.trim()?.toLowerCase() ===
         categoryName?.trim()?.toLowerCase()
       );
     }).length;
   };
 
-  // smooth scroll in catagry changes time
-  const handleCategoryWithScroll = (category) => {
-    handleCategoryChange(category);
-
-    setTimeout(() => {
-      coursesSectionRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  };
   // =====================================================
   // HANDLE CATEGORY CHANGE
   // =====================================================
@@ -186,6 +112,20 @@ const ExploreAllCourses = () => {
     }
   };
 
+  // =====================================================
+  // SMOOTH SCROLL
+  // =====================================================
+  const handleCategoryWithScroll = (category) => {
+    handleCategoryChange(category);
+
+    setTimeout(() => {
+      coursesSectionRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  };
+
   return (
     <section className="py-10 md:py-14 px-4 md:px-8 lg:px-16 min-h-screen bg-[#F5F7FA]">
       <div className="max-w-7xl mx-auto">
@@ -195,19 +135,17 @@ const ExploreAllCourses = () => {
         <div className="mb-12">
           <span className="inline-flex items-center gap-2 bg-[#F15A24]/10 text-[#F15A24] px-4 py-2 rounded-full text-sm font-semibold mb-5">
             <Flame size={16} />
-            Professional Training Courses
+            Professional Security Licences
           </span>
 
           <h2 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
-            Explore all courses
+            Explore all licences
           </h2>
 
           <p className="text-[#141414]/60 mt-4 max-w-2xl text-base leading-relaxed">
-            Browse our wide range of professional training courses and
-            certifications designed to help you build your career and gain
-            industry-recognized qualifications.
+            Browse professional SIA licences, first aid qualifications,
+            workplace safety training and specialist certification courses.
           </p>
-          {/* <Searchbar /> */}
         </div>
 
         {/* =====================================================
@@ -217,7 +155,6 @@ const ExploreAllCourses = () => {
           {/* =====================================================
               SIDEBAR
           ===================================================== */}
-          {/* DESKTOP SIDEBAR */}
           <div className="hidden lg:block sticky top-0 h-fit">
             <ExploreSidebar
               activeTab={activeTab}
@@ -226,28 +163,29 @@ const ExploreAllCourses = () => {
               handleCategoryChange={handleCategoryWithScroll}
               categories={categories}
               getCategoryCount={getCategoryCount}
-              title="Courses"
+              title="Licenses"
             />
           </div>
+
           {/* =====================================================
-              COURSES SECTION
+              LICENCES SECTION
           ===================================================== */}
           <div>
             {/* TOP BAR */}
             <div
               ref={coursesSectionRef}
-              className="bg-white rounded-xl border border-[#ECECEC] shadow-[0_10px_40px_rgba(0,0,0,0.05)] px-6 py-4 lg:mb-2 flex flex-col  md:flex-row md:items-center md:justify-between gap-4"
+              className="bg-white rounded-xl border border-[#ECECEC] shadow-[0_10px_40px_rgba(0,0,0,0.05)] px-6 py-4 lg:mb-2 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
             >
               <div>
                 <h2 className="text-2xl font-bold text-[#141414]">
                   {activeTab === "popular"
-                    ? `${categoryParam} Popular Courses`
+                    ? `${categoryParam} Popular Licences`
                     : categoryParam}
                 </h2>
 
                 <p className="text-gray-500 mt-1 text-sm">
-                  {filteredCourses.length}{" "}
-                  {filteredCourses.length === 1 ? "course" : "courses"}{" "}
+                  {filteredLicences.length}{" "}
+                  {filteredLicences.length === 1 ? "licence" : "licences"}{" "}
                   available
                 </p>
               </div>
@@ -256,35 +194,32 @@ const ExploreAllCourses = () => {
               {activeTab === "popular" && (
                 <div className="inline-flex items-center gap-2 bg-[#FFF1EB] text-[#F15A24] px-4 py-2 rounded-full text-sm font-semibold w-fit">
                   <Flame size={16} />
-                  Featured Courses Only
+                  Featured Licences Only
                 </div>
               )}
             </div>
 
+            {/* MOBILE FILTER BUTTON */}
             <button
               onClick={() => setOpenFilters(true)}
               className="lg:hidden sticky top-0 z-40 mb-4 w-full bg-white border border-[#ECECEC] rounded-2xl px-5 py-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)] flex items-center justify-between transition-all duration-300 hover:border-[#F15A24]/30 active:scale-[0.99]"
             >
-              {/* LEFT CONTENT */}
               <div className="flex items-center gap-3">
-                {/* ICON */}
                 <div className="w-11 h-11 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-lg shadow-[#F15A24]/20">
                   <Grid3X3 size={18} className="text-white" />
                 </div>
 
-                {/* TEXT */}
                 <div className="text-left">
                   <h3 className="text-[#141414] text-sm font-bold leading-none">
-                    Filter Courses
+                    Filter Licences
                   </h3>
 
                   <p className="text-gray-500 text-xs mt-1">
-                    Categories & featured courses
+                    Categories & featured licences
                   </p>
                 </div>
               </div>
 
-              {/* RIGHT ICON */}
               <div className="w-9 h-9 rounded-xl bg-[#FFF4EF] flex items-center justify-center">
                 <ChevronRight size={18} className="text-[#F15A24]" />
               </div>
@@ -337,12 +272,12 @@ const ExploreAllCourses = () => {
                         setActiveTab={setActiveTab}
                         categoryParam={categoryParam}
                         handleCategoryChange={(category) => {
-                          handleCategoryChange(category);
+                          handleCategoryWithScroll(category);
                           setOpenFilters(false);
                         }}
                         categories={categories}
                         getCategoryCount={getCategoryCount}
-                        title="Courses"
+                        title="Licenses"
                       />
                     </div>
                   </motion.div>
@@ -350,19 +285,17 @@ const ExploreAllCourses = () => {
               )}
             </AnimatePresence>
 
-            {/* LOADER */}
-            {loading ? (
-              <Loader text="Loading Courses..." />
-            ) : filteredCourses.length > 0 ? (
+            {/* LICENCES GRID */}
+            {filteredLicences.length > 0 ? (
               <motion.div
                 layout
                 className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"
               >
                 <AnimatePresence mode="popLayout">
-                  {filteredCourses.map((course) => (
+                  {filteredLicences.map((item, index) => (
                     <motion.div
+                      key={index}
                       layout
-                      key={course.id}
                       initial={{
                         opacity: 0,
                         scale: 0.95,
@@ -379,13 +312,13 @@ const ExploreAllCourses = () => {
                         duration: 0.3,
                       }}
                     >
-                      <CourseCard {...course} />
+                      <LicenseCard item={item} index={index} />
                     </motion.div>
                   ))}
                 </AnimatePresence>
               </motion.div>
             ) : (
-              <EmptyState text="Courses" />
+              <EmptyState text="Licenses" />
             )}
           </div>
         </div>
@@ -394,4 +327,4 @@ const ExploreAllCourses = () => {
   );
 };
 
-export default ExploreAllCourses;
+export default ExploreAllLicences;

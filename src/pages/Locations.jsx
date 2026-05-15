@@ -6,19 +6,21 @@ import WhyChooseTrainingCentres from "../components/locationComponents/WhyChoose
 import LocationHelpSection from "../components/locationComponents/LocationHelpSection";
 import FeaturedCentres from "../components/locationComponents/FeaturedCentres";
 import AllTrainingCentres from "../components/locationComponents/AllTrainingCentres";
+import LocationSearchPage from "../components/locationComponents/LocationSearch";
 
 export default function Locations() {
-  const [activeRegion, setActiveRegion] = useState("All Centers");
+  // const [activeRegion, setActiveRegion] = useState("All Centers");
 
   return (
     <div>
-      <TrainingCentresSection />
-      <RegionFilter active={activeRegion} setActive={setActiveRegion} />
-      <FeaturedCentres active={activeRegion} />
+      {/* <TrainingCentresSection /> */}
+      {/* <RegionFilter active={activeRegion} setActive={setActiveRegion} /> */}
+      {/* <FeaturedCentres active={activeRegion} /> */}
       {/* <AllTrainingCentres /> */}
       {/* <NationwideCoverage /> */}
-      <WhyChooseTrainingCentres />
-      <LocationHelpSection />
+      {/* <WhyChooseTrainingCentres /> */}
+      {/* <LocationHelpSection /> */}
+      <LocationSearchPage />
     </div>
   );
 }

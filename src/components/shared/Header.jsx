@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Logo from "../../assets/Logo.svg";
 import { ChevronDown, UserCircle, LogOut, Settings } from "lucide-react";
-import BrowseCoursesModal from "./BrowseCoursesModal";
+// import BrowseCoursesModal from "./BrowseCoursesModal";
 import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const [isCoursesModalOpen, setIsCoursesModalOpen] = useState(false);
+  // const [isCoursesModalOpen, setIsCoursesModalOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
   const { user, logout } = useAuth();
@@ -38,12 +38,14 @@ const Header = () => {
               Home
             </NavLink>
 
-            <button
-              onClick={() => setIsCoursesModalOpen(true)}
-              className={`${navLinkClasses({ isActive: false })} flex items-center gap-1 cursor-pointer`}
+            <NavLink
+              to="/courses"
+              // onClick={() => setIsCoursesModalOpen(true)}
+              className={navLinkClasses}
             >
-              Courses <ChevronDown className="w-4 h-4 mt-1" />
-            </button>
+              Courses
+              {/* <ChevronDown className="w-4 h-4 mt-1" /> */}
+            </NavLink>
 
             <NavLink to="/licences" className={navLinkClasses}>
               Licences
@@ -68,7 +70,7 @@ const Header = () => {
               to="/courses"
               className="bg-[#F15A24] text-white font-semibold px-6 py-2.5 rounded-full shadow-md hover:brightness-95 transition"
             >
-              Find Course
+              Quick Search
             </Link>
 
             {user ? (
@@ -208,15 +210,17 @@ const Header = () => {
               Home
             </NavLink>
 
-            <button
-              onClick={() => {
-                setOpen(false);
-                setIsCoursesModalOpen(true);
-              }}
-              className={`${mobileNavLinkClasses({ isActive: false })} flex items-center gap-1 text-left`}
+            <NavLink
+              to="/courses"
+              // onClick={() => {
+              //   setOpen(false);
+              //   setIsCoursesModalOpen(true);
+              // }}
+              className={navLinkClasses}
             >
-              Courses <ChevronDown className="w-4 h-4" />
-            </button>
+              Courses
+              {/* <ChevronDown className="w-4 h-4" /> */}
+            </NavLink>
 
             <NavLink
               to="/licences"
@@ -256,7 +260,7 @@ const Header = () => {
                 onClick={() => setOpen(false)}
                 className="bg-[#F15A24] text-white font-semibold py-3 rounded-full shadow-md hover:brightness-95 transition text-center"
               >
-                Find Course
+                Quick Search
               </Link>
 
               {user ? (
@@ -377,10 +381,10 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <BrowseCoursesModal
+      {/* <BrowseCoursesModal
         isOpen={isCoursesModalOpen}
         onClose={() => setIsCoursesModalOpen(false)}
-      />
+      /> */}
     </header>
   );
 };

@@ -4,29 +4,29 @@ import { Target, BookOpen, Medal, Zap } from "lucide-react";
 const steps = [
   {
     step: "STEP 1",
-    title: "Choose Your Licence",
-    desc: "Select the SIA licence that best matches your future career path and security goals.",
+    title: "Choose Your Course",
+    desc: "Browse and select the training course or certification that matches your career goals and interests.",
     icon: Target,
     bg: "bg-gradient-to-br from-blue-500 to-blue-700",
   },
   {
     step: "STEP 2",
-    title: "Complete Training",
-    desc: "Attend accredited professional training at one of our trusted UK locations.",
+    title: "Complete Your Training",
+    desc: "Attend professional training sessions delivered by experienced instructors at trusted learning locations.",
     icon: BookOpen,
     bg: "bg-gradient-to-br from-purple-500 to-purple-700",
   },
   {
     step: "STEP 3",
-    title: "Pass Your Exam",
-    desc: "Successfully complete your SIA assessment with fast and reliable same-day results.",
+    title: "Pass Your Assessment",
+    desc: "Successfully complete your course assessment or exam to demonstrate your skills and knowledge.",
     icon: Medal,
     bg: "bg-gradient-to-br from-[#F15A24] to-[#c63d0c]",
   },
   {
     step: "STEP 4",
-    title: "Start Working",
-    desc: "Apply for your licence and begin your professional career in the UK security industry.",
+    title: "Get Certified",
+    desc: "Receive your certification and take the next step toward professional growth and career opportunities.",
     icon: Zap,
     bg: "bg-gradient-to-br from-green-500 to-green-700",
   },
@@ -61,7 +61,7 @@ const HowItWorksSection = () => {
         </div>
 
         {/* ================= STEPS ================= */}
-        <div className="relative grid grid-cols-1  sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
+        <div className="relative grid grid-cols-1  sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
           {steps.map((item, index) => {
             const Icon = item.icon;
 
@@ -83,7 +83,7 @@ const HowItWorksSection = () => {
                 )}
 
                 {/* Step Number */}
-                <div className="absolute top-6 right-6 text-5xl font-extrabold text-[#edf2f7] select-none">
+                <div className="absolute top-6 right-6 text-5xl font-extrabold text-gray-200 select-none">
                   0{index + 1}
                 </div>
 
@@ -92,11 +92,6 @@ const HowItWorksSection = () => {
                   className={`relative z-10 w-16 h-16 rounded-2xl ${item.bg} flex items-center justify-center shadow-lg group-hover:scale-110 transition duration-300`}
                 >
                   <Icon size={30} strokeWidth={2.2} className="text-white" />
-                </div>
-
-                {/* Step Label */}
-                <div className="relative z-10 mt-7 inline-block text-xs font-bold tracking-[2px] text-[#F15A24] uppercase bg-[#F15A2410] px-3 py-1 rounded-full">
-                  {item.step}
                 </div>
 
                 {/* Title */}
