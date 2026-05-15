@@ -47,7 +47,7 @@ const categories = [
 const ExploreAllCourses = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const ALL_CATEGORY = "all";
+  const ALL_CATEGORY = "All";
   const categoryParam = searchParams.get("category") || ALL_CATEGORY;
 
   // =====================================================
@@ -99,13 +99,13 @@ const ExploreAllCourses = () => {
             (s) => s.availabilityStatus !== "Sold Out",
           )?.startDate
             ? new Date(
-                course.sessions.find((s) => s.availabilityStatus !== "Sold Out")
-                  .startDate,
-              ).toLocaleDateString("en-GB", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
+              course.sessions.find((s) => s.availabilityStatus !== "Sold Out")
+                .startDate,
+            ).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
             : undefined,
         }));
 
