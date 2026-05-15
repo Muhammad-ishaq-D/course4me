@@ -47,7 +47,7 @@ const categories = [
 const ExploreAllLicences = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const ALL_CATEGORY = "all";
+  const ALL_CATEGORY = "All";
   const categoryParam = searchParams.get("category") || ALL_CATEGORY;
   // =====================================================
   // STATES
