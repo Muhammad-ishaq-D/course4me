@@ -14,7 +14,7 @@ import {
 
 import { licences } from "./licences";
 
-import ExploreSidebar from "../ui/ExploreSideBar";
+import ExploreSidebar from "../ui/ExploreSidebar";
 import LicenseCard from "../ui/LicenseCard";
 import EmptyState from "../ui/EmptyState";
 

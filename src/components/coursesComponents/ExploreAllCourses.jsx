@@ -16,7 +16,7 @@ import courseService from "../../api/services/courseService";
 import Loader from "../ui/Loader";
 import Searchbar from "../ui/Searchbar";
 import EmptyState from "../ui/EmptyState";
-import ExploreSidebar from "../ui/ExploreSideBar";
+import ExploreSidebar from "../ui/ExploreSidebar";
 
 const categories = [
   {
