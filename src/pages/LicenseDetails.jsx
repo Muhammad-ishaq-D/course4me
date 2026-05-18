@@ -158,6 +158,14 @@ const LicenseDetails = () => {
     };
   }, [loading, sections]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F6F8FB] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-[#EEF2F6] border-t-[#F15A24] rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-[#F6F8FB] ">
       {/* =====================HERO SECTION========================== */}
