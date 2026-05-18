@@ -11,7 +11,7 @@ import {
   BriefcaseBusiness,
 } from "lucide-react";
 
-import CourseCard from "./CourseCard";
+import CourseCard from "../ui/CourseCard";
 import courseService from "../../api/services/courseService";
 import Loader from "../ui/Loader";
 import Searchbar from "../ui/Searchbar";
@@ -99,13 +99,13 @@ const ExploreAllCourses = () => {
             (s) => s.availabilityStatus !== "Sold Out",
           )?.startDate
             ? new Date(
-              course.sessions.find((s) => s.availabilityStatus !== "Sold Out")
-                .startDate,
-            ).toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })
+                course.sessions.find((s) => s.availabilityStatus !== "Sold Out")
+                  .startDate,
+              ).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
             : undefined,
         }));
 

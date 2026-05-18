@@ -23,7 +23,7 @@ const ExploreSidebar = ({
 
           <button
             onClick={() =>
-              setActiveTab((prev) => (prev === "popular" ? "all" : "popular"))
+              setActiveTab((prev) => (prev === "popular" ? "All" : "popular"))
             }
             className={`group w-full rounded-2xl px-4 py-4 flex items-center justify-between transition-all duration-300 border ${
               activeTab === "popular"
@@ -94,9 +94,9 @@ const ExploreSidebar = ({
           <div className="space-y-2">
             {/* ALL BUTTON */}
             <button
-              onClick={() => handleCategoryChange("all")}
+              onClick={() => handleCategoryChange("All")}
               className={`group w-full flex items-center justify-between px-4 py-4 rounded-2xl transition-all duration-300 border ${
-                categoryParam === "all"
+                categoryParam === "All"
                   ? "bg-gradient-to-r from-[#F15A24] to-[#ff7b4d] text-white border-[#F15A24] shadow-lg shadow-[#F15A24]/20"
                   : "bg-[#FAFAFA] hover:bg-[#FFF4EF] border-transparent hover:border-[#F15A24]/10"
               }`}
@@ -105,7 +105,7 @@ const ExploreSidebar = ({
                 {/* ICON */}
                 <div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                    categoryParam === "all"
+                    categoryParam === "All"
                       ? "bg-white/20 text-white"
                       : "bg-[#F15A24]/10 text-[#F15A24]"
                   }`}
@@ -120,12 +120,12 @@ const ExploreSidebar = ({
               {/* COUNT */}
               <div
                 className={`min-w-[30px] h-[30px] px-2 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                  categoryParam === "all"
+                  categoryParam === "All"
                     ? "bg-white/20 text-white"
                     : "bg-[#F15A24]/10 text-[#F15A24]"
                 }`}
               >
-                {getCategoryCount("all")}
+                {getCategoryCount("All")}
               </div>
             </button>
 

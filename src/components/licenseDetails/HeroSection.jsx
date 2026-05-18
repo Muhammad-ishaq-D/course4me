@@ -17,15 +17,21 @@ const HeroSection = () => {
       <div className="relative max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-14 lg:py-20">
         {/* =======================BREADCRUMB================= */}
         <div className="flex items-center gap-3 text-sm text-white/50 mb-4">
-          <span className="hover:text-[#F15A24] cursor-pointer transition-all duration-300">
+          <NavLink
+            to="/"
+            className="hover:text-[#F15A24] cursor-pointer transition-all duration-300"
+          >
             Home
-          </span>
+          </NavLink>
 
           <ChevronRight size={16} />
 
-          <span className="hover:text-[#F15A24] cursor-pointer transition-all duration-300">
-            SIA Training
-          </span>
+          <NavLink
+            to="/licences"
+            className="hover:text-[#F15A24] cursor-pointer transition-all duration-300"
+          >
+            Licenses
+          </NavLink>
 
           <ChevronRight size={16} />
 
