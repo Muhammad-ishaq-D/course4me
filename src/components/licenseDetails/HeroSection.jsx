@@ -2,7 +2,29 @@ import React from "react";
 import { ChevronRight, Shield, Clock3, BadgeCheck } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
-const HeroSection = () => {
+const HeroSection = ({ license }) => {
+  let titleMain = "SIA Door";
+  let titleHighlight = "Supervisor Licence";
+  if (license && license.title) {
+    const title = license.title;
+    if (title.toLowerCase().includes("door supervisor")) {
+      titleMain = "SIA Door";
+      titleHighlight = "Supervisor Licence";
+    } else {
+      const words = title.split(" ");
+      if (words.length > 2) {
+        titleMain = words.slice(0, words.length - 2).join(" ");
+        titleHighlight = words.slice(words.length - 2).join(" ");
+      } else if (words.length > 1) {
+        titleMain = words[0];
+        titleHighlight = words[1];
+      } else {
+        titleMain = title;
+        titleHighlight = "";
+      }
+    }
+  }
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#16202A] via-[#18232E] to-[#0F1720] border-b border-white/5">
       {/* ================= BACKGROUND GLOWS ================= */}
@@ -36,7 +58,7 @@ const HeroSection = () => {
           <ChevronRight size={16} />
 
           <span className="text-white font-semibold">
-            Door Supervisor Licence
+            {license?.title || "Door Supervisor Licence"}
           </span>
         </div>
 
@@ -59,21 +81,20 @@ const HeroSection = () => {
 
               {/* CATEGORY */}
               <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white px-5 py-3 rounded-full text-sm font-medium backdrop-blur-xl">
-                SIA Training
+                {license?.category || "SIA Training"}
               </div>
             </div>
 
             {/* TITLE */}
             <h1 className="text-4xl md:text-6xl xl:text-[74px] font-black leading-[0.95] tracking-tight text-white">
-              SIA Door
-              <span className="block text-[#F15A24]">Supervisor Licence</span>
+              {titleMain}{" "}
+              <span className="block text-[#F15A24]">{titleHighlight}</span>
             </h1>
 
             {/* DESCRIPTION */}
             <p className="mt-7 text-lg md:text-[19px] leading-8 text-white/70 max-w-3xl">
-              Professional security training and certification required for
-              working in licensed venues, events, and security environments
-              across the UK.
+              {license?.shortDescription ||
+                "Professional security training and certification required for working in licensed venues, events, and security environments across the UK."}
             </p>
 
             {/* TAGS */}
@@ -89,7 +110,9 @@ const HeroSection = () => {
                     Duration
                   </p>
 
-                  <p className="text-white font-semibold text-sm">6 Days</p>
+                  <p className="text-white font-semibold text-sm">
+                    {license?.duration || "6 Days"}
+                  </p>
                 </div>
               </div>
 
@@ -104,7 +127,9 @@ const HeroSection = () => {
                     Validity
                   </p>
 
-                  <p className="text-white font-semibold text-sm">3 Years</p>
+                  <p className="text-white font-semibold text-sm">
+                    {license?.valid || "3 Years"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -116,6 +141,18 @@ const HeroSection = () => {
               {/* CARD GLOW */}
               <div className="absolute top-0 right-0 w-40 h-40 bg-[#F15A24]/20 blur-[80px] rounded-full pointer-events-none" />
 
+              {/* THUMBNAIL IMAGE */}
+              {license?.thumbnail && (
+                <div className="relative w-full h-[150px] rounded-3xl overflow-hidden mb-6 border border-white/10 shadow-[0_8px_25px_rgba(0,0,0,0.3)]">
+                  <img
+                    src={license.thumbnail}
+                    alt={license.title || "License Thumbnail"}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                </div>
+              )}
+
               {/* LABEL */}
               <p className="relative uppercase tracking-[0.25em] text-white/50 text-xs font-bold">
                 Starting From
@@ -126,7 +163,9 @@ const HeroSection = () => {
                 <span className="text-white/70 text-2xl font-semibold">£</span>
 
                 <h2 className="text-6xl font-black text-white leading-none">
-                  219
+                  {license?.pricing && typeof license.pricing === "object"
+                    ? license.pricing.salePrice || license.pricing.basePrice
+                    : "219"}
                 </h2>
               </div>
 
@@ -156,7 +195,7 @@ const HeroSection = () => {
 
               {/* BUTTON */}
               <NavLink
-                to={`/booking/course`}
+                to={`/booking/course?courseid=${license?._id}`}
                 className="relative mt-8 w-full bg-[#F15A24] hover:bg-[#db4c14] text-white py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-[0_15px_40px_rgba(241,90,36,0.35)] hover:scale-[1.02] flex items-center justify-center gap-2"
               >
                 Book Now

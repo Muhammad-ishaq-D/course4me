@@ -19,7 +19,7 @@ const LicenseCard = ({ item, index }) => {
       {/* IMAGE */}
       <div className="relative overflow-hidden">
         <img
-          src={item.image}
+          src={item.thumbnail || item.image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop"}
           alt={item.title}
           className="w-full h-[180px] object-cover group-hover:scale-105 transition duration-700"
         />
@@ -56,7 +56,7 @@ const LicenseCard = ({ item, index }) => {
 
         {/* DESCRIPTION */}
         <p className="text-gray-500 mt-2 text-[13px] leading-relaxed line-clamp-2">
-          {item.description}
+          {item.shortDescription || item.description}
         </p>
 
         {/* INFO */}
@@ -95,7 +95,7 @@ const LicenseCard = ({ item, index }) => {
             </p>
 
             <h4 className="text-2xl font-extrabold text-[#243443]">
-              {item.pricing}
+              {item.pricing && typeof item.pricing === 'object' ? `£${item.pricing.salePrice || item.pricing.basePrice}` : item.pricing}
             </h4>
           </div>
 
@@ -113,7 +113,7 @@ const LicenseCard = ({ item, index }) => {
           </button> */}
 
           <NavLink
-            to="/licences/licencesdetails"
+            to={`/licences/licencesdetails?id=${item._id || item.title}`}
             className="h-[46px] px-5 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-sm font-bold flex items-center gap-2 transition-all duration-300 shadow-lg shadow-[#F15A24]/20"
           >
             View Details

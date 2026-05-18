@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { licences } from "./licences";
+import licenseService from "../../api/services/licenseService";
 
 import ExploreSidebar from "../ui/ExploreSidebar";
 import LicenseCard from "../ui/LicenseCard";
@@ -58,21 +59,49 @@ const ExploreAllLicences = () => {
 
   const coursesSectionRef = useRef(null);
 
+  const [licencesList, setLicencesList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // =====================================================
+  // FETCH LICENCES FROM DATABASE
+  // =====================================================
+  useEffect(() => {
+    const fetchLicences = async () => {
+      try {
+        setLoading(true);
+        const response = await licenseService.getAllLicenses({ status: 'Published' });
+        const resData = response.data || response;
+        const fetched = resData.licenses || resData.data || resData || [];
+        if (fetched.length > 0) {
+          setLicencesList(fetched);
+        } else {
+          setLicencesList(licences);
+        }
+      } catch (error) {
+        console.error("Error fetching licenses from backend:", error);
+        setLicencesList(licences);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLicences();
+  }, []);
+
   // =====================================================
   // CATEGORY FILTER
   // =====================================================
   const categoryLicences = useMemo(() => {
     if (categoryParam === ALL_CATEGORY) {
-      return licences;
+      return licencesList;
     }
 
-    return licences.filter((item) => {
+    return licencesList.filter((item) => {
       return (
         item.category?.trim()?.toLowerCase() ===
         categoryParam?.trim()?.toLowerCase()
       );
     });
-  }, [categoryParam]);
+  }, [categoryParam, licencesList]);
 
   // =====================================================
   // POPULAR FILTER
@@ -90,10 +119,10 @@ const ExploreAllLicences = () => {
   // =====================================================
   const getCategoryCount = (categoryName) => {
     if (categoryName === ALL_CATEGORY) {
-      return licences.length;
+      return licencesList.length;
     }
 
-    return licences.filter((item) => {
+    return licencesList.filter((item) => {
       return (
         item.category?.trim()?.toLowerCase() ===
         categoryName?.trim()?.toLowerCase()
