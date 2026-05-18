@@ -14,8 +14,9 @@ import {
 } from "lucide-react";
 
 import { locationsData } from "../../data/locationData";
+import { NavLink } from "react-router-dom";
 
-const CentersMapPage = () => {
+const LocationSearch = () => {
   // ===================== STATES =====================
 
   const [searchInput, setSearchInput] = useState("");
@@ -307,9 +308,13 @@ const CentersMapPage = () => {
                           </button>
 
                           {/* View Button */}
-                          <button className="h-11 px-5 sm:px-6 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-orange-200 whitespace-nowrap w-full sm:w-auto">
+                          <NavLink
+                            to="/locations/locationdetails"
+                            state={{ center }}
+                            className="h-11 px-5 sm:px-6 rounded-2xl bg-linear-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-orange-200 whitespace-nowrap w-full sm:w-auto flex items-center justify-center"
+                          >
                             View Details
-                          </button>
+                          </NavLink>
                         </div>
                       </div>
                     </div>
@@ -444,4 +449,4 @@ const CentersMapPage = () => {
   );
 };
 
-export default CentersMapPage;
+export default LocationSearch;

@@ -10,36 +10,36 @@ const StepsSection = () => {
   const steps = [
     {
       number: "01",
-      title: "Get Qualified Fast",
+      title: "Choose Your Career",
       description:
-        "Complete your SIA-approved training course at one of our 85+ centres — finish in days, not months",
-      icon: GraduationCap,
+        "Explore high-demand security career paths including Door Supervisor, CCTV Operator, Close Protection and more.",
+      icon: Search,
       color: "from-blue-500 to-blue-600",
     },
 
     {
       number: "02",
-      title: "Secure Your Licence",
+      title: "Get Professional Training",
       description:
-        "We guide you through the SIA application step by step — no guesswork, no stress, just results",
-      icon: BadgeCheck,
+        "Complete industry-recognised training courses at trusted centres to gain the skills employers are looking for.",
+      icon: GraduationCap,
       color: "from-purple-500 to-purple-600",
     },
 
     {
       number: "03",
-      title: "Browse Live Jobs",
+      title: "Gain Your Licence",
       description:
-        "Access hundreds of exclusive roles from our 500+ hiring partners — jobs you won't find anywhere else",
-      icon: Search,
+        "Apply for your SIA or professional certification with complete guidance and support throughout the process.",
+      icon: BadgeCheck,
       color: "from-green-500 to-green-600",
     },
 
     {
       number: "04",
-      title: "Start Earning",
+      title: "Start Your Career",
       description:
-        "Accept your offer, walk into your first shift, and begin building the career you deserve",
+        "Apply for jobs, attend interviews and begin building a successful long-term career in the security industry.",
       icon: Zap,
       color: "from-[#F8510C] to-orange-500",
     },
@@ -60,21 +60,20 @@ const StepsSection = () => {
             <Zap size={15} />
             Quick Career Journey
           </div>
-
           <h2 className="mt-6 text-4xl md:text-5xl font-extrabold leading-tight text-[#111111]">
-            Start Your Security Career
+            Start Your Career
             <br />
             <span className="text-[#F8510C]">In 4 Simple Steps</span>
           </h2>
 
           <p className="mt-6 text-[#6B7280] text-lg leading-relaxed">
-            From professional training to landing your first role — begin your
-            career journey within weeks.
+            From discovering the right career path to getting qualified and
+            hired — begin your professional journey with confidence.
           </p>
         </div>
 
         {/* ===== STEPS ===== */}
-        <div className="relative grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="relative grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* Connector Line */}
           <div className="hidden lg:block absolute top-[70px] left-[10%] right-[10%] h-[2px] border-t-2 border-dashed border-gray-300 z-0" />
 
@@ -84,29 +83,29 @@ const StepsSection = () => {
             return (
               <div key={index} className="group relative z-10">
                 {/* Card */}
-                <div className="relative bg-white border border-gray-200 rounded-[32px] p-8 text-center shadow-[0_10px_40px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.10)] hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+                <div className="relative bg-white border border-gray-200 rounded-[28px] p-6 text-center shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_18px_45px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-500 overflow-hidden h-full">
                   {/* Hover Glow */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#F8510C]/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition duration-500" />
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#F8510C]/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition duration-500" />
 
                   {/* Step Number */}
-                  <div className="absolute top-6 right-6 text-[42px] font-bold text-gray-200 leading-none">
+                  <div className="absolute top-5 right-5 text-[30px] font-black text-gray-100 leading-none">
                     {step.number}
                   </div>
 
                   {/* Icon */}
                   <div
-                    className={`relative w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-[0_15px_35px_rgba(0,0,0,0.15)]`}
+                    className={`relative w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-[0_12px_28px_rgba(0,0,0,0.12)]`}
                   >
-                    <Icon size={34} className="text-white" />
+                    <Icon size={28} className="text-white" />
                   </div>
 
                   {/* Content */}
-                  <div className="relative mt-8">
-                    <h3 className="text-[24px] font-bold text-[#111111]">
+                  <div className="relative mt-5">
+                    <h3 className="text-[20px] font-bold text-[#111111] leading-tight">
                       {step.title}
                     </h3>
 
-                    <p className="mt-4 text-[#6B7280] leading-relaxed text-[15px]">
+                    <p className="mt-3 text-[#6B7280] leading-relaxed text-[14px]">
                       {step.description}
                     </p>
                   </div>

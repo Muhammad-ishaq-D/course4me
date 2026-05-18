@@ -31,15 +31,21 @@ const HeroSection = ({ license }) => {
       <div className="relative max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-14 lg:py-20">
         {/* =======================BREADCRUMB================= */}
         <div className="flex items-center gap-3 text-sm text-white/50 mb-4">
-          <span className="hover:text-[#F15A24] cursor-pointer transition-all duration-300">
+          <NavLink
+            to="/"
+            className="hover:text-[#F15A24] cursor-pointer transition-all duration-300"
+          >
             Home
-          </span>
+          </NavLink>
 
           <ChevronRight size={16} />
 
-          <span className="hover:text-[#F15A24] cursor-pointer transition-all duration-300">
-            {license?.category || "SIA Training"}
-          </span>
+          <NavLink
+            to="/licences"
+            className="hover:text-[#F15A24] cursor-pointer transition-all duration-300"
+          >
+            Licenses
+          </NavLink>
 
           <ChevronRight size={16} />
 
@@ -79,7 +85,8 @@ const HeroSection = ({ license }) => {
 
             {/* DESCRIPTION */}
             <p className="mt-7 text-lg md:text-[19px] leading-8 text-white/70 max-w-3xl">
-              {license?.shortDescription || "Professional security training and certification required for working in licensed venues, events, and security environments across the UK."}
+              {license?.shortDescription ||
+                "Professional security training and certification required for working in licensed venues, events, and security environments across the UK."}
             </p>
 
             {/* TAGS */}
@@ -95,7 +102,9 @@ const HeroSection = ({ license }) => {
                     Duration
                   </p>
 
-                  <p className="text-white font-semibold text-sm">{license?.duration || "6 Days"}</p>
+                  <p className="text-white font-semibold text-sm">
+                    {license?.duration || "6 Days"}
+                  </p>
                 </div>
               </div>
 
@@ -110,7 +119,9 @@ const HeroSection = ({ license }) => {
                     Validity
                   </p>
 
-                  <p className="text-white font-semibold text-sm">{license?.valid || "3 Years"}</p>
+                  <p className="text-white font-semibold text-sm">
+                    {license?.valid || "3 Years"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -144,7 +155,9 @@ const HeroSection = ({ license }) => {
                 <span className="text-white/70 text-2xl font-semibold">£</span>
 
                 <h2 className="text-6xl font-black text-white leading-none">
-                  {license?.pricing && typeof license.pricing === 'object' ? (license.pricing.salePrice || license.pricing.basePrice) : "219"}
+                  {license?.pricing && typeof license.pricing === "object"
+                    ? license.pricing.salePrice || license.pricing.basePrice
+                    : "219"}
                 </h2>
               </div>
 

@@ -1,0 +1,449 @@
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Search,
+  MapPin,
+  Shield,
+  ChevronLeft,
+  ChevronRight,
+  LayoutGrid,
+  HeartPulse,
+  ShieldCheck,
+  BriefcaseBusiness,
+  ChevronDown,
+  Filter,
+  X,
+} from "lucide-react";
+import { careersData } from "../../data/careerData";
+import CareerSidebar from "../ui/CareerSidebar";
+import CareerCards from "../ui/CareerCards";
+import EmptyState from "../ui/EmptyState";
+import Loader from "../ui/Loader";
+import { NavLink } from "react-router-dom";
+
+const categories = [
+  {
+    id: 1,
+    name: "All Careers",
+    count: 7,
+    icon: LayoutGrid,
+    color: "from-[#F8510C] to-[#FF7A45]",
+  },
+
+  {
+    id: 2,
+    name: "SIA Training",
+    count: 6,
+    icon: Shield,
+    color: "from-[#FF2D55] to-[#FF5B7F]",
+  },
+
+  {
+    id: 3,
+    name: "First Aid",
+    count: 0,
+    icon: HeartPulse,
+    color: "from-[#22C55E] to-[#4ADE80]",
+  },
+
+  {
+    id: 4,
+    name: "Health & Safety",
+    count: 0,
+    icon: ShieldCheck,
+    color: "from-[#0A84FF] to-[#4DA3FF]",
+  },
+
+  {
+    id: 5,
+    name: "Specialist",
+    count: 1,
+    icon: BriefcaseBusiness,
+    color: "from-[#5856D6] to-[#7B79FF]",
+  },
+];
+
+const CareerListing = () => {
+  const [selectedCategory, setSelectedCategory] = useState("All Careers");
+
+  const [sortBy, setSortBy] = useState("all");
+
+  const [loading, setLoading] = useState(true);
+
+  const [showFilters, setShowFilters] = useState(false);
+
+  const mainSectionRef = useRef(null);
+
+  const filteredCareers = careersData.filter((career) => {
+    const categoryMatch =
+      selectedCategory === "All Careers"
+        ? true
+        : career.category === selectedCategory;
+
+    const popularMatch = sortBy === "popular" ? career.popular === true : true;
+
+    return categoryMatch && popularMatch;
+  });
+
+  useEffect(() => {
+    setLoading(true);
+
+    if (mainSectionRef.current) {
+      mainSectionRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+      setShowFilters(false);
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [selectedCategory, sortBy]);
+
+  return (
+    <div className="bg-[#F7F8FA] max-w-8xl  min-h-screen">
+      <div className="max-w-350 mx-auto px-4 md:px-6 py-6">
+        {/* ======================================================
+                    HERO SECTION
+====================================================== */}
+        <div className="mb-5">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm mb-5">
+            <NavLink
+              to="/"
+              className="text-[#98A2B3] cursor-pointer font-medium"
+            >
+              Home
+            </NavLink>
+
+            <span className="text-[#D0D5DD]">/</span>
+
+            <span className="text-[#111827]  font-bold">Careers</span>
+          </div>
+
+          {/* Hero Box */}
+          <div className="relative overflow-hidden rounded-[32px] border border-[#FFE2D6] bg-gradient-to-br from-[#FFF7F3] via-white to-[#FFF1EB] p-5 md:p-7 shadow-sm">
+            {/* Glow */}
+            <div className="absolute top-0 right-0 w-[250px] h-[250px] bg-[#F8510C]/10 blur-3xl rounded-full pointer-events-none" />
+
+            <div className="relative z-10">
+              {/* Top Content */}
+              <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-7">
+                {/* Left */}
+                <div className="max-w-3xl">
+                  {/* Badge */}
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF1EB] border border-[#FFD7C7] mb-5">
+                    <div className="w-2 h-2 rounded-full bg-[#F8510C]" />
+
+                    <span className="text-[12px] font-black tracking-[0.12em] uppercase text-[#F8510C]">
+                      Security Career Platform
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h1 className="text-[34px] md:text-[48px] leading-[1.05] font-black tracking-tight text-[#111827]">
+                    Explore Security
+                    <span className="block text-[#F8510C]">
+                      Careers Near You
+                    </span>
+                  </h1>
+
+                  {/* Description */}
+                  <p className="mt-5 text-[15px] md:text-[16px] leading-relaxed text-[#667085] max-w-2xl">
+                    Discover the right career path for you. Get trained, get
+                    licensed and build your future in the security industry.
+                  </p>
+
+                  {/* Stats */}
+                  <div className="flex flex-wrap items-center gap-6 mt-7">
+                    <div>
+                      <h3 className="text-2xl font-black text-[#111827]">
+                        120+
+                      </h3>
+
+                      <p className="text-sm text-[#667085] mt-1">
+                        Career Opportunities
+                      </p>
+                    </div>
+
+                    <div className="w-px h-10 bg-[#E4E7EC]" />
+
+                    <div>
+                      <h3 className="text-2xl font-black text-[#111827]">
+                        45K+
+                      </h3>
+
+                      <p className="text-sm text-[#667085] mt-1">
+                        Students Trained
+                      </p>
+                    </div>
+
+                    <div className="w-px h-10 bg-[#E4E7EC]" />
+
+                    <div>
+                      <h3 className="text-2xl font-black text-[#111827]">
+                        98%
+                      </h3>
+
+                      <p className="text-sm text-[#667085] mt-1">
+                        Success Rate
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Search Box */}
+                <div className="w-full xl:w-[390px]">
+                  <div className="bg-white rounded-[28px] border border-white shadow-[0_20px_50px_rgba(0,0,0,0.06)] p-5">
+                    <h2 className="text-xl font-black text-[#111827]">
+                      Quick Search
+                    </h2>
+
+                    <p className="text-sm text-[#667085] mt-2">
+                      Find the perfect career instantly.
+                    </p>
+
+                    {/* Search Inputs */}
+                    <div className="mt-5 space-y-4">
+                      {/* Career Search */}
+                      <div className="relative">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#F8510C]" />
+
+                        <input
+                          type="text"
+                          placeholder="Career title or keyword"
+                          className="w-full h-13 rounded-2xl border border-[#EAECF0] bg-[#FAFAFA] pl-12 pr-4 outline-none focus:border-[#F8510C] focus:ring-4 focus:ring-[#F8510C]/10 transition-all"
+                        />
+                      </div>
+
+                      {/* Location */}
+                      <div className="relative">
+                        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#F8510C]" />
+
+                        <input
+                          type="text"
+                          placeholder="Enter location"
+                          className="w-full h-13 rounded-2xl border border-[#EAECF0] bg-[#FAFAFA] pl-12 pr-4 outline-none focus:border-[#F8510C] focus:ring-4 focus:ring-[#F8510C]/10 transition-all"
+                        />
+                      </div>
+
+                      {/* Button */}
+                      <button className="w-full h-13 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] transition-all text-white font-bold shadow-lg shadow-[#F8510C]/20">
+                        Search Careers
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-[280px_1fr_320px] gap-3">
+          {/* ==================SIDEBAR====================== */}
+          <div className="hidden xl:block">
+            <CareerSidebar
+              categories={categories}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              careersData={careersData}
+            />
+          </div>
+          {/* =========================================
+          MOBILE FILTER SIDEBAR
+========================================= */}
+          {showFilters && (
+            <>
+              {/* Overlay */}
+              <div
+                onClick={() => setShowFilters(false)}
+                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 xl:hidden"
+              />
+
+              {/* Sidebar */}
+              <div className="fixed top-0 left-0 h-full w-[310px] bg-white z-50 shadow-2xl overflow-y-auto xl:hidden">
+                {/* Header */}
+                <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between">
+                  <h2 className="text-lg font-black text-[#111827]">Filters</h2>
+
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="w-10 h-10 rounded-xl bg-[#FFF1EB] flex items-center justify-center"
+                  >
+                    <X className="w-5 h-5 text-[#F8510C]" />
+                  </button>
+                </div>
+
+                {/* Sidebar */}
+                <div className="p-4">
+                  <CareerSidebar
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    careersData={careersData}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+          {/* ======================================================
+                    MAIN CONTENT
+          ====================================================== */}
+
+          <div ref={mainSectionRef}>
+            {/* ==================HEADER=================== */}
+            <div className="bg-white rounded-[24px] border border-gray-100 px-5 py-4 mb-5 shadow-sm sticky top-0 z-30 backdrop-blur-xl bg-white/95 lg:static">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                {/* Left Content */}
+                <div className="flex items-center gap-4">
+                  {/* Text */}
+                  <div>
+                    <h2 className="text-[22px] font-black text-[#111827] leading-none">
+                      {selectedCategory}
+                    </h2>
+
+                    <p className="text-sm text-[#667085] mt-2 font-medium">
+                      Showing{" "}
+                      <span className="text-[#F8510C] font-bold">
+                        {filteredCareers.length}
+                      </span>{" "}
+                      available careers
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Side */}
+                <div className="flex items-center gap-3">
+                  {/* Mobile Filter Button */}
+                  <button
+                    onClick={() => setShowFilters(true)}
+                    className="xl:hidden h-11 px-5 rounded-2xl border border-gray-200 bg-white flex items-center gap-2 font-semibold text-[#111827]"
+                  >
+                    <Filter className="w-4 h-4 text-[#F8510C]" />
+                    Filters
+                  </button>
+                  {/* Popular Filter Badge */}
+                  {sortBy === "popular" && (
+                    <div className="hidden sm:flex items-center gap-2 px-4 h-11 rounded-2xl bg-[#FFF1EB] border border-[#FFD9CC]">
+                      <div className="w-2 h-2 rounded-full bg-[#F8510C]" />
+
+                      <span className="text-sm font-bold text-[#F8510C]">
+                        Popular Careers
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Select */}
+                  <div className="relative">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="appearance-none h-11 pl-5 pr-12 rounded-2xl border border-gray-200 bg-white text-sm font-semibold text-[#111827] outline-none focus:border-[#F8510C] focus:ring-4 focus:ring-[#F8510C]/10 transition-all cursor-pointer"
+                    >
+                      <option value="all">Sort by: All</option>
+
+                      <option value="popular">Sort by: Popular</option>
+                    </select>
+
+                    {/* Arrow */}
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <ChevronDown className="w-4 h-4 text-[#667085]" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Cards */}
+            {loading ? (
+              <Loader text={`Loading Careers...`} />
+            ) : filteredCareers.length > 0 ? (
+              <CareerCards filteredCareers={filteredCareers} />
+            ) : (
+              <EmptyState text={selectedCategory} />
+            )}
+            {/* Pagination */}
+            <div className="flex items-center justify-center gap-2 mt-10">
+              <button className="w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              {[1, 2, 3, 4, 5].map((page) => (
+                <button
+                  key={page}
+                  className={`w-10 h-10 rounded-xl text-sm font-semibold ${
+                    page === 1
+                      ? "bg-[#F8510C] text-white"
+                      : "bg-white border border-gray-200 text-gray-700"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button className="w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          {/* ======================================================
+                    RIGHT SIDEBAR
+          ====================================================== */}
+          <div className="space-y-5 lg:sticky lg:top-5 self-start">
+            {/* Skills */}
+            <div className="bg-white rounded-2xl border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-6">
+                Top In-Demand Skills
+              </h2>
+
+              <div className="space-y-5">
+                {[
+                  ["Surveillance", "92%"],
+                  ["Communication", "88%"],
+                  ["Observation", "85%"],
+                  ["Conflict Management", "80%"],
+                  ["First Aid", "78%"],
+                ].map((skill, index) => (
+                  <div key={index}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-gray-700">
+                        {skill[0]}
+                      </span>
+
+                      <span className="text-sm text-gray-500">{skill[1]}</span>
+                    </div>
+
+                    <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+                      <div
+                        className="h-full bg-[#F8510C] rounded-full"
+                        style={{ width: skill[1] }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Help Card */}
+            <div className="bg-white rounded-2xl border border-gray-200 p-6">
+              <h2 className="text-xl font-bold text-gray-900">
+                Need Help Choosing?
+              </h2>
+
+              <p className="text-sm text-gray-500 mt-2 leading-relaxed">
+                Our career advisors are here to help you find the right path.
+              </p>
+
+              <button className="mt-5 h-11 px-5 rounded-xl bg-[#F8510C] hover:bg-[#c04b19] transition-all text-white font-semibold">
+                Talk to an Advisor
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CareerListing;

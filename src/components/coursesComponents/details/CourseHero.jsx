@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   Star,
   Clock,
@@ -28,19 +28,43 @@ const CourseHero = ({ course }) => {
 
   return (
     <>
-      <section className="bg-[#F8FAFC] border-b mt-5 border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-3 text-[13px] text-gray-500">
-          Home <span className="mx-2">›</span>
-          All Courses <span className="mx-2">›</span>
-          <span className="text-gray-900 font-medium">{course.title}</span>
-        </div>
-      </section>
+      {/* <section className="bg-[#F8FAFC] border-b mt-5 border-gray-200"></section> */}
 
       {/* 🔥 HERO */}
       <section className="relative text-white py-10 lg:py-12 overflow-hidden bg-[#141414]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-4">
+          <div className="flex items-center flex-wrap gap-2 text-[13px]">
+            {/* Home */}
+            <NavLink
+              to="/"
+              className="text-[#667085] font-medium cursor-pointer hover:text-[#F8510C] transition-colors duration-200"
+            >
+              Home
+            </NavLink>
+
+            {/* Divider */}
+            <span className="text-[#D0D5DD] text-sm">›</span>
+
+            {/* Courses */}
+            <NavLink
+              to="/courses"
+              className="text-[#667085] font-medium cursor-pointer hover:text-[#F8510C] transition-colors duration-200"
+            >
+              All Courses
+            </NavLink>
+
+            {/* Divider */}
+            <span className="text-[#D0D5DD] text-sm">›</span>
+
+            {/* Current Page */}
+            <span className="text-white font-semibold truncate max-w-55 sm:max-w-none">
+              {course.title}
+            </span>
+          </div>
+        </div>
+
         {/* BACKGROUND */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,#1e3a8a40,transparent_40%),radial-gradient(circle_at_80%_20%,#F15A2430,transparent_40%)]" />
-
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
           {/* GRID */}
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">

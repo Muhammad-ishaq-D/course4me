@@ -17,6 +17,8 @@ import ResetPassword from "../pages/Authentication/ResetPassword";
 import UserDashboard from "../pages/Authentication/UserDashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import LicenseDetails from "../pages/LicenseDetails";
+import LocationDetails from "../components/locationComponents/LocationDetails";
+import CareerDetails from "../components/careerComponents/CareerDetails";
 
 const AppRoutes = () => {
   return (
@@ -34,7 +36,9 @@ const AppRoutes = () => {
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog/article" element={<BlogArticle />} />
       <Route path="/locations" element={<Locations />} />
+      <Route path="/locations/locationdetails" element={<LocationDetails />} />
       <Route path="/careers" element={<Careers />} />
+      <Route path="/careers/careerdetails/:id" element={<CareerDetails />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route
