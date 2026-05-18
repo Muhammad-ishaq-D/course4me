@@ -1,5 +1,6 @@
 import React from "react";
 import { ChevronRight, Shield, Clock3, BadgeCheck, BookOpen } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 const HeroSection = ({ license }) => {
   const scrollToTraining = () => {
@@ -10,7 +11,7 @@ const HeroSection = ({ license }) => {
   };
   let titleMain = license?.title || "Door Supervisor Licence";
   let titleHighlight = "";
-  
+
   if (titleMain.toLowerCase().endsWith("licence") || titleMain.toLowerCase().endsWith("license")) {
     const words = titleMain.split(" ");
     titleHighlight = words.pop();
