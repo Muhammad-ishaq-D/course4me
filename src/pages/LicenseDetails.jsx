@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import {
   Shield,
   Clock3,
@@ -9,105 +9,112 @@ import {
   RefreshCw,
   ClipboardCheck,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import HeroSection from "../components/licenseDetails/HeroSection";
-
-const sections = [
-  {
-    id: "about",
-    title: "About this licence",
-    icon: Shield,
-    content:
-      "This professional training course is designed to help learners gain industry-recognized knowledge, practical skills, and certification required for career development and workplace compliance.",
-  },
-
-  {
-    id: "eligibility",
-    title: "Eligibility",
-    icon: ClipboardCheck,
-    items: [
-      "Be at least 18 years old",
-      "Pass an identity check",
-      "Pass a criminal record check",
-      "Basic communication skills required",
-    ],
-  },
-
-  {
-    id: "apply",
-    title: "How to apply",
-    icon: Check,
-    steps: [
-      {
-        title: "Book your training",
-        desc: "Choose your preferred training location and date.",
-      },
-
-      {
-        title: "Complete the course",
-        desc: "Attend training sessions and complete assessments.",
-      },
-
-      {
-        title: "Submit application",
-        desc: "Upload required documents and complete payment.",
-      },
-
-      {
-        title: "Receive certification",
-        desc: "Get your certificate after successful approval.",
-      },
-    ],
-  },
-
-  {
-    id: "training",
-    title: "Training & modules",
-    icon: BookOpen,
-    modules: [
-      "Industry Knowledge",
-      "Practical Training",
-      "Conflict Management",
-      "Safety Procedures",
-      "Emergency Response",
-    ],
-  },
-
-  {
-    id: "cost",
-    title: "Cost & renewal",
-    icon: Wallet,
-    pricing: [
-      {
-        label: "Training course",
-        price: "£219 - £349",
-      },
-
-      {
-        label: "Registration fee",
-        price: "£190",
-      },
-
-      {
-        label: "Certificate fee",
-        price: "£18",
-      },
-    ],
-  },
-
-  {
-    id: "renewal",
-    title: "Renewal",
-    icon: RefreshCw,
-    content:
-      "Some certifications require refresher training or renewal after a specific period to remain valid and compliant.",
-  },
-];
+import licenseService from "../api/services/licenseService";
 
 const LicenseDetails = () => {
-  const [activeSection, setActiveSection] = useState("about");
+  const [searchParams] = useSearchParams();
+  const licenseId = searchParams.get("id");
 
+  const [license, setLicense] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // ======================================================
+  // FETCH LICENSE DETAILS FROM BACKEND
+  // ======================================================
+  useEffect(() => {
+    const fetchLicenseDetails = async () => {
+      try {
+        setLoading(true);
+        if (licenseId) {
+          const response = await licenseService.getLicenseById(licenseId);
+          const responseData = response.data || response;
+          setLicense(responseData.data || responseData);
+        }
+      } catch (error) {
+        console.error("Error fetching license details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLicenseDetails();
+  }, [licenseId]);
+
+  const [activeSection, setActiveSection] = useState("about");
   const sectionRefs = useRef({});
+
+  // ======================================================
+  // DYNAMIC SECTIONS WITH FALLBACKS
+  // ======================================================
+  const sections = useMemo(() => {
+    const list = [];
+
+    // 1. About
+    if (license?.fullDescription) {
+      list.push({
+        id: "about",
+        title: "About this licence",
+        icon: Shield,
+        content: license.fullDescription,
+      });
+    }
+
+    // 2. Eligibility
+    if (license?.requirements && license.requirements.length > 0) {
+      list.push({
+        id: "eligibility",
+        title: "Eligibility",
+        icon: ClipboardCheck,
+        items: license.requirements,
+      });
+    }
+
+    // 3. How to apply
+    if (license?.applicationSteps && license.applicationSteps.length > 0) {
+      list.push({
+        id: "apply",
+        title: "How to apply",
+        icon: Check,
+        steps: license.applicationSteps,
+      });
+    }
+
+    // 4. Training & modules
+    if (license?.learningPoints && license.learningPoints.length > 0) {
+      list.push({
+        id: "training",
+        title: "Training & modules",
+        icon: BookOpen,
+        modules: license.learningPoints,
+      });
+    }
+
+    // 5. Cost & renewal
+    const breakdown = license?.pricingBreakdown?.length 
+      ? license.pricingBreakdown 
+      : (license?.pricing?.basePrice ? [{ label: "Training course", price: `£${license.pricing.basePrice}` }] : []);
+    if (breakdown.length > 0) {
+      list.push({
+        id: "cost",
+        title: "Cost & renewal",
+        icon: Wallet,
+        pricing: breakdown,
+      });
+    }
+
+    // 6. Renewal
+    if (license?.renewalInfo) {
+      list.push({
+        id: "renewal",
+        title: "Renewal",
+        icon: RefreshCw,
+        content: license.renewalInfo,
+      });
+    }
+
+    return list;
+  }, [license]);
 
   // ======================================================
   // SCROLL TO SECTION
@@ -124,16 +131,16 @@ const LicenseDetails = () => {
   // ======================================================
   useEffect(() => {
     const observers = [];
+    const sectionIds = sections.map((s) => s.id);
 
-    sections.forEach((section) => {
-      const element = sectionRefs.current[section.id];
+    sectionIds.forEach((id) => {
+      const element = sectionRefs.current[id];
       if (!element) return;
 
       const observer = new IntersectionObserver(
         ([entry]) => {
-          // We only set active if it's intersecting the top portion of the screen
           if (entry.isIntersecting) {
-            setActiveSection(section.id);
+            setActiveSection(id);
           }
         },
         {
@@ -149,12 +156,12 @@ const LicenseDetails = () => {
     return () => {
       observers.forEach((observer) => observer.disconnect());
     };
-  }, []);
+  }, [loading, sections]);
 
   return (
     <div className="bg-[#F6F8FB] ">
       {/* =====================HERO SECTION========================== */}
-      <HeroSection />
+      <HeroSection license={license} />
 
       {/* ======================================================
           DETAILS SECTION
@@ -220,7 +227,7 @@ const LicenseDetails = () => {
                     </div>
 
                     <span className="font-bold text-[#101828] text-[15px]">
-                      6 days
+                      {license?.duration || "6 days"}
                     </span>
                   </div>
 
@@ -233,7 +240,7 @@ const LicenseDetails = () => {
                     </div>
 
                     <span className="font-bold text-[#101828] text-[15px]">
-                      3 years
+                      {license?.valid || "3 years"}
                     </span>
                   </div>
 
@@ -246,7 +253,7 @@ const LicenseDetails = () => {
                     </div>
 
                     <span className="font-bold text-[#101828] text-[15px]">
-                      £219
+                      {license?.pricing && typeof license.pricing === 'object' ? `£${license.pricing.salePrice || license.pricing.basePrice}` : "£219"}
                     </span>
                   </div>
                 </div>
@@ -359,7 +366,7 @@ const LicenseDetails = () => {
                         <p className="text-sm">
                           Course duration:
                           <span className="font-bold text-[#101828] ml-2">
-                            6 days (approx. 54 hours)
+                            {license?.duration || "6 days (approx. 54 hours)"}
                           </span>
                         </p>
                       </div>
