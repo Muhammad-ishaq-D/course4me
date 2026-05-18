@@ -3,10 +3,10 @@ import {
   ArrowRight,
   Info,
   TrendingUp,
-  DollarSign,
   ChevronDown,
   Calendar,
   Clock,
+  Briefcase,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -36,10 +36,12 @@ const LicenseCard = ({ item, index }) => {
         )}
 
         {/* SALARY */}
+        {item.salary && (
         <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
-          <DollarSign size={13} />
+          <Briefcase size={13} />
           {item.salary}
         </div>
+        )}
       </div>
 
       {/* CONTENT */}
@@ -91,7 +93,7 @@ const LicenseCard = ({ item, index }) => {
           {/* PRICE */}
           <div>
             <p className="text-[10px] uppercase text-gray-400 font-semibold">
-              Starting From
+              Training From
             </p>
 
             <h4 className="text-2xl font-extrabold text-[#243443]">
@@ -116,7 +118,7 @@ const LicenseCard = ({ item, index }) => {
             to={`/licences/licencesdetails?id=${item._id || item.title}`}
             className="h-[46px] px-5 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-sm font-bold flex items-center gap-2 transition-all duration-300 shadow-lg shadow-[#F15A24]/20"
           >
-            View Details
+            View Licence
             <ArrowRight size={15} />
           </NavLink>
         </div>

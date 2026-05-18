@@ -1,28 +1,20 @@
 import React from "react";
-import { ChevronRight, Shield, Clock3, BadgeCheck } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { ChevronRight, Shield, Clock3, BadgeCheck, BookOpen } from "lucide-react";
 
 const HeroSection = ({ license }) => {
-  let titleMain = "SIA Door";
-  let titleHighlight = "Supervisor Licence";
-  if (license && license.title) {
-    const title = license.title;
-    if (title.toLowerCase().includes("door supervisor")) {
-      titleMain = "SIA Door";
-      titleHighlight = "Supervisor Licence";
-    } else {
-      const words = title.split(" ");
-      if (words.length > 2) {
-        titleMain = words.slice(0, words.length - 2).join(" ");
-        titleHighlight = words.slice(words.length - 2).join(" ");
-      } else if (words.length > 1) {
-        titleMain = words[0];
-        titleHighlight = words[1];
-      } else {
-        titleMain = title;
-        titleHighlight = "";
-      }
+  const scrollToTraining = () => {
+    const el = document.getElementById("required-training");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
     }
+  };
+  let titleMain = license?.title || "Door Supervisor Licence";
+  let titleHighlight = "";
+  
+  if (titleMain.toLowerCase().endsWith("licence") || titleMain.toLowerCase().endsWith("license")) {
+    const words = titleMain.split(" ");
+    titleHighlight = words.pop();
+    titleMain = words.join(" ") + " ";
   }
 
   return (
@@ -144,7 +136,7 @@ const HeroSection = ({ license }) => {
 
               {/* LABEL */}
               <p className="relative uppercase tracking-[0.25em] text-white/50 text-xs font-bold">
-                Starting From
+                Training Starts From
               </p>
 
               {/* PRICE */}
@@ -158,8 +150,7 @@ const HeroSection = ({ license }) => {
 
               {/* DESCRIPTION */}
               <p className="relative text-white/60 mt-5 leading-7 text-[15px]">
-                Includes training materials, assessments, certification support,
-                and professional guidance.
+                {license?.shortDescription || "Includes training materials, assessments, certification support, and professional guidance."}
               </p>
 
               {/* FEATURES */}
@@ -180,19 +171,14 @@ const HeroSection = ({ license }) => {
                 </div>
               </div>
 
-              {/* BUTTON */}
-              <NavLink
-                to={`/booking/course?courseid=${license?._id}`}
-                className="relative mt-8 w-full bg-[#F15A24] hover:bg-[#db4c14] text-white py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-[0_15px_40px_rgba(241,90,36,0.35)] hover:scale-[1.02] flex items-center justify-center gap-2"
+              {/* PRIMARY BUTTON */}
+              <button
+                onClick={scrollToTraining}
+                className="relative mt-8 w-full cursor-pointer bg-[#F15A24] hover:bg-[#db4c14] text-white py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-[0_15px_40px_rgba(241,90,36,0.35)] hover:scale-[1.02] flex items-center justify-center gap-2"
               >
-                Book Now
-                <ChevronRight size={20} />
-              </NavLink>
-
-              {/* FOOTER */}
-              <p className="relative text-center text-white/40 text-sm mt-5">
-                No payment until enrolment confirmed
-              </p>
+                <BookOpen size={20} />
+                View Required Courses
+              </button>
             </div>
           </div>
         </div>

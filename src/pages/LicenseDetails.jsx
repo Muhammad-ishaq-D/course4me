@@ -8,14 +8,19 @@ import {
   Wallet,
   RefreshCw,
   ClipboardCheck,
+  GraduationCap,
+  MapPin,
+  CalendarDays,
+  ArrowRight,
 } from "lucide-react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { NavLink, useSearchParams, useNavigate } from "react-router-dom";
 import HeroSection from "../components/licenseDetails/HeroSection";
 import licenseService from "../api/services/licenseService";
 
 const LicenseDetails = () => {
   const [searchParams] = useSearchParams();
   const licenseId = searchParams.get("id");
+  const navigate = useNavigate();
 
   const [license, setLicense] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -91,8 +96,8 @@ const LicenseDetails = () => {
     }
 
     // 5. Cost & renewal
-    const breakdown = license?.pricingBreakdown?.length 
-      ? license.pricingBreakdown 
+    const breakdown = license?.pricingBreakdown?.length
+      ? license.pricingBreakdown
       : (license?.pricing?.basePrice ? [{ label: "Training course", price: `£${license.pricing.basePrice}` }] : []);
     if (breakdown.length > 0) {
       list.push({
@@ -182,7 +187,7 @@ const LicenseDetails = () => {
               {/* ===============NAVIGATION========================= */}
               <div className="bg-white border border-[#EEF2F6] rounded-[28px] p-4 shadow-[0_10px_35px_rgba(0,0,0,0.04)]">
                 <h3 className="text-xs uppercase tracking-[0.2em] text-[#98A2B3] font-bold mb-2 px-2">
-                  Course Details
+                  Licence Details
                 </h3>
 
                 <div className="space-y-2">
@@ -193,11 +198,10 @@ const LicenseDetails = () => {
                       <button
                         key={section.id}
                         onClick={() => scrollToSection(section.id)}
-                        className={`group w-full flex cursor-pointer items-center justify-between px-3 py-3 rounded-2xl transition-all duration-300 text-left border ${
-                          isActive
+                        className={`group w-full flex cursor-pointer items-center justify-between px-3 py-3 rounded-2xl transition-all duration-300 text-left border ${isActive
                             ? "bg-[#F15A24] text-white border-[#F15A24] shadow-lg shadow-[#F15A24]/20 scale-[1.02]"
                             : "bg-[#FCFCFD] hover:bg-[#FFF4EF] border-transparent text-[#344054] hover:text-[#F15A24]"
-                        }`}
+                          }`}
                       >
                         <span className="font-semibold text-[14px] leading-none">
                           {section.title}
@@ -205,11 +209,10 @@ const LicenseDetails = () => {
 
                         <ChevronRight
                           size={16}
-                          className={`transition-all duration-300 ${
-                            isActive
+                          className={`transition-all duration-300 ${isActive
                               ? "translate-x-1"
                               : "group-hover:translate-x-1"
-                          }`}
+                            }`}
                         />
                       </button>
                     );
@@ -257,7 +260,7 @@ const LicenseDetails = () => {
                     <div className="flex items-center gap-3 text-[#667085]">
                       <span className="text-[18px] font-semibold">£</span>
 
-                      <span className="text-[15px]">From</span>
+                      <span className="text-[15px]">Training From</span>
                     </div>
 
                     <span className="font-bold text-[#101828] text-[15px]">
@@ -266,19 +269,9 @@ const LicenseDetails = () => {
                   </div>
                 </div>
 
-                {/* DIVIDER */}
-                <div className="h-[1px] bg-[#EAECF0] my-2" />
 
-                {/* APPLY BUTTON */}
-                <button className="w-full cursor-pointer bg-[#F15A24] hover:bg-[#ae4c29] text-white py-4 rounded-2xl font-bold text-md transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
-                  Apply now
-                  <ChevronRight size={20} />
-                </button>
 
-                {/* ADVISOR BUTTON */}
-                <button className="w-full mt-3 border cursor-pointer border-[#D0D5DD] hover:bg-black/90 hover:text-white text-[#1D2939] py-4 rounded-2xl font-semibold text-md transition-all duration-300 bg-white">
-                  Talk to an advisor
-                </button>
+
               </div>
             </div>
           </div>
@@ -435,6 +428,90 @@ const LicenseDetails = () => {
                 </div>
               );
             })}
+
+            {/* =====================REQUIRED TRAINING SECTION===================== */}
+            {license?.relatedCourses && license.relatedCourses.length > 0 && (
+              <div id="required-training" className="scroll-mt-28 bg-white border border-[#EEF2F6] rounded-[26px] p-5 md:p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                {/* HEADER */}
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-11 h-11 rounded-xl bg-[#F4F7FB] flex items-center justify-center">
+                    <GraduationCap size={20} className="text-[#F15A24]" />
+                  </div>
+                  <div>
+                    <h2 className="text-[24px] md:text-[28px] font-black tracking-tight text-[#101828]">
+                      Required Training
+                    </h2>
+                    <p className="text-[#667085] text-sm mt-0.5">
+                      Book one of the courses below to begin your journey towards this licence
+                    </p>
+                  </div>
+                </div>
+
+                {/* CLARIFICATION BANNER */}
+                <div className="flex items-start gap-3 bg-[#FFF9F6] border border-[#F15A24]/20 rounded-2xl px-4 py-3.5 mb-5">
+                  <BookOpen size={16} className="text-[#F15A24] mt-0.5 shrink-0" />
+                  <p className="text-sm text-[#667085] leading-6">
+                    <span className="font-semibold text-[#101828]">You are booking training</span>, not purchasing an SIA government licence directly. Complete the required courses below, then apply for your licence through the SIA.
+                  </p>
+                </div>
+
+                {/* COURSE CARDS */}
+                <div className="space-y-3">
+                  {license.relatedCourses.map((course, i) => (
+                    <div
+                      key={course._id || i}
+                      className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[#E4E7EC] rounded-2xl px-5 py-4 bg-[#FCFCFD] hover:border-[#F15A24]/30 hover:shadow-md transition-all duration-300"
+                    >
+                      <div className="flex-1">
+                        <h4 className="font-bold text-[#101828] text-[15px] group-hover:text-[#F15A24] transition-colors duration-200">
+                          {course.title}
+                        </h4>
+                        <div className="flex flex-wrap items-center gap-3 mt-2">
+                          {course.duration && (
+                            <span className="flex items-center gap-1.5 text-xs text-[#667085]">
+                              <Clock3 size={13} />
+                              {course.duration}
+                            </span>
+                          )}
+                          {course.pricing?.basePrice && (
+                            <span className="flex items-center gap-1 text-xs font-semibold text-[#101828]">
+                              From £{course.pricing.salePrice || course.pricing.basePrice}
+                            </span>
+                          )}
+                          {course.location && (
+                            <span className="flex items-center gap-1.5 text-xs text-[#667085]">
+                              <MapPin size={13} />
+                              {course.location}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => navigate(`/booking/course?courseid=${course._id}`)}
+                        className="shrink-0 flex items-center gap-2 bg-[#F15A24] hover:bg-[#db4c14] text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg"
+                      >
+                        Book Training
+                        <ArrowRight size={14} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* PROCESS FLOW */}
+                <div className="mt-6 pt-5 border-t border-[#EEF2F6]">
+                  <p className="text-xs uppercase tracking-[0.15em] text-[#98A2B3] font-bold mb-3">Your journey</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {["Book Training", "Attend Course", "Pass Assessment", "Get Certificate", "Apply for SIA Licence", "Start Working"].map((step, i, arr) => (
+                      <React.Fragment key={i}>
+                        <span className={`text-xs font-semibold px-3 py-1.5 rounded-full ${i === 0 ? "bg-[#F15A24] text-white" : "bg-[#F4F7FB] text-[#667085]"
+                          }`}>{step}</span>
+                        {i < arr.length - 1 && <ChevronRight size={14} className="text-[#D0D5DD]" />}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

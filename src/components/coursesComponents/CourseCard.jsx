@@ -93,7 +93,7 @@ const CourseCard = ({
             onClick={() => navigate(`/booking/course?courseid=${id}`)}
             className="flex-1 h-11.5 rounded-xl cursor-pointer bg-[#F15A24] hover:bg-[#d94f1f] text-white text-[16px] font-bold transition-all duration-300"
           >
-            Book Now
+            Book Training
           </button>
 
           <button

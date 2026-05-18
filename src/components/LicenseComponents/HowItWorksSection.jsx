@@ -1,33 +1,47 @@
 import React from "react";
-import { Target, BookOpen, Medal, Zap } from "lucide-react";
+import { Target, BookOpen, Medal, Award, ShieldCheck, Briefcase } from "lucide-react";
 
 const steps = [
   {
     step: "STEP 1",
-    title: "Choose Your Course",
-    desc: "Browse and select the training course or certification that matches your career goals and interests.",
+    title: "Book Training",
+    desc: "Browse available training courses and book your preferred date and location to start your licence journey.",
     icon: Target,
     bg: "bg-gradient-to-br from-blue-500 to-blue-700",
   },
   {
     step: "STEP 2",
-    title: "Complete Your Training",
+    title: "Attend Course",
     desc: "Attend professional training sessions delivered by experienced instructors at trusted learning locations.",
     icon: BookOpen,
     bg: "bg-gradient-to-br from-purple-500 to-purple-700",
   },
   {
     step: "STEP 3",
-    title: "Pass Your Assessment",
-    desc: "Successfully complete your course assessment or exam to demonstrate your skills and knowledge.",
+    title: "Pass Assessment",
+    desc: "Successfully complete your course assessment to demonstrate your knowledge and practical skills.",
     icon: Medal,
     bg: "bg-gradient-to-br from-[#F15A24] to-[#c63d0c]",
   },
   {
     step: "STEP 4",
-    title: "Get Certified",
-    desc: "Receive your certification and take the next step toward professional growth and career opportunities.",
-    icon: Zap,
+    title: "Receive Certificate",
+    desc: "Receive your accredited training certificate confirming you have completed the required qualification.",
+    icon: Award,
+    bg: "bg-gradient-to-br from-amber-500 to-amber-700",
+  },
+  {
+    step: "STEP 5",
+    title: "Apply for SIA Licence",
+    desc: "Use your training certificate to apply for your SIA licence through the official SIA website.",
+    icon: ShieldCheck,
+    bg: "bg-gradient-to-br from-teal-500 to-teal-700",
+  },
+  {
+    step: "STEP 6",
+    title: "Start Working",
+    desc: "Once your SIA licence is approved, you're ready to begin your career in the security industry.",
+    icon: Briefcase,
     bg: "bg-gradient-to-br from-green-500 to-green-700",
   },
 ];
@@ -55,13 +69,13 @@ const HowItWorksSection = () => {
 
           {/* Description */}
           <p className="text-gray-500 mt-2 text-base sm:text-lg leading-relaxed">
-            A simple 4-step journey designed to help you become a fully licensed
-            security professional quickly and confidently.
+            A simple 6-step journey from booking your training to starting your
+            career as a fully licensed security professional.
           </p>
         </div>
 
         {/* ================= STEPS ================= */}
-        <div className="relative grid grid-cols-1  sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
+        <div className="relative grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
           {steps.map((item, index) => {
             const Icon = item.icon;
 
@@ -73,8 +87,8 @@ const HowItWorksSection = () => {
                 {/* Hover Gradient */}
                 <div className="absolute inset-0 bg-linear-to-br from-[#F15A24]/0 via-transparent to-[#F15A24]/5 opacity-0 group-hover:opacity-100 transition duration-500" />
 
-                {/* Connector Line */}
-                {index < steps.length - 1 && (
+                {/* Connector Line — skip at end of each 3-column row */}
+                {index < steps.length - 1 && (index + 1) % 3 !== 0 && (
                   <div className="hidden xl:block absolute top-20 -right-8.75 z-20 w-17.5">
                     <div className="h-0.5 bg-linear-to-r from-[#F15A24]/40 to-transparent relative">
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#F15A24]" />

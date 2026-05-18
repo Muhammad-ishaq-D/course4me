@@ -18,6 +18,8 @@ import licenseService from "../../api/services/licenseService";
 import ExploreSidebar from "../ui/ExploreSidebar";
 import LicenseCard from "../ui/LicenseCard";
 import EmptyState from "../ui/EmptyState";
+import Loader from "../ui/Loader";
+import { Search, X } from "lucide-react";
 
 const categories = [
   {
@@ -56,6 +58,7 @@ const ExploreAllLicences = () => {
   const [activeTab, setActiveTab] = useState("all");
 
   const [openFilters, setOpenFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const coursesSectionRef = useRef(null);
 
@@ -103,16 +106,26 @@ const ExploreAllLicences = () => {
     });
   }, [categoryParam, licencesList]);
 
-  // =====================================================
-  // POPULAR FILTER
-  // =====================================================
   const filteredLicences = useMemo(() => {
+    let result = categoryLicences;
+
+    // Popular filter
     if (activeTab === "popular") {
-      return categoryLicences.filter((item) => item.isPopular === true);
+      result = result.filter((item) => item.isPopular === true);
     }
 
-    return categoryLicences;
-  }, [categoryLicences, activeTab]);
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.trim().toLowerCase();
+      result = result.filter((item) =>
+        item.title?.toLowerCase().includes(query) ||
+        item.shortDescription?.toLowerCase().includes(query) ||
+        item.category?.toLowerCase().includes(query)
+      );
+    }
+
+    return result;
+  }, [categoryLicences, activeTab, searchQuery]);
 
   // =====================================================
   // CATEGORY COUNTS
@@ -175,6 +188,28 @@ const ExploreAllLicences = () => {
             Browse professional SIA licences, first aid qualifications,
             workplace safety training and specialist certification courses.
           </p>
+
+          {/* SEARCH BAR */}
+          <div className="mt-6 relative max-w-xl">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#98A2B3]">
+              <Search size={18} />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search licences by name, category..."
+              className="w-full pl-11 pr-10 py-3.5 bg-white border border-[#E4E7EC] rounded-2xl text-[15px] text-[#101828] placeholder-[#98A2B3] focus:outline-none focus:border-[#F15A24]/40 focus:shadow-[0_0_0_3px_rgba(241,90,36,0.08)] transition-all duration-300"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-[#F5F5F5] hover:bg-[#ECECEC] flex items-center justify-center transition-all duration-200"
+              >
+                <X size={14} className="text-[#667085]" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* =====================================================
@@ -315,7 +350,11 @@ const ExploreAllLicences = () => {
             </AnimatePresence>
 
             {/* LICENCES GRID */}
-            {filteredLicences.length > 0 ? (
+            {loading ? (
+              <div className="flex justify-center items-center py-20">
+                <Loader text="Loading Licences..." />
+              </div>
+            ) : filteredLicences.length > 0 ? (
               <motion.div
                 layout
                 className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"
@@ -323,7 +362,7 @@ const ExploreAllLicences = () => {
                 <AnimatePresence mode="popLayout">
                   {filteredLicences.map((item, index) => (
                     <motion.div
-                      key={index}
+                      key={item._id || index}
                       layout
                       initial={{
                         opacity: 0,
