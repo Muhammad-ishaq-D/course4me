@@ -7,13 +7,11 @@ import {
   Star,
   Briefcase,
 } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
 
-const JobsCard = ({ job, index, setSelectedJob }) => {
+const JobsCard = ({ job }) => {
   return (
-    <div
-      key={index}
-      className="group relative flex flex-col h-full rounded-[28px] border border-[#F15A24]/70 bg-white p-6 overflow-hidden shadow-[0_8px_25px_rgba(0,0,0,0.04)] hover:shadow-[0_15px_45px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300"
-    >
+    <div className="group relative flex flex-col h-full rounded-[28px] border border-[#F15A24]/70 bg-white p-6 overflow-hidden shadow-[0_8px_25px_rgba(0,0,0,0.04)] hover:shadow-[0_15px_45px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300">
       {/* HOVER GLOW */}
       <div className="absolute top-0 right-0 w-36 h-36 bg-[#F15A24]/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition duration-300" />
 
@@ -114,8 +112,8 @@ const JobsCard = ({ job, index, setSelectedJob }) => {
         </div>
 
         {/* BUTTON */}
-        <button
-          onClick={() => setSelectedJob(job)}
+        <NavLink
+          to={`/apply-job/${job.id}`}
           className="group/button px-5 py-3 rounded-full bg-[#111111] hover:bg-[#F15A24] text-white text-[15px] font-semibold flex items-center justify-center gap-2 transition-all duration-300"
         >
           Apply Now
@@ -123,7 +121,7 @@ const JobsCard = ({ job, index, setSelectedJob }) => {
             size={16}
             className="group-hover/button:translate-x-1 transition"
           />
-        </button>
+        </NavLink>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useState } from "react";
-import ApplyModal from "./ApplyModal";
+import ApplyModal from "../careerDetailsComponents/ApplyJob";
 import JobsCard from "../ui/JobsCard";
 
 const FeaturedJobs = () => {

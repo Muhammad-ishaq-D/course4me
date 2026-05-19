@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 
 const CareerCards = ({ filteredCareers }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
+    <>
       {filteredCareers.map((career) => (
         <div
           key={career.id}
@@ -87,7 +87,7 @@ const CareerCards = ({ filteredCareers }) => {
           </div>
         </div>
       ))}
-    </div>
+    </>
   );
 };
 

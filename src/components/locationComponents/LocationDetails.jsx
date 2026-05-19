@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Clock3,
@@ -9,11 +9,31 @@ import {
 } from "lucide-react";
 import CourseCard from "../ui/CourseCard";
 import CenterDetails from "./CenterDetails";
+import Loader from "../ui/Loader";
 
 const LocationDetails = () => {
   const { state } = useLocation();
+  const [loading, setLoading] = useState(true);
 
   const center = state?.center;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // ================= LOADER =================
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F4F7FB] flex items-center justify-center">
+        {" "}
+        <Loader text="Preparing center details..." />{" "}
+      </div>
+    );
+  }
 
   if (!center) {
     return (
@@ -125,8 +145,8 @@ const LocationDetails = () => {
 
               {/* =================CTA BUTTON=============================== */}
               <div className="mt-8">
-                <button className="h-13 px-8 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base transition-all duration-300 shadow-[0_15px_35px_rgba(249,115,22,0.35)]">
-                  Book This Center
+                <button className="h-13 px-8 cursor-pointer rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base transition-all duration-300 shadow-[0_15px_35px_rgba(249,115,22,0.35)]">
+                  Explore Courses at This Center{" "}
                 </button>
               </div>
             </div>

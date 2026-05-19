@@ -19,7 +19,11 @@ const LicenseCard = ({ item, index }) => {
       {/* IMAGE */}
       <div className="relative overflow-hidden">
         <img
-          src={item.thumbnail || item.image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop"}
+          src={
+            item.thumbnail ||
+            item.image ||
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop"
+          }
           alt={item.title}
           className="w-full h-[180px] object-cover group-hover:scale-105 transition duration-700"
         />
@@ -37,10 +41,10 @@ const LicenseCard = ({ item, index }) => {
 
         {/* SALARY */}
         {item.salary && (
-        <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
-          <Briefcase size={13} />
-          {item.salary}
-        </div>
+          <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
+            <Briefcase size={13} />
+            {item.salary}
+          </div>
         )}
       </div>
 
@@ -97,22 +101,11 @@ const LicenseCard = ({ item, index }) => {
             </p>
 
             <h4 className="text-2xl font-extrabold text-[#243443]">
-              {item.pricing && typeof item.pricing === 'object' ? `£${item.pricing.salePrice || item.pricing.basePrice}` : item.pricing}
+              {item.pricing && typeof item.pricing === "object"
+                ? `£${item.pricing.salePrice || item.pricing.basePrice}`
+                : item.pricing}
             </h4>
           </div>
-
-          {/* BUTTON */}
-          {/* <button
-            onClick={() =>
-              navigate(
-                `/booking/course?courseid=${courseTitleToId(item.title)}`,
-              )
-            }
-            className="h-[46px] px-5 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-sm font-bold flex items-center gap-2 transition-all duration-300 shadow-lg shadow-[#F15A24]/20"
-          >
-            Book
-            <ArrowRight size={15} />
-          </button> */}
 
           <NavLink
             to={`/licences/licencesdetails?id=${item._id || item.title}`}

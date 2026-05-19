@@ -18,7 +18,9 @@ import UserDashboard from "../pages/Authentication/UserDashboard";
 import ProtectedRoute from "../components/ProtectedRoute";
 import LicenseDetails from "../pages/LicenseDetails";
 import LocationDetails from "../components/locationComponents/LocationDetails";
-import CareerDetails from "../components/careerComponents/CareerDetails";
+import CareerDetails from "../pages/CareerDetails";
+import ApplyJob from "../components/careerDetailsComponents/ApplyJob";
+import QuickSearch from "../pages/QuickSearch";
 
 const AppRoutes = () => {
   return (
@@ -39,6 +41,8 @@ const AppRoutes = () => {
       <Route path="/locations/locationdetails" element={<LocationDetails />} />
       <Route path="/careers" element={<Careers />} />
       <Route path="/careers/careerdetails/:id" element={<CareerDetails />} />
+      <Route path="/apply-job/:id" element={<ApplyJob />} />
+      <Route path="/quicksearch" element={<QuickSearch />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route

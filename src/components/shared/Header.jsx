@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Logo from "../../assets/Logo.svg";
-import { ChevronDown, UserCircle, LogOut, Settings } from "lucide-react";
+import {
+  ChevronDown,
+  UserCircle,
+  LogOut,
+  Settings,
+  Search,
+} from "lucide-react";
 // import BrowseCoursesModal from "./BrowseCoursesModal";
 import { useAuth } from "../../context/AuthContext";
 
@@ -67,9 +73,10 @@ const Header = () => {
           <div className="hidden lg:flex items-center gap-5">
             {/* FIND COURSE BUTTON */}
             <Link
-              to="/courses"
-              className="bg-[#F15A24] text-white font-semibold px-6 py-2.5 rounded-full shadow-md hover:brightness-95 transition"
+              to="/quicksearch"
+              className="bg-[#F15A24] flex gap-2 items-center text-white font-semibold px-6 py-2.5 rounded-full shadow-md hover:brightness-95 transition"
             >
+              <Search size={18} />
               Quick Search
             </Link>
 
@@ -256,10 +263,11 @@ const Header = () => {
             <div className="pt-5 border-t border-[#edf1f5] flex flex-col gap-4">
               {/* FIND COURSE BUTTON */}
               <Link
-                to="/courses"
+                to="/quicksearch"
                 onClick={() => setOpen(false)}
-                className="bg-[#F15A24] text-white font-semibold py-3 rounded-full shadow-md hover:brightness-95 transition text-center"
+                className="bg-[#F15A24] flex gap-2 items-center justify-center text-white font-semibold py-3 rounded-full shadow-md hover:brightness-95 transition text-center"
               >
+                <Search size={16} />
                 Quick Search
               </Link>
 

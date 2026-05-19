@@ -16,6 +16,7 @@ import {
 import { NavLink, useSearchParams, useNavigate } from "react-router-dom";
 import HeroSection from "../components/licenseDetails/HeroSection";
 import licenseService from "../api/services/licenseService";
+import Loader from "../components/ui/Loader";
 
 const LicenseDetails = () => {
   const [searchParams] = useSearchParams();
@@ -98,7 +99,9 @@ const LicenseDetails = () => {
     // 5. Cost & renewal
     const breakdown = license?.pricingBreakdown?.length
       ? license.pricingBreakdown
-      : (license?.pricing?.basePrice ? [{ label: "Training course", price: `£${license.pricing.basePrice}` }] : []);
+      : license?.pricing?.basePrice
+        ? [{ label: "Training course", price: `£${license.pricing.basePrice}` }]
+        : [];
     if (breakdown.length > 0) {
       list.push({
         id: "cost",
@@ -166,7 +169,7 @@ const LicenseDetails = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F6F8FB] flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-[#EEF2F6] border-t-[#F15A24] rounded-full animate-spin" />
+        <Loader text="Preparing your licence information..." />
       </div>
     );
   }
@@ -198,10 +201,11 @@ const LicenseDetails = () => {
                       <button
                         key={section.id}
                         onClick={() => scrollToSection(section.id)}
-                        className={`group w-full flex cursor-pointer items-center justify-between px-3 py-3 rounded-2xl transition-all duration-300 text-left border ${isActive
+                        className={`group w-full flex cursor-pointer items-center justify-between px-3 py-3 rounded-2xl transition-all duration-300 text-left border ${
+                          isActive
                             ? "bg-[#F15A24] text-white border-[#F15A24] shadow-lg shadow-[#F15A24]/20 scale-[1.02]"
                             : "bg-[#FCFCFD] hover:bg-[#FFF4EF] border-transparent text-[#344054] hover:text-[#F15A24]"
-                          }`}
+                        }`}
                       >
                         <span className="font-semibold text-[14px] leading-none">
                           {section.title}
@@ -209,10 +213,11 @@ const LicenseDetails = () => {
 
                         <ChevronRight
                           size={16}
-                          className={`transition-all duration-300 ${isActive
+                          className={`transition-all duration-300 ${
+                            isActive
                               ? "translate-x-1"
                               : "group-hover:translate-x-1"
-                            }`}
+                          }`}
                         />
                       </button>
                     );
@@ -264,14 +269,12 @@ const LicenseDetails = () => {
                     </div>
 
                     <span className="font-bold text-[#101828] text-[15px]">
-                      {license?.pricing && typeof license.pricing === 'object' ? `£${license.pricing.salePrice || license.pricing.basePrice}` : "£219"}
+                      {license?.pricing && typeof license.pricing === "object"
+                        ? `£${license.pricing.salePrice || license.pricing.basePrice}`
+                        : "£219"}
                     </span>
                   </div>
                 </div>
-
-
-
-
               </div>
             </div>
           </div>
@@ -431,7 +434,10 @@ const LicenseDetails = () => {
 
             {/* =====================REQUIRED TRAINING SECTION===================== */}
             {license?.relatedCourses && license.relatedCourses.length > 0 && (
-              <div id="required-training" className="scroll-mt-28 bg-white border border-[#EEF2F6] rounded-[26px] p-5 md:p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+              <div
+                id="required-training"
+                className="scroll-mt-28 bg-white border border-[#EEF2F6] rounded-[26px] p-5 md:p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)]"
+              >
                 {/* HEADER */}
                 <div className="flex items-center gap-3 mb-5">
                   <div className="w-11 h-11 rounded-xl bg-[#F4F7FB] flex items-center justify-center">
@@ -442,16 +448,25 @@ const LicenseDetails = () => {
                       Required Training
                     </h2>
                     <p className="text-[#667085] text-sm mt-0.5">
-                      Book one of the courses below to begin your journey towards this licence
+                      Book one of the courses below to begin your journey
+                      towards this licence
                     </p>
                   </div>
                 </div>
 
                 {/* CLARIFICATION BANNER */}
                 <div className="flex items-start gap-3 bg-[#FFF9F6] border border-[#F15A24]/20 rounded-2xl px-4 py-3.5 mb-5">
-                  <BookOpen size={16} className="text-[#F15A24] mt-0.5 shrink-0" />
+                  <BookOpen
+                    size={16}
+                    className="text-[#F15A24] mt-0.5 shrink-0"
+                  />
                   <p className="text-sm text-[#667085] leading-6">
-                    <span className="font-semibold text-[#101828]">You are booking training</span>, not purchasing an SIA government licence directly. Complete the required courses below, then apply for your licence through the SIA.
+                    <span className="font-semibold text-[#101828]">
+                      You are booking training
+                    </span>
+                    , not purchasing an SIA government licence directly.
+                    Complete the required courses below, then apply for your
+                    licence through the SIA.
                   </p>
                 </div>
 
@@ -475,7 +490,9 @@ const LicenseDetails = () => {
                           )}
                           {course.pricing?.basePrice && (
                             <span className="flex items-center gap-1 text-xs font-semibold text-[#101828]">
-                              From £{course.pricing.salePrice || course.pricing.basePrice}
+                              From £
+                              {course.pricing.salePrice ||
+                                course.pricing.basePrice}
                             </span>
                           )}
                           {course.location && (
@@ -487,7 +504,9 @@ const LicenseDetails = () => {
                         </div>
                       </div>
                       <button
-                        onClick={() => navigate(`/booking/course?courseid=${course._id}`)}
+                        onClick={() =>
+                          navigate(`/booking/course?courseid=${course._id}`)
+                        }
                         className="shrink-0 flex items-center gap-2 bg-[#F15A24] hover:bg-[#db4c14] text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg"
                       >
                         Book Training
@@ -499,13 +518,31 @@ const LicenseDetails = () => {
 
                 {/* PROCESS FLOW */}
                 <div className="mt-6 pt-5 border-t border-[#EEF2F6]">
-                  <p className="text-xs uppercase tracking-[0.15em] text-[#98A2B3] font-bold mb-3">Your journey</p>
+                  <p className="text-xs uppercase tracking-[0.15em] text-[#98A2B3] font-bold mb-3">
+                    Your journey
+                  </p>
                   <div className="flex flex-wrap items-center gap-2">
-                    {["Book Training", "Attend Course", "Pass Assessment", "Get Certificate", "Apply for SIA Licence", "Start Working"].map((step, i, arr) => (
+                    {[
+                      "Book Training",
+                      "Attend Course",
+                      "Pass Assessment",
+                      "Get Certificate",
+                      "Apply for SIA Licence",
+                      "Start Working",
+                    ].map((step, i, arr) => (
                       <React.Fragment key={i}>
-                        <span className={`text-xs font-semibold px-3 py-1.5 rounded-full ${i === 0 ? "bg-[#F15A24] text-white" : "bg-[#F4F7FB] text-[#667085]"
-                          }`}>{step}</span>
-                        {i < arr.length - 1 && <ChevronRight size={14} className="text-[#D0D5DD]" />}
+                        <span
+                          className={`text-xs font-semibold px-3 py-1.5 rounded-full ${
+                            i === 0
+                              ? "bg-[#F15A24] text-white"
+                              : "bg-[#F4F7FB] text-[#667085]"
+                          }`}
+                        >
+                          {step}
+                        </span>
+                        {i < arr.length - 1 && (
+                          <ChevronRight size={14} className="text-[#D0D5DD]" />
+                        )}
                       </React.Fragment>
                     ))}
                   </div>

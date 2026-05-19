@@ -359,7 +359,9 @@ const CareerListing = () => {
             {loading ? (
               <Loader text={`Loading Careers...`} />
             ) : filteredCareers.length > 0 ? (
-              <CareerCards filteredCareers={filteredCareers} />
+              <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
+                <CareerCards filteredCareers={filteredCareers} />
+              </div>
             ) : (
               <EmptyState text={selectedCategory} />
             )}

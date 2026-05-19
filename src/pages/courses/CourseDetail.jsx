@@ -35,8 +35,8 @@ const CourseDetail = () => {
 
   if (loading) {
     return (
-      <div className=" min-h-screen flex items-center justify-center">
-        <Loader text="Loading Course Details" />
+      <div className=" min-h-screen bg-[#F8FAFC] flex items-center justify-center">
+        <Loader text="Preparing your learning experience..." />
       </div>
     );
   }

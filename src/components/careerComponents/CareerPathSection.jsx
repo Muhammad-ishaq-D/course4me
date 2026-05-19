@@ -6,7 +6,7 @@ import {
   CheckCircle,
   TrendingUp,
 } from "lucide-react";
-import ApplyModal from "./ApplyModal";
+import ApplyModal from "../careerDetailsComponents/ApplyJob";
 
 const CareerPathSection = () => {
   const [selectedJob, setSelectedJob] = useState(null);
