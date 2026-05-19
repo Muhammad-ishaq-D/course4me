@@ -244,9 +244,9 @@ const ApplyJob = () => {
         }
       }
 
-      // Generate reference number
-      const randomRef = 'REF-' + Math.random().toString(36).substring(2, 9).toUpperCase();
-      setRefNumber(randomRef);
+      // Retrieve reference number from backend response
+      const finalRef = res.refNumber || res.data?.refNumber || res.data?.data?.applicationReference || 'REF-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+      setRefNumber(finalRef);
       setSuccessOpen(true);
       window.scrollTo({
         top: 0,
