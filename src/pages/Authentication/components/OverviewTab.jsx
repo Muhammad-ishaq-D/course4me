@@ -17,9 +17,11 @@ import {
   PlayCircle,
   AlertTriangle,
   XCircle,
+  Briefcase
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import courseService from "../../../api/services/courseService";
+import careerService from "../../../api/services/careerService";
 import Loader from "../../../components/ui/Loader";
 import { useAuth } from "../../../context/AuthContext";
 import { downloadCertificate } from "../../../utils/certificateGenerator";
@@ -35,6 +37,7 @@ const OverviewTab = () => {
     completed: [],
     postponed: [],
     cancelled: [],
+    applications: [],
     stats: [
       { label: "Upcoming", value: "0", color: "text-orange-500" },
       { label: "Ongoing", value: "0", color: "text-blue-500" },
@@ -47,6 +50,17 @@ const OverviewTab = () => {
     const fetchData = async () => {
       try {
         const result = await courseService.getUserCourses();
+        let apps = [];
+        
+        try {
+          const appsResult = await careerService.getMyApplications();
+          if (appsResult && appsResult.success) {
+            apps = appsResult.applications || [];
+          }
+        } catch (appErr) {
+          console.error("Failed to fetch job applications:", appErr);
+        }
+
         if (result) {
           setData({
             upcoming: result.upcoming || [],
@@ -54,6 +68,7 @@ const OverviewTab = () => {
             completed: result.completed || [],
             postponed: result.postponed || [],
             cancelled: result.cancelled || [],
+            applications: apps,
             stats: [
               {
                 label: "Upcoming",
@@ -293,6 +308,111 @@ const OverviewTab = () => {
                   className="text-orange-600 font-bold hover:underline"
                 >
                   Book a course
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* My Job Applications */}
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <Briefcase className="text-[#F15A24]" size={20} />
+            <h2 className="text-xl font-bold text-gray-800">
+              My Job Applications
+            </h2>
+          </div>
+          <div className="space-y-4">
+            {data.applications.length > 0 ? (
+              data.applications.map((app) => {
+                const getStatusStyle = (status) => {
+                  switch (status) {
+                    case "Shortlisted":
+                      return "bg-blue-50 text-blue-700 border-blue-200";
+                    case "Interview":
+                      return "bg-purple-50 text-purple-700 border-purple-200";
+                    case "Accepted":
+                      return "bg-green-50 text-green-700 border-green-200 animate-pulse";
+                    case "Rejected":
+                      return "bg-red-50 text-red-700 border-red-200";
+                    default:
+                      return "bg-orange-50 text-orange-700 border-orange-200";
+                  }
+                };
+
+                return (
+                  <div
+                    key={app._id}
+                    className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-lg text-gray-900">
+                          {app.jobTitle}
+                        </h3>
+                        {app.jobId?.company && (
+                          <span className="text-xs text-gray-400 font-bold">
+                            at {app.jobId.company}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-[#667085]">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar size={14} /> Applied on {new Date(app.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                        </span>
+                        {app.jobId?.location && (
+                          <span className="flex items-center gap-1.5">
+                            <MapPin size={14} /> {app.jobId.location}
+                          </span>
+                        )}
+                        {app.license && (
+                          <span className="flex items-center gap-1.5 bg-gray-50 px-2 py-0.5 rounded text-xs border border-gray-100 font-bold text-gray-500">
+                            SIA: {app.license}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {app.cvFile && app.cvFile.startsWith('data:') && (
+                        <button
+                          onClick={() => {
+                            const link = document.createElement('a');
+                            link.href = app.cvFile;
+                            let ext = 'pdf';
+                            if (app.cvFile.includes('msword')) ext = 'doc';
+                            else if (app.cvFile.includes('officedocument')) ext = 'docx';
+                            
+                            const applicantName = `${app.firstName || ''}_${app.lastName || ''}`;
+                            link.download = `${applicantName.replace(/\s+/g, '_')}_CV.${ext}`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-600 rounded-xl text-xs font-bold transition-all active:scale-95"
+                          title="Download Uploaded CV"
+                        >
+                          <Download size={13} />
+                          CV
+                        </button>
+                      )}
+                      <span
+                        className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wide border ${getStatusStyle(app.status)}`}
+                      >
+                        {app.status}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="bg-white p-10 rounded-2xl border border-dashed border-gray-200 text-center text-gray-500">
+                <Briefcase className="mx-auto mb-4 text-gray-300" size={40} />
+                You haven't applied for any jobs yet.{" "}
+                <button
+                  onClick={() => navigate("/careers")}
+                  className="text-orange-600 font-bold hover:underline"
+                >
+                  Explore job opportunities
                 </button>
               </div>
             )}

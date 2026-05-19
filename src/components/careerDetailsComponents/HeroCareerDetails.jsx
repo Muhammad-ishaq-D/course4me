@@ -110,8 +110,14 @@ const HeroCareerDetails = ({ career }) => {
 
               {/* Button */}
               <div className="mt-8">
-                <button className="inline-flex cursor-pointer items-center gap-3 h-12 px-6 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] text-white text-[14px] font-bold shadow-[0_15px_35px_rgba(248,81,12,0.30)] transition-all duration-300 hover:gap-4">
-                  Apply for This Career Course
+                <button
+                  onClick={() => {
+                    const el = document.getElementById("jobs-section");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="inline-flex cursor-pointer items-center gap-3 h-12 px-6 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] text-white text-[14px] font-bold shadow-[0_15px_35px_rgba(248,81,12,0.30)] transition-all duration-300 hover:gap-4 active:scale-95"
+                >
+                  Apply for This Career Jobs
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

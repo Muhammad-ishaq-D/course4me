@@ -1,69 +1,32 @@
-import {
-  Sparkles,
-  MapPin,
-  DollarSign,
-  Clock,
-  Star,
-  ArrowRight,
-} from "lucide-react";
-import { useState } from "react";
-import ApplyModal from "../careerDetailsComponents/ApplyJob";
+import { Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
 import JobsCard from "../ui/JobsCard";
+import careerService from "../../api/services/careerService";
 
 const FeaturedJobs = () => {
-  const [selectedJob, setSelectedJob] = useState(null);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const jobs = [
-    {
-      title: "Security Guard - Retail",
-      company: "SecureLife Ltd",
-      location: "London",
-      salary: "£24,000 - £26,000",
-      posted: "2 days ago",
-      type: "Full-time",
-      role: "Security Guard",
-      description:
-        "Busy shopping centre requires experienced SIA licensed security guards for day and night shifts.",
-      requirements: [
-        "Valid SIA License",
-        "Retail experience preferred",
-        "Customer service skills",
-      ],
-    },
-    {
-      title: "Door Supervisor - Nightclub",
-      company: "Elite Security Group",
-      location: "Manchester",
-      salary: "£12 - £15 per hour",
-      posted: "1 day ago",
-      type: "Part-time",
-      role: "Door Supervisor",
-      description:
-        "High-end nightclub seeking professional door supervisors for weekend shifts.",
-      requirements: [
-        "SIA Door Supervisor License",
-        "Conflict management",
-        "Smart appearance",
-      ],
-    },
-    {
-      title: "Close Protection Officer",
-      company: "VIP Protection Services",
-      location: "London",
-      salary: "£50,000 - £70,000",
-      posted: "5 days ago",
-      type: "Contract",
-      role: "Close Protection Officer",
-      description:
-        "Experienced CPO required for high-profile client. International travel involved.",
-      requirements: [
-        "SIA CP License",
-        "5+ years experience",
-        "Advanced driving",
-        "Languages beneficial",
-      ],
-    },
-  ];
+  useEffect(() => {
+    const fetchFeaturedJobs = async () => {
+      try {
+        setLoading(true);
+        const response = await careerService.getActiveJobs();
+        const allJobs = response.data?.listings || response.data?.data?.listings || [];
+        
+        // Filter featured active ones
+        const featured = allJobs.filter(j => j.isFeatured && j.status === 'Active');
+        
+        // Fallback: If no featured, show first 3 active jobs
+        setJobs(featured.length > 0 ? featured : allJobs.filter(j => j.status === 'Active').slice(0, 3));
+      } catch (error) {
+        console.error("Failed to fetch featured jobs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeaturedJobs();
+  }, []);
 
   return (
     <section className="bg-[#F3F4F6] py-14 px-6">
@@ -76,21 +39,26 @@ const FeaturedJobs = () => {
           </h2>
         </div>
 
-        {/* Cards */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {jobs.map((job, index) => (
-            <JobsCard
-              key={index}
-              job={job}
-              index={index}
-              setSelectedJob={setSelectedJob}
-            />
-          ))}
-        </div>
-
-        {/* ✅ MODAL SHOW HERE (IMPORTANT) */}
-        {selectedJob && (
-          <ApplyModal job={selectedJob} onClose={() => setSelectedJob(null)} />
+        {/* Loading Spinner */}
+        {loading ? (
+          <div className="py-20 flex flex-col items-center justify-center">
+            <div className="w-10 h-10 border-4 border-[#F8510C] border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-gray-500 font-medium">Loading premium careers...</p>
+          </div>
+        ) : jobs.length === 0 ? (
+          <div className="py-12 bg-white rounded-3xl border border-dashed border-gray-300 text-center text-gray-500 font-medium">
+            No active job openings at the moment. Please check back later!
+          </div>
+        ) : (
+          /* Cards */
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+            {jobs.map((job, index) => (
+              <JobsCard
+                key={job._id || job.id}
+                job={job}
+              />
+            ))}
+          </div>
         )}
       </div>
     </section>

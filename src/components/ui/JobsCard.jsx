@@ -4,12 +4,29 @@ import {
   Clock,
   DollarSign,
   MapPin,
-  Star,
-  Briefcase,
+  Star
 } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const JobsCard = ({ job }) => {
+  const jobId = job._id || job.id;
+  const roleBadge = job.category || job.role || "Security";
+
+  const formatPosted = (dateString) => {
+    if (!dateString) return "Recently";
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      const diffMs = Date.now() - date.getTime();
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      if (diffDays === 0) return "today";
+      if (diffDays === 1) return "yesterday";
+      return `${diffDays} days ago`;
+    } catch (e) {
+      return "Recently";
+    }
+  };
+
   return (
     <div className="group relative flex flex-col h-full rounded-[28px] border border-[#F15A24]/70 bg-white p-6 overflow-hidden shadow-[0_8px_25px_rgba(0,0,0,0.04)] hover:shadow-[0_15px_45px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300">
       {/* HOVER GLOW */}
@@ -18,10 +35,12 @@ const JobsCard = ({ job }) => {
       {/* ================= TAGS ================= */}
       <div className="flex items-center gap-2 flex-wrap">
         {/* FEATURED */}
-        <div className="flex items-center gap-1 bg-[#F15A24] text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
-          <Star size={10} fill="white" />
-          Featured
-        </div>
+        {job.isFeatured && (
+          <div className="flex items-center gap-1 bg-[#F15A24] text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
+            <Star size={10} fill="white" />
+            Featured
+          </div>
+        )}
 
         {/* TYPE */}
         <div className="bg-[#EEF4FF] text-[#155DFC] text-[10px] font-semibold px-3 py-1.5 rounded-full">
@@ -30,7 +49,7 @@ const JobsCard = ({ job }) => {
 
         {/* ROLE */}
         <div className="bg-[#155DFC] text-white text-[10px] font-semibold px-3 py-1.5 rounded-full">
-          {job.role}
+          {roleBadge}
         </div>
       </div>
 
@@ -68,7 +87,7 @@ const JobsCard = ({ job }) => {
           <Clock size={16} className="text-gray-500 shrink-0" />
 
           <p className="text-[15px] text-gray-500 font-medium">
-            Posted {job.posted}
+            Posted {formatPosted(job.createdAt || job.posted)}
           </p>
         </div>
       </div>
@@ -87,14 +106,20 @@ const JobsCard = ({ job }) => {
         </h4>
 
         <div className="flex flex-wrap gap-2">
-          {job.requirements.slice(0, 2).map((req, i) => (
-            <span
-              key={i}
-              className="bg-[#F4F6F8] text-[#4B5563] text-[12px] font-medium px-3 py-1.5 rounded-full"
-            >
-              {req}
+          {job.requirements && Array.isArray(job.requirements) ? (
+            job.requirements.slice(0, 2).map((req, i) => (
+              <span
+                key={i}
+                className="bg-[#F4F6F8] text-[#4B5563] text-[12px] font-medium px-3 py-1.5 rounded-full"
+              >
+                {req}
+              </span>
+            ))
+          ) : (
+            <span className="bg-[#F4F6F8] text-[#4B5563] text-[12px] font-medium px-3 py-1.5 rounded-full">
+              SIA License Required
             </span>
-          ))}
+          )}
         </div>
       </div>
 
@@ -113,7 +138,7 @@ const JobsCard = ({ job }) => {
 
         {/* BUTTON */}
         <NavLink
-          to={`/apply-job/${job.id}`}
+          to={`/apply-job/${jobId}`}
           className="group/button px-5 py-3 rounded-full bg-[#111111] hover:bg-[#F15A24] text-white text-[15px] font-semibold flex items-center justify-center gap-2 transition-all duration-300"
         >
           Apply Now

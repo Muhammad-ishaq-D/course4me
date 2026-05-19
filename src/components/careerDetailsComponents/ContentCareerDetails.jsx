@@ -98,11 +98,10 @@ const ContentCareerDetails = ({ career }) => {
 
                   {/* Content */}
                   <div
-                    className={`flex-1 pl-5 sm:pl-6 ml-[-10px] ${
-                      index !== 4
-                        ? "pb-6 md:pb-7 border-l-2 border-dashed border-[#FFD5C4]"
-                        : ""
-                    }`}
+                    className={`flex-1 pl-5 sm:pl-6 ml-[-10px] ${index !== 4
+                      ? "pb-6 md:pb-7 border-l-2 border-dashed border-[#FFD5C4]"
+                      : ""
+                      }`}
                   >
                     <h3 className="text-[17px] sm:text-[18px] font-black text-[#111827] leading-snug">
                       {step.title}
@@ -233,8 +232,14 @@ const ContentCareerDetails = ({ career }) => {
             </div>
 
             {/* CTA */}
-            <button className="w-full mt-7 h-12 sm:h-13 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] transition-all text-white text-sm sm:text-base font-bold shadow-lg shadow-[#F8510C]/20">
-              Apply For This Career Course
+            <button
+              onClick={() => {
+                const el = document.getElementById("jobs-section");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="w-full mt-7 h-12 sm:h-13 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] transition-all text-white text-sm sm:text-base font-bold shadow-lg shadow-[#F8510C]/20 active:scale-95"
+            >
+              Apply For This Career Jobs
             </button>
           </div>
 

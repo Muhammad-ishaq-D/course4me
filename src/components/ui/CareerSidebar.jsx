@@ -6,6 +6,8 @@ const CareerSidebar = ({
   selectedCategory,
   setSelectedCategory,
   careersData,
+  activeTab = "careers",
+  jobs = []
 }) => {
   return (
     <div className="bg-white rounded-[28px] border border-gray-100 p-4 shadow-sm h-fit lg:sticky lg:top-5">
@@ -26,8 +28,24 @@ const CareerSidebar = ({
       <div className="space-y-2">
         {categories.map((category) => {
           const Icon = category.icon;
-
           const isActive = selectedCategory === category.name;
+
+          const getCategoryCount = () => {
+            if (activeTab === "careers") {
+              if (category.name === "All Careers") return careersData.length;
+              return careersData.filter((c) => c.category === category.name).length;
+            } else {
+              // Active job counts
+              const activeJobs = jobs.filter((j) => j.status === "Active");
+              if (category.name === "All Careers") return activeJobs.length;
+              return activeJobs.filter(
+                (j) =>
+                  j.category === category.name ||
+                  j.category?.toLowerCase() === category.name.toLowerCase() ||
+                  category.name.toLowerCase().includes(j.category?.toLowerCase())
+              ).length;
+            }
+          };
 
           return (
             <button
@@ -74,11 +92,7 @@ const CareerSidebar = ({
                       : "bg-[#FFF1EB] text-[#F8510C]"
                   }`}
                 >
-                  {category.name === "All Careers"
-                    ? careersData.length
-                    : careersData.filter(
-                        (career) => career.category === category.name,
-                      ).length}
+                  {getCategoryCount()}
                 </div>
               </div>
             </button>
