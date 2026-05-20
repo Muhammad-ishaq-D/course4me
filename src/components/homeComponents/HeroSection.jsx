@@ -26,7 +26,7 @@ import {
   Zap,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import JourneyModal from "../modals/JourneyModal";
+import { NavLink } from "react-router-dom";
 
 /* ─── Video Player ─── */
 const VideoPlayer = ({ src, label, className = "" }) => (
@@ -50,15 +50,8 @@ const VideoPlayer = ({ src, label, className = "" }) => (
 
 /* ─── Hero Section ─── */
 const HeroSection = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
     <section className="bg-white min-h-screen  pb-8 md:pb-6 relative overflow-hidden">
-      <JourneyModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-
       <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-12 md:py-20">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-start">
           {/* LEFT COLUMN */}
@@ -99,15 +92,15 @@ const HeroSection = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <button
-                onClick={() => setIsModalOpen(true)}
+              <NavLink
+                to="/courses"
                 className="bg-[#FF5421] cursor-pointer hover:bg-[#E64A1A] text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300 transform hover:scale-105"
               >
                 Get Started
-              </button>
+              </NavLink>
               <button
                 onClick={() => {
-                  const element = document.getElementById("video-testimonials");
+                  const element = document.getElementById("hiringTraining");
                   if (element) element.scrollIntoView({ behavior: "smooth" });
                 }}
                 className="border-2 cursor-pointer border-[#28262633] hover:border-gray-400 font-semibold py-3 px-8 rounded-full flex items-center gap-2 bg-[#FFFFFF1A] backdrop-blur-sm"

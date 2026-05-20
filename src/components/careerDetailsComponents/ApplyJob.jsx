@@ -14,13 +14,14 @@ import {
   Phone as PhoneIcon,
   Loader2,
   Calendar,
-  AlertTriangle
+  AlertTriangle,
 } from "lucide-react";
 
 import careerService from "../../api/services/careerService";
 import { useAuth } from "../../context/AuthContext";
 import SocialLogin from "../../pages/Authentication/components/SocialLogin";
 import * as yup from "yup";
+import Loader from "../ui/Loader";
 
 const ApplyJob = () => {
   const { id } = useParams();
@@ -51,12 +52,12 @@ const ApplyJob = () => {
     availability: "",
     cover: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const [loginForm, setLoginForm] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -67,9 +68,10 @@ const ApplyJob = () => {
       setForm((prev) => ({
         ...prev,
         firstName: prev.firstName || user.name?.split(" ")[0] || "",
-        lastName: prev.lastName || user.name?.split(" ").slice(1).join(" ") || "",
+        lastName:
+          prev.lastName || user.name?.split(" ").slice(1).join(" ") || "",
         email: user.email || prev.email,
-        phone: prev.phone || user.phone || ""
+        phone: prev.phone || user.phone || "",
       }));
     }
   }, [user]);
@@ -111,13 +113,13 @@ const ApplyJob = () => {
     const { name, value } = e.target;
     setLoginForm({
       ...loginForm,
-      [name]: value
+      [name]: value,
     });
 
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
-        [name]: undefined
+        [name]: undefined,
       }));
     }
   };
@@ -130,7 +132,7 @@ const ApplyJob = () => {
         return;
       }
       setCvName(file.name);
-      
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setCvBase64(reader.result);
@@ -143,10 +145,10 @@ const ApplyJob = () => {
   const handleInlineLogin = async (e) => {
     e.preventDefault();
     setErrors({});
-    
+
     if (!loginForm.email.trim() || !loginForm.password) {
       setErrors({
-        login: "Please fill in all credentials."
+        login: "Please fill in all credentials.",
       });
       return;
     }
@@ -159,7 +161,7 @@ const ApplyJob = () => {
       }
     } catch (err) {
       setErrors({
-        login: err.response?.data?.message || "Invalid email or password"
+        login: err.response?.data?.message || "Invalid email or password",
       });
     } finally {
       setSubmitting(false);
@@ -171,7 +173,10 @@ const ApplyJob = () => {
     const schema = yup.object().shape({
       firstName: yup.string().required("First name is required"),
       lastName: yup.string().required("Last name is required"),
-      email: yup.string().required("Email is required").email("Please enter a valid email address"),
+      email: yup
+        .string()
+        .required("Email is required")
+        .email("Please enter a valid email address"),
       phone: yup.string().required("Phone number is required"),
       address: yup.string().required("Address is required"),
       city: yup.string().required("City is required"),
@@ -180,22 +185,24 @@ const ApplyJob = () => {
         .required("Postcode is required")
         .matches(
           /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i,
-          "Please enter a valid UK postcode"
+          "Please enter a valid UK postcode",
         ),
       license: yup.string().required("SIA license number is required"),
       experience: yup.string().required("Years of experience is required"),
       availability: yup.string().required("Availability is required"),
       cover: yup.string().required("Cover letter is required"),
-      ...(!user && !isLoggingIn ? {
-        password: yup
-          .string()
-          .required("Password is required")
-          .min(8, "Password must be at least 8 characters"),
-        confirmPassword: yup
-          .string()
-          .required("Confirm password is required")
-          .oneOf([yup.ref("password")], "Passwords do not match")
-      } : {})
+      ...(!user && !isLoggingIn
+        ? {
+            password: yup
+              .string()
+              .required("Password is required")
+              .min(8, "Password must be at least 8 characters"),
+            confirmPassword: yup
+              .string()
+              .required("Confirm password is required")
+              .oneOf([yup.ref("password")], "Passwords do not match"),
+          }
+        : {}),
     });
 
     try {
@@ -226,7 +233,7 @@ const ApplyJob = () => {
       setSubmitting(true);
       const payload = {
         ...form,
-        cvFile: cvBase64 || "cv_resume.pdf"
+        cvFile: cvBase64 || "cv_resume.pdf",
       };
 
       // Submit application
@@ -237,7 +244,7 @@ const ApplyJob = () => {
         try {
           await authLogin({
             email: form.email,
-            password: form.password
+            password: form.password,
           });
         } catch (loginErr) {
           console.error("Auto login after registration failed:", loginErr);
@@ -245,7 +252,11 @@ const ApplyJob = () => {
       }
 
       // Retrieve reference number from backend response
-      const finalRef = res.refNumber || res.data?.refNumber || res.data?.data?.applicationReference || 'REF-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+      const finalRef =
+        res.refNumber ||
+        res.data?.refNumber ||
+        res.data?.data?.applicationReference ||
+        "REF-" + Math.random().toString(36).substring(2, 9).toUpperCase();
       setRefNumber(finalRef);
       setSuccessOpen(true);
       window.scrollTo({
@@ -254,7 +265,10 @@ const ApplyJob = () => {
       });
     } catch (error) {
       console.error("Submit application failed:", error);
-      alert(error.response?.data?.message || "Failed to submit application. Please try again.");
+      alert(
+        error.response?.data?.message ||
+          "Failed to submit application. Please try again.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -272,8 +286,7 @@ const ApplyJob = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#F5F7FA]">
-        <div className="w-12 h-12 border-4 border-[#F15A24] border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-gray-500 font-bold">Loading job description...</p>
+        <Loader text="Loading job description..." />
       </div>
     );
   }
@@ -282,7 +295,9 @@ const ApplyJob = () => {
   if (!job) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#F5F7FA]">
-        <h2 className="text-3xl font-black text-[#111827] mb-4">Job Opening Not Found</h2>
+        <h2 className="text-3xl font-black text-[#111827] mb-4">
+          Job Opening Not Found
+        </h2>
         <NavLink
           to="/careers"
           className="px-6 py-3 bg-[#F15A24] text-white rounded-2xl font-bold shadow-lg shadow-orange-500/20 hover:bg-orange-600 transition-all"
@@ -315,7 +330,8 @@ const ApplyJob = () => {
             <p className="mt-4 text-[#667085] leading-[1.9]">
               Thank you for applying for the{" "}
               <span className="font-bold text-[#111827]">{job.title}</span> role
-              at <span className="font-bold text-[#111827]">{job.company}</span>.
+              at <span className="font-bold text-[#111827]">{job.company}</span>
+              .
             </p>
 
             <div className="mt-7 rounded-2xl border border-[#F15A24]/20 bg-[#FFF7F3] px-6 py-4 text-sm font-bold text-[#F15A24]">
@@ -323,7 +339,8 @@ const ApplyJob = () => {
             </div>
 
             <p className="mt-4 text-xs text-gray-500">
-              You can track your application status anytime inside your Student Dashboard.
+              You can track your application status anytime inside your Student
+              Dashboard.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -503,7 +520,8 @@ const ApplyJob = () => {
                     Logged in as {user.name || "Student"}
                   </p>
                   <p className="text-xs text-gray-500">
-                    We'll link this application to your verified student profile.
+                    We'll link this application to your verified student
+                    profile.
                   </p>
                 </div>
               </div>
@@ -549,7 +567,8 @@ const ApplyJob = () => {
               <form onSubmit={handleInlineLogin} className="space-y-5 max-w-lg">
                 <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
                   <p className="text-[13px] text-blue-700 font-semibold">
-                    Sign in to link this application to your existing student profile.
+                    Sign in to link this application to your existing student
+                    profile.
                   </p>
                 </div>
 
@@ -563,7 +582,9 @@ const ApplyJob = () => {
                       <span className="w-full border-t border-gray-100"></span>
                     </div>
                     <div className="relative flex justify-center text-xs uppercase text-gray-400 font-bold">
-                      <span className="bg-white px-4 tracking-widest">or use email</span>
+                      <span className="bg-white px-4 tracking-widest">
+                        or use email
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -705,9 +726,12 @@ const ApplyJob = () => {
                 {!user && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-orange-50/20 p-5 rounded-2xl border border-dashed border-orange-200/50">
                     <div className="sm:col-span-2">
-                      <h4 className="text-sm font-bold text-gray-800">Create Candidate Account</h4>
+                      <h4 className="text-sm font-bold text-gray-800">
+                        Create Candidate Account
+                      </h4>
                       <p className="text-xs text-gray-500 mt-1">
-                        Register a secure password to automatically build your student profile and track application statuses.
+                        Register a secure password to automatically build your
+                        student profile and track application statuses.
                       </p>
                     </div>
 
@@ -896,26 +920,30 @@ const ApplyJob = () => {
                     Upload CV / Resume
                   </label>
 
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    onChange={handleFileChange} 
-                    accept=".pdf,.doc,.docx" 
-                    className="hidden" 
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept=".pdf,.doc,.docx"
+                    className="hidden"
                   />
 
-                  <div 
+                  <div
                     onClick={() => fileInputRef.current.click()}
                     className="border-2 border-dashed border-gray-300 rounded-2xl p-7 text-center hover:border-[#F15A24] transition-all cursor-pointer bg-[#FAFBFC] hover:bg-orange-50/10"
                   >
                     <Upload size={24} className="mx-auto text-gray-400" />
 
                     <p className="mt-3 text-sm font-bold text-gray-700">
-                      {cvName ? `Selected File: ${cvName}` : "Click to select and upload your CV"}
+                      {cvName
+                        ? `Selected File: ${cvName}`
+                        : "Click to select and upload your CV"}
                     </p>
 
                     <p className="mt-1 text-xs text-gray-400">
-                      {cvName ? "Ready for submission" : "PDF, DOC, DOCX up to 5MB"}
+                      {cvName
+                        ? "Ready for submission"
+                        : "PDF, DOC, DOCX up to 5MB"}
                     </p>
                   </div>
                 </div>

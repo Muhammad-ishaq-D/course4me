@@ -6,7 +6,7 @@ const HiringTrainingSection = () => {
   const navigate = useNavigate();
   return (
     <section className="relative bg-white py-24  overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div id="hiringTraining" className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="relative grid grid-cols-1 lg:grid-cols-2 items-stretch">
           {/* LEFT SIDE */}
           <div className="flex flex-col justify-center gap-10">

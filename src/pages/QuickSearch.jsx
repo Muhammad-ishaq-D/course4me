@@ -1,43 +1,92 @@
-import React, { useState, useRef } from "react";
-import {
-  Search,
-  MapPin,
-  ChevronDown,
-  ArrowRight,
-  Sparkles,
-} from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Search, MapPin, ArrowRight, Sparkles } from "lucide-react";
+
 import CourseCard from "../components/ui/CourseCard";
 import LicenseCard from "../components/ui/LicenseCard";
 import CareerCards from "../components/ui/CareerCards";
 import Loader from "../components/ui/Loader";
+import NoResults from "../components/ui/NoResults";
+import EmptyStateQuickSearch from "../components/ui/EmptyStateQuickSearch";
+import CustomDropdown from "../components/ui/CustomDropdown";
 
 // ================= IMPORT DATA =================
 import { searchData } from "../data/quicksearchData";
-import NoResults from "../components/ui/NoResults";
-import EmptyStateQuickSearch from "../components/ui/EmptyStateQuickSearch";
-import { div } from "framer-motion/client";
 
 const QuickSearch = () => {
+  // ================= STATES =================
+
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState("");
   const [type, setType] = useState("all");
+
   const [hasSearched, setHasSearched] = useState(false);
   const [filteredResults, setFilteredResults] = useState([]);
+
   const [loading, setLoading] = useState(false);
 
+  // ================= LOCATION SUGGESTIONS =================
+
+  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
+
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
+
+  // ================= REFS =================
+
   const resultsRef = useRef(null);
+
+  const locationRef = useRef(null);
+
+  // ================= LOCATION FILTER =================
+
+  useEffect(() => {
+    // GET UNIQUE LOCATIONS
+    const uniqueLocations = [
+      ...new Set(searchData.map((item) => item.location)),
+    ];
+
+    // FILTER
+    const filtered = uniqueLocations.filter((loc) =>
+      loc.toLowerCase().includes(location.toLowerCase()),
+    );
+
+    if (location.trim() !== "") {
+      setLocationSuggestions(filtered);
+
+      // ONLY OPEN IF RESULTS EXIST
+      if (filtered.length > 0) {
+        setShowLocationSuggestions(true);
+      } else {
+        setShowLocationSuggestions(false);
+      }
+    } else {
+      setShowLocationSuggestions(false);
+    }
+  }, [location]);
+
+  // ================= CLOSE DROPDOWN =================
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (locationRef.current && !locationRef.current.contains(event.target)) {
+        setShowLocationSuggestions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // ================= SEARCH FUNCTION =================
 
   const handleSearch = () => {
-    // ================= START LOADING =================
-
     setLoading(true);
 
     setHasSearched(true);
 
-    // ================= SCROLL TO RESULTS =================
-
+    // SCROLL TO RESULTS
     setTimeout(() => {
       resultsRef.current?.scrollIntoView({
         behavior: "smooth",
@@ -45,8 +94,7 @@ const QuickSearch = () => {
       });
     }, 100);
 
-    // ================= SIMULATE API DELAY =================
-
+    // API DELAY
     setTimeout(() => {
       const results = searchData.filter((item) => {
         const matchesSearch =
@@ -66,24 +114,26 @@ const QuickSearch = () => {
         return matchesSearch && matchesLocation && matchesType;
       });
 
-      // ================= SET RESULTS =================
       setFilteredResults(results);
 
-      // ================= STOP LOADING =================
       setLoading(false);
     }, 1200);
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFC] overflow-hidden">
+    <div className="min-h-screen bg-[#FAFAFC] overflow-hidden relative">
       {/* ================= BACKGROUND ================= */}
+
       <div className="absolute top-0 left-0 w-[350px] h-[350px] bg-[#F15A24]/10 blur-[120px] rounded-full" />
+
       <div className="absolute top-20 right-0 w-[300px] h-[300px] bg-orange-200/20 blur-[120px] rounded-full" />
 
       {/* ================= MAIN ================= */}
+
       <section className="relative px-4 sm:px-6 lg:px-10 py-12 lg:py-16">
         <div className="max-w-7xl mx-auto">
           {/* ================= HERO ================= */}
+
           <div className="text-center max-w-4xl mx-auto">
             <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#FFF3EE] text-[#F15A24] text-sm font-semibold border border-[#F15A24]/10">
               <Sparkles size={16} />
@@ -102,7 +152,9 @@ const QuickSearch = () => {
               licenses, careers and nearby learning opportunities.
             </p>
           </div>
+
           {/* ================= SEARCH BOX ================= */}
+
           <div className="mt-10 bg-white border border-gray-100 shadow-2xl shadow-gray-100 rounded-[32px] p-5 md:p-7">
             {/* TOP */}
 
@@ -115,32 +167,30 @@ const QuickSearch = () => {
             </div>
 
             {/* SEARCH BAR */}
+
             <div className="grid grid-cols-1 xl:grid-cols-[220px_1fr_1fr_170px] gap-4">
               {/* TYPE */}
+
               <div className="relative">
                 <label className="text-sm font-semibold text-gray-700 mb-2 block">
                   Search Type
                 </label>
 
-                <select
+                <CustomDropdown
                   value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className="w-full h-[60px] rounded-2xl border border-gray-200 bg-[#FAFAFC] px-5 text-gray-700 outline-none appearance-none"
-                >
-                  <option value="all">All Types</option>
-                  <option value="course">Courses</option>
-                  <option value="license">Licenses</option>
-                  <option value="career">Careers</option>
-                  <option value="location">Centers</option>
-                </select>
-
-                <ChevronDown
-                  size={18}
-                  className="absolute right-5 top-[55px] -translate-y-1/2 text-gray-400"
+                  onChange={setType}
+                  options={[
+                    { label: "All Types", value: "all" },
+                    { label: "Courses", value: "course" },
+                    { label: "Licenses", value: "license" },
+                    { label: "Careers", value: "career" },
+                    { label: "Centers", value: "location" },
+                  ]}
                 />
               </div>
 
               {/* SEARCH */}
+
               <div className="relative">
                 <label className="text-sm font-semibold text-gray-700 mb-2 block">
                   Search Keyword
@@ -156,31 +206,69 @@ const QuickSearch = () => {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search courses, licenses, careers..."
-                  className="w-full h-[60px] rounded-2xl border border-gray-200 bg-[#FAFAFC] pl-14 pr-4 outline-none"
+                  className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none"
                 />
               </div>
 
               {/* LOCATION */}
-              <div className="relative">
+
+              <div className="relative" ref={locationRef}>
                 <label className="text-sm font-semibold text-gray-700 mb-2 block">
                   Location
                 </label>
 
                 <MapPin
                   size={18}
-                  className="absolute left-5 top-[55px] -translate-y-1/2 text-gray-400"
+                  className="absolute left-5 top-[55px] -translate-y-1/2 text-gray-400 z-10"
                 />
 
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
+                  onFocus={() => {
+                    if (locationSuggestions.length > 0) {
+                      setShowLocationSuggestions(true);
+                    }
+                  }}
                   placeholder="Enter city or location"
-                  className="w-full h-[60px] rounded-2xl border border-gray-200 bg-[#FAFAFC] pl-14 pr-4 outline-none"
+                  className="w-full h-[60px] rounded-2xl border focus:border-[#F15A24] border-gray-200 bg-[#FAFAFC] pl-14 pr-4 outline-none"
                 />
+
+                {/* ================= SUGGESTIONS ================= */}
+
+                {showLocationSuggestions && locationSuggestions.length > 0 && (
+                  <div className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
+                    {locationSuggestions.map((loc, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => {
+                          setLocation(loc);
+                          setLocationSuggestions([]);
+                          setTimeout(() => {
+                            setShowLocationSuggestions(false);
+                          }, 0);
+                        }}
+                        className="w-full px-5 py-4 flex items-center gap-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center">
+                          <MapPin size={16} className="text-[#F15A24]" />
+                        </div>
+
+                        <div>
+                          <h4 className="text-sm font-semibold text-gray-800">
+                            {loc}
+                          </h4>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* BUTTON */}
+
               <div className="flex items-end">
                 <button
                   onClick={handleSearch}
@@ -192,7 +280,9 @@ const QuickSearch = () => {
               </div>
             </div>
           </div>
+
           {/* ================= LOADER ================= */}
+
           {loading && (
             <div
               ref={resultsRef}
@@ -201,22 +291,29 @@ const QuickSearch = () => {
               <Loader text="Finding the best opportunities for you.." />
             </div>
           )}
+
           {/* ================= EMPTY STATE ================= */}
+
           {!hasSearched && (
             <div ref={resultsRef}>
               <EmptyStateQuickSearch />
             </div>
           )}
-          {/* // ================= NO RESULTS ================= */}
+
+          {/* ================= NO RESULTS ================= */}
+
           {!loading && hasSearched && filteredResults.length === 0 && (
             <div ref={resultsRef}>
               <NoResults />
             </div>
           )}
+
           {/* ================= RESULTS ================= */}
+
           {!loading && hasSearched && filteredResults.length > 0 && (
             <div ref={resultsRef} className="mt-16">
               {/* TOP */}
+
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
                 <div>
                   <h2 className="text-4xl font-black text-[#111827]">
@@ -233,14 +330,14 @@ const QuickSearch = () => {
               </div>
 
               {/* GRID */}
+
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredResults.map((item, index) => {
-                  // ================= COURSE CARD =================
+                  // ================= COURSE =================
 
                   if (item.type === "course") {
                     return (
                       <div key={index} className="relative">
-                        {/* LABEL */}
                         <div className="absolute top-5 right-5 z-20">
                           <div className="px-4 py-1.5 rounded-full bg-[#F15A24] text-white text-[11px] font-bold uppercase tracking-wide shadow-lg">
                             Course
@@ -264,12 +361,11 @@ const QuickSearch = () => {
                     );
                   }
 
-                  // ================= LICENSE CARD =================
+                  // ================= LICENSE =================
+
                   if (item.type === "license") {
                     return (
                       <div key={index} className="relative">
-                        {/* LABEL */}
-
                         <div className="absolute top-5 right-5 z-20">
                           <div className="px-4 py-1.5 rounded-full bg-[#0F172A] text-white text-[11px] font-bold uppercase tracking-wide shadow-lg">
                             Licence
@@ -281,12 +377,11 @@ const QuickSearch = () => {
                     );
                   }
 
-                  // ================= CAREER CARD =================
+                  // ================= CAREER =================
+
                   if (item.type === "career") {
                     return (
                       <div key={index} className="relative">
-                        {/* LABEL */}
-
                         <div className="absolute top-5 right-5 z-20">
                           <div className="px-4 py-1.5 rounded-full bg-[#7C3AED] text-white text-[11px] font-bold uppercase tracking-wide shadow-lg">
                             Career
@@ -298,14 +393,13 @@ const QuickSearch = () => {
                     );
                   }
 
-                  // ================= LOCATION CARD =================
+                  // ================= LOCATION =================
+
                   return (
                     <div
                       key={index}
                       className="group bg-white rounded-[28px] border border-gray-200 overflow-hidden hover:border-[#F15A24]/20 hover:shadow-[0_20px_45px_rgba(0,0,0,0.08)] transition-all duration-500"
                     >
-                      {/* IMAGE */}
-
                       <div className="relative h-52 overflow-hidden">
                         <img
                           src={item.image}
@@ -313,11 +407,7 @@ const QuickSearch = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                         />
 
-                        {/* OVERLAY */}
-
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-
-                        {/* LABEL */}
 
                         <div className="absolute top-4 right-4">
                           <div className="px-4 py-1.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold uppercase tracking-wide shadow-lg">
@@ -325,7 +415,6 @@ const QuickSearch = () => {
                           </div>
                         </div>
 
-                        {/* TITLE */}
                         <div className="absolute bottom-5 left-5">
                           <h3 className="text-white text-[28px] font-black leading-tight">
                             {item.title}
@@ -337,13 +426,11 @@ const QuickSearch = () => {
                         </div>
                       </div>
 
-                      {/* CONTENT */}
                       <div className="p-5">
                         <p className="text-[#667085] text-[14px] leading-relaxed">
                           {item.description}
                         </p>
 
-                        {/* STATS */}
                         <div className="grid grid-cols-3 gap-3 mt-5">
                           <div className="bg-[#F8FAFC] rounded-xl p-3 text-center border border-[#EDF1F5]">
                             <h4 className="text-[#111827] text-sm font-bold">
@@ -364,7 +451,6 @@ const QuickSearch = () => {
                           </div>
                         </div>
 
-                        {/* BUTTON */}
                         <button className="w-full h-12 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-sm font-bold mt-6 transition-all">
                           Explore Center
                         </button>

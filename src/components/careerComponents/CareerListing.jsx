@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Filter,
   X,
+  Check,
 } from "lucide-react";
 import { careersData } from "../../data/careerData";
 import CareerSidebar from "../ui/CareerSidebar";
@@ -63,6 +64,12 @@ const categories = [
 ];
 
 const CareerListing = () => {
+  const [open, setOpen] = useState(false);
+  const sortOptions = [
+    { label: "Sort by: All", value: "all" },
+    { label: "Sort by: Popular", value: "popular" },
+  ];
+
   const [selectedCategory, setSelectedCategory] = useState("All Careers");
 
   const [sortBy, setSortBy] = useState("all");
@@ -241,7 +248,7 @@ const CareerListing = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-[280px_1fr_320px] gap-3">
+        <div className="grid grid-cols-1 xl:grid-cols-[280px_1fr_320px] gap-3 overflow-visible">
           {/* ==================SIDEBAR====================== */}
           <div className="hidden xl:block">
             <CareerSidebar
@@ -292,18 +299,16 @@ const CareerListing = () => {
                     MAIN CONTENT
           ====================================================== */}
 
-          <div ref={mainSectionRef}>
+          <div ref={mainSectionRef} className="relative z-50 overflow-visible">
             {/* ==================HEADER=================== */}
-            <div className="bg-white rounded-[24px] border border-gray-100 px-5 py-4 mb-5 shadow-sm sticky top-0 z-30 backdrop-blur-xl bg-white/95 lg:static">
+            <div className="bg-white rounded-[24px] border border-gray-100 px-5 py-4 mb-5 shadow-sm sticky top-0 z-[99999] backdrop-blur-xl bg-white/95 overflow-visible">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 {/* Left Content */}
                 <div className="flex items-center gap-4">
-                  {/* Text */}
                   <div>
                     <h2 className="text-[22px] font-black text-[#111827] leading-none">
                       {selectedCategory}
                     </h2>
-
                     <p className="text-sm text-[#667085] mt-2 font-medium">
                       Showing{" "}
                       <span className="text-[#F8510C] font-bold">
@@ -313,7 +318,6 @@ const CareerListing = () => {
                     </p>
                   </div>
                 </div>
-
                 {/* Right Side */}
                 <div className="flex items-center gap-3">
                   {/* Mobile Filter Button */}
@@ -321,36 +325,46 @@ const CareerListing = () => {
                     onClick={() => setShowFilters(true)}
                     className="xl:hidden h-11 px-5 rounded-2xl border border-gray-200 bg-white flex items-center gap-2 font-semibold text-[#111827]"
                   >
-                    <Filter className="w-4 h-4 text-[#F8510C]" />
-                    Filters
+                    <Filter className="w-4 h-4 text-[#F8510C]" /> Filters
                   </button>
-                  {/* Popular Filter Badge */}
+                  {/* Popular Badge */}
                   {sortBy === "popular" && (
                     <div className="hidden sm:flex items-center gap-2 px-4 h-11 rounded-2xl bg-[#FFF1EB] border border-[#FFD9CC]">
                       <div className="w-2 h-2 rounded-full bg-[#F8510C]" />
-
                       <span className="text-sm font-bold text-[#F8510C]">
                         Popular Careers
                       </span>
                     </div>
                   )}
-
-                  {/* Select */}
+                  {/* ================= CUSTOM DROPDOWN ================= */}
                   <div className="relative">
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="appearance-none h-11 pl-5 pr-12 rounded-2xl border border-gray-200 bg-white text-sm font-semibold text-[#111827] outline-none focus:border-[#F8510C] focus:ring-4 focus:ring-[#F8510C]/10 transition-all cursor-pointer"
+                    {/* Button */}
+                    <button
+                      onClick={() => setOpen(!open)}
+                      className=" w-[140px] md:w-[170px] h-11 px-2 md:px-4 rounded-2xl border-2 border-[#e46612] bg-white flex items-center justify-between text-[#111827]  text-sm font-bold shadow-sm hover:shadow-md transition-all "
                     >
-                      <option value="all">Sort by: All</option>
-
-                      <option value="popular">Sort by: Popular</option>
-                    </select>
-
-                    {/* Arrow */}
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                      <ChevronDown className="w-4 h-4 text-[#667085]" />
-                    </div>
+                      {sortOptions.find((item) => item.value === sortBy)?.label}
+                      <ChevronDown
+                        className={`w-5 h-5 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+                      />
+                    </button>
+                    {/* Dropdown */}
+                    {open && (
+                      <div className=" absolute top-13 right-0 w-[150px] md:w-[170px] rounded-2xl bg-white border border-gray-200 shadow-[0_20px_45px_rgba(0,0,0,0.12)] overflow-hidden z-[999999] ">
+                        {sortOptions.map((item) => (
+                          <button
+                            key={item.value}
+                            onClick={() => {
+                              setSortBy(item.value);
+                              setOpen(false);
+                            }}
+                            className={` w-full px-5 py-3 flex items-center justify-between text-sm transition-all ${sortBy === item.value ? "bg-[#F8510C] text-white" : "text-[#111827] hover:bg-[#FFF1EB]"} `}
+                          >
+                            {item.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -359,7 +373,7 @@ const CareerListing = () => {
             {loading ? (
               <Loader text={`Loading Careers...`} />
             ) : filteredCareers.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 relative z-10 gap-3">
                 <CareerCards filteredCareers={filteredCareers} />
               </div>
             ) : (

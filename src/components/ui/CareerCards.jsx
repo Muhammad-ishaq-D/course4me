@@ -9,10 +9,10 @@ const CareerCards = ({ filteredCareers }) => {
       {filteredCareers.map((career) => (
         <div
           key={career.id}
-          className="group bg-white rounded-[28px] border border-gray-200 overflow-hidden hover:border-[#F8510C]/20 hover:shadow-[0_20px_45px_rgba(0,0,0,0.08)] transition-all duration-500"
+          className="group bg-white rounded-[28px] border border-gray-200 overflow-visible hover:border-[#F8510C]/20 hover:shadow-[0_20px_45px_rgba(0,0,0,0.08)] transition-all duration-500"
         >
           {/* Image */}
-          <div className="relative h-44 overflow-hidden">
+          <div className="relative h-44 overflow-hidden rounded-t-[28px]">
             <img
               src={career.image}
               alt={career.title}

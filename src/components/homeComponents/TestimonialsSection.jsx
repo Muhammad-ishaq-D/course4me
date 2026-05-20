@@ -11,7 +11,7 @@ const Stars = ({ color = "#FF5421" }) => (
 
 const TestimonialsSection = () => {
   return (
-    <section className="bg-white py-24 ">
+    <section id="testimonials" className="bg-white py-24 ">
       <div className="max-w-[1240px] mx-auto px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-20">
