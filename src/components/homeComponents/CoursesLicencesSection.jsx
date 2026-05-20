@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import courseService from "../../api/services/courseService";
+import licenseService from "../../api/services/licenseService";
 import {
   Shield,
   Camera,
@@ -31,23 +32,7 @@ const getCategoryIcon = (category) => {
   }
 };
 
-const POPULAR_LICENCES = [
-  {
-    id: "sia-door-supervisor-topup",
-    icon: CheckSquare,
-    title: "SIA Top-Up Refresher Training for Door Supervisor",
-  },
-  {
-    id: "sia-security-guard-topup",
-    icon: CheckSquare,
-    title: "SIA Top-Up Refresher Training for Security Guard",
-  },
-  {
-    id: "sia-close-protection-topup",
-    icon: CheckSquare,
-    title: "SIA Top-Up Refresher Training for Close Protection",
-  },
-];
+
 
 const CATEGORIES = [
   "Most Popular",
@@ -178,10 +163,11 @@ const CoursesLicencesSection = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("Most Popular");
   const [courses, setCourses] = useState([]);
+  const [licences, setLicences] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
         const params = { status: "Published" };
@@ -189,10 +175,15 @@ const CoursesLicencesSection = () => {
         // If not 'Most Popular', filter by category
         // Note: The UI categories don't perfectly match backend categories yet
         // For now, let's just fetch all and filter in memory or adjust backend call
-        const response = await courseService.getAllCourses(params);
-        const data = response.data?.data || [];
+        const [coursesRes, licencesRes] = await Promise.all([
+          courseService.getAllCourses(params),
+          licenseService.getAllLicenses(params)
+        ]);
+        
+        const coursesData = coursesRes.data?.data || [];
+        const licencesData = licencesRes.data?.data || [];
 
-        const mappedCourses = data.map((course) => ({
+        const mappedCourses = coursesData.map((course) => ({
           id: course._id,
           icon: getCategoryIcon(course.category),
           title: course.title,
@@ -200,15 +191,23 @@ const CoursesLicencesSection = () => {
           category: course.category,
         }));
 
+        const mappedLicences = licencesData.map((licence) => ({
+          id: licence._id,
+          icon: CheckSquare,
+          title: licence.title,
+          description: licence.description || "Licence",
+        }));
+
         setCourses(mappedCourses);
+        setLicences(mappedLicences);
       } catch (error) {
-        console.error("Error fetching popular courses:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCourses();
+    fetchData();
   }, []);
 
   // Filter based on UI categories
@@ -403,11 +402,12 @@ const CoursesLicencesSection = () => {
 
             {/* CARDS */}
             <div className="space-y-4 relative z-10">
-              {POPULAR_LICENCES.map((licence) => (
+              {licences.slice(0, 3).map((licence) => (
                 <ItemCard
                   key={licence.id}
                   icon={licence.icon}
                   title={licence.title}
+                  description={licence.description}
                   onClick={() => navigate("/licences")}
                 />
               ))}

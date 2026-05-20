@@ -71,14 +71,14 @@ const HeroSection = () => {
             </div>
 
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-              Start Your <br />
-              <span className="text-[#FF5421]">Security Career</span> <br />
-              in Just{" "}
+              Get Trained. <br />
+              <span className="text-[#FF5421]">Get Licenced.</span> <br />
+              Build Your{" "}
               <span className="relative inline-block text-[#00A3F4]">
-                3 Weeks
+                Future.
                 <img
                   src={underlineStroke}
-                  className="absolute -bottom-2 left-6 sm:left-10 md:left-14 w-[60%]"
+                  className="absolute bottom-1 md:bottom-2 left-2 w-[90%]"
                 />
               </span>
             </h2>

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import courseService from "../../api/services/courseService";
 import {
   Star,
   MapPin,
@@ -16,77 +17,51 @@ import Emma from "../../assets/home/emma.png";
 import Marcus from "../../assets/home/marcus.png";
 import { motion } from "framer-motion";
 
-const trainers = [
-  {
-    name: "Mr. John Redfern",
-    role: "Lead Security Instructor",
-    title: "Door Supervisor & Close Protection",
-    experience: "20+ years",
-    locations: ["London", "Manchester", "Birmingham"],
-    rating: "5",
-    reviews: "1,247",
-    badge: "Army Veteran",
-    image: John,
-  },
-  {
-    name: "Sarah Mitchell",
-    role: "Senior Training Manager",
-    title: "CCTV Operations & Security Guarding",
-    experience: "15+ years",
-    locations: ["Leeds", "Sheffield", "Nottingham"],
-    rating: "4.9",
-    reviews: "983",
-    badge: "Ex-Police",
-    image: Sarah,
-  },
-  {
-    name: "David Okonkwo",
-    role: "Security Training Specialist",
-    title: "Door Supervisor & Conflict Management",
-    experience: "12+ years",
-    locations: ["Glasgow", "Edinburgh", "Newcastle"],
-    rating: "4.9",
-    reviews: "756",
-    badge: "Top Rated",
-    image: David,
-  },
-  {
-    name: "Richard Clarke",
-    role: "Close Protection Instructor",
-    title: "Close Protection & First Aid",
-    experience: "18+ years",
-    locations: ["London", "Bristol", "Cardiff"],
-    rating: "4.8",
-    reviews: "612",
-    badge: "Royal Marines",
-    image: Richard,
-  },
-  {
-    name: "Emma Whitfield",
-    role: "Training & Compliance Lead",
-    title: "Security Guarding & Compliance",
-    experience: "14+ years",
-    locations: ["Manchester", "Liverpool", "Birmingham"],
-    rating: "4.9",
-    reviews: "891",
-    badge: "SIA Expert",
-    image: Emma,
-  },
-  {
-    name: "Marcus Thompson",
-    role: "Instructor & Career Coach",
-    title: "Door Supervisor & Career Development",
-    experience: "10+ years",
-    locations: ["London", "Southampton", "Brighton"],
-    rating: "4.8",
-    reviews: "534",
-    badge: "Career Coach",
-    image: Marcus,
-  },
-];
 
 export default function TrainersSection() {
   const navigate = useNavigate();
+  const [trainersList, setTrainersList] = useState([]);
+
+  useEffect(() => {
+    const fetchTrainers = async () => {
+      try {
+        const response = await courseService.getAllCourses({ status: "Published" });
+        const courses = response.data?.data || [];
+
+        const uniqueTrainers = [];
+        const seenNames = new Set();
+
+        courses.forEach((course) => {
+          if (course.instructor && course.instructor.name) {
+            if (!seenNames.has(course.instructor.name)) {
+              seenNames.add(course.instructor.name);
+
+              uniqueTrainers.push({
+                name: course.instructor.name,
+                role: course.instructor.title || "Security Instructor",
+                title: course.title || "Professional Training",
+                experience: "10+ years",
+                locations: course.location ? [course.location] : ["London", "Manchester"],
+                rating: "4.9",
+                reviews: "120+",
+                badge: "Certified",
+                image: course.instructor.photo || John,
+              });
+            }
+          }
+        });
+
+        if (uniqueTrainers.length > 0) {
+          setTrainersList(uniqueTrainers);
+        }
+      } catch (error) {
+        console.error("Error fetching trainers from courses:", error);
+      }
+    };
+
+    fetchTrainers();
+  }, []);
+
   return (
     <section className="bg-white text-[#1A1A1A] py-24 px-6">
       <div className="max-w-7xl mx-auto">
@@ -108,7 +83,7 @@ export default function TrainersSection() {
 
         {/* Trainer Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {trainers.map((trainer, i) => (
+          {trainersList.map((trainer, i) => (
             <TrainerCard
               key={i}
               trainer={trainer}

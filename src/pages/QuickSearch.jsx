@@ -9,8 +9,11 @@ import NoResults from "../components/ui/NoResults";
 import EmptyStateQuickSearch from "../components/ui/EmptyStateQuickSearch";
 import CustomDropdown from "../components/ui/CustomDropdown";
 
-// ================= IMPORT DATA =================
-import { searchData } from "../data/quicksearchData";
+// ================= API SERVICES =================
+import courseService from "../api/services/courseService";
+import licenseService from "../api/services/licenseService";
+import careerService from "../api/services/careerService";
+import { locationsData } from "../data/locationData";
 
 const QuickSearch = () => {
   // ================= STATES =================
@@ -39,9 +42,9 @@ const QuickSearch = () => {
   // ================= LOCATION FILTER =================
 
   useEffect(() => {
-    // GET UNIQUE LOCATIONS
+    // GET UNIQUE LOCATIONS FROM LOCATIONS DATA
     const uniqueLocations = [
-      ...new Set(searchData.map((item) => item.location)),
+      ...new Set(locationsData.map((item) => item.location)),
     ];
 
     // FILTER
@@ -81,9 +84,8 @@ const QuickSearch = () => {
 
   // ================= SEARCH FUNCTION =================
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     setLoading(true);
-
     setHasSearched(true);
 
     // SCROLL TO RESULTS
@@ -94,30 +96,110 @@ const QuickSearch = () => {
       });
     }, 100);
 
-    // API DELAY
-    setTimeout(() => {
-      const results = searchData.filter((item) => {
-        const matchesSearch =
-          item.title?.toLowerCase().includes(search.toLowerCase()) ||
-          item.description?.toLowerCase().includes(search.toLowerCase()) ||
-          item.shortDescription?.toLowerCase().includes(search.toLowerCase()) ||
-          item.location?.toLowerCase().includes(search.toLowerCase()) ||
-          item.category?.toLowerCase().includes(search.toLowerCase()) ||
-          item.subtitle?.toLowerCase().includes(search.toLowerCase());
+    try {
+      const params = {
+        status: "Published",
+      };
 
-        const matchesLocation = item.location
-          ?.toLowerCase()
-          .includes(location.toLowerCase());
+      if (search.trim()) {
+        params.search = search;
+      }
+      if (location.trim()) {
+        params.location = location;
+      }
 
-        const matchesType = type === "all" || item.type === type.toLowerCase();
+      let fetchedCourses = [];
+      let fetchedLicenses = [];
+      let fetchedCareers = [];
 
-        return matchesSearch && matchesLocation && matchesType;
-      });
+      // Only fetch the requested type (or all if type is 'all')
+      const promises = [];
+      if (type === "all" || type === "course") {
+        promises.push(
+          courseService.getAllCourses(params).then((res) => {
+            fetchedCourses = (res.data?.data || []).map((course) => ({
+              ...course,
+              id: course._id,
+              type: "course",
+              badge: course.isPopular ? "Popular" : "",
+              image:
+                course.image ||
+                "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop",
+            }));
+          }),
+        );
+      }
+      if (type === "all" || type === "license") {
+        promises.push(
+          licenseService.getAllLicenses(params).then((res) => {
+            fetchedLicenses = (res.data?.data || []).map((licence) => ({
+              ...licence,
+              id: licence._id,
+              type: "license",
+              thumbnail:
+                licence.thumbnail ||
+                "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop",
+            }));
+          }),
+        );
+      }
+      if (type === "all" || type === "career") {
+        promises.push(
+          careerService.getAllCareers(params).then((res) => {
+            fetchedCareers = (res.data?.data || []).map((career) => ({
+              ...career,
+              id: career._id,
+              type: "career",
+              image:
+                career.image ||
+                "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
+            }));
+          }),
+        );
+      }
 
-      setFilteredResults(results);
+      await Promise.all(promises);
 
+      // Local location search
+      let localLocations = [];
+      if (type === "all" || type === "location") {
+        const allCenters = locationsData.flatMap((loc) =>
+          loc.centers.map((center) => ({
+            id: center.id,
+            type: "location",
+            title: center.name,
+            description: center.address,
+            location: loc.location,
+            image: center.image || "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=1200&auto=format&fit=crop",
+            totalCourses: center.courses ? `${center.courses.length} Courses` : "0 Courses",
+            totalLicences: "N/A",
+            totalCareers: "N/A",
+          }))
+        );
+
+        localLocations = allCenters.filter((center) => {
+          const matchesLocation = location
+            ? center.location.toLowerCase().includes(location.toLowerCase()) || center.title.toLowerCase().includes(location.toLowerCase())
+            : true;
+          const matchesSearch = search
+            ? center.title.toLowerCase().includes(search.toLowerCase()) || center.description.toLowerCase().includes(search.toLowerCase())
+            : true;
+          return matchesLocation && matchesSearch;
+        });
+      }
+
+      setFilteredResults([
+        ...fetchedCourses,
+        ...fetchedLicenses,
+        ...fetchedCareers,
+        ...localLocations,
+      ]);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      setFilteredResults([]);
+    } finally {
       setLoading(false);
-    }, 1200);
+    }
   };
 
   return (

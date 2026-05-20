@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import courseService from "../../api/services/courseService";
+import licenseService from "../../api/services/licenseService";
 import {
   Phone,
   Mail,
@@ -12,6 +15,26 @@ import {
 import Logo from "../../assets/Logo.svg";
 
 const Footer = () => {
+  const [courses, setCourses] = useState([]);
+  const [licenses, setLicenses] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [coursesRes, licensesRes] = await Promise.all([
+          courseService.getAllCourses({ status: "Published" }),
+          licenseService.getAllLicenses()
+        ]);
+        
+        setCourses(coursesRes.data?.data?.slice(0, 5) || []);
+        setLicenses(licensesRes.data?.data?.slice(0, 5) || []);
+      } catch (error) {
+        console.error("Error fetching footer data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <footer className="bg-[#0F0F0F] text-white  py-16 border-t border-white/5">
       <div className="max-w-325 mx-auto px-6">
@@ -45,21 +68,14 @@ const Footer = () => {
               POPULAR LICENCES
             </h4>
             <ul className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
-              <li className="hover:text-white transition-colors cursor-pointer">
-                SIA Top-Up Door Supervisor
-              </li>
-              <li className="hover:text-white transition-colors cursor-pointer">
-                SIA Top-Up Security Guard
-              </li>
-              <li className="hover:text-white transition-colors cursor-pointer">
-                SIA Top-Up Close Protection
-              </li>
-              <li className="hover:text-white transition-colors cursor-pointer">
-                Door Supervisor Licence
-              </li>
-              <li className="hover:text-white transition-colors cursor-pointer">
-                CCTV Licence
-              </li>
+              {licenses.map((licence) => (
+                <li key={licence._id} className="hover:text-white transition-colors cursor-pointer line-clamp-1">
+                  <Link to="/licences">{licence.title}</Link>
+                </li>
+              ))}
+              {licenses.length === 0 && (
+                <li className="hover:text-white transition-colors cursor-pointer">Loading...</li>
+              )}
             </ul>
           </div>
 
@@ -69,21 +85,14 @@ const Footer = () => {
               POPULAR COURSES
             </h4>
             <ul className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
-              <li className="hover:text-white transition-colors cursor-pointer">
-                Door Supervisor Training
-              </li>
-              <li className="hover:text-white transition-colors cursor-pointer">
-                CCTV Training
-              </li>
-              <li className="hover:text-white transition-colors cursor-pointer">
-                Close Protection Training
-              </li>
-              <li className="hover:text-white transition-colors cursor-pointer">
-                First Aid at Work
-              </li>
-              <li className="hover:text-white transition-colors cursor-pointer">
-                Security Guard Training
-              </li>
+              {courses.map((course) => (
+                <li key={course._id} className="hover:text-white transition-colors cursor-pointer line-clamp-1">
+                  <Link to={`/course/${course._id}`}>{course.title}</Link>
+                </li>
+              ))}
+              {courses.length === 0 && (
+                <li className="hover:text-white transition-colors cursor-pointer">Loading...</li>
+              )}
             </ul>
           </div>
 
