@@ -12,6 +12,7 @@ import {
   Lock,
   BookOpen,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -55,32 +56,120 @@ const CATEGORIES = [
   "Specialist",
 ];
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
+// ─── Sub-components ──────────────────────────────────────────────────────────
 const ItemCard = ({ icon: Icon, title, description, onClick }) => (
-  <div
+  <motion.div
+    whileHover={{ y: -4 }}
+    transition={{ duration: 0.3 }}
     onClick={onClick}
-    className="flex items-center justify-between bg-white hover:bg-gray-50 transition-all duration-300 rounded-[20px] px-6 py-5 border border-gray-100 shadow-sm hover:shadow-md cursor-pointer group"
+    className="
+      group
+      relative
+      overflow-hidden
+      rounded-[26px]
+      bg-white
+      border border-gray-100
+      p-5
+      shadow-[0_10px_35px_rgba(0,0,0,0.04)]
+      hover:shadow-[0_20px_50px_rgba(248,81,12,0.12)]
+      transition-all duration-300
+      cursor-pointer
+    "
   >
-    <div className="flex items-center gap-5">
-      <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100">
-        <Icon className="w-5 h-5 text-gray-400 group-hover:text-[#00A3FF] transition-colors" />
+    {/* HOVER GLOW */}
+    <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF5421]/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition duration-500" />
+
+    <div className="relative flex items-center justify-between gap-4">
+      {/* LEFT */}
+      <div className="flex items-center gap-4 min-w-0">
+        {/* ICON */}
+        <div
+          className="
+          w-14 h-14
+          rounded-2xl
+          bg-gradient-to-br
+          from-[#00A3FF]/10
+          to-[#FF5421]/10
+          border border-[#00A3FF]/10
+          flex items-center justify-center
+          flex-shrink-0
+        "
+        >
+          <Icon className="w-6 h-6 text-[#00A3FF]" />
+        </div>
+
+        {/* CONTENT */}
+        <div className="min-w-0">
+          <h4
+            className="
+            font-bold
+            text-[#111111]
+            text-[16px]
+            leading-snug
+            group-hover:text-[#FF5421]
+            transition-colors
+            line-clamp-1
+          "
+          >
+            {title}
+          </h4>
+
+          {description && (
+            <p
+              className="
+              text-[13px]
+              text-gray-500
+              mt-1
+              font-medium
+              line-clamp-1
+            "
+            >
+              {description}
+            </p>
+          )}
+        </div>
       </div>
 
-      <div>
-        <h4 className="font-bold text-[#1A1A1A] text-base group-hover:text-[#00A3FF] transition-colors">
-          {title}
-        </h4>
-        {description && (
-          <p className="text-[13px] text-gray-500 mt-0.5 font-medium">
-            {description}
-          </p>
-        )}
+      {/* RIGHT ARROW */}
+      <div
+        className="
+        w-11 h-11
+        rounded-xl
+        bg-[#F9FAFB]
+        border border-gray-100
+        flex items-center justify-center
+        flex-shrink-0
+        group-hover:bg-[#FF5421]
+        transition-all duration-300
+      "
+      >
+        <ArrowRight
+          className="
+          w-5 h-5
+          text-gray-400
+          group-hover:text-white
+          group-hover:translate-x-0.5
+          transition-all duration-300
+        "
+        />
       </div>
     </div>
 
-    <ArrowRight className="w-4 h-4 text-gray-200 group-hover:text-[#00A3FF] group-hover:translate-x-1 transition-all" />
-  </div>
+    {/* BOTTOM LINE */}
+    <div
+      className="
+      absolute bottom-0 left-0
+      w-full h-1
+      bg-gradient-to-r
+      from-[#00A3FF]
+      to-[#FF5421]
+      scale-x-0
+      group-hover:scale-x-100
+      origin-left
+      transition-transform duration-300
+    "
+    />
+  </motion.div>
 );
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -135,98 +224,185 @@ const CoursesLicencesSection = () => {
         });
 
   return (
-    <section className="bg-white py-24 ">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* CATEGORIES FILTER */}
-        <div className="mb-16">
-          <h2 className="text-[#FF5421] text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
-            Our Courses
-          </h2>
-          <h2 className="text-[44px] md:text-[52px] font-bold text-[#1A1A1A] mb-6 tracking-tight leading-none">
-            Pick Your Course.{" "}
-            <span className="text-[#FF5421]">Change Your Life.</span>
-          </h2>
-          <div className="flex flex-wrap items-center gap-3">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-7 py-3 font-bold rounded-full transition-all text-sm ${
-                  activeCategory === cat
-                    ? "bg-[#00A3FF] text-white shadow-lg shadow-[#00A3FF]/20 hover:opacity-90"
-                    : "bg-[#F8F9FA] text-gray-500 border border-gray-100 hover:bg-gray-100"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+    <section className="relative overflow-hidden bg-[#FAFAFA] py-16 lg:py-20">
+      {/* BACKGROUND GLOW */}
+      <div className="absolute top-0 left-0 w-72 h-72 bg-[#00A3FF]/10 blur-3xl rounded-full" />
+      <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#FF5421]/10 blur-3xl rounded-full" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* HEADER */}
+        <div className="max-w-3xl">
+          {/* LABEL */}
+          <div
+            className="
+        inline-flex items-center
+        bg-[#FF54210D]
+        border border-[#FF54211A]
+        text-[#FF5421]
+        px-4 py-2
+        rounded-full
+        text-sm
+        font-bold
+        mb-5
+      "
+          >
+            Courses & Licences
           </div>
+
+          {/* TITLE */}
+          <h2
+            className="
+        text-3xl sm:text-4xl lg:text-5xl
+        font-black
+        text-[#111111]
+        leading-tight
+        tracking-tight
+      "
+          >
+            Pick Your Course.
+            <br />
+            <span className="text-[#FF5421]">Build Your Future.</span>
+          </h2>
+
+          {/* DESC */}
+          <p
+            className="
+        mt-5
+        text-base sm:text-lg
+        text-gray-500
+        leading-relaxed
+        max-w-2xl
+      "
+          >
+            Explore industry-recognised training courses and licences designed
+            to help you start and grow your career in security.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-          {/* LEFT COLUMN — Popular Courses */}
-          <div>
-            <div className="flex items-center justify-between mb-10">
-              <h3 className="text-2xl font-bold text-[#1A1A1A] tracking-tight">
-                POPULAR COURSES
-              </h3>
+        {/* CATEGORY FILTER */}
+        <div className="flex flex-wrap gap-3 mt-10">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`
+            px-6 py-3
+            rounded-2xl
+            text-sm
+            font-bold
+            transition-all duration-300
+
+            ${
+              activeCategory === cat
+                ? "bg-[#FF5421] text-white shadow-[0_10px_30px_rgba(248,81,12,0.25)]"
+                : "bg-white text-gray-500 border border-gray-100 hover:border-[#FF5421]/20 hover:text-[#FF5421]"
+            }
+          `}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* CONTENT GRID */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-7">
+          {/* LEFT */}
+          <div
+            className="
+        rounded-[32px]
+        bg-white/80
+        backdrop-blur-xl
+        border border-white/40
+        p-6 sm:p-8
+        shadow-[0_20px_60px_rgba(0,0,0,0.05)]
+      "
+          >
+            {/* HEADER */}
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h3 className="text-2xl font-black text-[#111111]">
+                  Popular Courses
+                </h3>
+
+                <p className="text-sm text-gray-500 mt-1">
+                  Most enrolled training programmes
+                </p>
+              </div>
+
               <button
                 onClick={() => navigate("/courses")}
-                className="text-[#00A3FF] font-bold text-[16px] tracking-widest uppercase flex items-center gap-2 hover:gap-3 transition-all"
+                className="
+              hidden sm:flex
+              items-center gap-2
+              text-[#FF5421]
+              font-bold
+              hover:gap-3
+              transition-all duration-300
+            "
               >
-                ALL COURSES <ArrowRight className="w-4 h-4" />
+                View All
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
 
+            {/* CARDS */}
             <div className="space-y-4">
-              {loading ? (
-                <div className="flex flex-col items-center justify-center py-10">
-                  <div className="w-8 h-8 border-3 border-[#00A3FF]/20 border-t-[#00A3FF] rounded-full animate-spin"></div>
-                </div>
-              ) : filteredCourses.length > 0 ? (
-                filteredCourses.map((course, idx) => (
-                  <ItemCard
-                    key={`${course.id}-${idx}`}
-                    icon={course.icon}
-                    title={course.title}
-                    description={course.description}
-                    onClick={() => navigate(`/course/${course.id}`)}
-                  />
-                ))
-              ) : (
-                <div className="h-[74px] border border-dashed border-gray-200 rounded-[20px] flex items-center justify-center text-gray-400 text-sm font-medium">
-                  No courses in this category yet
-                </div>
-              )}
-
-              {/* Filler slots to maintain consistent height when full list */}
-              {filteredCourses.length > 0 &&
-                Array.from({
-                  length: Math.max(0, 5 - filteredCourses.length),
-                }).map((_, i) => (
-                  <div
-                    key={`filler-${i}`}
-                    className="h-[74px] border border-gray-50 rounded-[20px]"
-                  />
-                ))}
+              {filteredCourses.map((course, idx) => (
+                <ItemCard
+                  key={`${course.id}-${idx}`}
+                  icon={course.icon}
+                  title={course.title}
+                  description={course.description}
+                  onClick={() => navigate(`/course/${course.id}`)}
+                />
+              ))}
             </div>
           </div>
 
-          {/* RIGHT COLUMN — Popular Licences */}
-          <div className="flex flex-col">
-            <div className="flex items-center justify-between mb-10">
-              <h3 className="text-2xl font-bold text-[#1A1A1A] tracking-tight">
-                POPULAR LICENCES
-              </h3>
+          {/* RIGHT */}
+          <div
+            className="
+        rounded-[32px]
+        bg-[#111111]
+        p-6 sm:p-8
+        shadow-[0_20px_60px_rgba(0,0,0,0.12)]
+        relative
+        overflow-hidden
+      "
+          >
+            {/* GLOW */}
+            <div className="absolute top-0 right-0 w-52 h-52 bg-[#FF5421]/20 blur-3xl rounded-full" />
+
+            {/* HEADER */}
+            <div className="flex items-center justify-between mb-8 relative z-10">
+              <div>
+                <h3 className="text-2xl font-black text-white">
+                  Popular Licences
+                </h3>
+
+                <p className="text-sm text-gray-400 mt-1">
+                  Most requested licence training
+                </p>
+              </div>
+
               <button
                 onClick={() => navigate("/licences")}
-                className="text-[#00A3FF] font-bold text-[16px] tracking-widest uppercase flex items-center gap-2 hover:gap-3 transition-all"
+                className="
+              hidden sm:flex
+              items-center gap-2
+              text-[#FF5421]
+              font-bold
+              hover:gap-3
+              transition-all duration-300
+            "
               >
-                ALL LICENCES <ArrowRight className="w-4 h-4" />
+                View All
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-4 flex-1">
+            {/* CARDS */}
+            <div className="space-y-4 relative z-10">
               {POPULAR_LICENCES.map((licence) => (
                 <ItemCard
                   key={licence.id}
@@ -235,40 +411,6 @@ const CoursesLicencesSection = () => {
                   onClick={() => navigate("/licences")}
                 />
               ))}
-
-              <div className="pt-6 space-y-4">
-                <button
-                  onClick={() => navigate("/locations")}
-                  className="text-[#00A3FF] font-bold text-[13px] tracking-widest uppercase flex items-center gap-2 hover:gap-3 transition-all"
-                >
-                  ALL LOCATIONS <ArrowRight className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => navigate("/careers")}
-                  className="text-[#00A3FF] font-bold text-[13px] tracking-widest uppercase flex items-center gap-2 hover:gap-3 transition-all"
-                >
-                  ALL CAREERS <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* SIA Licence Required Card */}
-            <div className="mb-28 mt-8 sm:mt-6 lg:mt-0 bg-[#1A1A1A] rounded-[24px] p-8 relative overflow-hidden shadow-2xl">
-              <div className="flex items-start gap-6 relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-[#00A3FF]/10 flex items-center justify-center flex-shrink-0 border border-[#00A3FF]/20">
-                  <Shield className="w-6 h-6 text-[#00A3FF]" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-lg mb-2 tracking-tight">
-                    SIA Licence Required
-                  </h4>
-                  <p className="text-gray-400 text-sm leading-relaxed font-medium">
-                    Mandatory requirement to work in security roles. An SIA
-                    licence is legally required to work in the private security
-                    industry in the UK.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

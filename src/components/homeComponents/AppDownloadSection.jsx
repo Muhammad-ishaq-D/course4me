@@ -28,17 +28,15 @@ const AppPromotionSection = () => {
           {/* RIGHT: Text Content */}
           <div className="flex-1 text-white">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-[#00A3FF] text-white text-[10px] font-bold uppercase tracking-widest py-2 px-4 rounded-lg mb-8 shadow-lg">
+            <div className="inline-flex items-center gap-2 bg-[#FF5421] text-white text-[10px] font-bold uppercase tracking-widest py-2 px-4 rounded-lg mb-8 shadow-lg">
               <Smartphone size={14} />
               UK's #1 Security App
             </div>
-
             {/* Heading */}
             <h2 className="text-[36px] md:text-[48px] lg:text-[44px] font-bold leading-[1.1] mb-6 tracking-tight">
               Start Your Security Career <br />
               <span className="text-[#00A3FF]">Right From Your Pocket</span>
             </h2>
-
             {/* Sub-headline */}
             <p className="text-gray-400 text-lg mb-10 max-w-xl font-medium leading-relaxed">
               Download our app for exclusive job alerts and study materials.
@@ -46,46 +44,69 @@ const AppPromotionSection = () => {
             </p>
 
             {/* Store buttons */}
-            <div className="flex flex-wrap items-center gap-6 mb-12">
+            <div className="flex flex-wrap items-center gap-5 mb-12">
+              {/* APP STORE */}
               <a
                 href="#"
-                className="bg-white text-[#1A1A1A] px-8 py-4 rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-xl flex items-center gap-2"
+                className="
+      group
+      bg-white
+      hover:bg-[#F9FAFB]
+      px-6 py-3
+      rounded-2xl
+      shadow-[0_10px_30px_rgba(0,0,0,0.15)]
+      transition-all duration-300
+      flex items-center gap-4
+    "
               >
-                <Download size={18} />
-                App Store
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+                  alt="Apple"
+                  className="w-7 h-7 object-contain"
+                />
+
+                <div className="flex flex-col leading-tight">
+                  <span className="text-[11px] text-gray-500 font-medium">
+                    Download on the
+                  </span>
+
+                  <span className="text-[#111111] font-bold text-base">
+                    App Store
+                  </span>
+                </div>
               </a>
+
+              {/* GOOGLE PLAY */}
               <a
                 href="#"
-                className="bg-transparent text-white border-2 border-white/20 px-8 py-4 rounded-xl font-bold text-sm hover:bg-white/5 transition-all shadow-xl flex items-center gap-2"
+                className="
+      group
+      bg-[#1F1F1F]
+      hover:bg-[#2A2A2A]
+      border border-white/10
+      px-6 py-3
+      rounded-2xl
+      shadow-[0_10px_30px_rgba(0,0,0,0.2)]
+      transition-all duration-300
+      flex items-center gap-4
+    "
               >
-                <Download size={18} />
-                Google Play
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg"
+                  alt="Google Play"
+                  className="w-7 h-7 object-contain"
+                />
+
+                <div className="flex flex-col leading-tight">
+                  <span className="text-[11px] text-gray-400 font-medium">
+                    GET IT ON
+                  </span>
+
+                  <span className="text-white font-bold text-base">
+                    Google Play
+                  </span>
+                </div>
               </a>
-            </div>
-
-            {/* PDF download section */}
-            <div className="flex flex-col pt-10 items-start gap-6 border-t border-white/10">
-              <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">
-                Enter your details below to instantly download the career guide
-                PDF
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 w-full max-w-2xl">
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  className="bg-[#2A2A2A] rounded-xl px-6 py-4 text-sm text-white placeholder-gray-500 outline-none flex-1 border border-white/5 focus:border-[#FF5421]/50 transition-all"
-                />
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="bg-[#2A2A2A] rounded-xl px-6 py-4 text-sm text-white placeholder-gray-500 outline-none flex-1 border border-white/5 focus:border-[#FF5421]/50 transition-all"
-                />
-                <button className="bg-[#FF5421] hover:bg-[#e3450c] px-8 py-4 rounded-xl flex items-center justify-center gap-2 text-white font-bold text-sm transition-all shadow-lg">
-                  Download
-                  <ArrowRight size={18} />
-                </button>
-              </div>
             </div>
           </div>
         </div>

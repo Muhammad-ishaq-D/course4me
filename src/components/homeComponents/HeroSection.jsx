@@ -71,9 +71,9 @@ const HeroSection = () => {
             </div>
 
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-              From Zero to <br />
-              <span className="text-[#FF5421]">£25/Hour</span> <br />
-              Security Pro in <br />
+              Start Your <br />
+              <span className="text-[#FF5421]">Security Career</span> <br />
+              in Just{" "}
               <span className="relative inline-block text-[#00A3F4]">
                 3 Weeks
                 <img
@@ -94,7 +94,7 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <NavLink
                 to="/courses"
-                className="bg-[#FF5421] cursor-pointer hover:bg-[#E64A1A] text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300 transform hover:scale-105"
+                className="bg-[#FF5421] cursor-pointer text-center hover:bg-[#E64A1A] text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300 transform hover:scale-105"
               >
                 Get Started
               </NavLink>
@@ -103,7 +103,7 @@ const HeroSection = () => {
                   const element = document.getElementById("hiringTraining");
                   if (element) element.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="border-2 cursor-pointer border-[#28262633] hover:border-gray-400 font-semibold py-3 px-8 rounded-full flex items-center gap-2 bg-[#FFFFFF1A] backdrop-blur-sm"
+                className="border-2 cursor-pointer text-center flex justify-center border-[#28262633] hover:border-gray-400 font-semibold py-3 px-8 rounded-full  items-center gap-2 bg-[#FFFFFF1A] backdrop-blur-sm"
               >
                 <Play className="w-4 h-5 text-[#00A3FF]" />
                 What We Do
@@ -174,7 +174,7 @@ const HeroSection = () => {
               </div>
 
               <div className="flex flex-col gap-6 w-full xl:w-auto">
-                <div className="relative w-full mt-6 md:mt-0 xl:w-46">
+                <div className="relative hidden lg:block w-full mt-6 md:mt-0 xl:w-46">
                   <div className="w-full xl:w-46 h-[160px] sm:h-[180px] xl:h-42 bg-[#00A3FF] rounded-3xl flex flex-col items-center justify-center text-center font-semibold text-white">
                     <Users className="w-8 h-8 mb-3 text-white" />
                     <div className="text-3xl font-bold text-white">400K+</div>
@@ -203,7 +203,7 @@ const HeroSection = () => {
                   </motion.span>
                 </div>
 
-                <div className="relative w-full xl:w-46">
+                <div className="relative hidden lg:block w-full xl:w-46">
                   <VideoPlayer
                     src={cctvVideo}
                     className="w-full h-[160px] sm:h-[200px] xl:h-47 xl:w-46"
@@ -215,7 +215,7 @@ const HeroSection = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 xl:gap-2">
+            <div className="lg:grid grid-cols-1 hidden lg:block sm:grid-cols-2 xl:grid-cols-3 gap-8 xl:gap-2">
               <div className="relative w-full xl:w-46">
                 <div className="w-full xl:w-43 h-[180px] xl:h-45 bg-[#E6F4FF] border border-[#00A3FF33] backdrop-blur-xl rounded-3xl flex flex-col items-center justify-center">
                   <CheckCircle className="w-8 h-8 mb-3 text-[#00A3FF]" />

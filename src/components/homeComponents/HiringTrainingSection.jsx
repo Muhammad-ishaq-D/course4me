@@ -1,139 +1,194 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Award, Briefcase, Building2, Check, Users } from "lucide-react";
+import {
+  Award,
+  Briefcase,
+  Building2,
+  Check,
+  Users,
+  ArrowRight,
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 const HiringTrainingSection = () => {
   const navigate = useNavigate();
+
+  const features = [
+    "Direct referrals to 850+ hiring partners",
+    "CV building & interview coaching",
+    "95% of graduates hired within 2 weeks",
+  ];
+
+  const stats = [
+    {
+      icon: <Users className="w-6 h-6 text-[#00A3FF]" />,
+      value: "850+",
+      label: "Hiring Partners",
+      bg: "bg-[#00A3FF0D]",
+    },
+    {
+      icon: <Award className="w-6 h-6 text-[#00A3FF]" />,
+      value: "SIA",
+      label: "Approved Centre",
+      bg: "bg-[#00A3FF0D]",
+    },
+    {
+      icon: <Briefcase className="w-6 h-6 text-[#FF5421]" />,
+      value: "95%",
+      label: "Placement Rate",
+      bg: "bg-[#FF54210D]",
+    },
+  ];
+
   return (
-    <section className="relative bg-white py-24  overflow-hidden">
-      <div id="hiringTraining" className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="relative grid grid-cols-1 lg:grid-cols-2 items-stretch">
+    <section className="relative py-14 overflow-hidden bg-white">
+      {/* BACKGROUND BLUR */}
+      <div className="absolute top-0 left-0 w-72 h-72 bg-[#00A3FF]/10 blur-3xl rounded-full" />
+      <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#FF5421]/10 blur-3xl rounded-full" />
+
+      <div
+        id="hiringTraining"
+        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-10 items-center">
           {/* LEFT SIDE */}
-          <div className="flex flex-col justify-center gap-10">
-            {/* Small Label */}
-            <div className="text-[#FF5421] text-xs font-bold tracking-[0.2em] uppercase">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+          >
+            {/* LABEL */}
+            <div className="inline-flex items-center gap-2 bg-[#FF54210D] border border-[#FF54211A] text-[#FF5421] px-4 py-1.5 rounded-full text-xs font-bold tracking-wide mb-5">
               Career Support
             </div>
 
-            {/* Heading */}
-            <h2 className="text-4xl md:text-[56px] leading-[1.05] font-bold text-[#1A1A1A] tracking-tight">
-              We don't just <br />
-              train you. <br />
-              <span className="text-[#00A3F4] ">We Get You Hired.</span>
+            {/* HEADING */}
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.05] tracking-tight text-[#111111]">
+              We Don't Just
+              <br />
+              Train You.
+              <br />
+              <span className="text-[#00A3F4]">We Get You Hired.</span>
             </h2>
 
-            <p className="text-[#5E5E5E] text-lg font-regular leading-relaxed max-w-lg">
-              Most training providers hand you a certificate and wish you good
-              luck. We go further — our job-placement network means your new
-              career starts the moment you graduate.
+            {/* DESCRIPTION */}
+            <p className="mt-5 text-base text-gray-500 leading-relaxed max-w-xl">
+              We help learners move directly from training into real security
+              careers with hiring support, interview preparation, and job
+              opportunities across the UK.
             </p>
 
-            {/* Features List */}
-            <div className="flex flex-col gap-5 -mt-2">
-              {[
-                "Direct referrals to 500+ hiring partners",
-                "CV building & interview coaching included",
-                "95% of graduates placed within 2 weeks",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-3 text-lg font-regular text-gray-500"
+            {/* FEATURES */}
+            <div className="mt-7 space-y-4">
+              {features.map((item, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ x: 5 }}
+                  className="flex items-center gap-4"
                 >
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00A3FF1A] flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-xl bg-[#00A3FF0D] flex items-center justify-center flex-shrink-0">
                     <Check className="w-4 h-4 text-[#00A3FF]" strokeWidth={3} />
                   </div>
-                  {item}
-                </div>
+
+                  <p className="text-gray-700 text-base font-medium">{item}</p>
+                </motion.div>
               ))}
             </div>
 
-            {/* Button */}
+            {/* BUTTON */}
             <button
               onClick={() => navigate("/careers")}
-              className="mt-4 bg-[#1A1A1A] text-white px-10 py-4.5 rounded-full font-bold flex items-center gap-3 w-fit shadow-xl hover:bg-black transition-all"
+              className="group mt-7 bg-[#FF5421] hover:bg-[#ca5633] transition-all duration-300 text-white px-7 py-3 rounded-full font-bold flex items-center gap-3 shadow-[0_15px_30px_rgba(248,81,12,0.2)]"
             >
               View Career Support
-              <span className="text-xl">→</span>
+              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
-          </div>
+          </motion.div>
 
-          {/* RIGHT SIDE CARD */}
-          <div className="relative lg:-ml-12 mt-12 lg:mt-0">
-            <div className="bg-white border border-gray-100 rounded-[32px] p-12 text-[#1A1A1A] shadow-[0_40px_80px_rgba(0,0,0,0.06)] relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#00A3FF] opacity-5 blur-[100px] -mr-32 -mt-32"></div>
+          {/* RIGHT SIDE */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            {/* MAIN CARD */}
+            <div className="relative overflow-hidden rounded-[30px] border border-white/30 bg-white/80 backdrop-blur-xl p-7 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
+              {/* GLOW */}
+              <div className="absolute top-0 right-0 w-52 h-52 bg-[#00A3FF]/10 blur-3xl rounded-full" />
 
-              {/* Icon */}
-              <div className="mb-10 w-20 h-20 bg-[#00A3FF0A] rounded-2xl flex items-center justify-center border border-[#00A3FF1A]">
-                <Building2 className="w-10 h-10 text-[#00A3FF]" />
+              {/* ICON */}
+              <div className="w-16 h-16 rounded-2xl bg-[#00A3FF0D] border border-[#00A3FF1A] flex items-center justify-center mb-6">
+                <Building2 className="w-8 h-8 text-[#00A3FF]" />
               </div>
 
-              {/* Title */}
-              <h3 className="text-2xl font-bold mb-4 tracking-tight">
-                Trusted by Industry Giants
+              {/* TITLE */}
+              <h3 className="text-2xl font-black text-[#111111] leading-tight">
+                Trusted by the UK's
+                <br />
+                Leading Security Companies
               </h3>
 
-              {/* Description */}
-              <p className="text-gray-500 font-medium mb-10 leading-relaxed">
-                Our graduates work for the biggest names in security. Your
-                licence opens these doors.{" "}
+              {/* DESCRIPTION */}
+              <p className="mt-3 text-gray-500 text-base leading-relaxed">
+                Our graduates work with top security firms, events, retail, and
+                corporate organisations nationwide.
               </p>
 
-              {/* Chips */}
-              <div className="flex flex-col gap-4">
+              {/* BENEFITS */}
+              <div className="mt-7 space-y-3">
                 {[
                   "Lifetime Career Support",
-                  "Job Interview Preparation",
+                  "Interview Preparation",
                   "Exclusive Job Board Access",
-                ].map((item) => (
+                ].map((item, index) => (
                   <div
-                    key={item}
-                    className="flex items-center gap-3 text-sm font-bold text-gray-700"
+                    key={index}
+                    className="flex items-center gap-3 bg-[#F9FAFB] border border-gray-100 rounded-xl px-4 py-3"
                   >
-                    <div className="w-5 h-5 rounded-full bg-[#00A3FF1A] flex items-center justify-center">
-                      <span className="text-[#00A3FF] text-[10px]">✓</span>
+                    <div className="w-7 h-7 rounded-full bg-[#00A3FF0D] flex items-center justify-center">
+                      <Check className="w-4 h-4 text-[#00A3FF]" />
                     </div>
-                    {item}
+
+                    <span className="font-semibold text-gray-700 text-sm">
+                      {item}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Stats Cards Section */}
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* 500+ Partner Companies Card */}
-              <div className="bg-white rounded-[24px] p-8 shadow-sm border border-gray-100 flex flex-col items-center text-center">
-                <Users className="w-8 h-8 text-[#00A3FF] mb-3" />
-                <div className="text-[32px] font-bold text-[#1A1A1A] tracking-tight leading-none">
-                  850+
-                </div>
-                <div className="text-gray-400 text-[10px] font-regular uppercase tracking-widest mt-2">
-                  Hiring Partners
-                </div>
-              </div>
+            {/* STATS CARDS */}
+            <div className="grid grid-cols-3 gap-2 md:gap-4 mt-2">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white rounded-[22px] border border-gray-100 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.04)] text-center"
+                >
+                  {/* ICON */}
+                  <div
+                    className={`w-12 h-12 mx-auto rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}
+                  >
+                    {stat.icon}
+                  </div>
 
-              {/* 15k+ Jobs Posted Card */}
-              <div className="bg-white rounded-[24px] p-8 shadow-sm border border-gray-100 flex flex-col items-center text-center">
-                <Award className="w-8 h-8 text-[#00A3FF] mb-3" />
-                <div className="text-[32px] font-bold text-[#1A1A1A] tracking-tight leading-none">
-                  SIA
-                </div>
-                <div className="text-gray-400 text-[10px] font-regular uppercase tracking-widest mt-2">
-                  Approved Centre
-                </div>
-              </div>
+                  {/* VALUE */}
+                  <div className="text-2xl font-black text-[#111111]">
+                    {stat.value}
+                  </div>
 
-              {/* £30k Avg. Salary Card */}
-              <div className="bg-white rounded-[24px] p-8 shadow-sm border border-gray-100 flex flex-col items-center text-center">
-                <Briefcase className="w-8 h-8 text-[#FF5421] mb-3" />
-                <div className="text-[32px] font-bold text-[#1A1A1A] tracking-tight leading-none">
-                  95%
-                </div>
-                <div className="text-gray-400 text-[10px] font-regular uppercase tracking-widest mt-2">
-                  Placement Rate
-                </div>
-              </div>
+                  {/* LABEL */}
+                  <div className="mt-1 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

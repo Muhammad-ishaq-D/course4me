@@ -1,52 +1,138 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { motion } from "framer-motion";
+import { Users, ShieldCheck, MapPin, Clock3 } from "lucide-react";
+
+const Counter = ({ end, suffix }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+
+    const duration = 2000;
+    const increment = end / (duration / 16);
+
+    const timer = setInterval(() => {
+      start += increment;
+
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+
+    return () => clearInterval(timer);
+  }, [end]);
+
+  return (
+    <span>
+      {count}
+      {suffix}
+    </span>
+  );
+};
 
 const StatsBar = () => {
-    const stats = [
-        {
-            number: "450K+",
-            label: "Professionals Trained",
-            numberColor: "text-[#00A3FF]"
-        },
-        {
-            number: "95%",
-            label: "First-Time Pass Rate",
-            numberColor: "text-[#FF5421]"
-        },
-        {
-            number: "85+",
-            label: "Training Locations",
-            numberColor: "text-[#00A3FF]"
-        },
-        {
-            number: "3 weeks",
-            label: "To Courses4Me",
-            numberColor: "text-[#FF5421]"
-        }
-    ];
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.3,
+  });
 
-    return (
-        <div className="max-w-7xl mx-auto px-6 mb-12">
-            <div className="bg-[#F9FAFB] rounded-2xl md:rounded-[32px] overflow-hidden border border-gray-100/50 shadow-sm">
-                <div className="grid grid-cols-2 md:grid-cols-4">
-                    {stats.map((stat, index) => (
-                        <div
-                            key={index}
-                            className={`py-8 md:py-12 flex flex-col items-center text-center px-4 relative ${index !== stats.length - 1 ? 'md:after:content-[""] md:after:absolute md:after:right-0 md:after:top-1/2 md:after:-translate-y-1/2 md:after:h-16 md:after:w-[1px] md:after:bg-gray-200' : ''
-                                } ${index % 2 === 0 ? 'after:content-[""] after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:h-12 after:w-[1px] after:bg-gray-200 md:after:hidden' : ''
-                                }`}
-                        >
-                            <div className={`text-3xl md:text-4xl font-extrabold mb-2 tracking-tight ${stat.numberColor}`}>
-                                {stat.number}
-                            </div>
-                            <div className="text-gray-500 text-sm md:text-base font-medium">
-                                {stat.label}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+  const stats = [
+    {
+      icon: <Users className="w-7 h-7 text-[#00A3FF]" />,
+      number: 450,
+      suffix: "K+",
+      label: "Professionals Trained",
+      numberColor: "text-[#00A3FF]",
+      bg: "bg-[#00A3FF0D]",
+    },
+    {
+      icon: <ShieldCheck className="w-7 h-7 text-[#FF5421]" />,
+      number: 95,
+      suffix: "%",
+      label: "First-Time Pass Rate",
+      numberColor: "text-[#FF5421]",
+      bg: "bg-[#FF54210D]",
+    },
+    {
+      icon: <MapPin className="w-7 h-7 text-[#00A3FF]" />,
+      number: 85,
+      suffix: "+",
+      label: "Training Locations",
+      numberColor: "text-[#00A3FF]",
+      bg: "bg-[#00A3FF0D]",
+    },
+    {
+      icon: <Clock3 className="w-7 h-7 text-[#FF5421]" />,
+      number: 3,
+      suffix: " Weeks",
+      label: "To Get Certified",
+      numberColor: "text-[#FF5421]",
+      bg: "bg-[#FF54210D]",
+    },
+  ];
+
+  return (
+    <section ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+      <div className="relative overflow-hidden rounded-[32px] bg-white border border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
+        {/* BACKGROUND BLUR */}
+        <div className="absolute top-0 left-0 w-40 h-40 bg-[#00A3FF]/10 blur-3xl rounded-full" />
+        <div className="absolute bottom-0 right-0 w-40 h-40 bg-[#FF5421]/10 blur-3xl rounded-full" />
+
+        <div className="relative grid grid-cols-2 lg:grid-cols-4">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ y: -5 }}
+              transition={{ duration: 0.3 }}
+              className={`
+                relative flex flex-col items-center justify-center
+                text-center px-6 py-10 sm:py-12
+                transition-all duration-300
+
+                ${
+                  index !== stats.length - 1
+                    ? "lg:border-r border-gray-100"
+                    : ""
+                }
+
+                ${index < 2 ? "border-b lg:border-b-0 border-gray-100" : ""}
+              `}
+            >
+              {/* ICON */}
+              <div
+                className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-5 ${stat.bg}`}
+              >
+                {stat.icon}
+              </div>
+
+              {/* COUNTER */}
+              <div
+                className={`text-4xl sm:text-5xl font-extrabold tracking-tight mb-3 ${stat.numberColor}`}
+              >
+                {inView ? (
+                  <Counter end={stat.number} suffix={stat.suffix} />
+                ) : (
+                  "0"
+                )}
+              </div>
+
+              {/* LABEL */}
+              <p className="text-gray-500 text-sm sm:text-base font-medium leading-relaxed max-w-[180px]">
+                {stat.label}
+              </p>
+
+              {/* HOVER LINE */}
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#00A3FF] to-[#FF5421] scale-x-0 hover:scale-x-100 transition-transform duration-300 origin-center rounded-full" />
+            </motion.div>
+          ))}
         </div>
-    );
+      </div>
+    </section>
+  );
 };
 
 export default StatsBar;
