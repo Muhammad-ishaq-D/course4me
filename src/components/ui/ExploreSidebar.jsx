@@ -1,5 +1,5 @@
 import React from "react";
-import { Flame, Grid3X3 } from "lucide-react";
+import { Flame, LayoutGrid } from "lucide-react";
 
 const ExploreSidebar = ({
   activeTab,
@@ -85,9 +85,9 @@ const ExploreSidebar = ({
               Categories
             </h3>
 
-            <div className="w-9 h-9 rounded-xl bg-[#F15A24]/10 flex items-center justify-center">
+            {/* <div className="w-9 h-9 rounded-xl bg-[#F15A24]/10 flex items-center justify-center">
               <Grid3X3 size={18} className="text-[#F15A24]" />
-            </div>
+            </div> */}
           </div>
 
           {/* CATEGORY LIST */}
@@ -106,11 +106,11 @@ const ExploreSidebar = ({
                 <div
                   className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
                     categoryParam === "All"
-                      ? "bg-white/20 text-white"
-                      : "bg-[#F15A24]/10 text-[#F15A24]"
+                      ? "bg-linear-to-r from-[#F8510C] to-[#FF7A45] text-white"
+                      : "bg-linear-to-r from-[#F8510C] to-[#FF7A45] text-white"
                   }`}
                 >
-                  <Grid3X3 size={18} />
+                  <LayoutGrid size={18} />
                 </div>
 
                 {/* LABEL */}

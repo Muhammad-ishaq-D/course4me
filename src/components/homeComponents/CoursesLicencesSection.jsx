@@ -32,8 +32,6 @@ const getCategoryIcon = (category) => {
   }
 };
 
-
-
 const CATEGORIES = [
   "Most Popular",
   "SIA Licenses",
@@ -177,9 +175,9 @@ const CoursesLicencesSection = () => {
         // For now, let's just fetch all and filter in memory or adjust backend call
         const [coursesRes, licencesRes] = await Promise.all([
           courseService.getAllCourses(params),
-          licenseService.getAllLicenses(params)
+          licenseService.getAllLicenses(params),
         ]);
-        
+
         const coursesData = coursesRes.data?.data || [];
         const licencesData = licencesRes.data?.data || [];
 
@@ -223,7 +221,7 @@ const CoursesLicencesSection = () => {
         });
 
   return (
-    <section className="relative overflow-hidden bg-[#FAFAFA] py-16 lg:py-20">
+    <section className="relative overflow-hidden bg-[#FAFAFA] py-16 px-4 lg:py-20">
       {/* BACKGROUND GLOW */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-[#00A3FF]/10 blur-3xl rounded-full" />
       <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#FF5421]/10 blur-3xl rounded-full" />
@@ -312,7 +310,7 @@ const CoursesLicencesSection = () => {
         bg-white/80
         backdrop-blur-xl
         border border-white/40
-        p-6 sm:p-8
+        p-4 md:p-8
         shadow-[0_20px_60px_rgba(0,0,0,0.05)]
       "
           >
@@ -363,7 +361,7 @@ const CoursesLicencesSection = () => {
             className="
         rounded-[32px]
         bg-[#111111]
-        p-6 sm:p-8
+        p-4 md:p-8
         shadow-[0_20px_60px_rgba(0,0,0,0.12)]
         relative
         overflow-hidden

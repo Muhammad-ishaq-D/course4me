@@ -89,7 +89,7 @@ const LocationSearch = () => {
           {/* Background Glow */}
           <div className="absolute inset-0 bg-gradient-to-r from-orange-100/40 via-white to-orange-100/40 blur-3xl rounded-full pointer-events-none" />
 
-          <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] px-5 py-5 overflow-visible z-[999]">
+          <div className="relative z-40 bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] px-5 py-5 overflow-visible ">
             {/* Top Content */}
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
               {/* Left */}
@@ -106,7 +106,7 @@ const LocationSearch = () => {
               </div>
 
               {/* ================= SEARCH BAR ================= */}
-              <div className="sticky top-0 z-50 lg:static bg-[#F4F7FB] py-3">
+              <div className="sticky top-0 z-30 lg:static bg-[#F4F7FB] py-3">
                 <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
                   {/* Search Input */}
                   <div className="relative flex-1 lg:w-[420px]">

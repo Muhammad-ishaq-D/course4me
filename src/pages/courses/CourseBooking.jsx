@@ -132,28 +132,61 @@ const CourseBooking = () => {
         initialCourse={course.title}
         initialLocation={searchLocation}
       />
-      {/* 1. Specialized Booking Header */}
-      <header className=" border-b border-gray-200 py-3 bg-white sticky top-0 w-full shadow-md z-30 px-4 md:px-0">
-        <div className="max-w-300 mx-auto flex items-center justify-between px-4 md:px-6">
-          <div className="flex-1 max-w-150 relative ml-4 md:ml-0">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              size={18}
-            />
-            <input
-              type="text"
-              readOnly
-              value={course.title}
-              onClick={() => setIsSearchModalOpen(true)}
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-md text-sm outline-none focus:ring-1 focus:ring-[#F15A24] cursor-pointer hover:bg-gray-50 transition-colors text-[#1C1C1C] font-medium"
-            />
-          </div>
-          <div className="flex items-center gap-2 text-sm text-[#2f3a47] font-medium mr-4 md:mr-0">
-            <MessageCircle className="text-[#F15A24]" size={18} />
-            <span className="hidden sm:inline text-gray-500">Not sure?</span>
-            <span className="text-[#F15A24] cursor-pointer hover:underline font-bold">
-              Chat with us
-            </span>
+
+      {/* BOOKING HEADER */}
+      <header className="sticky top-0 z-30 w-full border-b border-gray-200 bg-white/95 backdrop-blur-md shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3">
+            {/* SEARCH INPUT */}
+            <div className="w-full sm:flex-1 sm:max-w-[620px] relative">
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={18}
+              />
+
+              <input
+                type="text"
+                readOnly
+                value={course.title}
+                onClick={() => setIsSearchModalOpen(true)}
+                placeholder="Search course..."
+                className="
+            w-full
+            pl-10 pr-4 py-3
+            bg-white
+            border border-gray-200
+            rounded-xl
+            text-sm sm:text-[15px]
+            outline-none
+            focus:ring-2 focus:ring-[#F15A24]/20
+            focus:border-[#F15A24]
+            cursor-pointer
+            hover:bg-gray-50
+            transition-all duration-300
+            text-[#1C1C1C]
+            font-medium
+          "
+              />
+            </div>
+
+            {/* CHAT SECTION */}
+            <div className="flex items-center justify-between sm:justify-end gap-2 text-sm font-medium whitespace-nowrap">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-full bg-[#F15A24]/10 flex items-center justify-center">
+                  <MessageCircle className="text-[#F15A24]" size={18} />
+                </div>
+
+                <div className="flex flex-col leading-tight">
+                  <span className="text-gray-500 text-xs sm:text-sm">
+                    Need help?
+                  </span>
+
+                  <button className="text-[#F15A24] hover:underline font-bold text-sm text-left cursor-pointer">
+                    Chat with us
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </header>

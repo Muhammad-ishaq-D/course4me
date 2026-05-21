@@ -21,6 +21,7 @@ import LocationDetails from "../components/locationComponents/LocationDetails";
 import CareerDetails from "../pages/CareerDetails";
 import ApplyJob from "../components/careerDetailsComponents/ApplyJob";
 import QuickSearch from "../pages/QuickSearch";
+import TrainerProfile from "../components/TrainerComponents/TrainerProfile";
 
 const AppRoutes = () => {
   return (
@@ -45,6 +46,7 @@ const AppRoutes = () => {
       <Route path="/quicksearch" element={<QuickSearch />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/trainer-profile" element={<TrainerProfile />} />
       <Route
         path="/dashboard"
         element={

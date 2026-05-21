@@ -200,7 +200,7 @@ const Header = () => {
 
       {/* MOBILE MENU */}
       <div
-        className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-xl transition-all duration-300 overflow-hidden ${
+        className={`lg:hidden absolute top-full z-999 left-0 w-full bg-white shadow-xl transition-all duration-300 overflow-hidden ${
           open
             ? "opacity-100 visible translate-y-0"
             : "opacity-0 invisible -translate-y-2"
@@ -219,10 +219,10 @@ const Header = () => {
 
             <NavLink
               to="/courses"
-              // onClick={() => {
-              //   setOpen(false);
-              //   setIsCoursesModalOpen(true);
-              // }}
+              onClick={() => {
+                setOpen(false);
+                setIsCoursesModalOpen(true);
+              }}
               className={navLinkClasses}
             >
               Courses

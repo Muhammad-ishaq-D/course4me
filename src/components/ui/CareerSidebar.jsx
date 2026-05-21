@@ -7,10 +7,10 @@ const CareerSidebar = ({
   setSelectedCategory,
   careersData,
   activeTab = "careers",
-  jobs = []
+  jobs = [],
 }) => {
   return (
-    <div className="bg-white rounded-[28px] border border-gray-100 p-4 shadow-sm h-fit lg:sticky lg:top-5">
+    <div className="bg-white rounded-[28px] border z-30  border-gray-100 p-4 shadow-sm h-fit lg:sticky lg:top-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 px-2">
         <div>
@@ -19,9 +19,9 @@ const CareerSidebar = ({
           </p>
         </div>
 
-        <button className="w-10 h-10 rounded-2xl bg-[#FFF1EB] flex items-center justify-center">
+        {/* <button className="w-10 h-10 rounded-2xl bg-[#FFF1EB] flex items-center justify-center">
           <LayoutGrid className="w-4 h-4 text-[#F8510C]" />
-        </button>
+        </button> */}
       </div>
 
       {/* Categories */}
@@ -33,7 +33,8 @@ const CareerSidebar = ({
           const getCategoryCount = () => {
             if (activeTab === "careers") {
               if (category.name === "All Careers") return careersData.length;
-              return careersData.filter((c) => c.category === category.name).length;
+              return careersData.filter((c) => c.category === category.name)
+                .length;
             } else {
               // Active job counts
               const activeJobs = jobs.filter((j) => j.status === "Active");
@@ -42,7 +43,9 @@ const CareerSidebar = ({
                 (j) =>
                   j.category === category.name ||
                   j.category?.toLowerCase() === category.name.toLowerCase() ||
-                  category.name.toLowerCase().includes(j.category?.toLowerCase())
+                  category.name
+                    .toLowerCase()
+                    .includes(j.category?.toLowerCase()),
               ).length;
             }
           };

@@ -51,12 +51,12 @@ const VideoPlayer = ({ src, label, className = "" }) => (
 /* ─── Hero Section ─── */
 const HeroSection = () => {
   return (
-    <section className="bg-white min-h-screen  pb-8 md:pb-6 relative overflow-hidden">
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 py-12 md:py-20">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-start">
+    <section className="bg-white min-h-screen px-2 pb-8 md:pb-6 relative overflow-hidden">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 py-12 md:py-20">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8  items-start">
           {/* LEFT COLUMN */}
           <div>
-            <div className="inline-flex items-center bg-[#F8510C33] text-[#F8510C] rounded-full px-4 py-2 text-sm font-bold shadow-sm mb-6">
+            {/* <div className="inline-flex items-center bg-[#F8510C33] text-[#F8510C] rounded-full px-4 py-2 text-sm font-bold shadow-sm mb-6">
               <TrendingUp className="w-4 h-4 mr-2 text-[#F8510C]" />
               The UK's #1 Security Training provider
               <div className="flex gap-0.5 ml-3">
@@ -68,7 +68,7 @@ const HeroSection = () => {
                   />
                 ))}
               </div>
-            </div>
+            </div> */}
 
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
               Get Trained. <br />
@@ -87,7 +87,7 @@ const HeroSection = () => {
               No experience? No problem. Thousands of people just like you are
               now earning great money in security.{" "}
               <span className="font-bold text-black">
-                Your SIA licence is waiting — and we guarantee you'll pass.
+                Professional courses & licences for your career growth.
               </span>
             </p>
 
@@ -110,7 +110,7 @@ const HeroSection = () => {
               </button>
             </div>
 
-            <div className="flex flex-wrap gap-4 mt-8 max-w-xl">
+            {/* <div className="flex flex-wrap gap-4 mt-8 max-w-xl">
               <div className="flex items-center gap-3 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-full px-4 py-2">
                 <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#00A3FF1A]">
                   <CheckCircle2 size={16} className="text-[#00A3FF]" />
@@ -151,7 +151,7 @@ const HeroSection = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* RIGHT COLUMN */}

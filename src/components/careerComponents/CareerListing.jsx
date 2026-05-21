@@ -250,7 +250,7 @@ const CareerListing = () => {
 
         <div className="grid grid-cols-1 xl:grid-cols-[280px_1fr_320px] gap-3 overflow-visible">
           {/* ==================SIDEBAR====================== */}
-          <div className="hidden xl:block">
+          <div className="hidden relative xl:block">
             <CareerSidebar
               categories={categories}
               selectedCategory={selectedCategory}
@@ -270,7 +270,7 @@ const CareerListing = () => {
               />
 
               {/* Sidebar */}
-              <div className="fixed top-0 left-0 h-full w-[310px] bg-white z-50 shadow-2xl overflow-y-auto xl:hidden">
+              <div className="fixed top-0 left-0 h-full w-77.5 bg-white z-40 shadow-2xl overflow-y-auto xl:hidden">
                 {/* Header */}
                 <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between">
                   <h2 className="text-lg font-black text-[#111827]">Filters</h2>
@@ -299,7 +299,7 @@ const CareerListing = () => {
                     MAIN CONTENT
           ====================================================== */}
 
-          <div ref={mainSectionRef} className="relative z-50 overflow-visible">
+          <div ref={mainSectionRef} className="relative z-20 overflow-visible">
             {/* ==================HEADER=================== */}
             <div className="bg-white rounded-[24px] border border-gray-100 px-5 py-4 mb-5 shadow-sm sticky top-0 z-[99999] backdrop-blur-xl bg-white/95 overflow-visible">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">

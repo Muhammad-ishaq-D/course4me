@@ -106,7 +106,7 @@ const LocationCards = ({ loc, course }) => {
               <p className="text-[10px] uppercase tracking-widest font-black text-gray-400 mb-1.5">
                 Popularity
               </p>
-              <p className="text-[14px] font-bold text-emerald-600">
+              <p className="text-[14px] font-bold text-[#F15A24]">
                 {loc.booked}+
                 <span className="text-gray-400 font-normal text-xs ml-1">
                   Booked

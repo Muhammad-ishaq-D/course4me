@@ -1,34 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
 import {
   ArrowLeft,
   Lock,
   Clock,
   User,
   MapPin,
-  Briefcase,
-  CreditCard,
-  ChevronDown,
   Check,
-  ShieldCheck,
-  Star,
   Phone,
   Mail,
   Calendar,
   Edit2,
-  Copy,
-  Download,
-  ArrowRight,
-  BookOpen,
-  Smartphone,
-  Award,
-  CheckCircle,
   AlertCircle,
   Loader2,
-  Eye,
-  EyeOff,
 } from "lucide-react";
 import bookingService from "../../api/services/bookingService";
 import courseService from "../../api/services/courseService";
@@ -46,572 +30,11 @@ import CheckoutSkeleton from "../../components/ui/CheckoutSkeleton";
 import RightSidebar from "../../components/checkoutComponents/RightSidebar";
 import CardPaymentModal from "../../components/modals/CardPaymentModal";
 import SocialLogin from "../Authentication/components/SocialLogin";
-
-/* ─── helpers ─── */
-const StepCheck = () => (
-  <div className="w-7 h-7 rounded-full bg-[#00b67a] flex items-center justify-center shrink-0">
-    <Check size={14} className="text-white" strokeWidth={3} />
-  </div>
-);
-
-const StepNumber = ({ n, active }) => (
-  <div
-    className={`w-7 h-7 rounded-full border-2 flex items-center justify-center shrink-0 text-xs font-black transition-all
-    ${active ? "bg-[#1C1C1C] border-[#1C1C1C] text-white" : "border-gray-300 text-gray-400"}`}
-  >
-    {n}
-  </div>
-);
-
-const FieldInput = ({
-  label,
-  placeholder,
-  value,
-  onChange,
-  onBlur,
-  type = "text",
-  icon: Icon,
-  error,
-}) => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const isPassword = type === "password";
-  const inputType = isPassword ? (showPassword ? "text" : "password") : type;
-
-  return (
-    <div>
-      <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">
-        {label}
-      </label>
-      <div className="relative">
-        {Icon && !isPassword && (
-          <Icon
-            size={14}
-            className={`absolute left-3 top-1/2 -translate-y-1/2 ${error ? "text-red-400" : "text-gray-400"}`}
-          />
-        )}
-        <input
-          type={inputType}
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onBlur={onBlur}
-          className={`w-full border rounded-lg py-3 text-[14px] text-[#1C1C1C] outline-none focus:ring-2 transition-all placeholder:text-gray-300 ${Icon && !isPassword ? "pl-10 pr-4" : "px-4"} ${
-            error
-              ? "border-red-400 focus:ring-red-400/40 focus:border-red-400 bg-red-50/30"
-              : "border-gray-200 focus:ring-[#F15A24]/40 focus:border-[#F15A24]"
-          }`}
-        />
-        {isPassword && (
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-          </button>
-        )}
-      </div>
-      {error && (
-        <p className="text-red-500 text-[11px] font-semibold mt-1 ml-0.5">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-};
-
-const SaveBtn = ({
-  onClick,
-  label = "Save & Continue",
-  loading,
-  fullWidth,
-}) => (
-  <button
-    onClick={onClick}
-    disabled={loading}
-    className={`${fullWidth ? "w-full" : "px-8"} bg-[#1C1C1C] text-white py-3.5 rounded-lg font-black text-sm hover:bg-black active:scale-95 transition-all mt-2 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed`}
-  >
-    {loading && <Loader2 size={16} className="animate-spin" />}
-    {label}
-  </button>
-);
-
-/* ─── Booking Confirmed Page ─── */
-const BookingConfirmed = ({
-  name,
-  email,
-  mobile,
-  billing,
-  courseName,
-  plan,
-  price,
-  date,
-  easyApply,
-  bookingRef,
-  navigate,
-}) => {
-  const [copied, setCopied] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const receiptRef = useRef(null);
-  const ref = bookingRef || "GL-PENDING";
-
-  const handleDownloadReceipt = async () => {
-    if (!receiptRef.current) return;
-    try {
-      setIsDownloading(true);
-
-      const saveTextReceiptPdf = () => {
-        const pdf = new jsPDF("p", "mm", "a4");
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const margin = 14;
-        let y = 18;
-
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(16);
-        pdf.text("Receipt", margin, y);
-
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "normal");
-        pdf.text(`Ref: ${ref}`, pageWidth - margin, y, { align: "right" });
-        y += 10;
-
-        pdf.setDrawColor(220);
-        pdf.line(margin, y, pageWidth - margin, y);
-        y += 8;
-
-        pdf.setFont("helvetica", "bold");
-        pdf.text("Billed To", margin, y);
-        pdf.text("Total Paid", pageWidth - margin, y, { align: "right" });
-        y += 6;
-
-        pdf.setFont("helvetica", "normal");
-        const billedLines = [
-          name,
-          email,
-          mobile || null,
-          billing?.addr1 || null,
-          billing?.addr2 || null,
-          [billing?.city, billing?.postcode].filter(Boolean).join(", ") || null,
-        ].filter(Boolean);
-
-        billedLines.forEach((line) => {
-          pdf.text(String(line), margin, y);
-          y += 5.2;
-        });
-
-        const totalText = `£${Number(price || 0).toFixed(2)}`;
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(14);
-        pdf.text(totalText, pageWidth - margin, 42, { align: "right" });
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "normal");
-        pdf.text(`Date: ${date}`, pageWidth - margin, 48, { align: "right" });
-
-        y += 4;
-        pdf.setDrawColor(220);
-        pdf.line(margin, y, pageWidth - margin, y);
-        y += 10;
-
-        pdf.setFont("helvetica", "bold");
-        pdf.text("Item", margin, y);
-        pdf.text("Amount", pageWidth - margin, y, { align: "right" });
-        y += 6;
-
-        pdf.setFont("helvetica", "normal");
-        const itemLines = pdf.splitTextToSize(
-          String(courseName || "Course"),
-          pageWidth - margin * 2 - 40,
-        );
-        itemLines.forEach((line) => {
-          pdf.text(line, margin, y);
-          y += 5.2;
-        });
-        pdf.setFontSize(9);
-        pdf.text(`${plan} Package`, margin, y);
-        y += 5.2;
-        if (easyApply) {
-          pdf.setTextColor(0, 182, 122);
-          pdf.setFont("helvetica", "bold");
-          pdf.text("EasyApply™ included", margin, y);
-          pdf.setTextColor(0, 0, 0);
-        }
-
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "bold");
-        pdf.text(totalText, pageWidth - margin, y - (easyApply ? 5.2 : 10.4), {
-          align: "right",
-        });
-
-        pdf.save(`Receipt_${ref}.pdf`);
-      };
-
-      try {
-        const canvas = await html2canvas(receiptRef.current, {
-          scale: 2,
-          useCORS: true,
-          logging: false,
-          backgroundColor: "#ffffff",
-        });
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-
-        let heightLeft = imgHeight;
-        let position = 0;
-
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
-        heightLeft -= pageHeight;
-
-        while (heightLeft > 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, "PNG", 0, position, pdfWidth, imgHeight);
-          heightLeft -= pageHeight;
-        }
-        pdf.save(`Receipt_${ref}.pdf`);
-      } catch (canvasErr) {
-        // Some browsers expose computed colors as `oklab(...)`, which html2canvas can't parse.
-        console.warn(
-          "Canvas receipt generation failed; falling back to text PDF.",
-          canvasErr,
-        );
-        saveTextReceiptPdf();
-      }
-    } catch (err) {
-      console.error("PDF generation failed", err);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-[#F8FAFC] font-sans pt-[90px]">
-      {/* Dark hero */}
-      <div className="bg-[#1C1C1C] pt-12 pb-16 text-center px-4">
-        <div className="w-16 h-16 rounded-full bg-[#00b67a] flex items-center justify-center mx-auto mb-5">
-          <Check className="text-white" size={32} strokeWidth={3} />
-        </div>
-        <h1 className="text-3xl font-black text-white mb-2">
-          Booking Confirmed!
-        </h1>
-        <p className="text-gray-400 text-sm mb-6">
-          Thank you, <span className="text-white font-bold">{name}</span>. Your
-          place has been secured.
-        </p>
-        <div className="flex items-center justify-center gap-3">
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(ref);
-              setCopied(true);
-              setTimeout(() => setCopied(false), 2000);
-            }}
-            className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-white/20 transition-all"
-          >
-            <span className="text-gray-400 text-xs">Booking Reference</span>
-            <span className="font-black">{ref}</span>
-            <Copy
-              size={14}
-              className={copied ? "text-[#00b67a]" : "text-gray-400"}
-            />
-          </button>
-        </div>
-      </div>
-
-      <div className="max-w-[1000px] mx-auto px-4 md:px-6 py-10">
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
-          {/* Left col */}
-          <div className="flex-1 space-y-6">
-            {/* Receipt area (captured for PDF) */}
-            <div
-              ref={receiptRef}
-              className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden"
-            >
-              <div className="bg-[#1C1C1C] px-5 py-3 flex items-center justify-between">
-                <span className="text-white font-black text-[13px]">
-                  Receipt
-                </span>
-                <span className="text-white/70 text-[11px] font-bold">
-                  Ref: {ref}
-                </span>
-              </div>
-              <div className="p-5 space-y-4">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">
-                      Billed To
-                    </p>
-                    <p className="text-[14px] font-black text-[#1C1C1C] truncate">
-                      {name}
-                    </p>
-                    <p className="text-[12px] text-gray-600 break-all">
-                      {email}
-                    </p>
-                    {mobile && (
-                      <p className="text-[12px] text-gray-600">{mobile}</p>
-                    )}
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">
-                      Total Paid
-                    </p>
-                    <p className="text-[18px] font-black text-[#F15A24]">
-                      £{Number(price || 0).toFixed(2)}
-                    </p>
-                    <p className="text-[11px] text-gray-500">Date: {date}</p>
-                  </div>
-                </div>
-
-                {billing &&
-                  (billing.addr1 || billing.city || billing.postcode) && (
-                    <div>
-                      <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider mb-1">
-                        Billing Address
-                      </p>
-                      <div className="text-[12px] text-gray-600 space-y-0.5">
-                        {billing.addr1 && <p>{billing.addr1}</p>}
-                        {billing.addr2 && <p>{billing.addr2}</p>}
-                        {(billing.city || billing.postcode) && (
-                          <p>
-                            {[billing.city, billing.postcode]
-                              .filter(Boolean)
-                              .join(", ")}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                <div className="h-px bg-gray-100" />
-
-                <div className="flex items-start justify-between gap-4">
-                  <div className="min-w-0">
-                    <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">
-                      Item
-                    </p>
-                    <p className="text-[13px] font-black text-[#1C1C1C]">
-                      {courseName}
-                    </p>
-                    <p className="text-[11px] text-gray-500">{plan} Package</p>
-                    {easyApply && (
-                      <p className="text-[11px] font-bold text-[#00b67a] mt-1">
-                        EasyApply™ included
-                      </p>
-                    )}
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">
-                      Amount
-                    </p>
-                    <p className="text-[13px] font-black text-[#1C1C1C]">
-                      £{Number(price || 0).toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Order Details */}
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="bg-[#F15A24] px-5 py-3">
-                <span className="text-white font-black text-[13px]">
-                  Order Details
-                </span>
-              </div>
-              <div className="p-5 space-y-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-[#1C1C1C] rounded-lg flex items-center justify-center shrink-0">
-                      <ShieldCheck className="text-white" size={16} />
-                    </div>
-                    <div>
-                      <p className="text-[13px] font-black text-[#1C1C1C]">
-                        {courseName}
-                      </p>
-                      <p className="text-[11px] text-gray-400">
-                        {plan} Package
-                      </p>
-                    </div>
-                  </div>
-                  <span className="text-[14px] font-black text-[#1C1C1C]">
-                    £{price?.toFixed(2)}
-                  </span>
-                </div>
-                <div className="h-px bg-gray-100" />
-                <div className="flex items-center gap-3 text-[12px] text-gray-500">
-                  <Calendar size={14} className="text-gray-400" />{" "}
-                  <span>
-                    Course Date: <b className="text-[#1C1C1C]">{date}</b>
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 text-[12px] text-gray-500">
-                  <Mail size={14} className="text-gray-400" />{" "}
-                  <span>
-                    Confirmation sent to:{" "}
-                    <b className="text-[#F15A24]">{email}</b>
-                  </span>
-                </div>
-                {easyApply && (
-                  <div className="flex items-center gap-3 text-[12px] text-[#00b67a] font-bold">
-                    <Check size={14} /> EasyApply™ included — we'll handle your
-                    licence application
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* What Happens Next */}
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-              <h2 className="text-lg font-black text-[#1C1C1C] mb-6">
-                What Happens Next
-              </h2>
-              <div className="space-y-6">
-                {[
-                  {
-                    icon: Mail,
-                    label: "Check Your Email",
-                    badge: "Within 5 minutes",
-                    badgeColor: "bg-gray-100 text-gray-600",
-                    desc: "A confirmation email with your booking details, course materials access link, and venue information has been sent to your inbox.",
-                  },
-                  {
-                    icon: Smartphone,
-                    label: "Download the GuardPass App",
-                    badge: "Available Now",
-                    badgeColor: "bg-[#E8F5E9] text-[#00b67a]",
-                    desc: "Access your eLearning materials, mock exams, and revision content immediately through our 5-star rated app.",
-                  },
-                  {
-                    icon: BookOpen,
-                    label: "Attend Your Course",
-                    badge: date,
-                    badgeColor: "bg-[#FFF5F1] text-[#F15A24]",
-                    desc: "Arrive at the venue on your course date with valid photo ID. Our instructor will guide you through everything.",
-                  },
-                  {
-                    icon: Award,
-                    label: "Get Your Results & Licence",
-                    badge: "1 working day",
-                    badgeColor: "bg-gray-100 text-gray-600",
-                    desc: "Results available within 1 working day. Our team will handle your licence application.",
-                  },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
-                      <item.icon size={18} className="text-[#1C1C1C]" />
-                    </div>
-                    <div>
-                      <div className="flex items-center flex-wrap gap-2 mb-1">
-                        <span className="text-[14px] font-black text-[#1C1C1C]">
-                          {item.label}
-                        </span>
-                        <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded ${item.badgeColor}`}
-                        >
-                          {item.badge}
-                        </span>
-                      </div>
-                      <p className="text-[12px] text-gray-500 leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Action buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={handleDownloadReceipt}
-                disabled={isDownloading}
-                className="flex items-center justify-center gap-2 border-2 border-gray-200 text-[#1C1C1C] px-6 py-3 rounded-xl font-black text-sm hover:border-gray-300 transition-all"
-              >
-                {isDownloading ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : (
-                  <Download size={16} />
-                )}
-                {isDownloading ? "Generating..." : "Download Receipt"}
-              </button>
-              <button
-                onClick={() => navigate("/courses")}
-                className="flex items-center justify-center gap-2 bg-[#F15A24] text-white px-6 py-3 rounded-xl font-black text-sm hover:brightness-110 transition-all"
-              >
-                Browse More Courses <ArrowRight size={16} />
-              </button>
-            </div>
-          </div>
-
-          {/* Right col */}
-          <div className="w-full lg:w-[270px] space-y-4 lg:sticky lg:top-[100px]">
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-              <h3 className="text-[13px] font-black text-[#1C1C1C] mb-4">
-                Quick Links
-              </h3>
-              <div className="space-y-3">
-                {[
-                  { icon: User, label: "Student Portal" },
-                  { icon: CheckCircle, label: "FAQs" },
-                  { icon: Mail, label: "Contact Us" },
-                ].map((item, i) => (
-                  <button
-                    key={i}
-                    className="flex items-center gap-3 text-[13px] text-[#F15A24] font-bold hover:underline w-full"
-                  >
-                    <item.icon size={15} className="text-[#F15A24]" />{" "}
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="bg-[#1C1C1C] rounded-xl p-5">
-              <p className="text-white font-black text-sm mb-1">Need Help?</p>
-              <p className="text-gray-400 text-[11px] mb-4">
-                Our team is here to assist you with any questions about your
-                booking.
-              </p>
-              <button className="w-full bg-[#F15A24] text-white px-4 py-2.5 rounded-lg font-black text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all">
-                <Phone size={14} className="fill-current" /> Call 08006894621
-              </button>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 text-center">
-              <p className="text-[10px] text-gray-400 mb-2">
-                Trusted by 400,000+ students
-              </p>
-              <div className="flex justify-center items-center gap-1 mb-1">
-                <span className="text-xs font-black">Excellent</span>
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-4 h-4 bg-[#00b67a] flex items-center justify-center"
-                    >
-                      <span className="text-white text-[8px]">★</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <p className="text-[10px] text-gray-400">
-                9,511 reviews on Trustpilot
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="bg-[#1C1C1C] py-4 mt-8">
-        <p className="text-center text-[11px] text-gray-500">
-          Courses4Me is a registered trademark of Courses4Me Limited. Courses4Me
-          is a training &amp; staffing platform — we help people book training
-          courses with approved providers and help them find work.
-        </p>
-      </div>
-    </div>
-  );
-};
+import BookingConfirmed from "../../components/coursesComponents/booking/BookingConfirmed";
+import StepCheck from "../../components/ui/checkoutUI/StepCheck";
+import StepNumber from "../../components/ui/checkoutUI/StepNumber";
+import FieldInput from "../../components/ui/checkoutUI/FieldInput";
+import SaveBtn from "../../components/ui/checkoutUI/SaveBtn";
 
 /* ═══════════════════════════════════════════════════════ */
 /*                  MAIN CHECKOUT COMPONENT                */
@@ -841,7 +264,7 @@ const CourseCheckout = () => {
     fetchData();
     window.scrollTo(0, 0);
   }, [courseId, scheduleId, plan]);
-  
+
   // Sync user details if logged in (especially after social auth redirect)
   useEffect(() => {
     if (user) {
@@ -856,7 +279,12 @@ const CourseCheckout = () => {
       setDetails(updatedDetails);
 
       // If user has all required info, auto-advance to step 2 if we are on step 1
-      if (activeStep === 1 && updatedDetails.mobile && updatedDetails.dob && updatedDetails.firstName) {
+      if (
+        activeStep === 1 &&
+        updatedDetails.mobile &&
+        updatedDetails.dob &&
+        updatedDetails.firstName
+      ) {
         setActiveStep(2);
       }
     }
@@ -993,7 +421,7 @@ const CourseCheckout = () => {
       <StepNumber n={stepNum} active={false} />
       <span className="text-[14px] font-bold text-gray-400">{title}</span>
       {badge && (
-        <span className="inline-block px-2 py-0.5 bg-[#00b67a] text-white text-[9px] font-black uppercase tracking-widest rounded">
+        <span className="inline-block px-2 py-0.5 bg-[#F15A24] text-white text-[9px] font-black uppercase tracking-widest rounded">
           {badge}
         </span>
       )}
@@ -1001,8 +429,8 @@ const CourseCheckout = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] font-sans pt-[90px]">
-      <div className="max-w-[1100px] mx-auto px-4 md:px-6 py-8">
+    <div className="min-h-screen bg-[#F8FAFC]  pt-10">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-gray-500 hover:text-[#1C1C1C] transition-colors text-sm font-bold mb-4"
@@ -1026,9 +454,9 @@ const CourseCheckout = () => {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+        <div className="flex flex-col lg:flex-row gap-6 items-center">
           {/* ══ LEFT COLUMN ══ */}
-          <div className="flex-1 space-y-3">
+          <div className="flex-1 w-full space-y-3">
             {/* ── Step 1: Your Details ── */}
             {activeStep > 1 ? (
               <CompletedStep
@@ -1068,7 +496,8 @@ const CourseCheckout = () => {
                     <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                       <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
                         <p className="text-[13px] text-blue-700 font-semibold">
-                          Please complete your profile with your mobile number and date of birth to proceed.
+                          Please complete your profile with your mobile number
+                          and date of birth to proceed.
                         </p>
                       </div>
                       <FieldInput
@@ -1107,155 +536,160 @@ const CourseCheckout = () => {
                             <span className="w-full border-t border-gray-100"></span>
                           </div>
                           <div className="relative flex justify-center text-xs uppercase text-gray-400 font-bold">
-                            <span className="bg-white px-4 tracking-widest">or use email</span>
+                            <span className="bg-white px-4 tracking-widest">
+                              or use email
+                            </span>
                           </div>
                         </div>
                       </div>
 
                       {isLoggingIn ? (
-                    /* ── Inline Login Fields ── */
-                    <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                      <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
-                        <p className="text-[13px] text-blue-700 font-semibold">
-                          Login to your account to proceed with your booking.
-                        </p>
-                      </div>
-                      <FieldInput
-                        label="Email address"
-                        placeholder="john.smith@email.com"
-                        type="email"
-                        value={loginForm.email}
-                        onChange={(v) =>
-                          setLoginForm((prev) => ({ ...prev, email: v }))
-                        }
-                        icon={Mail}
-                        error={detailsErrors.email}
-                      />
-                      <FieldInput
-                        label="Password"
-                        placeholder="••••••••"
-                        type="password"
-                        value={loginForm.password}
-                        onChange={(v) =>
-                          setLoginForm((prev) => ({ ...prev, password: v }))
-                        }
-                        icon={Lock}
-                        error={detailsErrors.password}
-                      />
-                      <div className="flex flex-col gap-3 pt-2">
-                        {detailsErrors.login && (
-                          <p className="text-red-500 text-xs font-bold text-center">
-                            {detailsErrors.login}
-                          </p>
-                        )}
-                        <button
-                          onClick={handleLogin}
-                          disabled={loading}
-                          className="bg-[#1C1C1C] text-white px-8 py-3.5 rounded-lg font-black text-sm hover:bg-black active:scale-95 transition-all mt-2 flex items-center justify-center gap-2 disabled:opacity-70"
-                        >
-                          {loading && (
-                            <Loader2 size={16} className="animate-spin" />
-                          )}
-                          Login & Continue
-                        </button>
-                        <button
-                          onClick={() => setIsLoggingIn(false)}
-                          className="text-[13px] text-gray-500 font-bold hover:text-[#F15A24] transition-colors"
-                        >
-                          Don't have an account? Register here
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    /* ── Registration Fields ── */
-                    <>
-                      <div className="flex gap-4">
-                        <FieldInput
-                          label="First name"
-                          placeholder="First name"
-                          value={details.firstName}
-                          onChange={(v) => updateDetail("firstName", v)}
-                          icon={User}
-                          error={detailsErrors.firstName}
-                        />
-                        <FieldInput
-                          label="Last name"
-                          placeholder="Last name"
-                          value={details.lastName}
-                          onChange={(v) => updateDetail("lastName", v)}
-                          icon={User}
-                          error={detailsErrors.lastName}
-                        />
-                      </div>
-                      <FieldInput
-                        label="Email address"
-                        placeholder="Email address"
-                        type="email"
-                        value={details.email}
-                        onChange={(v) => updateDetail("email", v)}
-                        onBlur={() => checkEmailAvailability(details.email)}
-                        icon={Mail}
-                        error={detailsErrors.email}
-                      />
-                      <FieldInput
-                        label="Mobile number"
-                        placeholder="Mobile number"
-                        type="tel"
-                        value={details.mobile}
-                        onChange={(v) => updateDetail("mobile", v)}
-                        icon={Phone}
-                        error={detailsErrors.mobile}
-                      />
-                      <FieldInput
-                        label="Date of birth"
-                        type="date"
-                        value={details.dob}
-                        onChange={(v) => updateDetail("dob", v)}
-                        icon={Calendar}
-                        error={detailsErrors.dob}
-                      />
+                        /* ── Inline Login Fields ── */
+                        <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                          <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
+                            <p className="text-[13px] text-[#F15A24] font-semibold">
+                              Login to your account to proceed with your
+                              booking.
+                            </p>
+                          </div>
+                          <FieldInput
+                            label="Email address"
+                            placeholder="john.smith@email.com"
+                            type="email"
+                            value={loginForm.email}
+                            onChange={(v) =>
+                              setLoginForm((prev) => ({ ...prev, email: v }))
+                            }
+                            icon={Mail}
+                            error={detailsErrors.email}
+                          />
+                          <FieldInput
+                            label="Password"
+                            placeholder="••••••••"
+                            type="password"
+                            value={loginForm.password}
+                            onChange={(v) =>
+                              setLoginForm((prev) => ({ ...prev, password: v }))
+                            }
+                            icon={Lock}
+                            error={detailsErrors.password}
+                          />
+                          <div className="flex flex-col gap-3 pt-2">
+                            {detailsErrors.login && (
+                              <p className="text-red-500 text-xs font-bold text-center">
+                                {detailsErrors.login}
+                              </p>
+                            )}
+                            <button
+                              onClick={handleLogin}
+                              disabled={loading}
+                              className="bg-[#F15A24] cursor-pointer text-white px-8 py-3.5 rounded-lg font-black text-sm hover:bg-[#b53a0d] active:scale-95 transition-all mt-2 flex items-center justify-center gap-2 disabled:opacity-70"
+                            >
+                              {loading && (
+                                <Loader2 size={16} className="animate-spin" />
+                              )}
+                              Login & Continue
+                            </button>
+                            <button
+                              onClick={() => setIsLoggingIn(false)}
+                              className="text-[13px] text-gray-500 font-bold cursor-pointer hover:text-[#F15A24] transition-colors"
+                            >
+                              Don't have an account? Register here
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        /* ── Registration Fields ── */
+                        <>
+                          <div className="flex gap-4">
+                            <FieldInput
+                              label="First name"
+                              placeholder="First name"
+                              value={details.firstName}
+                              onChange={(v) => updateDetail("firstName", v)}
+                              icon={User}
+                              error={detailsErrors.firstName}
+                            />
+                            <FieldInput
+                              label="Last name"
+                              placeholder="Last name"
+                              value={details.lastName}
+                              onChange={(v) => updateDetail("lastName", v)}
+                              icon={User}
+                              error={detailsErrors.lastName}
+                            />
+                          </div>
+                          <FieldInput
+                            label="Email address"
+                            placeholder="Email address"
+                            type="email"
+                            value={details.email}
+                            onChange={(v) => updateDetail("email", v)}
+                            onBlur={() => checkEmailAvailability(details.email)}
+                            icon={Mail}
+                            error={detailsErrors.email}
+                          />
+                          <FieldInput
+                            label="Mobile number"
+                            placeholder="Mobile number"
+                            type="tel"
+                            value={details.mobile}
+                            onChange={(v) => updateDetail("mobile", v)}
+                            icon={Phone}
+                            error={detailsErrors.mobile}
+                          />
+                          <FieldInput
+                            label="Date of birth"
+                            type="date"
+                            value={details.dob}
+                            onChange={(v) => updateDetail("dob", v)}
+                            icon={Calendar}
+                            error={detailsErrors.dob}
+                          />
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FieldInput
-                          label="Create Password"
-                          placeholder="••••••••"
-                          type="password"
-                          value={details.password}
-                          onChange={(v) => updateDetail("password", v)}
-                          icon={Lock}
-                          error={detailsErrors.password}
-                        />
-                        <FieldInput
-                          label="Confirm Password"
-                          placeholder="••••••••"
-                          type="password"
-                          value={details.confirmPassword}
-                          onChange={(v) => updateDetail("confirmPassword", v)}
-                          icon={Lock}
-                          error={detailsErrors.confirmPassword}
-                        />
-                      </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FieldInput
+                              label="Create Password"
+                              placeholder="••••••••"
+                              type="password"
+                              value={details.password}
+                              onChange={(v) => updateDetail("password", v)}
+                              icon={Lock}
+                              error={detailsErrors.password}
+                            />
+                            <FieldInput
+                              label="Confirm Password"
+                              placeholder="••••••••"
+                              type="password"
+                              value={details.confirmPassword}
+                              onChange={(v) =>
+                                updateDetail("confirmPassword", v)
+                              }
+                              icon={Lock}
+                              error={detailsErrors.confirmPassword}
+                            />
+                          </div>
 
-                      <SaveBtn
-                        loading={checkingEmail}
-                        onClick={async () => {
-                          if (await validateStep(1)) setActiveStep(2);
-                        }}
-                      />
+                          <SaveBtn
+                            loading={checkingEmail}
+                            onClick={async () => {
+                              if (await validateStep(1)) setActiveStep(2);
+                            }}
+                          />
 
-                      <div className="text-center pt-2">
-                        <p className="text-[13px] text-gray-500 font-medium">
-                          Already registered?{" "}
-                          <button
-                            onClick={() => setIsLoggingIn(true)}
-                            className="text-[#F15A24] font-bold hover:underline"
-                          >
-                            Please sign in
-                          </button>
-                        </p>
-                      </div>
-                    </>
-                  )}
+                          <div className="text-center pt-2">
+                            <p className="text-[13px] text-gray-500 font-medium">
+                              Already registered?{" "}
+                              <button
+                                onClick={() => setIsLoggingIn(true)}
+                                className="text-[#F15A24] font-bold cursor-pointer hover:underline"
+                              >
+                                Please sign in
+                              </button>
+                            </p>
+                          </div>
+                        </>
+                      )}
                     </>
                   )}
                 </div>
@@ -1343,7 +777,7 @@ const CourseCheckout = () => {
                   <span className="text-[14px] font-black text-[#1C1C1C]">
                     Zero-Hassle Application Service - EasyApply™
                   </span>
-                  <span className="inline-block px-2 py-0.5 bg-[#00b67a] text-white text-[9px] font-black uppercase tracking-widest rounded">
+                  <span className="inline-block px-2 py-0.5 bg-[#F15A24] text-white text-[9px] font-black uppercase tracking-widest rounded">
                     Recommended
                   </span>
                 </div>
@@ -1357,15 +791,15 @@ const CourseCheckout = () => {
                   {/* Get EasyApply option */}
                   <div
                     onClick={() => setEasyApply("get")}
-                    className={`rounded-xl border-2 p-4 cursor-pointer transition-all ${easyApply === "get" ? "border-blue-500 bg-blue-50/30" : "border-gray-200 hover:border-gray-300"}`}
+                    className={`rounded-xl border-2 p-4 cursor-pointer transition-all ${easyApply === "get" ? "border-[#F15A24] bg-blue-50/30" : "border-gray-200 hover:border-[#ba532d]"}`}
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div
-                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${easyApply === "get" ? "border-blue-500" : "border-gray-300"}`}
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${easyApply === "get" ? "border-[#F15A24]" : "border-gray-300"}`}
                         >
                           {easyApply === "get" && (
-                            <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
                           )}
                         </div>
                         <span className="text-[14px] font-black text-[#1C1C1C]">
@@ -1377,7 +811,7 @@ const CourseCheckout = () => {
                           £149.99
                         </span>
                         {easyApply === "get" && (
-                          <Check size={16} className="text-[#00b67a]" />
+                          <Check size={16} className="text-[#F15A24]" />
                         )}
                       </div>
                     </div>
@@ -1395,7 +829,7 @@ const CourseCheckout = () => {
                         >
                           <Check
                             size={12}
-                            className="text-[#00b67a] shrink-0"
+                            className="text-[#F15A24] shrink-0"
                           />{" "}
                           {f}
                         </li>
@@ -1406,14 +840,14 @@ const CourseCheckout = () => {
                   {/* Self apply option */}
                   <div
                     onClick={() => setEasyApply("self")}
-                    className={`rounded-xl border-2 p-4 cursor-pointer transition-all ${easyApply === "self" ? "border-gray-400" : "border-gray-200 hover:border-gray-300"}`}
+                    className={`rounded-xl border-2 p-4 cursor-pointer transition-all ${easyApply === "self" ? "border-[#F15A24]" : "border-gray-200 hover:border-[#d25e33]"}`}
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${easyApply === "self" ? "border-gray-500" : "border-gray-300"}`}
+                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${easyApply === "self" ? "border-[#F15A24]" : "border-gray-300"}`}
                       >
                         {easyApply === "self" && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-gray-500" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
                         )}
                       </div>
                       <span className="text-[14px] font-black text-[#1C1C1C]">
@@ -1431,7 +865,7 @@ const CourseCheckout = () => {
                           key={i}
                           className="flex items-start gap-2 text-[12px] text-gray-500"
                         >
-                          <span className="mt-1 w-1.5 h-1.5 rounded-full bg-gray-400 shrink-0" />{" "}
+                          <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#F15A24] shrink-0" />{" "}
                           {f}
                         </li>
                       ))}
@@ -1522,14 +956,14 @@ const CourseCheckout = () => {
                           setIsCardModalOpen(true);
                         }
                       }}
-                      className={`rounded-xl border-2 px-4 py-3.5 cursor-pointer transition-all flex items-center justify-between gap-3 ${payment === opt.id ? "border-blue-500 bg-blue-50/20" : "border-gray-200 hover:border-gray-300"}`}
+                      className={`rounded-xl border-2 px-4 py-3.5 cursor-pointer transition-all flex items-center justify-between gap-3 ${payment === opt.id ? "border-[#F15A24] bg-blue-50/20" : "border-gray-200 hover:border-gray-300"}`}
                     >
                       <div className="flex items-center gap-3">
                         <div
-                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${payment === opt.id ? "border-blue-500" : "border-gray-300"}`}
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${payment === opt.id ? "border-[#F15A24]" : "border-gray-300"}`}
                         >
                           {payment === opt.id && (
-                            <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
                           )}
                         </div>
                         <span className="text-[13px] font-bold text-[#1C1C1C]">

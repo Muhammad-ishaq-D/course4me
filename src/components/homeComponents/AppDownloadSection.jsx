@@ -7,7 +7,7 @@ import courses4meApp from "../../assets/home/Courses4Me App.png";
 
 const AppPromotionSection = () => {
   return (
-    <section className="w-full bg-[#1A1A1A] py-24 relative overflow-hidden">
+    <section className="w-full bg-[#1A1A1A] py-24 px-4 md:px-0 relative overflow-hidden">
       {/* Decor */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF5421] opacity-5 blur-[100px] -mr-48 -mt-48"></div>
 

@@ -22,10 +22,10 @@ const SocialLogin = ({ className = "" }) => {
   };
 
   return (
-    <div className={` ${className}`}>
+    <div className={` ${className} flex justify-center`}>
       <button
         onClick={() => handleSocialLogin("Google")}
-        className="group relative flex items-center w-full justify-center gap-3 py-3.5 px-4 border border-gray-200 rounded-2xl hover:bg-gray-50 hover:border-gray-300 transition-all duration-300 font-bold text-sm text-gray-700 active:scale-[0.98] bg-white shadow-sm hover:shadow-md"
+        className="group relative flex items-center  justify-center gap-3 py-3.5 px-24 border border-gray-200 rounded-2xl hover:bg-gray-50 hover:border-[#F15A24] cursor-pointer transition-all duration-300 font-bold text-sm text-gray-700 active:scale-[0.98] bg-white shadow-sm hover:shadow-md"
       >
         <img
           src="https://www.svgrepo.com/show/355037/google.svg"

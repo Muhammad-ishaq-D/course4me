@@ -132,7 +132,7 @@ const Feedback = () => {
                 {[...Array(5)].map((_, i) => (
                   <div
                     key={i}
-                    className="w-4 h-4 bg-[#00b67a] flex items-center justify-center rounded-sm"
+                    className="w-4 h-4 bg-[#F15A24] flex items-center justify-center rounded-sm"
                   >
                     <Star size={10} fill="white" className="text-white" />
                   </div>
@@ -141,7 +141,7 @@ const Feedback = () => {
             </div>
 
             <div className="text-right">
-              <span className="text-[#00b67a] text-[12px] font-black tracking-tight">
+              <span className="text-[#F15A24] text-[12px] font-black tracking-tight">
                 Trustpilot
               </span>
             </div>
@@ -152,7 +152,7 @@ const Feedback = () => {
 
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-0.5">
-                <div className="flex text-amber-400">
+                <div className="flex text-[#F15A24]">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} size={14} fill="currentColor" />
                   ))}

@@ -46,7 +46,7 @@ function VideoTestimonials() {
   return (
     <section
       id="video-testimonials"
-      className="relative overflow-hidden bg-[#111111] py-16 lg:py-20"
+      className="relative overflow-hidden px-4 bg-[#111111] py-16 lg:py-20"
     >
       {/* BACKGROUND GLOW */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#FF5421]/10 blur-3xl rounded-full" />

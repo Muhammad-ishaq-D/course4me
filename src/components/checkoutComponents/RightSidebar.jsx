@@ -6,7 +6,7 @@ const RightSidebar = () => (
   <div className="w-full lg:w-[330px] space-y-4 lg:sticky lg:top-[100px]">
     {/* Order Summary */}
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="bg-[#00b67a] px-5 py-3 flex items-center justify-between">
+      <div className="bg-[#F15A24] px-5 py-3 flex items-center justify-between">
         <span className="text-white text-[13px] font-black">Order Summary</span>
         <span className="text-white text-[12px] font-bold bg-white/20 px-3 py-0.5 rounded-full">
           You're saving £112.00
@@ -14,7 +14,7 @@ const RightSidebar = () => (
       </div>
       <div className="p-5 space-y-4">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#1C1C1C] flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-[#F15A24] flex items-center justify-center shrink-0">
             <ShieldCheck className="text-white" size={18} />
           </div>
           <div className="flex-1 min-w-0">
@@ -35,7 +35,7 @@ const RightSidebar = () => (
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Check size={13} className="text-[#00b67a]" />
+            <Check size={13} className="text-[#F15A24]" />
             <span className="text-[13px] text-[#1C1C1C] font-bold">
               EasyApply
             </span>
@@ -62,7 +62,7 @@ const RightSidebar = () => (
     </div>
 
     {/* Guarantee */}
-    <div className="bg-[#00b67a] rounded-xl p-5 flex items-center justify-between gap-4">
+    <div className="bg-[#F15A24] rounded-xl p-5 flex items-center justify-between gap-4">
       <div>
         <h3 className="text-white font-extrabold text-base leading-snug mb-3">
           Zero Risk With
@@ -100,7 +100,7 @@ const RightSidebar = () => (
       <div className="flex gap-1.5">
         <div className="w-2 h-2 rounded-full bg-gray-200" />
         <div className="w-2 h-2 rounded-full bg-gray-200" />
-        <div className="w-2 h-2 rounded-full bg-[#1C1C1C]" />
+        <div className="w-2 h-2 rounded-full bg-[#F15A24]" />
       </div>
     </div>
 
@@ -115,7 +115,7 @@ const RightSidebar = () => (
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="w-5 h-5 bg-[#00b67a] flex items-center justify-center"
+              className="w-5 h-5 bg-[#F15A24] flex items-center justify-center"
             >
               <span className="text-white text-[10px]">★</span>
             </div>
@@ -150,7 +150,7 @@ const RightSidebar = () => (
       </div>
       <div className="flex items-center justify-center gap-2 mb-1">
         <span className="text-2xl font-black text-[#1C1C1C]">4.9</span>
-        <div className="flex text-[#ffb800]">
+        <div className="flex text-[#F15A24]">
           {[...Array(5)].map((_, i) => (
             <Star key={i} size={16} fill="currentColor" />
           ))}

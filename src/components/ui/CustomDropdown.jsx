@@ -28,7 +28,7 @@ const CustomDropdown = ({
   const selectedOption = options.find((item) => item.value === value);
 
   return (
-    <div ref={dropdownRef} className={`relative ${width} z-[9999]`}>
+    <div ref={dropdownRef} className={`relative ${width} z-40`}>
       {/* BUTTON */}
       <button
         type="button"

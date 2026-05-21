@@ -23,7 +23,7 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section id="testimonials" className="bg-white py-24">
+    <section id="testimonials" className="bg-white px-4 py-24">
       <div className="max-w-7xl mx-auto p-4">
         {/* Header */}
         <motion.div

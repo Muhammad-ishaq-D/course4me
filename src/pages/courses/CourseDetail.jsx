@@ -55,7 +55,7 @@ const CourseDetail = () => {
 
       <RelatedCourses />
 
-      <CourseCTA course={course} />
+      {/* <CourseCTA course={course} /> */}
     </div>
   );
 };

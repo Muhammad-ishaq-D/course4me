@@ -34,7 +34,7 @@ const WhyChooseTrainingCentres = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative overflow-hidden bg-[#F9FAFB] py-16 lg:py-20">
+    <section className="relative overflow-hidden bg-[#F9FAFB] px-4 py-16 lg:py-20">
       {/* BACKGROUND EFFECTS */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-[#00A3FF]/10 blur-3xl rounded-full" />
       <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#FF5421]/10 blur-3xl rounded-full" />
