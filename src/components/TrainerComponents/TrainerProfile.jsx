@@ -27,7 +27,7 @@ const TrainerProfile = () => {
   }
 
   return (
-    <section className="bg-[#F8F8F8] min-h-screen">
+    <section className="bg-[#F8F8F8] ">
       {/* HERO SECTION */}
       <div className="relative overflow-hidden bg-[#0B0B0B]">
         {/* BACKGROUND EFFECTS */}

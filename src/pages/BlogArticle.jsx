@@ -414,9 +414,10 @@ const BlogArticle = () => {
 
                   <button
                     onClick={() => navigate("/courses")}
-                    className="mt-6 cursor-pointer w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-[#F15A24] hover:bg-[#df4c18] text-white font-bold px-7 py-4 rounded-full transition-all duration-300 shadow-[0_12px_35px_rgba(241,90,36,0.30)] hover:scale-[1.02] active:scale-95"
+                    className="mt-6 cursor-pointer w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-[#F15A24] hover:bg-[#df4c18] text-white font-bold px-4 py-3 md:px-6 md:py-4 rounded-full transition-all duration-300 shadow-[0_12px_35px_rgba(241,90,36,0.30)] hover:scale-[1.02] active:scale-95"
                   >
-                    Find a Course Near You
+                    Find a Course{" "}
+                    <span className="hidden md:block">Near You</span>
                     <ArrowRight size={18} />
                   </button>
                 </div>

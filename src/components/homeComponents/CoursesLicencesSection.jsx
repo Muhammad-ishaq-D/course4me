@@ -14,6 +14,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import ItemCardSkeleton from "../ui/ItemCardSkeleton";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -344,15 +345,17 @@ const CoursesLicencesSection = () => {
 
             {/* CARDS */}
             <div className="space-y-4">
-              {filteredCourses.map((course, idx) => (
-                <ItemCard
-                  key={`${course.id}-${idx}`}
-                  icon={course.icon}
-                  title={course.title}
-                  description={course.description}
-                  onClick={() => navigate(`/course/${course.id}`)}
-                />
-              ))}
+              {loading
+                ? [...Array(3)].map((_, idx) => <ItemCardSkeleton key={idx} />)
+                : filteredCourses.map((course, idx) => (
+                    <ItemCard
+                      key={`${course.id}-${idx}`}
+                      icon={course.icon}
+                      title={course.title}
+                      description={course.description}
+                      onClick={() => navigate(`/course/${course.id}`)}
+                    />
+                  ))}
             </div>
           </div>
 
@@ -400,15 +403,19 @@ const CoursesLicencesSection = () => {
 
             {/* CARDS */}
             <div className="space-y-4 relative z-10">
-              {licences.slice(0, 3).map((licence) => (
-                <ItemCard
-                  key={licence.id}
-                  icon={licence.icon}
-                  title={licence.title}
-                  description={licence.description}
-                  onClick={() => navigate("/licences")}
-                />
-              ))}
+              {loading
+                ? [...Array(3)].map((_, idx) => <ItemCardSkeleton key={idx} />)
+                : licences
+                    .slice(0, 3)
+                    .map((licence) => (
+                      <ItemCard
+                        key={licence.id}
+                        icon={licence.icon}
+                        title={licence.title}
+                        description={licence.description}
+                        onClick={() => navigate("/licences")}
+                      />
+                    ))}
             </div>
           </div>
         </div>
