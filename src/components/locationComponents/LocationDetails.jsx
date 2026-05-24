@@ -10,6 +10,7 @@ import {
 import CourseCard from "../ui/CourseCard";
 import CenterDetails from "./CenterDetails";
 import Loader from "../ui/Loader";
+import locationService from "../../api/services/locationService";
 
 const LocationDetails = () => {
   const { state } = useLocation();
@@ -17,13 +18,28 @@ const LocationDetails = () => {
 
   const center = state?.center;
 
+  const [courses, setCourses] = useState([]);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, []);
+    
+    const fetchCourses = async () => {
+      try {
+        if (center?.locationId) {
+          const data = await locationService.getLocationCourses(center.locationId);
+          if (data.success) {
+            setCourses(data.data);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch location courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchCourses();
+  }, [center?.locationId]);
 
   // ================= LOADER =================
   if (loading) {
@@ -188,7 +204,7 @@ const LocationDetails = () => {
                     </div>
 
                     <span className="text-white text-sm font-semibold">
-                      {center.courses.length}+
+                      {courses.length}+
                     </span>
                   </div>
 
@@ -280,7 +296,7 @@ const LocationDetails = () => {
                 </p>
 
                 <h3 className="text-2xl font-semibold text-gray-900">
-                  {center.courses.length}
+                  {courses.length}
                 </h3>
               </div>
             </div>
@@ -288,20 +304,20 @@ const LocationDetails = () => {
           {/* ======================COURSES GRID===================== */}
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {center.courses.map((course) => (
+            {courses.map((course) => (
               <CourseCard
-                key={course.id}
-                id={course.id}
-                image={course.image}
+                key={course._id || course.id}
+                id={course._id || course.id}
+                image={course.thumbnail || course.image}
                 title={course.title}
-                description={course.description}
-                badge={course.badge}
-                price={course.price}
-                date={course.date}
+                description={course.shortDescription || course.description}
+                badge={course.badge || "Popular"}
+                price={course.pricing?.basePrice || course.price}
+                date={course.date || "Multiple Dates"}
                 category={course.category}
                 duration={course.duration}
                 isPopular={course.isPopular}
-                isOnline={course.isOnline}
+                isOnline={course.isOnline || false}
               />
             ))}
           </div>

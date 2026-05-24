@@ -1,472 +1,604 @@
-import React, { useMemo, useState } from "react";
-import {
-  Search,
-  MapPin,
-  Heart,
-  Star,
-  Filter,
-  Plus,
-  Minus,
-  LocateFixed,
-  GraduationCap,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Search, MapPin, ArrowRight, Sparkles } from "lucide-react";
 
-import { locationsData } from "../../data/locationData";
-import { NavLink } from "react-router-dom";
-import Loader from "../ui/Loader";
-import { div } from "framer-motion/client";
+import CourseCard from "../../components/ui/CourseCard";
+import LicenseCard from "../../components/ui/LicenseCard";
+import CareerCards from "../../components/ui/CareerCards";
+import Loader from "../../components/ui/Loader";
+import NoResults from "../../components/ui/NoResults";
+import EmptyStateQuickSearch from "../../components/ui/EmptyStateQuickSearch";
+import CustomDropdown from "../../components/ui/CustomDropdown";
 
-const LocationSearch = () => {
-  // ===================== STATES =====================
+// ================= API SERVICES =================
+import { Link } from "react-router-dom";
+import courseService from "../../api/services/courseService";
+import licenseService from "../../api/services/licenseService";
+import careerService from "../../api/services/careerService";
+import locationService from "../../api/services/locationService";
 
-  const [searchInput, setSearchInput] = useState("");
+const QuickSearch = () => {
+  // ================= STATES =================
+
   const [search, setSearch] = useState("");
-  const [activeCenter, setActiveCenter] = useState(null);
+  const [location, setLocation] = useState("");
+  const [type, setType] = useState("all");
 
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [filteredResults, setFilteredResults] = useState([]);
 
-  // ===================== FIND LOCATION =====================
-  const selectedLocation = useMemo(() => {
-    return locationsData.find((item) =>
-      item.location.toLowerCase().includes(search.toLowerCase()),
-    );
-  }, [search]);
+  const [loading, setLoading] = useState(false);
 
-  // ===================== FILTER CENTERS =====================
-  const filteredCenters = useMemo(() => {
-    // If location found → show all centers
-    if (selectedLocation) {
-      return selectedLocation.centers.map((center, index) => ({
-        ...center,
+  // ================= LOCATION SUGGESTIONS =================
 
-        // dynamic marker positions
-        top: `${20 + index * 15}%`,
-        left: `${40 + index * 10}%`,
-      }));
+  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
+
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
+
+  // ================= REFS =================
+
+  const resultsRef = useRef(null);
+
+  const locationRef = useRef(null);
+
+  // ================= LOCATION FILTER =================
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchLocationSuggestions = async () => {
+      if (location.trim() === "") {
+        setLocationSuggestions([]);
+        setShowLocationSuggestions(false);
+        return;
+      }
+
+      try {
+        const res = await locationService.searchLocations({
+          location: location.trim(),
+        });
+        if (cancelled) return;
+
+        const suggestions = [
+          ...new Set((res.data || []).map((item) => item.location)),
+        ].filter((loc) =>
+          loc.toLowerCase().includes(location.toLowerCase()),
+        );
+
+        setLocationSuggestions(suggestions);
+        setShowLocationSuggestions(suggestions.length > 0);
+      } catch (error) {
+        console.error("Failed to fetch location suggestions:", error);
+        if (!cancelled) {
+          setLocationSuggestions([]);
+          setShowLocationSuggestions(false);
+        }
+      }
+    };
+
+    const debounce = setTimeout(fetchLocationSuggestions, 250);
+    return () => {
+      cancelled = true;
+      clearTimeout(debounce);
+    };
+  }, [location]);
+
+  // ================= CLOSE DROPDOWN =================
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (locationRef.current && !locationRef.current.contains(event.target)) {
+        setShowLocationSuggestions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // ================= SEARCH FUNCTION =================
+
+  const handleSearch = async () => {
+    setLoading(true);
+    setHasSearched(true);
+
+    // SCROLL TO RESULTS
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+
+    try {
+      const params = {
+        status: "Published",
+      };
+
+      if (search.trim()) {
+        params.search = search;
+      }
+      if (location.trim()) {
+        params.location = location;
+      }
+
+      let fetchedCourses = [];
+      let fetchedLicenses = [];
+      let fetchedCareers = [];
+      let fetchedCenters = [];
+
+      // Only fetch the requested type (or all if type is 'all')
+      const promises = [];
+      if (type === "all" || type === "course") {
+        promises.push(
+          courseService.getAllCourses(params).then((res) => {
+            fetchedCourses = (res.data?.data || []).map((course) => ({
+              ...course,
+              id: course._id,
+              type: "course",
+              badge: course.isPopular ? "Popular" : "",
+              image:
+                course.image ||
+                "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop",
+            }));
+          }),
+        );
+      }
+      if (type === "all" || type === "license") {
+        promises.push(
+          licenseService.getAllLicenses(params).then((res) => {
+            fetchedLicenses = (res.data?.data || []).map((licence) => ({
+              ...licence,
+              id: licence._id,
+              type: "license",
+              thumbnail:
+                licence.thumbnail ||
+                "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop",
+            }));
+          }),
+        );
+      }
+      if (type === "all" || type === "career") {
+        promises.push(
+          careerService.getAllCareers(params).then((res) => {
+            fetchedCareers = (res.data?.data || []).map((career) => ({
+              ...career,
+              id: career._id,
+              type: "career",
+              image:
+                career.image ||
+                "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop",
+            }));
+          }),
+        );
+      }
+      if (type === "all" || type === "location") {
+        promises.push(
+          locationService
+            .searchLocations({
+              search: search.trim(),
+              location: location.trim(),
+            })
+            .then(async (res) => {
+              const locations = res.data || [];
+              const locationIds = [...new Set(locations.map((loc) => loc._id))];
+              const courseCountByLocation = {};
+
+              await Promise.all(
+                locationIds.map(async (locationId) => {
+                  try {
+                    const coursesRes =
+                      await locationService.getLocationCourses(locationId);
+                    courseCountByLocation[locationId] =
+                      coursesRes.data?.length ?? coursesRes.count ?? 0;
+                  } catch {
+                    courseCountByLocation[locationId] = 0;
+                  }
+                }),
+              );
+
+              fetchedCenters = locations.flatMap((loc) =>
+                (loc.centers || [])
+                  .filter((center) => center.name?.trim())
+                  .map((center) => {
+                    const centerPayload = {
+                      ...center,
+                      locationId: loc._id,
+                      locationName: loc.location,
+                    };
+                    const coursesAtLocation =
+                      courseCountByLocation[loc._id] ?? 0;
+
+                    return {
+                      id: center._id,
+                      type: "location",
+                      title: center.name,
+                      description:
+                        center.address ||
+                        center.postcode ||
+                        loc.location,
+                      location: loc.location,
+                      image:
+                        center.image ||
+                        "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=1200&auto=format&fit=crop",
+                      totalCourses: `${coursesAtLocation} Courses`,
+                      totalLicences: "—",
+                      totalCareers: "—",
+                      center: centerPayload,
+                    };
+                  }),
+              );
+            }),
+        );
+      }
+
+      await Promise.all(promises);
+
+      setFilteredResults([
+        ...fetchedCourses,
+        ...fetchedLicenses,
+        ...fetchedCareers,
+        ...fetchedCenters,
+      ]);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      setFilteredResults([]);
+    } finally {
+      setLoading(false);
     }
-
-    // Otherwise search globally
-    const allCenters = locationsData.flatMap((location) =>
-      location.centers.map((center, index) => ({
-        ...center,
-        locationName: location.location,
-
-        top: `${20 + index * 15}%`,
-        left: `${40 + index * 10}%`,
-      })),
-    );
-
-    return allCenters.filter(
-      (center) =>
-        center.name.toLowerCase().includes(search.toLowerCase()) ||
-        center.address.toLowerCase().includes(search.toLowerCase()) ||
-        center.locationName?.toLowerCase().includes(search.toLowerCase()),
-    );
-  }, [search, selectedLocation]);
-
-  // ===================== LOCATION SUGGESTIONS =====================
-  const locationSuggestions = useMemo(() => {
-    if (!searchInput.trim()) return [];
-
-    return locationsData.filter((item) =>
-      item.location.toLowerCase().includes(searchInput.toLowerCase()),
-    );
-  }, [searchInput]);
+  };
 
   return (
-    <div className="min-h-screen bg-[#F4F7FB] py-6 px-4">
-      {/* =========================================================
-            MAIN CONTAINER
-      ========================================================= */}
-      <div className="max-w-7xl mx-auto">
-        {/* =========================================================
-              SEARCH SECTION
-        ========================================================= */}
-        <div className="relative mb-5">
-          {/* Background Glow */}
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-100/40 via-white to-orange-100/40 blur-3xl rounded-full pointer-events-none" />
+    <div className="min-h-screen bg-[#FAFAFC] overflow-hidden relative">
+      {/* ================= BACKGROUND ================= */}
 
-          <div className="relative z-40 bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] px-5 py-5 overflow-visible ">
-            {/* Top Content */}
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-              {/* Left */}
-              <div>
-                <h2 className="text-[26px] font-bold text-gray-900 leading-tight">
-                  Find Training Centers
-                </h2>
+      <div className="absolute top-0 left-0 w-[350px] h-[350px] bg-[#F15A24]/10 blur-[120px] rounded-full" />
 
-                <p className="text-sm text-gray-500 mt-1 max-w-xl leading-relaxed">
-                  Explore the best institutes, academies, and professional
-                  learning centers near your location with verified reviews and
-                  ratings.
-                </p>
+      <div className="absolute top-20 right-0 w-[300px] h-[300px] bg-orange-200/20 blur-[120px] rounded-full" />
+
+      {/* ================= MAIN ================= */}
+
+      <section className="relative px-4 sm:px-6 lg:px-10 py-12 lg:py-16">
+        <div className="max-w-7xl mx-auto">
+          {/* ================= HERO ================= */}
+
+          <div className="text-center max-w-4xl mx-auto">
+            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#FFF3EE] text-[#F15A24] text-sm font-semibold border border-[#F15A24]/10">
+              <Sparkles size={16} />
+              Smart Discovery Platform
+            </span>
+
+            <h1 className="mt-6 text-4xl md:text-6xl font-black text-gray-900 leading-tight">
+              Find The Right
+              <span className="text-[#F15A24]"> Course</span>,
+              <br />
+              Career & License Faster
+            </h1>
+
+            <p className="mt-6 text-gray-500 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+              Explore thousands of professional courses, certifications,
+              licenses, careers and nearby learning opportunities.
+            </p>
+          </div>
+
+          {/* ================= SEARCH BOX ================= */}
+
+          <div className="mt-10 bg-white border border-gray-100 shadow-2xl shadow-gray-100 rounded-[32px] p-5 md:p-7">
+            {/* TOP */}
+
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Quick Search</h2>
+
+              <p className="text-gray-500 mt-1 text-sm">
+                Search everything from one intelligent search system
+              </p>
+            </div>
+
+            {/* SEARCH BAR */}
+
+            <div className="grid grid-cols-1 xl:grid-cols-[220px_1fr_1fr_170px] gap-4">
+              {/* TYPE */}
+
+              <div className="relative">
+                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                  Search Type
+                </label>
+
+                <CustomDropdown
+                  value={type}
+                  onChange={setType}
+                  options={[
+                    { label: "All Types", value: "all" },
+                    { label: "Courses", value: "course" },
+                    { label: "Licenses", value: "license" },
+                    { label: "Careers", value: "career" },
+                    { label: "Centers", value: "location" },
+                  ]}
+                />
               </div>
 
-              {/* ================= SEARCH BAR ================= */}
-              <div className="sticky top-0 z-30 lg:static bg-[#F4F7FB] py-3">
-                <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
-                  {/* Search Input */}
-                  <div className="relative flex-1 lg:w-[420px]">
-                    {/* Icon */}
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-2xl bg-orange-50 flex items-center justify-center z-20">
-                      <MapPin className="w-5 h-5 text-orange-500" />
-                    </div>
+              {/* SEARCH */}
 
-                    <input
-                      type="text"
-                      placeholder="Search centers or locations..."
-                      value={searchInput}
-                      onFocus={() => setShowSuggestions(true)}
-                      onChange={(e) => {
-                        setSearchInput(e.target.value);
-                        setShowSuggestions(true);
-                      }}
-                      className="w-full h-14 pl-16 pr-5 rounded-2xl border border-gray-200 bg-[#FAFBFD] focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-100 outline-none transition-all text-[15px] font-medium text-gray-700 placeholder:text-gray-400"
-                    />
+              <div className="relative">
+                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                  Search Keyword
+                </label>
 
-                    {/* ===================== DROPDOWN ===================== */}
-                    {showSuggestions && locationSuggestions.length > 0 && (
-                      <div className="absolute top-full mt-3  w-full bg-white border border-gray-200 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
-                        {/* Header */}
-                        <div className="px-4 py-3 border-b border-gray-100">
-                          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-                            Available Locations
-                          </p>
+                <Search
+                  size={18}
+                  className="absolute left-5 top-[55px] -translate-y-1/2 text-gray-400"
+                />
+
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search courses, licenses, careers..."
+                  className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none"
+                />
+              </div>
+
+              {/* LOCATION */}
+
+              <div className="relative" ref={locationRef}>
+                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                  Location
+                </label>
+
+                <MapPin
+                  size={18}
+                  className="absolute left-5 top-[55px] -translate-y-1/2 text-gray-400 z-10"
+                />
+
+                <input
+                  type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  onFocus={() => {
+                    if (locationSuggestions.length > 0) {
+                      setShowLocationSuggestions(true);
+                    }
+                  }}
+                  placeholder="Enter city or location"
+                  className="w-full h-[60px] rounded-2xl border focus:border-[#F15A24] border-gray-200 bg-[#FAFAFC] pl-14 pr-4 outline-none"
+                />
+
+                {/* ================= SUGGESTIONS ================= */}
+
+                {showLocationSuggestions && locationSuggestions.length > 0 && (
+                  <div className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
+                    {locationSuggestions.map((loc, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => {
+                          setLocation(loc);
+                          setLocationSuggestions([]);
+                          setTimeout(() => {
+                            setShowLocationSuggestions(false);
+                          }, 0);
+                        }}
+                        className="w-full px-5 py-4 flex items-center gap-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center">
+                          <MapPin size={16} className="text-[#F15A24]" />
                         </div>
 
-                        {/* Suggestions */}
-                        <div className="max-h-[280px] overflow-y-auto scrollbar-hide ">
-                          {locationSuggestions.map((item) => (
-                            <button
-                              key={item.id}
-                              onClick={() => {
-                                setSearchInput(item.location);
-                                setSearch(item.location);
-                                setShowSuggestions(false);
-                              }}
-                              className="w-full flex items-center gap-3 px-4 py-4 hover:bg-orange-50 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0"
-                            >
-                              {/* Icon */}
-                              <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
-                                <MapPin className="w-4 h-4 text-orange-500" />
-                              </div>
-
-                              {/* Content */}
-                              <div>
-                                <h4 className="text-sm font-semibold text-gray-800">
-                                  {item.location}
-                                </h4>
-
-                                <p className="text-xs text-gray-500 mt-1">
-                                  {item.centers.length} centers available
-                                </p>
-                              </div>
-                            </button>
-                          ))}
+                        <div>
+                          <h4 className="text-sm font-semibold text-gray-800">
+                            {loc}
+                          </h4>
                         </div>
-                      </div>
-                    )}
+                      </button>
+                    ))}
                   </div>
-                  {/* Search Button */}
-                  <button
-                    onClick={() => {
-                      setLoading(true);
+                )}
+              </div>
 
-                      setTimeout(() => {
-                        setSearch(searchInput);
+              {/* BUTTON */}
 
-                        setLoading(false);
-                      }, 500);
-                    }}
-                    className="h-14 px-7 rounded-2xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold shadow-lg shadow-orange-200 transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap w-full md:w-auto"
-                  >
-                    <Search className="w-4 h-4" />
-
-                    <span>Search</span>
-                  </button>
-                </div>
+              <div className="flex items-end">
+                <button
+                  onClick={handleSearch}
+                  className="w-full h-[60px] rounded-2xl bg-[#F15A24] hover:bg-[#E14D17] transition-all text-white font-semibold flex items-center justify-center gap-2"
+                >
+                  Search Now
+                  <ArrowRight size={18} />
+                </button>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* =========================================================
-              CONTENT AREA
-        ========================================================= */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
-          {/* =========================================================
-                LEFT SIDE - CENTERS
-          ========================================================= */}
-          <div className="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Training Centers
-                </h2>
+          {/* ================= LOADER ================= */}
 
-                <p className="text-sm text-gray-500 mt-1">
-                  <span className="text-orange-500 font-semibold">
-                    {filteredCenters.length}
-                  </span>{" "}
-                  centers found in {selectedLocation?.location || search}
-                </p>
+          {loading && (
+            <div
+              ref={resultsRef}
+              className="flex items-center justify-center py-32"
+            >
+              <Loader text="Finding the best opportunities for you.." />
+            </div>
+          )}
+
+          {/* ================= EMPTY STATE ================= */}
+
+          {!hasSearched && (
+            <div ref={resultsRef}>
+              <EmptyStateQuickSearch />
+            </div>
+          )}
+
+          {/* ================= NO RESULTS ================= */}
+
+          {!loading && hasSearched && filteredResults.length === 0 && (
+            <div ref={resultsRef}>
+              <NoResults />
+            </div>
+          )}
+
+          {/* ================= RESULTS ================= */}
+
+          {!loading && hasSearched && filteredResults.length > 0 && (
+            <div ref={resultsRef} className="mt-16">
+              {/* TOP */}
+
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+                <div>
+                  <h2 className="text-4xl font-black text-[#111827]">
+                    Results in{" "}
+                    <span className="text-[#F15A24] capitalize">
+                      {type === "all" ? "All Types" : type}
+                    </span>
+                  </h2>
+
+                  <p className="text-gray-500 mt-2">
+                    {filteredResults.length} results found
+                  </p>
+                </div>
               </div>
 
-              <button className="h-12 px-5 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all flex items-center gap-2">
-                <Filter className="w-4 h-4" />
+              {/* GRID */}
 
-                <span className="text-sm font-medium">Filters</span>
-              </button>
-            </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {filteredResults.map((item, index) => {
+                  // ================= COURSE =================
 
-            {/* =========================================================
-                  CARDS
-            ========================================================= */}
-            <div className="p-5 space-y-3">
-              {loading ? (
-                <div className="py-32 flex items-center justify-center">
-                  {" "}
-                  <Loader text="Finding nearby training centers..." />{" "}
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {filteredCenters.map((center) => (
-                    <div
-                      key={center.id}
-                      onMouseEnter={() => setActiveCenter(center.id)}
-                      onMouseLeave={() => setActiveCenter(null)}
-                      className={`group relative bg-white border rounded-[28px] p-3 transition-all duration-300 cursor-pointer overflow-hidden
-                  ${
-                    activeCenter === center.id
-                      ? "border-orange-300 shadow-[0_20px_60px_rgba(249,115,22,0.15)]"
-                      : "border-gray-200 hover:border-orange-200 hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]"
-                  }`}
-                    >
-                      {/* Hover Gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-orange-50/0 via-orange-50/40 to-orange-50/0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />
-
-                      {/* ======================================================
-                        MAIN CONTENT
-                  ====================================================== */}
-                      <div className="relative flex flex-col sm:flex-row gap-4">
-                        {/* ======================================================
-                          IMAGE
-                    ====================================================== */}
-                        <div className="w-full sm:w-32 md:w-36 h-52 sm:h-32 md:h-28 rounded-3xl overflow-hidden flex-shrink-0">
-                          <img
-                            src={center.image}
-                            alt={center.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                        </div>
-
-                        {/* ======================================================
-                          RIGHT CONTENT
-                    ====================================================== */}
-                        <div className="flex-1 min-w-0 flex flex-col">
-                          {/* ======================================================
-                            TOP SECTION
-                      ====================================================== */}
-                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                            {/* ======================================================
-                              LEFT CONTENT
-                        ====================================================== */}
-                            <div className="flex-1 min-w-0">
-                              {/* Title */}
-                              <h3 className="text-[18px] sm:text-[20px] font-bold text-gray-900 leading-tight break-words">
-                                {center.name}
-                              </h3>
-
-                              {/* Address */}
-                              <div className="flex items-center gap-2 mt-3">
-                                <div className="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0">
-                                  <MapPin className="w-4 h-4 text-orange-500" />
-                                </div>
-
-                                <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">
-                                  {center.address}
-                                </p>
-                              </div>
-
-                              {/* Rating */}
-                              <div className="flex flex-wrap items-center gap-2 mt-4">
-                                {/* Stars */}
-                                <div className="flex items-center gap-1">
-                                  {[...Array(1)].map((_, index) => (
-                                    <Star
-                                      key={index}
-                                      className="w-4 h-4 fill-orange-500 text-orange-500"
-                                    />
-                                  ))}
-                                </div>
-
-                                {/* Rating */}
-                                <span className="text-sm font-semibold text-gray-800">
-                                  {center.rating}
-                                </span>
-
-                                {/* Reviews */}
-                                <span className="text-sm text-gray-400">
-                                  ({center.reviews} reviews)
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* ======================================================
-                              ACTIONS
-                        ====================================================== */}
-                            <div className="flex sm:flex-col items-center sm:items-end gap-2 flex-shrink-0">
-                              {/* Heart Button */}
-                              <button className="w-11 h-11 rounded-2xl border border-gray-200 bg-white flex items-center justify-center hover:bg-orange-50 hover:border-orange-200 transition-all duration-300">
-                                <Heart className="w-4 h-4 text-gray-500 hover:text-orange-500 transition-colors" />
-                              </button>
-
-                              {/* View Button */}
-                              <NavLink
-                                to="/locations/locationdetails"
-                                state={{ center }}
-                                className="h-11 px-5 sm:px-6 rounded-2xl bg-linear-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-orange-200 whitespace-nowrap w-full sm:w-auto flex items-center justify-center"
-                              >
-                                View Details
-                              </NavLink>
-                            </div>
+                  if (item.type === "course") {
+                    return (
+                      <div key={index} className="relative">
+                        <div className="absolute top-5 right-5 z-20">
+                          <div className="px-4 py-1.5 rounded-full bg-[#F15A24] text-white text-[11px] font-bold uppercase tracking-wide shadow-lg">
+                            Course
                           </div>
                         </div>
+
+                        <CourseCard
+                          id={item.id}
+                          image={item.image}
+                          title={item.title}
+                          description={item.description}
+                          badge={item.badge}
+                          price={item.price}
+                          date={item.date}
+                          category={item.category}
+                          duration={item.duration}
+                          isPopular={item.isPopular}
+                          isOnline={item.isOnline}
+                        />
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    );
+                  }
 
-              {/* =========================================================
-                    EMPTY STATE
-              ========================================================= */}
-              {filteredCenters.length === 0 && (
-                <div className="py-20 flex items-center justify-center">
-                  <div className="text-center">
-                    <h3 className="text-2xl font-bold text-gray-800">
-                      No Centers Found
-                    </h3>
+                  // ================= LICENSE =================
 
-                    <p className="text-gray-500 mt-2">
-                      Try searching with another keyword.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
+                  if (item.type === "license") {
+                    return (
+                      <div key={index} className="relative">
+                        <div className="absolute top-5 right-5 z-20">
+                          <div className="px-4 py-1.5 rounded-full bg-[#0F172A] text-white text-[11px] font-bold uppercase tracking-wide shadow-lg">
+                            Licence
+                          </div>
+                        </div>
 
-            {/* =========================================================
-                  PAGINATION
-            ========================================================= */}
-            <div className="border-t border-gray-100 p-5 flex flex-col sm:flex-row gap-4 items-center justify-between">
-              <p className="text-sm text-gray-500">
-                Showing 1 to {filteredCenters.length} results
-              </p>
+                        <LicenseCard item={item} index={index} />
+                      </div>
+                    );
+                  }
 
-              <div className="flex items-center gap-2">
-                <button className="w-11 h-11 rounded-2xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
+                  // ================= CAREER =================
 
-                <button className="w-11 h-11 rounded-2xl bg-orange-500 text-white font-semibold">
-                  1
-                </button>
+                  if (item.type === "career") {
+                    return (
+                      <div key={index} className="relative">
+                        <div className="absolute top-5 right-5 z-20">
+                          <div className="px-4 py-1.5 rounded-full bg-[#7C3AED] text-white text-[11px] font-bold uppercase tracking-wide shadow-lg">
+                            Career
+                          </div>
+                        </div>
 
-                <button className="w-11 h-11 rounded-2xl border border-gray-200 hover:bg-gray-50 transition">
-                  2
-                </button>
+                        <CareerCards filteredCareers={[item]} />
+                      </div>
+                    );
+                  }
 
-                <button className="w-11 h-11 rounded-2xl border border-gray-200 hover:bg-gray-50 transition">
-                  3
-                </button>
+                  // ================= LOCATION =================
 
-                <button className="w-11 h-11 rounded-2xl border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* =========================================================
-                RIGHT SIDE - MAP
-          ========================================================= */}
-          <div className="sticky top-0 ">
-            <div className="relative h-[88vh] rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-white">
-              {/* Google Map */}
-              <iframe
-                title="Google Map"
-                src={`https://www.google.com/maps?q=${
-                  selectedLocation?.location || search
-                }&output=embed`}
-                loading="lazy"
-                className="w-full h-full"
-              />
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent pointer-events-none" />
-
-              {/* =========================================================
-                    MAP MARKERS
-              ========================================================= */}
-              {filteredCenters.map((center) => (
-                <div
-                  key={center.id}
-                  style={{
-                    top: center.top,
-                    left: center.left,
-                  }}
-                  className="absolute z-20"
-                >
-                  <div className="group relative">
-                    {/* Marker */}
+                  return (
                     <div
-                      className={`w-14 h-14 rounded-full border-4 border-white shadow-2xl flex items-center justify-center transition-all duration-300 cursor-pointer
-                      ${
-                        activeCenter === center.id
-                          ? "bg-orange-600 scale-110"
-                          : "bg-orange-500 hover:scale-110"
-                      }`}
+                      key={index}
+                      className="group bg-white rounded-[28px] border border-gray-200 overflow-hidden hover:border-[#F15A24]/20 hover:shadow-[0_20px_45px_rgba(0,0,0,0.08)] transition-all duration-500"
                     >
-                      <GraduationCap className="w-6 h-6 text-white" />
-                    </div>
+                      <div className="relative h-52 overflow-hidden">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
+                        />
 
-                    {/* Tooltip */}
-                    <div className="absolute left-1/2 -translate-x-1/2 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      <div className="bg-white px-4 py-2 rounded-xl shadow-xl whitespace-nowrap text-sm font-semibold text-gray-800">
-                        {center.name}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+
+                        <div className="absolute top-4 right-4">
+                          <div className="px-4 py-1.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold uppercase tracking-wide shadow-lg">
+                            Location
+                          </div>
+                        </div>
+
+                        <div className="absolute bottom-5 left-5">
+                          <h3 className="text-white text-[28px] font-black leading-tight">
+                            {item.title}
+                          </h3>
+
+                          <p className="text-white/80 text-sm mt-1">
+                            {item.location}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="p-5">
+                        <p className="text-[#667085] text-[14px] leading-relaxed">
+                          {item.description}
+                        </p>
+
+                        <div className="grid grid-cols-3 gap-3 mt-5">
+                          <div className="bg-[#F8FAFC] rounded-xl p-3 text-center border border-[#EDF1F5]">
+                            <h4 className="text-[#111827] text-sm font-bold">
+                              {item.totalCourses}
+                            </h4>
+                          </div>
+
+                          <div className="bg-[#F8FAFC] rounded-xl p-3 text-center border border-[#EDF1F5]">
+                            <h4 className="text-[#111827] text-sm font-bold">
+                              {item.totalLicences}
+                            </h4>
+                          </div>
+
+                          <div className="bg-[#F8FAFC] rounded-xl p-3 text-center border border-[#EDF1F5]">
+                            <h4 className="text-[#111827] text-sm font-bold">
+                              {item.totalCareers}
+                            </h4>
+                          </div>
+                        </div>
+
+                        <Link
+                          to="/locations/locationdetails"
+                          state={{ center: item.center }}
+                          className="w-full h-12 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-sm font-bold mt-6 transition-all flex items-center justify-center"
+                        >
+                          Explore Center
+                        </Link>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-
-              {/* =========================================================
-                    MAP CONTROLS
-              ========================================================= */}
-              <div className="absolute bottom-6 right-6 flex flex-col gap-3 z-30">
-                <button className="w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-lg flex items-center justify-center hover:bg-gray-50 transition">
-                  <LocateFixed className="w-5 h-5 text-gray-700" />
-                </button>
-
-                <button className="w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-lg flex items-center justify-center hover:bg-gray-50 transition">
-                  <Plus className="w-5 h-5 text-gray-700" />
-                </button>
-
-                <button className="w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-lg flex items-center justify-center hover:bg-gray-50 transition">
-                  <Minus className="w-5 h-5 text-gray-700" />
-                </button>
+                  );
+                })}
               </div>
             </div>
-          </div>
+          )}
         </div>
-      </div>
+      </section>
     </div>
   );
 };
 
-export default LocationSearch;
+export default QuickSearch;

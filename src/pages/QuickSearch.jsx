@@ -8,12 +8,37 @@ import Loader from "../components/ui/Loader";
 import NoResults from "../components/ui/NoResults";
 import EmptyStateQuickSearch from "../components/ui/EmptyStateQuickSearch";
 import CustomDropdown from "../components/ui/CustomDropdown";
+import CenterSearchCard from "../components/ui/CenterSearchCard";
 
 // ================= API SERVICES =================
 import courseService from "../api/services/courseService";
 import licenseService from "../api/services/licenseService";
 import careerService from "../api/services/careerService";
-import { locationsData } from "../data/locationData";
+import locationService from "../api/services/locationService";
+
+/** Only include centers that match the search keyword and/or location field */
+const centerMatchesFilters = (center, loc, searchTerm, locationTerm) => {
+  if (!center.name?.trim()) return false;
+
+  const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const matches = (text, term) =>
+    term && new RegExp(escape(term), "i").test(text || "");
+
+  if (locationTerm && !matches(loc.location, locationTerm)) {
+    return false;
+  }
+
+  if (!searchTerm) {
+    return true;
+  }
+
+  return (
+    matches(center.name, searchTerm) ||
+    matches(center.address, searchTerm) ||
+    matches(center.postcode, searchTerm) ||
+    matches(loc.location, searchTerm)
+  );
+};
 
 const QuickSearch = () => {
   // ================= STATES =================
@@ -42,28 +67,43 @@ const QuickSearch = () => {
   // ================= LOCATION FILTER =================
 
   useEffect(() => {
-    // GET UNIQUE LOCATIONS FROM LOCATIONS DATA
-    const uniqueLocations = [
-      ...new Set(locationsData.map((item) => item.location)),
-    ];
+    let cancelled = false;
 
-    // FILTER
-    const filtered = uniqueLocations.filter((loc) =>
-      loc.toLowerCase().includes(location.toLowerCase()),
-    );
-
-    if (location.trim() !== "") {
-      setLocationSuggestions(filtered);
-
-      // ONLY OPEN IF RESULTS EXIST
-      if (filtered.length > 0) {
-        setShowLocationSuggestions(true);
-      } else {
+    const fetchLocationSuggestions = async () => {
+      if (location.trim() === "") {
+        setLocationSuggestions([]);
         setShowLocationSuggestions(false);
+        return;
       }
-    } else {
-      setShowLocationSuggestions(false);
-    }
+
+      try {
+        const res = await locationService.searchLocations({
+          location: location.trim(),
+        });
+        if (cancelled) return;
+
+        const suggestions = [
+          ...new Set((res.data || []).map((item) => item.location)),
+        ].filter((loc) =>
+          loc.toLowerCase().includes(location.toLowerCase()),
+        );
+
+        setLocationSuggestions(suggestions);
+        setShowLocationSuggestions(suggestions.length > 0);
+      } catch (error) {
+        console.error("Failed to fetch location suggestions:", error);
+        if (!cancelled) {
+          setLocationSuggestions([]);
+          setShowLocationSuggestions(false);
+        }
+      }
+    };
+
+    const debounce = setTimeout(fetchLocationSuggestions, 250);
+    return () => {
+      cancelled = true;
+      clearTimeout(debounce);
+    };
   }, [location]);
 
   // ================= CLOSE DROPDOWN =================
@@ -111,6 +151,7 @@ const QuickSearch = () => {
       let fetchedCourses = [];
       let fetchedLicenses = [];
       let fetchedCareers = [];
+      let fetchedCenters = [];
 
       // Only fetch the requested type (or all if type is 'all')
       const promises = [];
@@ -157,42 +198,92 @@ const QuickSearch = () => {
           }),
         );
       }
+      const centerSearchTerm = search.trim();
+      const centerLocationTerm = location.trim();
+      const shouldFetchCenters =
+        (type === "all" || type === "location") &&
+        (centerSearchTerm || centerLocationTerm);
+
+      if (shouldFetchCenters) {
+        promises.push(
+          locationService
+            .searchLocations({
+              search: centerSearchTerm,
+              location: centerLocationTerm,
+            })
+            .then(async (res) => {
+              const locations = res.data || [];
+              const locationIds = [...new Set(locations.map((loc) => loc._id))];
+              const coursesByLocation = {};
+
+              await Promise.all(
+                locationIds.map(async (locationId) => {
+                  try {
+                    const coursesRes =
+                      await locationService.getLocationCourses(locationId);
+                    coursesByLocation[locationId] = coursesRes.data || [];
+                  } catch {
+                    coursesByLocation[locationId] = [];
+                  }
+                }),
+              );
+
+              const countCoursesForCenter = (loc, centerId) => {
+                const courses = coursesByLocation[loc._id] || [];
+                const hasCenterLinks = courses.some((course) => course.centerId);
+
+                if (hasCenterLinks) {
+                  return courses.filter(
+                    (course) => String(course.centerId) === String(centerId),
+                  ).length;
+                }
+
+                const namedCenters = (loc.centers || []).filter((c) =>
+                  c.name?.trim(),
+                );
+                if (namedCenters.length === 1) return courses.length;
+                return 0;
+              };
+
+              fetchedCenters = locations.flatMap((loc) =>
+                (loc.centers || [])
+                  .filter((center) =>
+                    centerMatchesFilters(
+                      center,
+                      loc,
+                      centerSearchTerm,
+                      centerLocationTerm,
+                    ),
+                  )
+                  .map((center) => {
+                    const centerPayload = {
+                      ...center,
+                      locationId: loc._id,
+                      locationName: loc.location,
+                    };
+
+                    return {
+                      id: center._id,
+                      type: "location",
+                      title: center.name,
+                      location: loc.location,
+                      image: center.image,
+                      courseCount: countCoursesForCenter(loc, center._id),
+                      center: centerPayload,
+                    };
+                  }),
+              );
+            }),
+        );
+      }
 
       await Promise.all(promises);
-
-      // Local location search
-      let localLocations = [];
-      if (type === "all" || type === "location") {
-        const allCenters = locationsData.flatMap((loc) =>
-          loc.centers.map((center) => ({
-            id: center.id,
-            type: "location",
-            title: center.name,
-            description: center.address,
-            location: loc.location,
-            image: center.image || "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=1200&auto=format&fit=crop",
-            totalCourses: center.courses ? `${center.courses.length} Courses` : "0 Courses",
-            totalLicences: "N/A",
-            totalCareers: "N/A",
-          }))
-        );
-
-        localLocations = allCenters.filter((center) => {
-          const matchesLocation = location
-            ? center.location.toLowerCase().includes(location.toLowerCase()) || center.title.toLowerCase().includes(location.toLowerCase())
-            : true;
-          const matchesSearch = search
-            ? center.title.toLowerCase().includes(search.toLowerCase()) || center.description.toLowerCase().includes(search.toLowerCase())
-            : true;
-          return matchesLocation && matchesSearch;
-        });
-      }
 
       setFilteredResults([
         ...fetchedCourses,
         ...fetchedLicenses,
         ...fetchedCareers,
-        ...localLocations,
+        ...fetchedCenters,
       ]);
     } catch (error) {
       console.error("Error fetching search results:", error);
@@ -475,69 +566,10 @@ const QuickSearch = () => {
                     );
                   }
 
-                  // ================= LOCATION =================
+                  // ================= TRAINING CENTER =================
 
                   return (
-                    <div
-                      key={index}
-                      className="group bg-white rounded-[28px] border border-gray-200 overflow-hidden hover:border-[#F15A24]/20 hover:shadow-[0_20px_45px_rgba(0,0,0,0.08)] transition-all duration-500"
-                    >
-                      <div className="relative h-52 overflow-hidden">
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
-                        />
-
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-
-                        <div className="absolute top-4 right-4">
-                          <div className="px-4 py-1.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold uppercase tracking-wide shadow-lg">
-                            Location
-                          </div>
-                        </div>
-
-                        <div className="absolute bottom-5 left-5">
-                          <h3 className="text-white text-[28px] font-black leading-tight">
-                            {item.title}
-                          </h3>
-
-                          <p className="text-white/80 text-sm mt-1">
-                            {item.location}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="p-5">
-                        <p className="text-[#667085] text-[14px] leading-relaxed">
-                          {item.description}
-                        </p>
-
-                        <div className="grid grid-cols-3 gap-3 mt-5">
-                          <div className="bg-[#F8FAFC] rounded-xl p-3 text-center border border-[#EDF1F5]">
-                            <h4 className="text-[#111827] text-sm font-bold">
-                              {item.totalCourses}
-                            </h4>
-                          </div>
-
-                          <div className="bg-[#F8FAFC] rounded-xl p-3 text-center border border-[#EDF1F5]">
-                            <h4 className="text-[#111827] text-sm font-bold">
-                              {item.totalLicences}
-                            </h4>
-                          </div>
-
-                          <div className="bg-[#F8FAFC] rounded-xl p-3 text-center border border-[#EDF1F5]">
-                            <h4 className="text-[#111827] text-sm font-bold">
-                              {item.totalCareers}
-                            </h4>
-                          </div>
-                        </div>
-
-                        <button className="w-full h-12 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-sm font-bold mt-6 transition-all">
-                          Explore Center
-                        </button>
-                      </div>
-                    </div>
+                    <CenterSearchCard key={item.id || index} item={item} />
                   );
                 })}
               </div>
