@@ -352,8 +352,8 @@ const QuickSearch = () => {
                 <CustomDropdown
                   value={type}
                   onChange={setType}
+                  placeholder="Select Types"
                   options={[
-                    { label: "All Types", value: "all" },
                     { label: "Courses", value: "course" },
                     { label: "Licenses", value: "license" },
                     { label: "Careers", value: "career" },
