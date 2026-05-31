@@ -9,7 +9,12 @@ const bookingService = {
     // Get booking by reference (public)
     getBookingByReference: async (ref) => {
         return await axiosInstance.get(`/bookings/reference/${ref}`);
-    }
+    },
+
+    // Create Stripe PaymentIntent for embedded stripe Elements flow
+    createPaymentIntent: async (bookingId) => {
+        return await axiosInstance.post(`/stripe/create-payment-intent/${bookingId}`);
+    },
 };
 
 export default bookingService;

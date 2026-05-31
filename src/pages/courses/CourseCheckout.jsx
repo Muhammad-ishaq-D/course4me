@@ -28,7 +28,7 @@ import authService from "../../api/services/authService";
 import { useAuth } from "../../context/AuthContext";
 import CheckoutSkeleton from "../../components/ui/CheckoutSkeleton";
 import RightSidebar from "../../components/checkoutComponents/RightSidebar";
-import CardPaymentModal from "../../components/modals/CardPaymentModal";
+import StripePaymentModal from "../../components/modals/StripePaymentModal";
 import SocialLogin from "../Authentication/components/SocialLogin";
 import BookingConfirmed from "../../components/coursesComponents/booking/BookingConfirmed";
 import StepCheck from "../../components/ui/checkoutUI/StepCheck";
@@ -47,6 +47,8 @@ const CourseCheckout = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [clientSecret, setClientSecret] = useState(null);
+  const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
   const [bookingRef, setBookingRef] = useState("");
   const [error, setError] = useState("");
   const [timeLeft, setTimeLeft] = useState(14 * 60 + 12);
@@ -340,15 +342,21 @@ const CourseCheckout = () => {
         totalAmount: price + (easyApply === "get" ? 149.99 : 0),
       };
 
-      const response = await bookingService.createBooking(bookingPayload);
-
-      if (response.data.success) {
-        setBookingRef(response.data.data?.bookingReference || "");
-        window.scrollTo(0, 0);
-        setIsConfirmed(true);
-      } else {
-        setError(response.data.message || "Failed to create booking.");
-      }
+        // Create booking first
+        const response = await bookingService.createBooking(bookingPayload);
+        if (response.data.success) {
+          const bookingId = response.data.data._id;
+          // Create PaymentIntent and get clientSecret
+          const piRes = await bookingService.createPaymentIntent(bookingId);
+          if (piRes.data.success && piRes.data.clientSecret) {
+            setClientSecret(piRes.data.clientSecret);
+            setPaymentModalOpen(true);
+          } else {
+            setError("Failed to initialize payment.");
+          }
+        } else {
+          setError(response.data.message || "Failed to create booking.");
+        }
     } catch (err) {
       console.error("Booking Error:", err);
       setError(
@@ -1040,6 +1048,12 @@ const CourseCheckout = () => {
           courses with approved providers and help them find work.
         </p>
       </div>
+
+      <StripePaymentModal
+        clientSecret={clientSecret}
+        isOpen={isPaymentModalOpen}
+        onClose={() => setPaymentModalOpen(false)}
+      />
 
       <CardPaymentModal
         isOpen={isCardModalOpen}
