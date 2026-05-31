@@ -91,14 +91,6 @@ const CourseCheckout = () => {
   const [detailsErrors, setDetailsErrors] = useState({});
   const [billingErrors, setBillingErrors] = useState({});
 
-  // Card details state (for card modal)
-  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
-  const [cardData, setCardData] = useState({
-    name: "",
-    number: "",
-    expiry: "",
-    cvv: "",
-  });
 
   // Clear individual detail error on change
   const updateDetail = (field, value) => {
@@ -959,10 +951,6 @@ const CourseCheckout = () => {
                       key={opt.id}
                       onClick={() => {
                         setPayment(opt.id);
-
-                        if (opt.id === "card") {
-                          setIsCardModalOpen(true);
-                        }
                       }}
                       className={`rounded-xl border-2 px-4 py-3.5 cursor-pointer transition-all flex items-center justify-between gap-3 ${payment === opt.id ? "border-[#F15A24] bg-blue-50/20" : "border-gray-200 hover:border-gray-300"}`}
                     >
@@ -1055,16 +1043,7 @@ const CourseCheckout = () => {
         onClose={() => setPaymentModalOpen(false)}
       />
 
-      <CardPaymentModal
-        isOpen={isCardModalOpen}
-        onClose={() => setIsCardModalOpen(false)}
-        cardData={cardData}
-        setCardData={setCardData}
-        onPay={() => {
-          console.log("Paying with card:", cardData);
-          setIsCardModalOpen(false);
-        }}
-      />
+
     </div>
   );
 };
