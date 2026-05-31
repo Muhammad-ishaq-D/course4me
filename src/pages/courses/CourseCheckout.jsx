@@ -353,10 +353,16 @@ const CourseCheckout = () => {
         }
     } catch (err) {
       console.error("Booking Error:", err);
-      setError(
-        err.response?.data?.message ||
-          "An error occurred during booking. Please try again.",
-      );
+      // Show specific validation errors from backend if available
+      const backendErrors = err.response?.data?.errors;
+      if (backendErrors && backendErrors.length > 0) {
+        setError(backendErrors.map(e => e.message).join(" | "));
+      } else {
+        setError(
+          err.response?.data?.message ||
+            "An error occurred during booking. Please try again.",
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
