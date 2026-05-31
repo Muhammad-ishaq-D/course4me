@@ -338,6 +338,8 @@ const CourseCheckout = () => {
         const response = await bookingService.createBooking(bookingPayload);
         if (response.data.success) {
           const bookingId = response.data.data._id;
+          const bookingReference = response.data.data.bookingReference;
+          setBookingRef(bookingReference);
           // Create PaymentIntent and get clientSecret
           const piRes = await bookingService.createPaymentIntent(bookingId);
           if (piRes.data.success && piRes.data.clientSecret) {
@@ -1039,6 +1041,7 @@ const CourseCheckout = () => {
 
       <StripePaymentModal
         clientSecret={clientSecret}
+        bookingRef={bookingRef}
         isOpen={isPaymentModalOpen}
         onClose={() => setPaymentModalOpen(false)}
       />
