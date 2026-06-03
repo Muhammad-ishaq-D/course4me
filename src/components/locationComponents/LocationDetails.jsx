@@ -41,8 +41,13 @@ const LocationDetails = () => {
             }
             allCourses = [...fetchedCourses];
           }
-        } else if (center?.courses) {
-          allCourses = [...center.courses];
+        } else if (center?.name) {
+          // Navigate from LocationSearch uses hardcoded center objects with no locationId.
+          // Fetch real courses directly by center name!
+          const data = await locationService.getCoursesByCenterName(center.name);
+          if (data.success) {
+            allCourses = [...data.data];
+          }
         }
 
         // Always ensure we show dummy courses for this specific center so the page isn't empty

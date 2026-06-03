@@ -18,9 +18,15 @@ const locationService = {
         return response.data;
     },
 
-    // Get courses for a specific location
+    // Get courses for a specific location by ID
     getLocationCourses: async (locationId) => {
         const response = await axiosInstance.get(`/locations/${locationId}/courses`);
+        return response.data;
+    },
+
+    // Get courses by center name (useful for hardcoded location fallbacks)
+    getCoursesByCenterName: async (centerName) => {
+        const response = await axiosInstance.get(`/locations/courses/by-center?centerName=${encodeURIComponent(centerName)}`);
         return response.data;
     }
 };
