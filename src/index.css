@@ -66,3 +66,12 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* ─── Hide Stripe Developer Tools badge (test mode only) ─── */
+/* Stripe auto-injects this badge when using test keys.
+   It will NOT appear in production with live keys. */
+#stripe-badge-frame,
+iframe[src*="js.stripe.com/v3/controller-"],
+a[target="_blank"][href*="stripe.com/docs"] {
+  display: none !important;
+}

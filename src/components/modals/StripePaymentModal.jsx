@@ -107,8 +107,8 @@ export default function StripePaymentModal({ clientSecret, bookingRef, isOpen, o
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 px-4">
-      <div className="bg-white rounded-2xl shadow-2xl p-7 w-full max-w-md relative animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 px-4 py-4 sm:py-8">
+      <div className="bg-white rounded-2xl shadow-2xl p-5 sm:p-7 w-full max-w-md max-h-[90vh] overflow-y-auto relative animate-in fade-in slide-in-from-bottom-4 duration-300">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>

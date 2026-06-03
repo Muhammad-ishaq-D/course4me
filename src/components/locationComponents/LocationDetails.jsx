@@ -28,8 +28,19 @@ const LocationDetails = () => {
         if (center?.locationId) {
           const data = await locationService.getLocationCourses(center.locationId);
           if (data.success) {
-            setCourses(data.data);
+            let fetchedCourses = data.data;
+            // Filter by centerId if the course is explicitly linked to a center
+            const centerId = center._id || center.id;
+            if (centerId) {
+              fetchedCourses = fetchedCourses.filter(
+                (c) => !c.centerId || String(c.centerId) === String(centerId)
+              );
+            }
+            setCourses(fetchedCourses);
           }
+        } else if (center?.courses) {
+          // Fallback to hardcoded courses for locationsData
+          setCourses(center.courses);
         }
       } catch (error) {
         console.error("Failed to fetch location courses:", error);
@@ -39,7 +50,7 @@ const LocationDetails = () => {
     };
     
     fetchCourses();
-  }, [center?.locationId]);
+  }, [center]);
 
   // ================= LOADER =================
   if (loading) {
@@ -161,7 +172,10 @@ const LocationDetails = () => {
 
               {/* =================CTA BUTTON=============================== */}
               <div className="mt-8">
-                <button className="h-13 px-8 cursor-pointer rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base transition-all duration-300 shadow-[0_15px_35px_rgba(249,115,22,0.35)]">
+                <button 
+                  onClick={() => document.getElementById('courses-section')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="h-13 px-8 cursor-pointer rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base transition-all duration-300 shadow-[0_15px_35px_rgba(249,115,22,0.35)]"
+                >
                   Explore Courses at This Center{" "}
                 </button>
               </div>
@@ -271,7 +285,7 @@ const LocationDetails = () => {
         <CenterDetails center={center} />
 
         {/* ======================COURSES======================= */}
-        <div className="mt-20">
+        <div id="courses-section" className="mt-20">
           {/* ============================SECTION HEADER================== */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-10">
             <div>
