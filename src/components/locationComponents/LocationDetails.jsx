@@ -11,6 +11,7 @@ import CourseCard from "../ui/CourseCard";
 import CenterDetails from "./CenterDetails";
 import Loader from "../ui/Loader";
 import locationService from "../../api/services/locationService";
+import { locationsData } from "../../data/locationData";
 
 const LocationDetails = () => {
   const { state } = useLocation();
@@ -25,23 +26,42 @@ const LocationDetails = () => {
     
     const fetchCourses = async () => {
       try {
+        let allCourses = [];
+
         if (center?.locationId) {
           const data = await locationService.getLocationCourses(center.locationId);
           if (data.success) {
             let fetchedCourses = data.data;
-            // Filter by centerId if the course is explicitly linked to a center
+            // Strictly filter by centerId so courses don't bleed into other centers
             const centerId = center._id || center.id;
             if (centerId) {
               fetchedCourses = fetchedCourses.filter(
-                (c) => !c.centerId || String(c.centerId) === String(centerId)
+                (c) => String(c.centerId) === String(centerId)
               );
             }
-            setCourses(fetchedCourses);
+            allCourses = [...fetchedCourses];
           }
         } else if (center?.courses) {
-          // Fallback to hardcoded courses for locationsData
-          setCourses(center.courses);
+          allCourses = [...center.courses];
         }
+
+        // Always ensure we show dummy courses for this specific center so the page isn't empty
+        if (center?.name) {
+          const dummyCenter = locationsData
+            .flatMap((loc) => loc.centers)
+            .find((c) => c.name === center.name);
+
+          if (dummyCenter && dummyCenter.courses) {
+            // Append dummy courses that aren't already in the list
+            const existingTitles = allCourses.map((c) => c.title);
+            const dummyCoursesToAdd = dummyCenter.courses.filter(
+              (c) => !existingTitles.includes(c.title)
+            );
+            allCourses = [...allCourses, ...dummyCoursesToAdd];
+          }
+        }
+
+        setCourses(allCourses);
       } catch (error) {
         console.error("Failed to fetch location courses:", error);
       } finally {
