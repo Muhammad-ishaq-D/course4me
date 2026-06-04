@@ -58,10 +58,15 @@ const QuickSearch = () => {
 
   const [locationSuggestions, setLocationSuggestions] = useState([]);
 
+  // ================= KEYWORD SUGGESTIONS =================
+
+  const [showKeywordSuggestions, setShowKeywordSuggestions] = useState(false);
+  const [keywordSuggestions, setKeywordSuggestions] = useState([]);
+  const searchRef = useRef(null);
+
   // ================= REFS =================
 
   const resultsRef = useRef(null);
-
   const locationRef = useRef(null);
 
   // ================= LOCATION FILTER =================
@@ -106,12 +111,101 @@ const QuickSearch = () => {
     };
   }, [location]);
 
+  // ================= KEYWORD FILTER =================
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchKeywordSuggestions = async () => {
+      if (search.trim() === "") {
+        setKeywordSuggestions([]);
+        setShowKeywordSuggestions(false);
+        return;
+      }
+
+      try {
+        const params = { status: "Published", search: search.trim() };
+        let suggestions = [];
+        const promises = [];
+
+        if (type === "all" || type === "course") {
+          promises.push(
+            courseService.getAllCourses(params).then((res) => {
+              const data = res.data?.data || [];
+              data.forEach((c) => suggestions.push({ title: c.title, type: "Course" }));
+            })
+          );
+        }
+        if (type === "all" || type === "license") {
+          promises.push(
+            licenseService.getAllLicenses(params).then((res) => {
+              const data = res.data?.data || [];
+              data.forEach((l) => suggestions.push({ title: l.title, type: "License" }));
+            })
+          );
+        }
+        if (type === "all" || type === "career") {
+          promises.push(
+            careerService.getAllCareers(params).then((res) => {
+              const data = res.data?.data || [];
+              data.forEach((c) => suggestions.push({ title: c.title, type: "Career" }));
+            })
+          );
+        }
+        if (type === "all" || type === "location") {
+          promises.push(
+            locationService.searchLocations({ search: search.trim() }).then((res) => {
+              const data = res.data || [];
+              data.forEach((loc) => {
+                (loc.centers || []).forEach((center) => {
+                  if (center.name?.toLowerCase().includes(search.toLowerCase())) {
+                    suggestions.push({ title: center.name, type: "Center" });
+                  }
+                });
+              });
+            })
+          );
+        }
+
+        await Promise.all(promises.map(p => p.catch(e => console.error(e))));
+
+        if (cancelled) return;
+
+        const uniqueSuggestions = [];
+        const seen = new Set();
+        for (const item of suggestions) {
+          if (!seen.has(item.title)) {
+            seen.add(item.title);
+            uniqueSuggestions.push(item);
+          }
+        }
+
+        setKeywordSuggestions(uniqueSuggestions.slice(0, 8));
+        setShowKeywordSuggestions(uniqueSuggestions.length > 0);
+      } catch (error) {
+        if (!cancelled) {
+          setKeywordSuggestions([]);
+          setShowKeywordSuggestions(false);
+        }
+      }
+    };
+
+    const debounce = setTimeout(fetchKeywordSuggestions, 300);
+    return () => {
+      cancelled = true;
+      clearTimeout(debounce);
+    };
+  }, [search, type]);
+
   // ================= CLOSE DROPDOWN =================
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (locationRef.current && !locationRef.current.contains(event.target)) {
         setShowLocationSuggestions(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowKeywordSuggestions(false);
       }
     };
 
@@ -364,23 +458,60 @@ const QuickSearch = () => {
 
               {/* SEARCH */}
 
-              <div className="relative">
+              <div className="relative" ref={searchRef}>
                 <label className="text-sm font-semibold text-gray-700 mb-2 block">
                   Search Keyword
                 </label>
 
                 <Search
                   size={18}
-                  className="absolute left-5 top-[55px] -translate-y-1/2 text-gray-400"
+                  className="absolute left-5 top-[55px] -translate-y-1/2 text-gray-400 z-10"
                 />
 
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
+                  onFocus={() => {
+                    if (keywordSuggestions.length > 0) {
+                      setShowKeywordSuggestions(true);
+                    }
+                  }}
                   placeholder="Search courses, licenses, careers..."
-                  className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none"
+                  className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none relative z-0"
                 />
+
+                {/* ================= KEYWORD SUGGESTIONS ================= */}
+                {showKeywordSuggestions && keywordSuggestions.length > 0 && (
+                  <div className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
+                    {keywordSuggestions.map((item, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => {
+                          setSearch(item.title);
+                          setKeywordSuggestions([]);
+                          setTimeout(() => {
+                            setShowKeywordSuggestions(false);
+                          }, 0);
+                        }}
+                        className="w-full px-5 py-4 flex items-center justify-between hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100 group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <Search size={16} className="text-[#F15A24]" />
+                          </div>
+                          <h4 className="text-sm font-semibold text-gray-800">
+                            {item.title}
+                          </h4>
+                        </div>
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50 px-2 py-1 rounded-md">
+                          {item.type}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* LOCATION */}

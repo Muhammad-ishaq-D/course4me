@@ -36,7 +36,7 @@ const LocationDetails = () => {
             const centerId = center._id || center.id;
             if (centerId) {
               fetchedCourses = fetchedCourses.filter(
-                (c) => String(c.centerId) === String(centerId)
+                (c) => !c.centerId || String(c.centerId) === String(centerId) || c.centerName === center.name
               );
             }
             allCourses = [...fetchedCourses];
@@ -50,21 +50,7 @@ const LocationDetails = () => {
           }
         }
 
-        // Always ensure we show dummy courses for this specific center so the page isn't empty
-        if (center?.name) {
-          const dummyCenter = locationsData
-            .flatMap((loc) => loc.centers)
-            .find((c) => c.name === center.name);
-
-          if (dummyCenter && dummyCenter.courses) {
-            // Append dummy courses that aren't already in the list
-            const existingTitles = allCourses.map((c) => c.title);
-            const dummyCoursesToAdd = dummyCenter.courses.filter(
-              (c) => !existingTitles.includes(c.title)
-            );
-            allCourses = [...allCourses, ...dummyCoursesToAdd];
-          }
-        }
+        // Dummy courses logic removed as per user request to only show database courses
 
         setCourses(allCourses);
       } catch (error) {
