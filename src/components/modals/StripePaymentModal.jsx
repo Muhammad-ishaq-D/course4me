@@ -14,7 +14,7 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 /* ─────────────────────────────────────────────
    Inner form – must live inside <Elements>
 ───────────────────────────────────────────── */
-function CheckoutForm({ bookingRef, onClose }) {
+function CheckoutForm({ bookingRef, onClose, onSuccess }) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -29,17 +29,26 @@ function CheckoutForm({ bookingRef, onClose }) {
     setProcessing(true);
     setPayError(null);
 
-    const { error } = await stripe.confirmPayment({
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // bookingRef travels to /booking-success so that page can fetch the booking
+        // Fallback for redirect-required flows (3DS, bank redirects, etc.)
         return_url: `${window.location.origin}/booking-success?bookingRef=${bookingRef}`,
       },
+      // For card payments, resolve in-app without a full redirect
+      redirect: 'if_required',
     });
 
-    // confirmPayment only falls through on error; success triggers a full redirect
     if (error) {
+      // Card declined, validation error, etc.
       setPayError(error.message);
+      setProcessing(false);
+    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+      // Payment confirmed in-app — hand back to parent to show confirmation
+      onSuccess?.();
+    } else {
+      // Unexpected state
+      setPayError('Payment could not be confirmed. Please try again.');
       setProcessing(false);
     }
   };
@@ -92,7 +101,7 @@ function CheckoutForm({ bookingRef, onClose }) {
 /* ─────────────────────────────────────────────
    Modal wrapper
 ───────────────────────────────────────────── */
-export default function StripePaymentModal({ clientSecret, bookingRef, isOpen, onClose }) {
+export default function StripePaymentModal({ clientSecret, bookingRef, isOpen, onClose, onSuccess }) {
   if (!isOpen || !clientSecret) return null;
 
   const options = {
@@ -124,7 +133,7 @@ export default function StripePaymentModal({ clientSecret, bookingRef, isOpen, o
         </div>
 
         <Elements stripe={stripePromise} options={options}>
-          <CheckoutForm bookingRef={bookingRef} onClose={onClose} />
+          <CheckoutForm bookingRef={bookingRef} onClose={onClose} onSuccess={onSuccess} />
         </Elements>
 
         {/* Security badge */}

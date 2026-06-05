@@ -264,31 +264,54 @@ const CourseCheckout = () => {
   }, [courseId, scheduleId, plan]);
 
   useEffect(() => {
-    const existingBookingId = searchParams.get("bookingId");
-    if (existingBookingId) {
-      // User is returning to complete payment
-      bookingService.createPaymentIntent(existingBookingId).then(piRes => {
-        if (piRes.data.success && piRes.data.clientSecret) {
-          setClientSecret(piRes.data.clientSecret);
+    const urlBookingId = searchParams.get("bookingId");
+    if (urlBookingId) {
+      // First check if this booking is already paid before reopening the modal
+      bookingService.getMyBookingStatus(courseId).then(statusRes => {
+        if (statusRes.data?.status === 'PAID') {
+          // Already paid — just reflect the PAID state, do NOT reopen modal
+          setBookingStatus('PAID');
+          setPaymentModalOpen(false);
           setIsSubmitting(false);
-          setPaymentModalOpen(true);
-        } else {
-          setError("Failed to initialize payment for existing booking. " + (piRes.data?.message || ""));
+          return;
         }
-      }).catch(err => {
-        setError(err.response?.data?.message || "Could not load payment session. You may have already completed this payment.");
+        // Still pending — safe to reopen the payment modal
+        bookingService.createPaymentIntent(urlBookingId).then(piRes => {
+          if (piRes.data.success && piRes.data.clientSecret) {
+            setClientSecret(piRes.data.clientSecret);
+            setIsSubmitting(false);
+            setPaymentModalOpen(true);
+          } else {
+            setError("Failed to initialize payment for existing booking. " + (piRes.data?.message || ""));
+          }
+        }).catch(err => {
+          setError(err.response?.data?.message || "Could not load payment session. You may have already completed this payment.");
+        });
+      }).catch(() => {
+        // Status check failed — fall through to try opening the modal anyway
+        bookingService.createPaymentIntent(urlBookingId).then(piRes => {
+          if (piRes.data.success && piRes.data.clientSecret) {
+            setClientSecret(piRes.data.clientSecret);
+            setIsSubmitting(false);
+            setPaymentModalOpen(true);
+          } else {
+            setError("Failed to initialize payment for existing booking. " + (piRes.data?.message || ""));
+          }
+        }).catch(err => {
+          setError(err.response?.data?.message || "Could not load payment session. You may have already completed this payment.");
+        });
       });
     }
   }, [searchParams]);
 
-  // Close modal and reset submission state if booking becomes PAID (e.g., user navigated back after successful payment)
+  // Close modal and reset state if booking is/becomes PAID
   useEffect(() => {
-    if (bookingStatus === 'PAID' && isPaymentModalOpen) {
+    if (bookingStatus === 'PAID') {
       setPaymentModalOpen(false);
       setIsSubmitting(false);
-      setExistingBookingId(null);
+      // Don't clear existingBookingId here — we still need it to show the PAID banner
     }
-  }, [bookingStatus, isPaymentModalOpen]);
+  }, [bookingStatus]);
 
   // Load current booking status for this course
   React.useEffect(() => {
@@ -1213,6 +1236,13 @@ const CourseCheckout = () => {
         bookingRef={bookingRef}
         isOpen={isPaymentModalOpen}
         onClose={() => setPaymentModalOpen(false)}
+        onSuccess={() => {
+          // Payment succeeded in-app — close modal and show confirmation
+          setPaymentModalOpen(false);
+          setIsSubmitting(false);
+          setBookingStatus('PAID');
+          setIsConfirmed(true);
+        }}
       />
 
 
