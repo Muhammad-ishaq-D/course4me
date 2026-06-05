@@ -13,12 +13,45 @@ import {
   Trophy,
   MapPin
 } from "lucide-react";
-
+import { useAuth } from "../../../context/AuthContext";
 const CourseMainContent = ({ course }) => {
   const navigate = useNavigate();
 
-  if (!course) return null;
+  const [bookingStatus, setBookingStatus] = React.useState(null);
+  const [bookingId, setBookingId] = React.useState(null);
+  const { user } = useAuth();
 
+  React.useEffect(() => {
+    if (user && course?._id) {
+      import('../../../api/services/bookingService').then((module) => {
+        module.default.getMyBookingStatus(course._id).then(res => {
+          if (res.data?.success) {
+            setBookingStatus(res.data.status);
+            if (res.data.bookingId) setBookingId(res.data.bookingId);
+          }
+        }).catch(console.error);
+      });
+    }
+  }, [user, course]);
+
+  const handleActionClick = () => {
+    if (bookingStatus === 'PAID') {
+      navigate('/dashboard'); // Go to student portal/dashboard
+    } else if (bookingStatus === 'PENDING' && bookingId) {
+      // Direct them to checkout but pass bookingId to bypass creation
+      navigate(`/booking/checkout?courseId=${course._id}&bookingId=${bookingId}`);
+    } else {
+      navigate(`/course/${course._id}/book`);
+    }
+  };
+
+  const getButtonContent = () => {
+    if (bookingStatus === 'PAID') return "Already Enrolled / View Course";
+    if (bookingStatus === 'PENDING') return "Complete Your Payment";
+    return <>Book Now <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></>;
+  };
+
+  if (!course) return null;
   // Formatting backend data
   const displayPrice = course.pricing?.basePrice ? `£${course.pricing.basePrice}` : "N/A";
   const displayLearn = course.learningPoints || [];
@@ -107,10 +140,10 @@ const CourseMainContent = ({ course }) => {
 
                   <div className="space-y-4 mb-8">
                     <button
-                      onClick={() => navigate(`/course/${course._id}/book`)}
+                      onClick={handleActionClick}
                       className="w-full bg-[#F15A24] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#F15A24]/20 hover:brightness-110 transition-all flex items-center justify-center gap-2 group"
                     >
-                      Book Now <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      {getButtonContent()}
                     </button>
                     <button
                       onClick={() => {

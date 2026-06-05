@@ -15,6 +15,11 @@ const bookingService = {
     createPaymentIntent: async (bookingId) => {
         return await axiosInstance.post(`/stripe/create-payment-intent/${bookingId}`);
     },
+
+    // Get my booking status for a specific course
+    getMyBookingStatus: async (courseId) => {
+        return await axiosInstance.get(`/bookings/my-status/${courseId}`);
+    },
 };
 
 export default bookingService;

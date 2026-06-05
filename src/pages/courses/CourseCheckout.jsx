@@ -259,6 +259,24 @@ const CourseCheckout = () => {
     window.scrollTo(0, 0);
   }, [courseId, scheduleId, plan]);
 
+  useEffect(() => {
+    const existingBookingId = searchParams.get("bookingId");
+    if (existingBookingId) {
+      // User is returning to complete payment
+      setBookingRef("Resumed");
+      bookingService.createPaymentIntent(existingBookingId).then(piRes => {
+        if (piRes.data.success && piRes.data.clientSecret) {
+          setClientSecret(piRes.data.clientSecret);
+          setPaymentModalOpen(true);
+        } else {
+          setError("Failed to initialize payment for existing booking.");
+        }
+      }).catch(err => {
+        setError("Could not load payment session.");
+      });
+    }
+  }, [searchParams]);
+
   // Sync user details if logged in (especially after social auth redirect)
   useEffect(() => {
     if (user) {

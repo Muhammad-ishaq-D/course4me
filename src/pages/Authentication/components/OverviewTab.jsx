@@ -37,6 +37,7 @@ const OverviewTab = () => {
     completed: [],
     postponed: [],
     cancelled: [],
+    pendingBookings: [],
     applications: [],
     stats: [
       { label: "Upcoming", value: "0", color: "text-orange-500" },
@@ -45,6 +46,50 @@ const OverviewTab = () => {
       { label: "Certificates", value: "0", color: "text-purple-500" },
     ],
   });
+
+  const PendingBanner = ({ booking }) => {
+    const navigate = useNavigate();
+    const [timeLeft, setTimeLeft] = useState(0);
+
+    useEffect(() => {
+      const expirationTime = new Date(booking.createdAt).getTime() + 30 * 60 * 1000;
+      
+      const updateTimer = () => {
+        const now = new Date().getTime();
+        const diff = expirationTime - now;
+        setTimeLeft(Math.max(0, Math.floor(diff / 1000)));
+      };
+
+      updateTimer();
+      const id = setInterval(updateTimer, 1000);
+      return () => clearInterval(id);
+    }, [booking.createdAt]);
+
+    if (timeLeft <= 0) return null;
+
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+
+    return (
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-yellow-50 border-2 border-yellow-400 rounded-xl text-yellow-900 shadow-lg mb-4">
+        <div className="flex items-center gap-3 mb-3 sm:mb-0">
+          <AlertTriangle size={24} className="text-yellow-600 animate-pulse" />
+          <div>
+            <p className="font-bold text-lg">⚠️ You have a pending booking for {booking.title}.</p>
+            <p className="text-sm font-medium">
+              Your spot is held for another <span className="text-red-600 font-black">{minutes}:{seconds < 10 ? '0'+seconds : seconds}</span> minutes.
+            </p>
+          </div>
+        </div>
+        <button 
+          onClick={() => navigate(`/booking/checkout?courseId=${booking.courseId}&bookingId=${booking.id}`)}
+          className="bg-[#F15A24] hover:bg-[#D94E1F] text-white px-6 py-2.5 rounded-xl font-bold shadow-md transition-all active:scale-95 whitespace-nowrap"
+        >
+          Complete Payment Now
+        </button>
+      </div>
+    );
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,6 +113,7 @@ const OverviewTab = () => {
             completed: result.completed || [],
             postponed: result.postponed || [],
             cancelled: result.cancelled || [],
+            pendingBookings: result.pendingBookings || [],
             applications: apps,
             stats: [
               {
@@ -126,6 +172,15 @@ const OverviewTab = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-8 space-y-6">
+        {/* Pending Bookings Banner */}
+        {data.pendingBookings && data.pendingBookings.length > 0 && (
+          <div className="space-y-3">
+            {data.pendingBookings.map(pb => (
+              <PendingBanner key={pb.id} booking={pb} />
+            ))}
+          </div>
+        )}
+
         {/* Alerts */}
         <div className="space-y-3">
           {data.upcoming.length > 0 && (
