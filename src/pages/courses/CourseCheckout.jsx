@@ -267,18 +267,25 @@ const CourseCheckout = () => {
       bookingService.createPaymentIntent(existingBookingId).then(piRes => {
         if (piRes.data.success && piRes.data.clientSecret) {
           setClientSecret(piRes.data.clientSecret);
-          if (piRes.data.bookingReference) {
-            setBookingRef(piRes.data.bookingReference);
-          }
+          setIsSubmitting(false);
           setPaymentModalOpen(true);
         } else {
-          setError("Failed to initialize payment for existing booking.");
+          setError("Failed to initialize payment for existing booking. " + (piRes.data?.message || ""));
         }
       }).catch(err => {
-        setError("Could not load payment session.");
+        setError(err.response?.data?.message || "Could not load payment session. You may have already completed this payment.");
       });
     }
   }, [searchParams]);
+
+  // Close modal and reset submission state if booking becomes PAID (e.g., user navigated back after successful payment)
+  useEffect(() => {
+    if (bookingStatus === 'PAID' && isPaymentModalOpen) {
+      setPaymentModalOpen(false);
+      setIsSubmitting(false);
+      setExistingBookingId(null);
+    }
+  }, [bookingStatus, isPaymentModalOpen]);
 
   // Sync user details if logged in (especially after social auth redirect)
   useEffect(() => {
@@ -336,8 +343,9 @@ const CourseCheckout = () => {
           }
           setPaymentModalOpen(true);
         } else {
-          setError("Failed to initialize payment for existing booking.");
+          setError("Failed to initialize payment for existing booking. " + (piRes.data?.message || ""));
         }
+        setIsSubmitting(false);
         return;
       }
 
@@ -370,23 +378,24 @@ const CourseCheckout = () => {
         totalAmount: price + (easyApply === "get" ? 149.99 : 0),
       };
 
-        // Create booking first
-        const response = await bookingService.createBooking(bookingPayload);
-        if (response.data.success) {
-          const bookingId = response.data.data._id;
-          const bookingReference = response.data.data.bookingReference;
-          setBookingRef(bookingReference);
-          // Create PaymentIntent and get clientSecret
-          const piRes = await bookingService.createPaymentIntent(bookingId);
-          if (piRes.data.success && piRes.data.clientSecret) {
-            setClientSecret(piRes.data.clientSecret);
-            setPaymentModalOpen(true);
-          } else {
-            setError("Failed to initialize payment.");
-          }
+      // Create booking first
+      const response = await bookingService.createBooking(bookingPayload);
+      if (response.data.success) {
+        const bookingId = response.data.data._id;
+        const bookingReference = response.data.data.bookingReference;
+        setBookingRef(bookingReference);
+        // Create PaymentIntent and get clientSecret
+        const piRes = await bookingService.createPaymentIntent(bookingId);
+        if (piRes.data.success && piRes.data.clientSecret) {
+          setClientSecret(piRes.data.clientSecret);
+          setIsSubmitting(false);
+          setPaymentModalOpen(true);
         } else {
-          setError(response.data.message || "Failed to create booking.");
+          setError("Failed to initialize payment.");
         }
+      } else {
+        setError(response.data.message || "Failed to create booking.");
+      }
     } catch (err) {
       console.error("Booking Error:", err);
       // Show specific validation errors from backend if available
@@ -396,9 +405,9 @@ const CourseCheckout = () => {
       } else {
         setError(
           err.response?.data?.message ||
-            "An error occurred during booking. Please try again.",
+          "An error occurred during booking. Please try again.",
         );
-        if (err.response?.data?.existingBookingId) {
+        if (err.response?.data?.existingBookingId && err.response?.data?.existingBookingStatus === 'PENDING') {
           setExistingBookingId(err.response.data.existingBookingId);
         }
       }
@@ -415,11 +424,11 @@ const CourseCheckout = () => {
   if (isConfirmed) {
     const formattedDate = selectedSchedule?.startDate
       ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-          weekday: "long",
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        })
+        weekday: "long",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
       : "Pending Date";
 
     return (
@@ -1062,6 +1071,7 @@ const CourseCheckout = () => {
                     onClick={handlePayment}
                     fullWidth
                     label={isSubmitting ? "Processing..." : existingBookingId ? "Complete Pending Payment" : "Submit Payment"}
+                    disabled={isSubmitting || (bookingStatus === "PAID") || (error && error.includes("already enrolled")) || (error && error.includes("already been paid for"))}
                   />
                 </div>
               </div>
