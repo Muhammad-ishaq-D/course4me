@@ -296,6 +296,11 @@ const CourseCheckout = () => {
       bookingService.getMyBookingStatus(courseData._id).then(res => {
         if (res.data?.success) {
           setBookingStatus(res.data.status);
+          // If there's already a pending booking, set its ID so the
+          // "Complete Pending Payment" button shows immediately on page load
+          if (res.data.status === 'PENDING' && res.data.bookingId) {
+            setExistingBookingId(res.data.bookingId);
+          }
         }
       }).catch(err => {
         console.error('Failed to fetch booking status', err);
@@ -1135,32 +1140,51 @@ const CourseCheckout = () => {
                     </label>
                   </div>
 
-                  {error && (
+                   {error && (
                     <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3 text-red-600 text-sm">
                       <AlertCircle size={18} className="shrink-0 mt-0.5" />
                       <p>{error}</p>
                     </div>
                   )}
 
+                  {/* Info banner: booking created, awaiting payment */}
+                  {existingBookingId && bookingStatus === 'PENDING' && !error && (
+                    <div className="p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3 text-green-700 text-sm">
+                      <Check size={18} className="shrink-0 mt-0.5 text-green-600" />
+                      <p>
+                        <span className="font-bold">Booking created!</span> Click{" "}
+                        <span className="font-bold">"Complete Pending Payment"</span> below to finalise your purchase.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Warning: already paid */}
+                  {bookingStatus === 'PAID' && (
+                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3 text-blue-700 text-sm">
+                      <Check size={18} className="shrink-0 mt-0.5 text-blue-600" />
+                      <p className="font-bold">You are already enrolled in this course. No further payment is needed.</p>
+                    </div>
+                  )}
+
                   {/* Button to create a pending booking when none exists */}
-                  {!existingBookingId && (
+                  {!existingBookingId && bookingStatus !== 'PAID' && (
                     <SaveBtn
                       loading={isSubmitting}
                       onClick={createPendingBooking}
                       fullWidth
                       label={isSubmitting ? "Creating..." : "Create Booking"}
-                      disabled={isSubmitting || (bookingStatus === "PAID")}
+                      disabled={isSubmitting}
                     />
                   )}
 
                   {/* Button to complete payment for an existing pending booking */}
-                  {existingBookingId && (
+                  {existingBookingId && bookingStatus !== 'PAID' && (
                     <SaveBtn
                       loading={isSubmitting}
                       onClick={handlePayment}
                       fullWidth
                       label={isSubmitting ? "Processing..." : "Complete Pending Payment"}
-                      disabled={isSubmitting || (bookingStatus === "PAID") || (error && (error.includes("already enrolled") || error.includes("already been paid for")))}
+                      disabled={isSubmitting}
                     />
                   )}
                 </div>
