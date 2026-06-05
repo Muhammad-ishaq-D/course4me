@@ -264,10 +264,12 @@ const CourseCheckout = () => {
     const existingBookingId = searchParams.get("bookingId");
     if (existingBookingId) {
       // User is returning to complete payment
-      setBookingRef("Resumed");
       bookingService.createPaymentIntent(existingBookingId).then(piRes => {
         if (piRes.data.success && piRes.data.clientSecret) {
           setClientSecret(piRes.data.clientSecret);
+          if (piRes.data.bookingReference) {
+            setBookingRef(piRes.data.bookingReference);
+          }
           setPaymentModalOpen(true);
         } else {
           setError("Failed to initialize payment for existing booking.");
@@ -329,6 +331,9 @@ const CourseCheckout = () => {
         const piRes = await bookingService.createPaymentIntent(existingBookingId);
         if (piRes.data.success && piRes.data.clientSecret) {
           setClientSecret(piRes.data.clientSecret);
+          if (piRes.data.bookingReference) {
+            setBookingRef(piRes.data.bookingReference);
+          }
           setPaymentModalOpen(true);
         } else {
           setError("Failed to initialize payment for existing booking.");
