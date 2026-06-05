@@ -430,6 +430,55 @@ const CourseCheckout = () => {
     }
   };
 
+  // Create pending booking without initiating payment
+  const createPendingBooking = async () => {
+    setIsSubmitting(true);
+    setError("");
+    try {
+      const bookingPayload = {
+        courseId: courseData._id,
+        session: {
+          scheduleId: selectedSchedule?._id,
+          location: selectedSchedule?.locationName || "Online",
+          startDate: selectedSchedule?.startDate,
+        },
+        customerDetails: {
+          firstName: details.firstName,
+          lastName: details.lastName,
+          email: details.email,
+          phone: details.mobile,
+          dob: details.dob,
+          password: details.password,
+        },
+        billingAddress: {
+          postcode: billing.postcode,
+          line1: billing.addr1,
+          line2: billing.addr2,
+          city: billing.city,
+        },
+        packageName: plan,
+        options: {
+          easyApply: easyApply === "get",
+        },
+        paymentMethod: payment,
+        totalAmount: price + (easyApply === "get" ? 149.99 : 0),
+      };
+      const response = await bookingService.createBooking(bookingPayload);
+      if (response.data.success) {
+        const bookingId = response.data.data._id;
+        const bookingReference = response.data.data.bookingReference;
+        setExistingBookingId(bookingId);
+        setBookingRef(bookingReference);
+      } else {
+        setError(response.data.message || "Failed to create booking.");
+      }
+    } catch (err) {
+      console.error("Booking Error:", err);
+      setError(err.response?.data?.message || "An error occurred during booking.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   /* ── Skeleton ── */
   if (isLoading) {
     return <CheckoutSkeleton />;
