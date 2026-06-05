@@ -267,15 +267,25 @@ const CourseCheckout = () => {
       bookingService.createPaymentIntent(existingBookingId).then(piRes => {
         if (piRes.data.success && piRes.data.clientSecret) {
           setClientSecret(piRes.data.clientSecret);
+          setIsSubmitting(false);
           setPaymentModalOpen(true);
         } else {
-          setError("Failed to initialize payment for existing booking.");
+          setError("Failed to initialize payment for existing booking. " + (piRes.data?.message || ""));
         }
       }).catch(err => {
-        setError("Could not load payment session.");
+        setError(err.response?.data?.message || "Could not load payment session. You may have already completed this payment.");
       });
     }
   }, [searchParams]);
+
+  // Close modal and reset submission state if booking becomes PAID (e.g., user navigated back after successful payment)
+  useEffect(() => {
+    if (bookingStatus === 'PAID' && isPaymentModalOpen) {
+      setPaymentModalOpen(false);
+      setIsSubmitting(false);
+      setExistingBookingId(null);
+    }
+  }, [bookingStatus, isPaymentModalOpen]);
 
   // Sync user details if logged in (especially after social auth redirect)
   useEffect(() => {
@@ -323,6 +333,22 @@ const CourseCheckout = () => {
       setIsSubmitting(true);
       setError("");
 
+      if (existingBookingId) {
+        // Resume payment for existing pending booking
+        const piRes = await bookingService.createPaymentIntent(existingBookingId);
+        if (piRes.data.success && piRes.data.clientSecret) {
+          setClientSecret(piRes.data.clientSecret);
+          if (piRes.data.bookingReference) {
+            setBookingRef(piRes.data.bookingReference);
+          }
+          setPaymentModalOpen(true);
+        } else {
+          setError("Failed to initialize payment for existing booking. " + (piRes.data?.message || ""));
+        }
+        setIsSubmitting(false);
+        return;
+      }
+
       const bookingPayload = {
         courseId: courseData._id,
         session: {
@@ -362,6 +388,7 @@ const CourseCheckout = () => {
           const piRes = await bookingService.createPaymentIntent(bookingId);
           if (piRes.data.success && piRes.data.clientSecret) {
             setClientSecret(piRes.data.clientSecret);
+            setIsSubmitting(false);
             setPaymentModalOpen(true);
           } else {
             setError("Failed to initialize payment.");
@@ -380,6 +407,9 @@ const CourseCheckout = () => {
           err.response?.data?.message ||
             "An error occurred during booking. Please try again.",
         );
+        if (err.response?.data?.existingBookingId && err.response?.data?.existingBookingStatus === 'PENDING') {
+          setExistingBookingId(err.response.data.existingBookingId);
+        }
       }
     } finally {
       setIsSubmitting(false);
@@ -1040,7 +1070,8 @@ const CourseCheckout = () => {
                     loading={isSubmitting}
                     onClick={handlePayment}
                     fullWidth
-                    label={isSubmitting ? "Processing..." : "Submit Payment"}
+                    label={isSubmitting ? "Processing..." : existingBookingId ? "Complete Pending Payment" : "Submit Payment"}
+                    disabled={isSubmitting || (bookingStatus === "PAID") || (error && error.includes("already enrolled")) || (error && error.includes("already been paid for"))}
                   />
                 </div>
               </div>
