@@ -49,6 +49,9 @@ const CourseCheckout = () => {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [clientSecret, setClientSecret] = useState(null);
   const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
+  // New state for tracking booking status (PAID, PENDING, etc.)
+  const [bookingStatus, setBookingStatus] = React.useState(null);
+  // Existing state for booking reference (used for success page)
   const [bookingRef, setBookingRef] = useState("");
   const [error, setError] = useState("");
   const [existingBookingId, setExistingBookingId] = useState(null);
@@ -287,7 +290,18 @@ const CourseCheckout = () => {
     }
   }, [bookingStatus, isPaymentModalOpen]);
 
-  // Sync user details if logged in (especially after social auth redirect)
+  // Load current booking status for this course
+  React.useEffect(() => {
+    if (user && course?._id) {
+      bookingService.getMyBookingStatus(course._id).then(res => {
+        if (res.data?.success) {
+          setBookingStatus(res.data.status);
+        }
+      }).catch(err => {
+        console.error('Failed to fetch booking status', err);
+      });
+    }
+  }, [user, course?._id]);
   useEffect(() => {
     if (user) {
       const updatedDetails = {
