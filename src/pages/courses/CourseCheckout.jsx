@@ -292,8 +292,8 @@ const CourseCheckout = () => {
 
   // Load current booking status for this course
   React.useEffect(() => {
-    if (user && course?._id) {
-      bookingService.getMyBookingStatus(course._id).then(res => {
+    if (user && courseData?._id) {
+      bookingService.getMyBookingStatus(courseData._id).then(res => {
         if (res.data?.success) {
           setBookingStatus(res.data.status);
         }
@@ -301,7 +301,7 @@ const CourseCheckout = () => {
         console.error('Failed to fetch booking status', err);
       });
     }
-  }, [user, course?._id]);
+  }, [user, courseData?._id]);
   useEffect(() => {
     if (user) {
       const updatedDetails = {
