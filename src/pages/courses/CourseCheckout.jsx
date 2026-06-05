@@ -477,7 +477,17 @@ const CourseCheckout = () => {
       }
     } catch (err) {
       console.error("Booking Error:", err);
-      setError(err.response?.data?.message || "An error occurred during booking.");
+      // If backend says a pending booking already exists, switch to "Complete Pending Payment" flow
+      if (
+        err.response?.data?.existingBookingId &&
+        err.response?.data?.existingBookingStatus === 'PENDING'
+      ) {
+        setExistingBookingId(err.response.data.existingBookingId);
+        setBookingStatus('PENDING');
+        setError(''); // clear error so UI is clean when button switches
+      } else {
+        setError(err.response?.data?.message || "An error occurred during booking.");
+      }
     } finally {
       setIsSubmitting(false);
     }
