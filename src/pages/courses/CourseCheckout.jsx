@@ -51,6 +51,7 @@ const CourseCheckout = () => {
   const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
   const [bookingRef, setBookingRef] = useState("");
   const [error, setError] = useState("");
+  const [existingBookingId, setExistingBookingId] = useState(null);
   const [timeLeft, setTimeLeft] = useState(14 * 60 + 12);
 
   // Dynamic Data
@@ -323,6 +324,18 @@ const CourseCheckout = () => {
       setIsSubmitting(true);
       setError("");
 
+      if (existingBookingId) {
+        // Resume payment for existing pending booking
+        const piRes = await bookingService.createPaymentIntent(existingBookingId);
+        if (piRes.data.success && piRes.data.clientSecret) {
+          setClientSecret(piRes.data.clientSecret);
+          setPaymentModalOpen(true);
+        } else {
+          setError("Failed to initialize payment for existing booking.");
+        }
+        return;
+      }
+
       const bookingPayload = {
         courseId: courseData._id,
         session: {
@@ -380,6 +393,9 @@ const CourseCheckout = () => {
           err.response?.data?.message ||
             "An error occurred during booking. Please try again.",
         );
+        if (err.response?.data?.existingBookingId) {
+          setExistingBookingId(err.response.data.existingBookingId);
+        }
       }
     } finally {
       setIsSubmitting(false);
@@ -1040,7 +1056,7 @@ const CourseCheckout = () => {
                     loading={isSubmitting}
                     onClick={handlePayment}
                     fullWidth
-                    label={isSubmitting ? "Processing..." : "Submit Payment"}
+                    label={isSubmitting ? "Processing..." : existingBookingId ? "Complete Pending Payment" : "Submit Payment"}
                   />
                 </div>
               </div>
