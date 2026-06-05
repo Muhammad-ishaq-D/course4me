@@ -469,6 +469,7 @@ const CourseCheckout = () => {
         const bookingReference = response.data.data.bookingReference;
         setExistingBookingId(bookingId);
         setBookingRef(bookingReference);
+        setBookingStatus('PENDING');
       } else {
         setError(response.data.message || "Failed to create booking.");
       }
@@ -1129,13 +1130,27 @@ const CourseCheckout = () => {
                     </div>
                   )}
 
-                  <SaveBtn
-                    loading={isSubmitting}
-                    onClick={handlePayment}
-                    fullWidth
-                    label={isSubmitting ? "Processing..." : existingBookingId ? "Complete Pending Payment" : "Submit Payment"}
-                    disabled={isSubmitting || (bookingStatus === "PAID") || (error && error.includes("already enrolled")) || (error && error.includes("already been paid for"))}
-                  />
+                  {/* Button to create a pending booking when none exists */}
+                  {!existingBookingId && (
+                    <SaveBtn
+                      loading={isSubmitting}
+                      onClick={createPendingBooking}
+                      fullWidth
+                      label={isSubmitting ? "Creating..." : "Create Booking"}
+                      disabled={isSubmitting || (bookingStatus === "PAID")}
+                    />
+                  )}
+
+                  {/* Button to complete payment for an existing pending booking */}
+                  {existingBookingId && (
+                    <SaveBtn
+                      loading={isSubmitting}
+                      onClick={handlePayment}
+                      fullWidth
+                      label={isSubmitting ? "Processing..." : "Complete Pending Payment"}
+                      disabled={isSubmitting || (bookingStatus === "PAID") || (error && (error.includes("already enrolled") || error.includes("already been paid for")))}
+                    />
+                  )}
                 </div>
               </div>
             )}
