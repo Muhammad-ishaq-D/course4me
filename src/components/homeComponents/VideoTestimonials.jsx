@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import jamesOkonkwo from "../../assets/home/James Okonkwo.png";
 import sarahMitchell from "../../assets/home/Sarah Mitchell.png";
-import emilyChen from "../../assets/home/Emily Chen.png";
+import Emma from "../../assets/home/emma.png";
 import davidOsei from "../../assets/home/David Osei.png";
 
 function VideoTestimonials() {
@@ -28,10 +28,10 @@ function VideoTestimonials() {
     {
       role: "Close Protection",
       duration: "1:58",
-      name: "Emily Chen",
+      name: "Emma",
       job: "Security Consultant — Birmingham",
       quote: "The training gave me confidence to build a successful career.",
-      img: emilyChen,
+      img: Emma,
     },
     {
       role: "Event Security",
