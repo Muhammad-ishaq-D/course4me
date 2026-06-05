@@ -423,6 +423,8 @@ const CourseCheckout = () => {
         );
         if (err.response?.data?.existingBookingId && err.response?.data?.existingBookingStatus === 'PENDING') {
           setExistingBookingId(err.response.data.existingBookingId);
+          setBookingStatus('PENDING');
+          setError('');
         }
       }
     } finally {
