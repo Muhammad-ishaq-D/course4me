@@ -3,15 +3,12 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import {
   CheckCircle2,
   ChevronDown,
-  ChevronUp,
   Star,
-  Phone,
   ArrowLeft,
   ShieldCheck,
   Check,
   X as XIcon,
   Users,
-  Loader2,
 } from "lucide-react";
 import { courses as fallbackCourses } from "../../data/courseData";
 import courseService from "../../api/services/courseService";
@@ -481,120 +478,6 @@ const CoursePackages = () => {
                 Select Premium
               </button>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Post Packages info grid */}
-      <div className="max-w-[1000px] mx-auto px-4 md:px-6 mb-24 hidden md:flex items-center justify-between text-center gap-4">
-        <div className="flex flex-col items-center">
-          <div className="w-12 h-12 bg-[#F15A24] text-white rounded-full shadow border border-gray-100 flex items-center justify-center mb-3">
-            <CheckCircle2 className="" size={20} />
-          </div>
-          <p className="text-xs font-black uppercase tracking-widest text-[#1C1C1C]">
-            Get better shift patterns
-          </p>
-          <p className="text-[10px] text-gray-500 mt-1 max-w-[150px]">
-            Door supervisors are needed round the clock.
-          </p>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="w-12 h-12 bg-[#F15A24] text-white rounded-full shadow border border-gray-100 flex items-center justify-center mb-3">
-            <CheckCircle2 className="" size={20} />
-          </div>
-          <p className="text-xs font-black uppercase tracking-widest text-[#1C1C1C]">
-            Same day results
-          </p>
-          <p className="text-[10px] text-gray-500 mt-1 max-w-[150px]">
-            You don't need to wait 14 days, get your results the same day.
-          </p>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="w-12 h-12 bg-[#F15A24] text-white rounded-full shadow border border-gray-100 flex items-center justify-center mb-3">
-            <CheckCircle2 className="" size={20} />
-          </div>
-          <p className="text-xs font-black uppercase tracking-widest text-[#1C1C1C]">
-            Top-rated instructors
-          </p>
-          <p className="text-[10px] text-gray-500 mt-1 max-w-[150px]">
-            Industry-leading trainers verified by student reviews.
-          </p>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="w-12 h-12 bg-[#F15A24] text-white rounded-full shadow border border-gray-100 flex items-center justify-center mb-3">
-            <CheckCircle2 className="" size={20} />
-          </div>
-          <p className="text-xs font-black uppercase tracking-widest text-[#1C1C1C]">
-            Premium learning tools
-          </p>
-          <p className="text-[10px] text-gray-500 mt-1 max-w-[150px]">
-            Access mock exams on mobile to pass the first time.
-          </p>
-        </div>
-      </div>
-
-      {/* Testimonials */}
-      <div className="bg-white py-16 border-t border-b border-gray-100 mb-16">
-        <div className="max-w-[700px] mx-auto px-4 text-center">
-          <h2 className="text-2xl font-black text-[#1C1C1C] mb-8">
-            See What Our Customers Say
-          </h2>
-          <p className="text-lg text-gray-600 leading-relaxed italic mb-8 font-serif">
-            I was very nervous taking this course especially with the exams. But
-            the trainer, Adam, was super friendly and{" "}
-            <span className="text-[#F15A24] font-bold">
-              really gave me the confidence I needed.
-            </span>{" "}
-            The mock exams on the App and course book{" "}
-            <span className="text-[#F15A24] font-bold">
-              helped me pass the first time!
-            </span>
-          </p>
-          <p className="text-sm font-black text-[#1C1C1C] mb-8 uppercase tracking-widest">
-            - Jy Pall
-          </p>
-
-          <div className="flex justify-center gap-1.5 mb-6">
-            <div className="w-2 h-2 rounded-full bg-[#1C1C1C]"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-200"></div>
-            <div className="w-2 h-2 rounded-full bg-gray-200"></div>
-          </div>
-
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex items-center gap-1.5 mb-2">
-              <svg viewBox="0 0 24 24" className="w-4 h-4">
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
-              <span className="text-[10px] font-black uppercase tracking-tighter">
-                Google Reviews
-              </span>
-            </div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xl font-black text-[#1C1C1C]">4.9</span>
-              <div className="flex text-[#ffb800]">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={14} fill="currentColor" />
-                ))}
-              </div>
-            </div>
-            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-              9,511 reviews
-            </span>
           </div>
         </div>
       </div>

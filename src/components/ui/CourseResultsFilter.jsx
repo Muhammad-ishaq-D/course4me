@@ -74,7 +74,7 @@ const CourseResultsFilter = ({ filter, setFilter }) => {
       </div>
 
       {/* Modern Postcode Info Card */}
-      <div className="mt-4 bg-slate-900 rounded-[22px] p-5 relative overflow-hidden group">
+      {/* <div className="mt-4 bg-slate-900 rounded-[22px] p-5 relative overflow-hidden group">
         <div className="relative z-10 flex gap-3">
           <div className="w-8 h-8 rounded-lg bg-[#F15A24] flex items-center justify-center shrink-0">
             <MapPin size={16} className="text-white" />
@@ -88,9 +88,9 @@ const CourseResultsFilter = ({ filter, setFilter }) => {
             </p>
           </div>
         </div>
-        {/* Subtle Decorative Circle */}
+
         <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-white/5 rounded-full" />
-      </div>
+      </div> */}
     </aside>
   );
 };

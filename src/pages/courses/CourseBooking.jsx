@@ -126,18 +126,17 @@ const CourseBooking = () => {
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen mt-5">
-      <SearchModal
+      {/* <SearchModal
         isOpen={isSearchModalOpen}
         onClose={() => setIsSearchModalOpen(false)}
         initialCourse={course.title}
         initialLocation={searchLocation}
-      />
+      /> */}
 
       {/* BOOKING HEADER */}
-      <header className="sticky top-0 z-30 w-full border-b border-gray-200 bg-white/95 backdrop-blur-md shadow-sm">
+      {/* <header className="sticky top-0 z-30 w-full border-b border-gray-200 bg-white/95 backdrop-blur-md shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3">
-            {/* SEARCH INPUT */}
             <div className="w-full sm:flex-1 sm:max-w-[620px] relative">
               <Search
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -169,7 +168,6 @@ const CourseBooking = () => {
               />
             </div>
 
-            {/* CHAT SECTION */}
             <div className="flex items-center justify-between sm:justify-end gap-2 text-sm font-medium whitespace-nowrap">
               <div className="flex items-center gap-2">
                 <div className="w-9 h-9 rounded-full bg-[#F15A24]/10 flex items-center justify-center">
@@ -189,7 +187,7 @@ const CourseBooking = () => {
             </div>
           </div>
         </div>
-      </header>
+      </header> */}
 
       <main className="max-w-300 mx-auto px-4 md:px-6 py-8">
         {/* 2. Breadcrumbs */}
@@ -214,11 +212,8 @@ const CourseBooking = () => {
           {course.title}
         </h1>
         <p className="text-[#64748B] mb-10 text-lg">
-          We have several{" "}
-          <span className="text-[#F15A24] cursor-pointer hover:underline">
-            locations nationwide
-          </span>
-          . Enter your location to find a course near you.
+          Search for training centres near you and choose the date and location
+          that best suits your schedule.
         </p>
 
         <div className="flex flex-col lg:flex-row gap-8">

@@ -105,14 +105,14 @@ const CourseResults = () => {
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen mt-5 ">
-      <SearchModal
+      {/* <SearchModal
         isOpen={isSearchModalOpen}
         onClose={() => setIsSearchModalOpen(false)}
         initialCourse={course.title}
         initialLocation={postcode}
-      />
+      /> */}
       {/* Search Header */}
-      <header className="sticky bg-white border-b border-gray-200 py-3 top-0 w-full shadow-xs z-30">
+      {/* <header className="sticky bg-white border-b border-gray-200 py-3 top-0 w-full shadow-xs z-30">
         <div className="max-w-[1200px] mx-auto px-4 flex items-center justify-between">
           <div className="flex-1 max-w-[600px] relative">
             <Search
@@ -135,7 +135,7 @@ const CourseResults = () => {
             </span>
           </div>
         </div>
-      </header>
+      </header> */}
 
       <main className="max-w-300 mx-auto px-4 py-6 md:py-20">
         <div className="flex flex-col lg:flex-row gap-5">
@@ -145,7 +145,7 @@ const CourseResults = () => {
           <div className="flex-1 space-y-6">
             <div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-[#1C1C1C] mb-1">
-                Door Supervisor Training
+                {course.title}
               </h1>
               <p className="text-gray-500 font-medium">
                 We've found{" "}
@@ -158,7 +158,7 @@ const CourseResults = () => {
             </div>
 
             {/* Weekend Alert */}
-            <div className="bg-white rounded-xl border border-gray-100 p-4 flex items-start gap-4">
+            {/* <div className="bg-white rounded-xl border border-gray-100 p-4 flex items-start gap-4">
               <div className="bg-[#FFF5F1] p-2 rounded-lg">
                 <Calendar className="text-[#F15A24]" size={20} />
               </div>
@@ -174,7 +174,7 @@ const CourseResults = () => {
                   </span>
                 </p>
               </div>
-            </div>
+            </div> */}
 
             {/* Location Cards */}
             {locations.map((loc) => (
@@ -186,7 +186,7 @@ const CourseResults = () => {
           </div>
 
           {/* Right Sidebar */}
-          <Feedback />
+          <Feedback price={course.pricing.basePrice} date={course.date} />
         </div>
       </main>
     </div>

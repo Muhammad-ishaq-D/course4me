@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import CourseHero from "../../components/coursesComponents/CourseHero";
 import ExploreAllCourses from "../../components/coursesComponents/ExploreAllCourses";
 import RealStories from "../../components/coursesComponents/RealStories";
-import HelpBanners from "../../components/coursesComponents/HelpBanners";
 
 import { useSearchParams } from "react-router-dom";
 
