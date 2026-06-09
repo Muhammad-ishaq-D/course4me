@@ -35,6 +35,8 @@ const BookingConfirmed = ({
   const [isDownloading, setIsDownloading] = useState(false);
   const receiptRef = useRef(null);
   const ref = bookingRef || "GL-PENDING";
+  const EASY_APPLY_FEE = 149.99;
+  const courseOnlyPrice = easyApply ? (price || 0) - EASY_APPLY_FEE : (price || 0);
 
   const handleDownloadReceipt = async () => {
     if (!receiptRef.current) return;
@@ -168,7 +170,7 @@ const BookingConfirmed = ({
   };
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText("Your Text");
+    await navigator.clipboard.writeText(ref);
 
     setCopied(true);
 
@@ -290,7 +292,7 @@ const BookingConfirmed = ({
                     <p className="text-[11px] text-gray-500">{plan} Package</p>
                     {easyApply && (
                       <p className="text-[11px] font-bold text-[#F15A24] mt-1">
-                        EasyApply™ included
+                        + EasyApply™
                       </p>
                     )}
                   </div>
@@ -299,8 +301,13 @@ const BookingConfirmed = ({
                       Amount
                     </p>
                     <p className="text-[13px] font-black text-[#1C1C1C]">
-                      £{Number(price || 0).toFixed(2)}
+                      £{Number(courseOnlyPrice).toFixed(2)}
                     </p>
+                    {easyApply && (
+                      <p className="text-[13px] font-black text-[#1C1C1C]">
+                        £{EASY_APPLY_FEE.toFixed(2)}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -328,9 +335,16 @@ const BookingConfirmed = ({
                       </p>
                     </div>
                   </div>
-                  <span className="text-[14px] font-black text-[#1C1C1C]">
-                    £{price?.toFixed(2)}
-                  </span>
+                  <div className="text-right">
+                    <span className="text-[14px] font-black text-[#1C1C1C]">
+                      £{Number(courseOnlyPrice).toFixed(2)}
+                    </span>
+                    {easyApply && (
+                      <p className="text-[12px] text-gray-500 mt-0.5">
+                        + £{EASY_APPLY_FEE.toFixed(2)} EasyApply™
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="h-px bg-gray-100" />
                 <div className="flex items-center gap-3 text-[12px] text-gray-500">

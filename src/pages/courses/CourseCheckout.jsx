@@ -1218,7 +1218,24 @@ const CourseCheckout = () => {
           </div>
 
           {/* ══ RIGHT SIDEBAR ══ */}
-          <RightSidebar />
+          <RightSidebar
+            courseName={courseData?.title}
+            plan={plan}
+            price={price}
+            easyApply={easyApply === "get"}
+            date={
+              selectedSchedule?.startDate
+                ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })
+                : null
+            }
+            courseId={courseId}
+            scheduleId={scheduleId}
+          />
         </div>
       </div>
 
