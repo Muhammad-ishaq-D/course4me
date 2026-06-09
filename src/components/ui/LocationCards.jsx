@@ -38,10 +38,35 @@ const LocationCards = ({ loc, course }) => {
               <h2 className="text-3xl md:text-4xl font-black text-[#1C1C1C] tracking-tight">
                 {loc.name}
               </h2>
-              <div className="flex items-center gap-1.5 mt-1 text-gray-400 font-medium text-sm">
-                <MapPin size={14} className="text-[#F15A24]" />
-                {loc.address} •{" "}
-                <span className="text-[#F15A24]">{loc.distance}</span>
+              <div className="flex items-center gap-1.5 mt-1 text-gray-500 font-medium text-sm flex-wrap">
+                <MapPin size={14} className="text-[#F15A24] shrink-0" />
+                {loc.mapsUrl ? (
+                  <a
+                    href={loc.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Open in Google Maps"
+                    className="text-gray-500 hover:text-[#F15A24] hover:underline underline-offset-2 transition-colors"
+                  >
+                    {loc.address}
+                  </a>
+                ) : (
+                  <span className="text-gray-500">{loc.address}</span>
+                )}
+                {loc.distance && (
+                  <>
+                    <span className="text-gray-300">•</span>
+                    <span
+                      className={
+                        loc.distance === "Calculating..."
+                          ? "text-gray-400"
+                          : "text-[#F15A24] font-semibold"
+                      }
+                    >
+                      {loc.distance}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
 
@@ -71,10 +96,12 @@ const LocationCards = ({ loc, course }) => {
                 Parking
               </p>
               <p className="text-[14px] font-bold text-gray-700 leading-snug">
-                Available
-                <span className="text-gray-400 font-normal block text-xs mt-0.5">
-                  nearby
-                </span>
+                {loc.parking?.main || "Available"}
+                {loc.parking?.sub && (
+                  <span className="text-gray-400 font-normal block text-xs mt-0.5">
+                    {loc.parking.sub}
+                  </span>
+                )}
               </p>
             </div>
 
@@ -84,10 +111,12 @@ const LocationCards = ({ loc, course }) => {
                 Commute
               </p>
               <p className="text-[14px] font-bold text-gray-700 leading-snug">
-                Short walk
-                <span className="text-gray-400 font-normal block text-xs mt-0.5">
-                  from station
-                </span>
+                {loc.commute?.main || "Public transport"}
+                {loc.commute?.sub && (
+                  <span className="text-gray-400 font-normal block text-xs mt-0.5">
+                    {loc.commute.sub}
+                  </span>
+                )}
               </p>
             </div>
 

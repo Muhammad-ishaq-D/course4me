@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import {
   Search,
@@ -20,6 +20,15 @@ import Loader from "../../components/ui/Loader";
 import Feedback from "../../components/ui/Feedback";
 import TrustBadges from "../../components/ui/TrustBadges";
 import CourseResultsFilter from "../../components/ui/CourseResultsFilter";
+import {
+  geocodeLocation,
+  geocodePostcode,
+  calculateDistanceMiles,
+  formatDistanceFromUser,
+  formatVenueAddress,
+  getGoogleMapsUrl,
+} from "../../utils/distance";
+import { deriveLocationAmenities } from "../../utils/locationAmenities";
 
 const CourseResults = () => {
   const [searchParams] = useSearchParams();
@@ -32,6 +41,9 @@ const CourseResults = () => {
 
   const [filter, setFilter] = useState("Closest");
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [distanceByLocationId, setDistanceByLocationId] = useState({});
+  const [amenitiesByLocationId, setAmenitiesByLocationId] = useState({});
+  const [isCalculatingDistances, setIsCalculatingDistances] = useState(false);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -52,21 +64,154 @@ const CourseResults = () => {
     fetchCourse();
   }, [courseId]);
 
+  useEffect(() => {
+    if (!course?.locations?.length) {
+      setAmenitiesByLocationId({});
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadAmenities = async () => {
+      const entries = await Promise.all(
+        course.locations.map(async (loc) => {
+          let geocodeMeta = {};
+
+          if (loc.postcode) {
+            const lookup = await geocodePostcode(loc.postcode).catch(() => null);
+            if (lookup) {
+              geocodeMeta = {
+                region: lookup.region,
+                adminDistrict: lookup.adminDistrict,
+              };
+            }
+          }
+
+          return [
+            String(loc._id),
+            deriveLocationAmenities(loc, geocodeMeta),
+          ];
+        }),
+      );
+
+      if (!cancelled) {
+        setAmenitiesByLocationId(Object.fromEntries(entries));
+      }
+    };
+
+    loadAmenities();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [course]);
+
+  useEffect(() => {
+    if (!course?.locations?.length) {
+      setDistanceByLocationId({});
+      setIsCalculatingDistances(false);
+      return;
+    }
+
+    if (!postcode.trim()) {
+      setDistanceByLocationId({});
+      setIsCalculatingDistances(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    const calculateDistances = async () => {
+      setIsCalculatingDistances(true);
+      setDistanceByLocationId({});
+
+      try {
+        const userCoords = postcode
+          ? await geocodeLocation(postcode).catch(() => null)
+          : null;
+
+        const entries = await Promise.all(
+          course.locations.map(async (loc) => {
+            let latitude = loc.latitude;
+            let longitude = loc.longitude;
+
+            if ((latitude == null || longitude == null) && loc.postcode) {
+              const venueCoords = await geocodePostcode(loc.postcode).catch(
+                () => null,
+              );
+              if (venueCoords) {
+                latitude = venueCoords.latitude;
+                longitude = venueCoords.longitude;
+              }
+            }
+
+            if (!userCoords || latitude == null || longitude == null) {
+              return [String(loc._id), null];
+            }
+
+            const miles = calculateDistanceMiles(
+              userCoords.latitude,
+              userCoords.longitude,
+              latitude,
+              longitude,
+            );
+
+            return [
+              String(loc._id),
+              {
+                miles,
+                label: formatDistanceFromUser(miles),
+              },
+            ];
+          }),
+        );
+
+        if (!cancelled) {
+          setDistanceByLocationId(Object.fromEntries(entries));
+        }
+      } finally {
+        if (!cancelled) {
+          setIsCalculatingDistances(false);
+        }
+      }
+    };
+
+    calculateDistances();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [course, postcode]);
+
   // Map Backend Hierarchy to UI Format
-  const locations = React.useMemo(() => {
+  const locations = useMemo(() => {
     if (!course?.locations) return [];
 
     const flatLocations = [];
     course.locations.forEach((loc) => {
+      const venueAddress = formatVenueAddress(loc);
+      const distanceInfo = distanceByLocationId[String(loc._id)];
+      const amenities =
+        amenitiesByLocationId[String(loc._id)] ||
+        deriveLocationAmenities(loc);
+
       flatLocations.push({
         id: loc._id,
         name: loc.name,
         recommended:
           loc.name.includes("Central") || loc.name.includes("Ilford"),
-        address: loc.name,
-        distance: "Calculating...", // Placeholder for real distance logic
-        parking: "Parking available nearby",
-        walk: "Short walk from station",
+        address: venueAddress || loc.name,
+        mapsUrl: getGoogleMapsUrl(loc),
+        latitude: loc.latitude,
+        longitude: loc.longitude,
+        distance: postcode.trim()
+          ? isCalculatingDistances
+            ? "Calculating..."
+            : distanceInfo?.label || ""
+          : "",
+        distanceMiles: distanceInfo?.miles ?? null,
+        parking: amenities.parking,
+        commute: amenities.commute,
         duration: course.duration,
         booked: "500+",
         price: course.pricing?.basePrice || 139.99,
@@ -81,11 +226,48 @@ const CourseResults = () => {
           range: `${new Date(sch.startDate).toLocaleDateString("en-GB", { day: "numeric", month: "short" })} - ${new Date(sch.endDate).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
           price: sch.price || course.pricing?.basePrice,
           bookingFee: sch.seatsAvailable < 5,
+          startDate: sch.startDate,
         })),
       });
     });
     return flatLocations;
-  }, [course]);
+  }, [course, distanceByLocationId, amenitiesByLocationId, isCalculatingDistances, postcode]);
+
+  const sortedLocations = useMemo(() => {
+    const copy = [...locations];
+
+    if (filter === "Closest") {
+      copy.sort((a, b) => {
+        if (a.distanceMiles == null && b.distanceMiles == null) return 0;
+        if (a.distanceMiles == null) return 1;
+        if (b.distanceMiles == null) return -1;
+        return a.distanceMiles - b.distanceMiles;
+      });
+    } else if (filter === "Cheapest") {
+      copy.sort((a, b) => a.price - b.price);
+    } else if (filter === "Earliest") {
+      copy.sort((a, b) => {
+        const aDate = a.dates?.[0]?.startDate
+          ? new Date(a.dates[0].startDate).getTime()
+          : Infinity;
+        const bDate = b.dates?.[0]?.startDate
+          ? new Date(b.dates[0].startDate).getTime()
+          : Infinity;
+        return aDate - bDate;
+      });
+    }
+
+    return copy;
+  }, [locations, filter]);
+
+  const totalSchedules = useMemo(
+    () =>
+      course?.locations?.reduce(
+        (count, loc) => count + (loc.schedules?.length || 0),
+        0,
+      ) || 0,
+    [course],
+  );
 
   if (isLoading) {
     return (
@@ -150,10 +332,12 @@ const CourseResults = () => {
               <p className="text-gray-500 font-medium">
                 We've found{" "}
                 <span className="text-[#1C1C1C] font-bold">
-                  12 course dates
+                  {totalSchedules} course date{totalSchedules === 1 ? "" : "s"}
                 </span>{" "}
                 across{" "}
-                <span className="text-[#1C1C1C] font-bold">5 locations</span>
+                <span className="text-[#1C1C1C] font-bold">
+                  {locations.length} location{locations.length === 1 ? "" : "s"}
+                </span>
               </p>
             </div>
 
@@ -177,7 +361,7 @@ const CourseResults = () => {
             </div> */}
 
             {/* Location Cards */}
-            {locations.map((loc) => (
+            {sortedLocations.map((loc) => (
               <LocationCards key={loc.id} loc={loc} course={course} />
             ))}
 

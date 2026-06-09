@@ -161,9 +161,9 @@ const CoursePackages = () => {
 
   const baseTitle = course?.title || "Course";
   const basePriceValue = course?.pricing?.basePrice || 139.99;
-  const saverPrice = ((basePriceValue - 40) * 0.85).toFixed(2);
-  const flexiPrice = (basePriceValue * 0.85).toFixed(2);
-  const premiumPrice = ((basePriceValue + 120) * 0.85).toFixed(2);
+  const saverPrice = (basePriceValue - 40).toFixed(2);
+  const flexiPrice = basePriceValue.toFixed(2);
+  const premiumPrice = (basePriceValue + 120).toFixed(2);
 
   return (
     <div className=" min-h-screen bg-[#F8FAFC]">
