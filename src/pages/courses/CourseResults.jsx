@@ -13,8 +13,6 @@ import {
   Navigation,
   ArrowLeft,
 } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
 import courseService from "../../api/services/courseService";
 import courseLocationService from "../../api/services/courseLocationService";
 import LocationCards from "../../components/ui/LocationCards";
@@ -32,6 +30,7 @@ import {
 import { deriveLocationAmenities } from "../../utils/locationAmenities";
 
 const CourseResults = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const postcode = searchParams.get("postcode") || "";
   const courseId = searchParams.get("courseid");
@@ -193,6 +192,32 @@ const CourseResults = () => {
     return copy;
   }, [locations, filter]);
 
+  const filterPrices = useMemo(() => {
+    if (!locations.length) return {};
+    const fmt = (p) => (p != null && isFinite(p) ? `£${Number(p).toFixed(0)}` : "");
+
+    const byClosest = [...locations].sort((a, b) => {
+      if (a.distanceMiles == null && b.distanceMiles == null) return 0;
+      if (a.distanceMiles == null) return 1;
+      if (b.distanceMiles == null) return -1;
+      return a.distanceMiles - b.distanceMiles;
+    });
+
+    const cheapest = Math.min(...locations.map((l) => l.price ?? Infinity));
+
+    const byEarliest = [...locations].sort((a, b) => {
+      const aDate = a.dates?.[0]?.startDate ? new Date(a.dates[0].startDate).getTime() : Infinity;
+      const bDate = b.dates?.[0]?.startDate ? new Date(b.dates[0].startDate).getTime() : Infinity;
+      return aDate - bDate;
+    });
+
+    return {
+      Closest: fmt(byClosest[0]?.price),
+      Cheapest: fmt(cheapest),
+      Earliest: fmt(byEarliest[0]?.price),
+    };
+  }, [locations]);
+
   const totalSchedules = useMemo(
     () => activeLinks.reduce((sum, l) => sum + (l.dates?.length || 0), 0),
     [activeLinks],
@@ -224,7 +249,7 @@ const CourseResults = () => {
           <ArrowLeft size={16} /> Back
         </button>
         <div className="flex flex-col lg:flex-row gap-5">
-          <CourseResultsFilter filter={filter} setFilter={setFilter} />
+          <CourseResultsFilter filter={filter} setFilter={setFilter} filterPrices={filterPrices} />
 
           <div className="flex-1 space-y-6">
             <div>

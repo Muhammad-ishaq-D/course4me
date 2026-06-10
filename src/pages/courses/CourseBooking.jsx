@@ -47,6 +47,7 @@ const CourseBooking = () => {
   const [filter, setFilter] = useState("Closest");
   const [loadingStep, setLoadingStep] = useState(0);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchInputRef = React.useRef(null);
 
   // Fetch course
   useEffect(() => {
@@ -92,6 +93,8 @@ const CourseBooking = () => {
     );
   }, [linkedLocations, searchLocation]);
 
+  const sortMap = { Closest: "distance", Cheapest: "price", Earliest: "date" };
+
   const handleSearch = (locationText) => {
     const loc = locationText || searchLocation;
     if (!loc) return;
@@ -100,7 +103,7 @@ const CourseBooking = () => {
     setTimeout(() => setLoadingStep(3), 2400);
     setTimeout(() => {
       navigate(
-        `/booking/results?courseid=${course._id}&postcode=${encodeURIComponent(loc)}&sortby=distance&view=all`,
+        `/booking/results?courseid=${course._id}&postcode=${encodeURIComponent(loc)}&sortby=${sortMap[filter] ?? "distance"}&view=all`,
       );
     }, 3600);
   };
@@ -180,8 +183,8 @@ const CourseBooking = () => {
                     key={option}
                     onClick={() => setFilter(option)}
                     className={`flex items-center justify-between px-5 py-4 rounded-2xl border-2 transition-all duration-300 group ${isActive
-                        ? "border-[#F15A24] bg-[#F15A24]/5 shadow-sm"
-                        : "border-gray-100 bg-white hover:border-gray-200"
+                      ? "border-[#F15A24] bg-[#F15A24]/5 shadow-sm"
+                      : "border-gray-100 bg-white hover:border-gray-200"
                       }`}
                   >
                     <span className={`text-[15px] font-bold ${isActive ? "text-[#F15A24]" : "text-gray-600"}`}>
@@ -197,11 +200,14 @@ const CourseBooking = () => {
 
             <div className="mt-8 p-4 rounded-2xl bg-gray-50 border border-dashed border-gray-200">
               <p className="text-[13px] text-gray-500 leading-relaxed">
-                <button className="text-[#F15A24] font-bold hover:underline">Add your postcode</button>{" "}
+                <button
+                  className="text-[#F15A24] font-bold hover:underline"
+                  onClick={() => searchInputRef.current?.focus()}
+                >Add your postcode</button>{" "}
                 to unlock distance-based filters.
               </p>
             </div>
-          </aside> */}
+          </aside>
 
           {/* Center Content */}
           <div className="flex-1 space-y-6">
@@ -212,6 +218,7 @@ const CourseBooking = () => {
                 <div className="relative flex-1" onClick={(e) => e.stopPropagation()}>
                   <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
                   <input
+                    ref={searchInputRef}
                     type="text"
                     placeholder="Enter postcode, city or address"
                     className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#F15A24] transition-colors"
@@ -289,39 +296,9 @@ const CourseBooking = () => {
                         onClick={() => selectLocation(link)}
                         className="flex flex-col items-start gap-2 bg-white border border-gray-100 hover:border-[#F15A24]/30 hover:bg-[#FFF5F1]/50 px-5 py-4 rounded-2xl text-left transition-all group shadow-sm"
                       >
-                        <div className="flex items-start justify-between w-full gap-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                              <MapPin size={14} className="text-[#F15A24]" />
-                            </div>
-                            <div>
-                              <p className="text-[13px] font-bold text-[#1C1C1C] group-hover:text-[#F15A24] transition-colors leading-tight">
-                                {loc.name}
-                              </p>
-                              <p className="text-[11px] text-gray-400 font-medium mt-0.5">
-                                {[loc.city, loc.postcode].filter(Boolean).join(" · ")}
-                              </p>
-                            </div>
-                          </div>
-                          {link.price && (
-                            <span className="text-[12px] font-bold text-[#F15A24] shrink-0 flex items-center gap-0.5">
-                              <PoundSterling size={11} />
-                              {link.price}
-                            </span>
-                          )}
-                        </div>
-
-                        {nextDate && (
-                          <div className="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium pl-10">
-                            <CalendarDays size={11} className="text-gray-300" />
-                            Next: {fmtDate(nextDate.startDate)}
-                            {upcomingDates.length > 1 && (
-                              <span className="ml-1 text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full font-semibold">
-                                +{upcomingDates.length - 1} more
-                              </span>
-                            )}
-                          </div>
-                        )}
+                        <p className="text-[13px] font-bold text-[#1C1C1C] group-hover:text-[#F15A24] transition-colors leading-tight">
+                          {loc.name}
+                        </p>
                       </button>
                     );
                   })}

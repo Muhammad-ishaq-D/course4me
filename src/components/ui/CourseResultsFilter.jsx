@@ -1,7 +1,7 @@
 import React from "react";
 import { MapPin, Info } from "lucide-react";
 
-const CourseResultsFilter = ({ filter, setFilter }) => {
+const CourseResultsFilter = ({ filter, setFilter, filterPrices = {} }) => {
   return (
     <aside className="w-full lg:w-70 shrink-0">
       <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden p-2">
@@ -15,9 +15,9 @@ const CourseResultsFilter = ({ filter, setFilter }) => {
 
         <div className="space-y-1">
           {[
-            { id: "Closest", label: "Closest to you", price: "£185" },
-            { id: "Cheapest", label: "Lowest Price", price: "£185" },
-            { id: "Earliest", label: "Soonest Date", price: "£199" },
+            { id: "Closest", label: "Closest to you" },
+            { id: "Cheapest", label: "Lowest Price" },
+            { id: "Earliest", label: "Soonest Date" },
           ].map((option) => {
             const isActive = filter === option.id;
             return (
@@ -58,15 +58,17 @@ const CourseResultsFilter = ({ filter, setFilter }) => {
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <span
-                    className={`text-[16px] font-black transition-colors ${
-                      isActive ? "text-white" : "text-gray-900"
-                    }`}
-                  >
-                    {option.price}
-                  </span>
-                </div>
+                {filterPrices[option.id] && (
+                  <div className="text-right">
+                    <span
+                      className={`text-[16px] font-black transition-colors ${
+                        isActive ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      {filterPrices[option.id]}
+                    </span>
+                  </div>
+                )}
               </div>
             );
           })}

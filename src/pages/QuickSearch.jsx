@@ -74,60 +74,10 @@ const QuickSearch = () => {
     return results.slice(0, 8);
   }, [location, allCourseLinks]);
 
-<<<<<<< HEAD
   // Show/hide dropdown reactively
   useEffect(() => {
     setShowLocationSuggestions(locationSuggestions.length > 0 && location.trim().length > 0);
   }, [locationSuggestions, location]);
-=======
-      setLoadingLocations(true);
-      setShowLocationSuggestions(true);
-
-      try {
-        const res = await courseService.getAllCourses({
-          status: "Published",
-          location: location.trim(),
-        });
-        if (cancelled) return;
-
-        const courses = res?.data?.data || [];
-        const seen = new Set();
-        const suggestions = [];
-
-        courses.forEach((course) => {
-          course.locations?.forEach((loc) => {
-            const label = [loc.name, loc.address, loc.postcode]
-              .filter(Boolean)
-              .join(", ");
-            if (label && !seen.has(label)) {
-              seen.add(label);
-              suggestions.push({
-                label,
-                filterKey: loc.postcode || loc.name || label,
-              });
-            }
-          });
-        });
-
-        setLocationSuggestions(suggestions.slice(0, 8));
-        setShowLocationSuggestions(suggestions.length > 0);
-      } catch {
-        if (!cancelled) {
-          setLocationSuggestions([]);
-          setShowLocationSuggestions(false);
-        }
-      } finally {
-        if (!cancelled) setLoadingLocations(false);
-      }
-    };
-
-    const debounce = setTimeout(fetchLocationSuggestions, 300);
-    return () => {
-      cancelled = true;
-      clearTimeout(debounce);
-    };
-  }, [location]);
->>>>>>> 6ede8fce753f824469f1ad3f9cec214ddcb131e3
 
   // =====================================================================
   // KEYWORD SUGGESTIONS — courses, licenses, careers
@@ -294,7 +244,6 @@ const QuickSearch = () => {
 
       await Promise.all(promises.map((p) => p?.catch(() => {})));
 
-<<<<<<< HEAD
       // Filter courses by location using course-location links (new model)
       if (location.trim() && fetchedCourses.length > 0) {
         const term = location.trim().toLowerCase();
@@ -319,13 +268,6 @@ const QuickSearch = () => {
       }
 
       setFilteredResults([...fetchedCourses, ...fetchedLicenses, ...fetchedCareers]);
-=======
-      setFilteredResults([
-        ...fetchedCourses,
-        ...fetchedLicenses,
-        ...fetchedCareers,
-      ]);
->>>>>>> 6ede8fce753f824469f1ad3f9cec214ddcb131e3
     } catch (error) {
       console.error("Search error:", error);
       setFilteredResults([]);
@@ -466,7 +408,6 @@ const QuickSearch = () => {
 
                 {showLocationSuggestions && locationSuggestions.length > 0 && (
                   <div className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
-<<<<<<< HEAD
                     {locationSuggestions.map((item, i) => (
                       <button
                         key={i}
@@ -485,35 +426,6 @@ const QuickSearch = () => {
                         </p>
                       </button>
                     ))}
-=======
-                    {loadingLocations ? (
-                      <div className="flex items-center justify-center gap-3 px-5 py-5">
-                        <div className="w-5 h-5 rounded-full border-[3px] border-orange-200 border-t-[#F15A24] animate-spin shrink-0" />
-                        <p className="text-sm text-gray-400 font-medium">
-                          Searching locations...
-                        </p>
-                      </div>
-                    ) : locationSuggestions.length > 0 ? (
-                      locationSuggestions.map((item, i) => (
-                        <button
-                          key={i}
-                          type="button"
-                          onClick={() => {
-                            setLocation(item.filterKey);
-                            setShowLocationSuggestions(false);
-                          }}
-                          className="w-full px-5 py-4 flex items-center gap-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
-                        >
-                          <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center shrink-0">
-                            <MapPin size={16} className="text-[#F15A24]" />
-                          </div>
-                          <p className="text-sm font-medium text-gray-800 line-clamp-2">
-                            {item.label}
-                          </p>
-                        </button>
-                      ))
-                    ) : null}
->>>>>>> 6ede8fce753f824469f1ad3f9cec214ddcb131e3
                   </div>
                 )}
               </div>
