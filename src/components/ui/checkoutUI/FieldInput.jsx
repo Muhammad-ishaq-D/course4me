@@ -7,6 +7,7 @@ const FieldInput = ({
   value,
   onChange,
   onBlur,
+  onFocus,
   type = "text",
   icon: Icon,
   error,
@@ -33,6 +34,7 @@ const FieldInput = ({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onBlur={onBlur}
+          onFocus={onFocus}
           className={`w-full border rounded-lg py-3 text-[14px] text-[#1C1C1C] outline-none focus:ring-2 transition-all placeholder:text-gray-300 ${Icon && !isPassword ? "pl-10 pr-4" : "px-4"} ${
             error
               ? "border-red-400 focus:ring-red-400/40 focus:border-red-400 bg-red-50/30"

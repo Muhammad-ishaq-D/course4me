@@ -8,114 +8,105 @@ import Loader from "../components/ui/Loader";
 import NoResults from "../components/ui/NoResults";
 import EmptyStateQuickSearch from "../components/ui/EmptyStateQuickSearch";
 import CustomDropdown from "../components/ui/CustomDropdown";
-import CenterSearchCard from "../components/ui/CenterSearchCard";
 
-// ================= API SERVICES =================
 import courseService from "../api/services/courseService";
 import licenseService from "../api/services/licenseService";
 import careerService from "../api/services/careerService";
-import locationService from "../api/services/locationService";
-
-/** Only include centers that match the search keyword and/or location field */
-const centerMatchesFilters = (center, loc, searchTerm, locationTerm) => {
-  if (!center.name?.trim()) return false;
-
-  const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const matches = (text, term) =>
-    term && new RegExp(escape(term), "i").test(text || "");
-
-  if (locationTerm && !matches(loc.location, locationTerm)) {
-    return false;
-  }
-
-  if (!searchTerm) {
-    return true;
-  }
-
-  return (
-    matches(center.name, searchTerm) ||
-    matches(center.address, searchTerm) ||
-    matches(center.postcode, searchTerm) ||
-    matches(loc.location, searchTerm)
-  );
-};
 
 const QuickSearch = () => {
   // ================= STATES =================
-
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState("");
   const [type, setType] = useState("all");
 
   const [hasSearched, setHasSearched] = useState(false);
   const [filteredResults, setFilteredResults] = useState([]);
-
   const [loading, setLoading] = useState(false);
 
   // ================= LOCATION SUGGESTIONS =================
-
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
-
   const [locationSuggestions, setLocationSuggestions] = useState([]);
+  const [loadingLocations, setLoadingLocations] = useState(false);
 
   // ================= KEYWORD SUGGESTIONS =================
-
   const [showKeywordSuggestions, setShowKeywordSuggestions] = useState(false);
   const [keywordSuggestions, setKeywordSuggestions] = useState([]);
-  const searchRef = useRef(null);
 
   // ================= REFS =================
-
   const resultsRef = useRef(null);
   const locationRef = useRef(null);
+  const searchRef = useRef(null);
 
-  // ================= LOCATION FILTER =================
-
+  // =====================================================================
+  // LOCATION SUGGESTIONS — derived from real course location data
+  // =====================================================================
   useEffect(() => {
     let cancelled = false;
 
     const fetchLocationSuggestions = async () => {
-      if (location.trim() === "") {
+      if (!location.trim()) {
         setLocationSuggestions([]);
         setShowLocationSuggestions(false);
+        setLoadingLocations(false);
         return;
       }
 
+      setLoadingLocations(true);
+      setShowLocationSuggestions(true);
+
       try {
-        const res = await locationService.searchLocations({
+        const res = await courseService.getAllCourses({
+          status: "Published",
           location: location.trim(),
         });
         if (cancelled) return;
 
-        const suggestions = [
-          ...new Set((res.data || []).map((item) => item.location)),
-        ].filter((loc) => loc.toLowerCase().includes(location.toLowerCase()));
+        const courses = res?.data?.data || [];
+        const seen = new Set();
+        const suggestions = [];
 
-        setLocationSuggestions(suggestions);
+        courses.forEach((course) => {
+          course.locations?.forEach((loc) => {
+            const label = [loc.name, loc.address, loc.postcode]
+              .filter(Boolean)
+              .join(", ");
+            if (label && !seen.has(label)) {
+              seen.add(label);
+              suggestions.push({
+                label,
+                filterKey: loc.postcode || loc.name || label,
+              });
+            }
+          });
+        });
+
+        setLocationSuggestions(suggestions.slice(0, 8));
         setShowLocationSuggestions(suggestions.length > 0);
-      } catch (error) {
-        console.error("Failed to fetch location suggestions:", error);
+      } catch {
         if (!cancelled) {
           setLocationSuggestions([]);
           setShowLocationSuggestions(false);
         }
+      } finally {
+        if (!cancelled) setLoadingLocations(false);
       }
     };
 
-    const debounce = setTimeout(fetchLocationSuggestions, 250);
+    const debounce = setTimeout(fetchLocationSuggestions, 300);
     return () => {
       cancelled = true;
       clearTimeout(debounce);
     };
   }, [location]);
 
-  // ================= KEYWORD FILTER =================
-
+  // =====================================================================
+  // KEYWORD SUGGESTIONS — courses, licenses, careers
+  // =====================================================================
   useEffect(() => {
     let cancelled = false;
 
     const fetchKeywordSuggestions = async () => {
-      if (search.trim() === "") {
+      if (!search.trim()) {
         setKeywordSuggestions([]);
         setShowKeywordSuggestions(false);
         return;
@@ -123,14 +114,13 @@ const QuickSearch = () => {
 
       try {
         const params = { status: "Published", search: search.trim() };
-        let suggestions = [];
+        const suggestions = [];
         const promises = [];
 
         if (type === "all" || type === "course") {
           promises.push(
             courseService.getAllCourses(params).then((res) => {
-              const data = res.data?.data || [];
-              data.forEach((c) =>
+              (res.data?.data || []).forEach((c) =>
                 suggestions.push({ title: c.title, type: "Course" }),
               );
             }),
@@ -139,8 +129,7 @@ const QuickSearch = () => {
         if (type === "all" || type === "license") {
           promises.push(
             licenseService.getAllLicenses(params).then((res) => {
-              const data = res.data?.data || [];
-              data.forEach((l) =>
+              (res.data?.data || []).forEach((l) =>
                 suggestions.push({ title: l.title, type: "License" }),
               );
             }),
@@ -148,51 +137,29 @@ const QuickSearch = () => {
         }
         if (type === "all" || type === "career") {
           promises.push(
-            careerService.getAllCareers(params).then((res) => {
-              const data = res.data?.data || [];
-              data.forEach((c) =>
+            careerService.getAllCareers?.(params).then((res) => {
+              (res.data?.data || []).forEach((c) =>
                 suggestions.push({ title: c.title, type: "Career" }),
               );
             }),
           );
         }
-        if (type === "all" || type === "location") {
-          promises.push(
-            locationService
-              .searchLocations({ search: search.trim() })
-              .then((res) => {
-                const data = res.data || [];
-                data.forEach((loc) => {
-                  (loc.centers || []).forEach((center) => {
-                    if (
-                      center.name?.toLowerCase().includes(search.toLowerCase())
-                    ) {
-                      suggestions.push({ title: center.name, type: "Center" });
-                    }
-                  });
-                });
-              }),
-          );
-        }
 
-        await Promise.all(
-          promises.map((p) => p.catch((e) => console.error(e))),
-        );
-
+        await Promise.all(promises.map((p) => p?.catch(() => {})));
         if (cancelled) return;
 
-        const uniqueSuggestions = [];
         const seen = new Set();
-        for (const item of suggestions) {
+        const unique = [];
+        suggestions.forEach((item) => {
           if (!seen.has(item.title)) {
             seen.add(item.title);
-            uniqueSuggestions.push(item);
+            unique.push(item);
           }
-        }
+        });
 
-        setKeywordSuggestions(uniqueSuggestions.slice(0, 8));
-        setShowKeywordSuggestions(uniqueSuggestions.length > 0);
-      } catch (error) {
+        setKeywordSuggestions(unique.slice(0, 8));
+        setShowKeywordSuggestions(unique.length > 0);
+      } catch {
         if (!cancelled) {
           setKeywordSuggestions([]);
           setShowKeywordSuggestions(false);
@@ -207,32 +174,27 @@ const QuickSearch = () => {
     };
   }, [search, type]);
 
-  // ================= CLOSE DROPDOWN =================
-
+  // ================= CLOSE DROPDOWNS ON OUTSIDE CLICK =================
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (locationRef.current && !locationRef.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (locationRef.current && !locationRef.current.contains(e.target)) {
         setShowLocationSuggestions(false);
       }
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
         setShowKeywordSuggestions(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ================= SEARCH FUNCTION =================
-
+  // =====================================================================
+  // SEARCH — fetch courses, licenses, careers
+  // =====================================================================
   const handleSearch = async () => {
     setLoading(true);
     setHasSearched(true);
 
-    // SCROLL TO RESULTS
     setTimeout(() => {
       resultsRef.current?.scrollIntoView({
         behavior: "smooth",
@@ -241,24 +203,16 @@ const QuickSearch = () => {
     }, 100);
 
     try {
-      const params = {
-        status: "Published",
-      };
-
-      if (search.trim()) {
-        params.search = search;
-      }
-      if (location.trim()) {
-        params.location = location;
-      }
+      const params = { status: "Published" };
+      if (search.trim()) params.search = search.trim();
+      if (location.trim()) params.location = location.trim();
 
       let fetchedCourses = [];
       let fetchedLicenses = [];
       let fetchedCareers = [];
-      let fetchedCenters = [];
 
-      // Only fetch the requested type (or all if type is 'all')
       const promises = [];
+
       if (type === "all" || type === "course") {
         promises.push(
           courseService.getAllCourses(params).then((res) => {
@@ -274,9 +228,13 @@ const QuickSearch = () => {
           }),
         );
       }
+
       if (type === "all" || type === "license") {
+        // licenses don't have location data — filter only by keyword
+        const licenseParams = { status: "Published" };
+        if (search.trim()) licenseParams.search = search.trim();
         promises.push(
-          licenseService.getAllLicenses(params).then((res) => {
+          licenseService.getAllLicenses(licenseParams).then((res) => {
             fetchedLicenses = (res.data?.data || []).map((licence) => ({
               ...licence,
               id: licence._id,
@@ -288,9 +246,13 @@ const QuickSearch = () => {
           }),
         );
       }
+
       if (type === "all" || type === "career") {
+        // careers don't have location data — filter only by keyword
+        const careerParams = { status: "Published" };
+        if (search.trim()) careerParams.search = search.trim();
         promises.push(
-          careerService.getAllCareers(params).then((res) => {
+          careerService.getAllCareers?.(careerParams).then((res) => {
             fetchedCareers = (res.data?.data || []).map((career) => ({
               ...career,
               id: career._id,
@@ -302,97 +264,16 @@ const QuickSearch = () => {
           }),
         );
       }
-      const centerSearchTerm = search.trim();
-      const centerLocationTerm = location.trim();
-      const shouldFetchCenters =
-        (type === "all" || type === "location") &&
-        (centerSearchTerm || centerLocationTerm);
 
-      if (shouldFetchCenters) {
-        promises.push(
-          locationService
-            .searchLocations({
-              search: centerSearchTerm,
-              location: centerLocationTerm,
-            })
-            .then(async (res) => {
-              const locations = res.data || [];
-              const locationIds = [...new Set(locations.map((loc) => loc._id))];
-              const coursesByLocation = {};
-
-              await Promise.all(
-                locationIds.map(async (locationId) => {
-                  try {
-                    const coursesRes =
-                      await locationService.getLocationCourses(locationId);
-                    coursesByLocation[locationId] = coursesRes.data || [];
-                  } catch {
-                    coursesByLocation[locationId] = [];
-                  }
-                }),
-              );
-
-              const countCoursesForCenter = (loc, centerId) => {
-                const courses = coursesByLocation[loc._id] || [];
-                const hasCenterLinks = courses.some(
-                  (course) => course.centerId,
-                );
-
-                if (hasCenterLinks) {
-                  return courses.filter(
-                    (course) => String(course.centerId) === String(centerId),
-                  ).length;
-                }
-
-                const namedCenters = (loc.centers || []).filter((c) =>
-                  c.name?.trim(),
-                );
-                if (namedCenters.length === 1) return courses.length;
-                return 0;
-              };
-
-              fetchedCenters = locations.flatMap((loc) =>
-                (loc.centers || [])
-                  .filter((center) =>
-                    centerMatchesFilters(
-                      center,
-                      loc,
-                      centerSearchTerm,
-                      centerLocationTerm,
-                    ),
-                  )
-                  .map((center) => {
-                    const centerPayload = {
-                      ...center,
-                      locationId: loc._id,
-                      locationName: loc.location,
-                    };
-
-                    return {
-                      id: center._id,
-                      type: "location",
-                      title: center.name,
-                      location: loc.location,
-                      image: center.image,
-                      courseCount: countCoursesForCenter(loc, center._id),
-                      center: centerPayload,
-                    };
-                  }),
-              );
-            }),
-        );
-      }
-
-      await Promise.all(promises);
+      await Promise.all(promises.map((p) => p?.catch(() => {})));
 
       setFilteredResults([
         ...fetchedCourses,
         ...fetchedLicenses,
         ...fetchedCareers,
-        ...fetchedCenters,
       ]);
     } catch (error) {
-      console.error("Error fetching search results:", error);
+      console.error("Search error:", error);
       setFilteredResults([]);
     } finally {
       setLoading(false);
@@ -402,17 +283,13 @@ const QuickSearch = () => {
   return (
     <div className="min-h-screen bg-[#FAFAFC] overflow-hidden relative">
       {/* ================= BACKGROUND ================= */}
-
       <div className="absolute top-0 left-0 w-[350px] h-[350px] bg-[#F15A24]/10 blur-[120px] rounded-full" />
-
       <div className="absolute top-20 right-0 w-[300px] h-[300px] bg-orange-200/20 blur-[120px] rounded-full" />
 
       {/* ================= MAIN ================= */}
-
       <section className="relative px-4 sm:px-6 lg:px-10 py-12 lg:py-16">
         <div className="max-w-7xl mx-auto">
           {/* ================= HERO ================= */}
-
           <div className="text-center max-w-4xl mx-auto">
             <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#FFF3EE] text-[#F15A24] text-sm font-semibold border border-[#F15A24]/10">
               <Sparkles size={16} />
@@ -433,28 +310,21 @@ const QuickSearch = () => {
           </div>
 
           {/* ================= SEARCH BOX ================= */}
-
           <div className="mt-10 bg-white border border-gray-100 shadow-2xl shadow-gray-100 rounded-[32px] p-5 md:p-7">
-            {/* TOP */}
-
             <div className="mb-6">
-              <h2 className="text-3xl font-bold text-gray-900">Quick Search</h2>
-
-              <p className="text-gray-500 mt-1 text-lg">
+              <h2 className="text-2xl font-bold text-gray-900">Quick Search</h2>
+              <p className="text-gray-500 mt-1 text-sm">
                 Search everything from one intelligent search system
               </p>
             </div>
 
-            {/* SEARCH BAR */}
-
+            {/* ================= SEARCH FIELDS ================= */}
             <div className="grid grid-cols-1 xl:grid-cols-[220px_1fr_1fr_170px] gap-4">
               {/* TYPE */}
-
               <div className="relative">
                 <label className="text-base font-semibold text-gray-700 mb-2 block">
                   Search Type
                 </label>
-
                 <CustomDropdown
                   value={type}
                   onChange={setType}
@@ -463,49 +333,41 @@ const QuickSearch = () => {
                     { label: "Courses", value: "course" },
                     { label: "Licenses", value: "license" },
                     { label: "Careers", value: "career" },
-                    { label: "Centers", value: "location" },
                   ]}
                 />
               </div>
 
-              {/* SEARCH */}
-
+              {/* KEYWORD */}
               <div className="relative" ref={searchRef}>
                 <label className="text-base font-semibold text-gray-700 mb-2 block">
                   Search Keyword
                 </label>
-
                 <Search
                   size={18}
                   className="absolute left-5 top-[55px] -translate-y-1/2 text-gray-400 z-10"
                 />
-
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  onFocus={() => {
-                    if (keywordSuggestions.length > 0) {
-                      setShowKeywordSuggestions(true);
-                    }
-                  }}
+                  onFocus={() =>
+                    keywordSuggestions.length > 0 &&
+                    setShowKeywordSuggestions(true)
+                  }
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   placeholder="Search courses, licenses, careers..."
-                  className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none relative z-0"
+                  className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none"
                 />
 
-                {/* ================= KEYWORD SUGGESTIONS ================= */}
                 {showKeywordSuggestions && keywordSuggestions.length > 0 && (
                   <div className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
-                    {keywordSuggestions.map((item, index) => (
+                    {keywordSuggestions.map((item, i) => (
                       <button
-                        key={index}
+                        key={i}
                         type="button"
                         onClick={() => {
                           setSearch(item.title);
-                          setKeywordSuggestions([]);
-                          setTimeout(() => {
-                            setShowKeywordSuggestions(false);
-                          }, 0);
+                          setShowKeywordSuggestions(false);
                         }}
                         className="w-full px-5 py-4 flex items-center justify-between hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100 group"
                       >
@@ -513,7 +375,7 @@ const QuickSearch = () => {
                           <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center group-hover:scale-110 transition-transform">
                             <Search size={16} className="text-[#F15A24]" />
                           </div>
-                          <h4 className="text-base font-semibold text-gray-800">
+                          <h4 className="text-sm font-semibold text-gray-800">
                             {item.title}
                           </h4>
                         </div>
@@ -527,64 +389,61 @@ const QuickSearch = () => {
               </div>
 
               {/* LOCATION */}
-
               <div className="relative" ref={locationRef}>
                 <label className="text-base font-semibold text-gray-700 mb-2 block">
                   Location
                 </label>
-
                 <MapPin
                   size={18}
                   className="absolute left-5 top-[55px] -translate-y-1/2 text-gray-400 z-10"
                 />
-
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  onFocus={() => {
-                    if (locationSuggestions.length > 0) {
-                      setShowLocationSuggestions(true);
-                    }
-                  }}
-                  placeholder="Enter city or location"
-                  className="w-full h-[60px] rounded-2xl border focus:border-[#F15A24] border-gray-200 bg-[#FAFAFC] pl-14 pr-4 outline-none"
+                  onFocus={() =>
+                    locationSuggestions.length > 0 &&
+                    setShowLocationSuggestions(true)
+                  }
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  placeholder="Town, city or postcode..."
+                  className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none"
                 />
 
-                {/* ================= SUGGESTIONS ================= */}
-
-                {showLocationSuggestions && locationSuggestions.length > 0 && (
+                {showLocationSuggestions && (
                   <div className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
-                    {locationSuggestions.map((loc, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        onClick={() => {
-                          setLocation(loc);
-                          setLocationSuggestions([]);
-                          setTimeout(() => {
+                    {loadingLocations ? (
+                      <div className="flex items-center justify-center gap-3 px-5 py-5">
+                        <div className="w-5 h-5 rounded-full border-[3px] border-orange-200 border-t-[#F15A24] animate-spin shrink-0" />
+                        <p className="text-sm text-gray-400 font-medium">
+                          Searching locations...
+                        </p>
+                      </div>
+                    ) : locationSuggestions.length > 0 ? (
+                      locationSuggestions.map((item, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => {
+                            setLocation(item.filterKey);
                             setShowLocationSuggestions(false);
-                          }, 0);
-                        }}
-                        className="w-full px-5 py-4 flex items-center gap-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
-                      >
-                        <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center">
-                          <MapPin size={16} className="text-[#F15A24]" />
-                        </div>
-
-                        <div>
-                          <h4 className="text-base font-semibold text-gray-800">
-                            {loc}
-                          </h4>
-                        </div>
-                      </button>
-                    ))}
+                          }}
+                          className="w-full px-5 py-4 flex items-center gap-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
+                        >
+                          <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center shrink-0">
+                            <MapPin size={16} className="text-[#F15A24]" />
+                          </div>
+                          <p className="text-sm font-medium text-gray-800 line-clamp-2">
+                            {item.label}
+                          </p>
+                        </button>
+                      ))
+                    ) : null}
                   </div>
                 )}
               </div>
 
               {/* BUTTON */}
-
               <div className="flex items-end">
                 <button
                   onClick={handleSearch}
@@ -598,7 +457,6 @@ const QuickSearch = () => {
           </div>
 
           {/* ================= LOADER ================= */}
-
           {loading && (
             <div
               ref={resultsRef}
@@ -609,7 +467,6 @@ const QuickSearch = () => {
           )}
 
           {/* ================= EMPTY STATE ================= */}
-
           {!hasSearched && (
             <div ref={resultsRef}>
               <EmptyStateQuickSearch />
@@ -617,7 +474,6 @@ const QuickSearch = () => {
           )}
 
           {/* ================= NO RESULTS ================= */}
-
           {!loading && hasSearched && filteredResults.length === 0 && (
             <div ref={resultsRef}>
               <NoResults />
@@ -625,11 +481,8 @@ const QuickSearch = () => {
           )}
 
           {/* ================= RESULTS ================= */}
-
           {!loading && hasSearched && filteredResults.length > 0 && (
             <div ref={resultsRef} className="mt-16">
-              {/* TOP */}
-
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
                 <div>
                   <h2 className="text-4xl font-black text-[#111827]">
@@ -638,19 +491,14 @@ const QuickSearch = () => {
                       {type === "all" ? "All Types" : type}
                     </span>
                   </h2>
-
                   <p className="text-gray-500 mt-2">
                     {filteredResults.length} results found
                   </p>
                 </div>
               </div>
 
-              {/* GRID */}
-
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredResults.map((item, index) => {
-                  // ================= COURSE =================
-
                   if (item.type === "course") {
                     return (
                       <div key={index} className="relative">
@@ -659,7 +507,6 @@ const QuickSearch = () => {
                             Course
                           </div>
                         </div>
-
                         <CourseCard
                           id={item.id}
                           image={item.image}
@@ -677,8 +524,6 @@ const QuickSearch = () => {
                     );
                   }
 
-                  // ================= LICENSE =================
-
                   if (item.type === "license") {
                     return (
                       <div key={index} className="relative">
@@ -687,13 +532,10 @@ const QuickSearch = () => {
                             Licence
                           </div>
                         </div>
-
                         <LicenseCard item={item} index={index} />
                       </div>
                     );
                   }
-
-                  // ================= CAREER =================
 
                   if (item.type === "career") {
                     return (
@@ -703,17 +545,12 @@ const QuickSearch = () => {
                             Career
                           </div>
                         </div>
-
                         <CareerCards filteredCareers={[item]} />
                       </div>
                     );
                   }
 
-                  // ================= TRAINING CENTER =================
-
-                  return (
-                    <CenterSearchCard key={item.id || index} item={item} />
-                  );
+                  return null;
                 })}
               </div>
             </div>

@@ -91,6 +91,12 @@ const CourseCheckout = () => {
   const [loading, setLoading] = useState(false);
   const [checkingEmail, setCheckingEmail] = useState(false);
 
+  // Postcode suggestions
+  const [showPostcodeSuggestions, setShowPostcodeSuggestions] = useState(false);
+  const [postcodeSuggestions, setPostcodeSuggestions] = useState([]);
+  const [loadingPostcode, setLoadingPostcode] = useState(false);
+  const postcodeRef = useRef(null);
+
   // Validation state
   const [detailsErrors, setDetailsErrors] = useState({});
   const [billingErrors, setBillingErrors] = useState({});
@@ -115,6 +121,72 @@ const CourseCheckout = () => {
       setBillingErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
+
+  // Postcode/address suggestions from course location data
+  useEffect(() => {
+    let cancelled = false;
+    const term = billing.postcode.trim();
+
+    if (!term) {
+      setPostcodeSuggestions([]);
+      setShowPostcodeSuggestions(false);
+      setLoadingPostcode(false);
+      return;
+    }
+
+    setLoadingPostcode(true);
+    setShowPostcodeSuggestions(true);
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await courseService.getAllCourses({ status: "Published", location: term });
+        if (cancelled) return;
+
+        const seen = new Set();
+        const suggestions = [];
+        (res?.data?.data || []).forEach((course) => {
+          course.locations?.forEach((loc) => {
+            const label = [loc.name, loc.address, loc.postcode].filter(Boolean).join(", ");
+            if (label && !seen.has(label)) {
+              seen.add(label);
+              suggestions.push({
+                label,
+                postcode: loc.postcode || "",
+                address: loc.address || "",
+                city: loc.name || "",
+              });
+            }
+          });
+        });
+
+        setPostcodeSuggestions(suggestions.slice(0, 8));
+        setShowPostcodeSuggestions(suggestions.length > 0);
+      } catch {
+        if (!cancelled) {
+          setPostcodeSuggestions([]);
+          setShowPostcodeSuggestions(false);
+        }
+      } finally {
+        if (!cancelled) setLoadingPostcode(false);
+      }
+    }, 300);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [billing.postcode]);
+
+  // Close postcode dropdown on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (postcodeRef.current && !postcodeRef.current.contains(e.target)) {
+        setShowPostcodeSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   // Check email availability in real-time
   const checkEmailAvailability = async (email) => {
@@ -878,14 +950,49 @@ const CourseCheckout = () => {
                   <p className="text-[13px] text-gray-500">
                     Enter your postcode and select your address.
                   </p>
-                  <FieldInput
-                    label="Post code"
-                    placeholder="Post code"
-                    value={billing.postcode}
-                    onChange={(v) => updateBilling("postcode", v)}
-                    icon={MapPin}
-                    error={billingErrors.postcode}
-                  />
+                  <div className="relative" ref={postcodeRef}>
+                    <FieldInput
+                      label="Post code"
+                      placeholder="Post code"
+                      value={billing.postcode}
+                      onChange={(v) => updateBilling("postcode", v)}
+                      onFocus={() => postcodeSuggestions.length > 0 && setShowPostcodeSuggestions(true)}
+                      icon={MapPin}
+                      error={billingErrors.postcode}
+                    />
+
+                    {showPostcodeSuggestions && (
+                      <div className="absolute top-full left-0 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
+                        {loadingPostcode ? (
+                          <div className="flex items-center gap-3 px-4 py-4">
+                            <div className="w-4 h-4 rounded-full border-2 border-orange-200 border-t-[#F15A24] animate-spin shrink-0" />
+                            <p className="text-sm text-gray-400 font-medium">Searching locations...</p>
+                          </div>
+                        ) : (
+                          postcodeSuggestions.map((item, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onMouseDown={() => {
+                                updateBilling("postcode", item.postcode);
+                                updateBilling("addr1", item.address);
+                                updateBilling("city", item.city);
+                                setShowPostcodeSuggestions(false);
+                              }}
+                              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
+                            >
+                              <div className="w-8 h-8 rounded-full bg-[#FFF1EB] flex items-center justify-center shrink-0">
+                                <MapPin size={13} className="text-[#F15A24]" />
+                              </div>
+                              <p className="text-[13px] font-medium text-gray-700 line-clamp-2">
+                                {item.label}
+                              </p>
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    )}
+                  </div>
                   <FieldInput
                     label="Address line 1"
                     placeholder="Address line 1"
