@@ -72,7 +72,9 @@ const ExploreAllLicences = () => {
     const fetchLicences = async () => {
       try {
         setLoading(true);
-        const response = await licenseService.getAllLicenses({ status: 'Published' });
+        const response = await licenseService.getAllLicenses({
+          status: "Published",
+        });
         const resData = response.data || response;
         const fetched = resData.licenses || resData.data || resData || [];
         if (fetched.length > 0) {
@@ -117,10 +119,11 @@ const ExploreAllLicences = () => {
     // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.trim().toLowerCase();
-      result = result.filter((item) =>
-        item.title?.toLowerCase().includes(query) ||
-        item.shortDescription?.toLowerCase().includes(query) ||
-        item.category?.toLowerCase().includes(query)
+      result = result.filter(
+        (item) =>
+          item.title?.toLowerCase().includes(query) ||
+          item.shortDescription?.toLowerCase().includes(query) ||
+          item.category?.toLowerCase().includes(query),
       );
     }
 
@@ -247,7 +250,7 @@ const ExploreAllLicences = () => {
                     : categoryParam}
                 </h2>
 
-                <p className="text-gray-500 mt-1 text-sm">
+                <p className="text-gray-500 mt-1 text-md">
                   {filteredLicences.length}{" "}
                   {filteredLicences.length === 1 ? "licence" : "licences"}{" "}
                   available
@@ -274,11 +277,11 @@ const ExploreAllLicences = () => {
                 </div>
 
                 <div className="text-left">
-                  <h3 className="text-[#141414] text-sm font-bold leading-none">
+                  <h3 className="text-[#141414] text-xl font-bold leading-none">
                     Filter Licences
                   </h3>
 
-                  <p className="text-gray-500 text-xs mt-1">
+                  <p className="text-gray-500 text-sm mt-1">
                     Categories & featured licences
                   </p>
                 </div>

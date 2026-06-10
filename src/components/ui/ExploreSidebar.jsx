@@ -51,8 +51,8 @@ const ExploreSidebar = ({
                 <h4 className="font-semibold text-sm">Featured Only</h4>
 
                 <p
-                  className={`text-xs ${
-                    activeTab === "popular" ? "text-white/70" : "text-gray-500"
+                  className={`text-sm ${
+                    activeTab === "popular" ? "text-white" : "text-gray-500"
                   }`}
                 >
                   Show popular {title}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import {
   Search,
   MessageCircle,
@@ -11,6 +11,7 @@ import {
   GraduationCap,
   Loader2,
   Navigation,
+  ArrowLeft,
 } from "lucide-react";
 import courseService from "../../api/services/courseService";
 import { courses as fallbackCourses } from "../../data/courseData";
@@ -45,6 +46,8 @@ const CourseResults = () => {
   const [amenitiesByLocationId, setAmenitiesByLocationId] = useState({});
   const [isCalculatingDistances, setIsCalculatingDistances] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -78,7 +81,9 @@ const CourseResults = () => {
           let geocodeMeta = {};
 
           if (loc.postcode) {
-            const lookup = await geocodePostcode(loc.postcode).catch(() => null);
+            const lookup = await geocodePostcode(loc.postcode).catch(
+              () => null,
+            );
             if (lookup) {
               geocodeMeta = {
                 region: lookup.region,
@@ -87,10 +92,7 @@ const CourseResults = () => {
             }
           }
 
-          return [
-            String(loc._id),
-            deriveLocationAmenities(loc, geocodeMeta),
-          ];
+          return [String(loc._id), deriveLocationAmenities(loc, geocodeMeta)];
         }),
       );
 
@@ -192,8 +194,7 @@ const CourseResults = () => {
       const venueAddress = formatVenueAddress(loc);
       const distanceInfo = distanceByLocationId[String(loc._id)];
       const amenities =
-        amenitiesByLocationId[String(loc._id)] ||
-        deriveLocationAmenities(loc);
+        amenitiesByLocationId[String(loc._id)] || deriveLocationAmenities(loc);
 
       flatLocations.push({
         id: loc._id,
@@ -231,7 +232,13 @@ const CourseResults = () => {
       });
     });
     return flatLocations;
-  }, [course, distanceByLocationId, amenitiesByLocationId, isCalculatingDistances, postcode]);
+  }, [
+    course,
+    distanceByLocationId,
+    amenitiesByLocationId,
+    isCalculatingDistances,
+    postcode,
+  ]);
 
   const sortedLocations = useMemo(() => {
     const copy = [...locations];
@@ -320,6 +327,12 @@ const CourseResults = () => {
       </header> */}
 
       <main className="max-w-300 mx-auto px-4 py-6 md:py-20">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-[#d84a1a] transition-colors text-xs font-bold uppercase tracking-widest mb-6"
+        >
+          <ArrowLeft size={16} /> Back
+        </button>
         <div className="flex flex-col lg:flex-row gap-5">
           {/* 4. Left Sidebar (Filters) */}
           <CourseResultsFilter filter={filter} setFilter={setFilter} />
@@ -340,25 +353,6 @@ const CourseResults = () => {
                 </span>
               </p>
             </div>
-
-            {/* Weekend Alert */}
-            {/* <div className="bg-white rounded-xl border border-gray-100 p-4 flex items-start gap-4">
-              <div className="bg-[#FFF5F1] p-2 rounded-lg">
-                <Calendar className="text-[#F15A24]" size={20} />
-              </div>
-              <div className="text-sm">
-                <p className="font-bold text-[#1C1C1C] mb-0.5">
-                  Weekend Training Now Available!
-                </p>
-                <p className="text-gray-500">
-                  Complete your training on Saturdays and Sundays across three
-                  weekends.{" "}
-                  <span className="text-[#F15A24] cursor-pointer hover:underline">
-                    Learn more
-                  </span>
-                </p>
-              </div>
-            </div> */}
 
             {/* Location Cards */}
             {sortedLocations.map((loc) => (

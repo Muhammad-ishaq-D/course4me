@@ -116,7 +116,7 @@ const HiringTrainingSection = () => {
             </h2>
 
             {/* DESCRIPTION */}
-            <p className="mt-5 text-base text-gray-500 leading-relaxed max-w-xl">
+            <p className="mt-5 text-lg text-gray-500 leading-relaxed max-w-xl">
               We help learners move directly from training into real security
               careers with hiring support, interview preparation, and job
               opportunities across the UK.
@@ -175,7 +175,7 @@ const HiringTrainingSection = () => {
               </h3>
 
               {/* DESCRIPTION */}
-              <p className="mt-3 text-gray-500 text-base leading-relaxed">
+              <p className="mt-3 text-gray-500 text-lg leading-relaxed">
                 Our graduates work with top security firms, events, retail, and
                 corporate organisations nationwide.
               </p>
@@ -195,7 +195,7 @@ const HiringTrainingSection = () => {
                       <Check className="w-4 h-4 text-[#00A3FF]" />
                     </div>
 
-                    <span className="font-semibold text-gray-700 text-sm">
+                    <span className="font-semibold text-gray-700 text-base">
                       {item}
                     </span>
                   </div>
@@ -231,7 +231,7 @@ const HiringTrainingSection = () => {
                   </div>
 
                   {/* LABEL */}
-                  <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
+                  <div className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
                     {stat.label}
                   </div>
 

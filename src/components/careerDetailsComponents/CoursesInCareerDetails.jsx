@@ -14,7 +14,9 @@ const CoursesInCareerDetails = ({ career }) => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const response = await courseService.getAllCourses({ status: "Published" });
+        const response = await courseService.getAllCourses({
+          status: "Published",
+        });
         const data = response?.data?.data || [];
 
         // Map the backend courses
@@ -35,13 +37,13 @@ const CoursesInCareerDetails = ({ career }) => {
             (s) => s.availabilityStatus !== "Sold Out",
           )?.startDate
             ? new Date(
-              course.sessions.find((s) => s.availabilityStatus !== "Sold Out")
-                .startDate,
-            ).toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })
+                course.sessions.find((s) => s.availabilityStatus !== "Sold Out")
+                  .startDate,
+              ).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
             : undefined,
         }));
 
@@ -72,7 +74,7 @@ const CoursesInCareerDetails = ({ career }) => {
             Explore All Training Courses
           </h2>
 
-          <p className="mt-3 text-[#667085] text-[15px] max-w-2xl leading-[1.8]">
+          <p className="mt-3 text-[#667085] text-base max-w-2xl leading-[1.8]">
             Complete these professional training courses to begin your journey
             as a successful {career.title}.
           </p>

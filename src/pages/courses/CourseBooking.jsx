@@ -191,7 +191,7 @@ const CourseBooking = () => {
 
       <main className="max-w-300 mx-auto px-4 md:px-6 py-8">
         {/* 2. Breadcrumbs */}
-        <nav className="flex items-center gap-2 text-[13px] text-gray-400 mb-8 overflow-x-auto no-scrollbar">
+        <nav className="flex items-center gap-2 text-[15px] text-gray-400 mb-8 overflow-x-auto no-scrollbar">
           <Link to="/" className="hover:text-gray-600">
             Home
           </Link>
@@ -218,7 +218,7 @@ const CourseBooking = () => {
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* 4. Left Sidebar (Filters) */}
-          <aside className="w-full lg:w-64 shrink-0">
+          {/* <aside className="w-full lg:w-64 shrink-0">
             <h3 className="text-[11px] font-black text-gray-400 tracking-[2px] uppercase mb-5">
               Sort Results By
             </h3>
@@ -242,7 +242,6 @@ const CourseBooking = () => {
                       {option}
                     </span>
 
-                    {/* Custom Radio Indicator */}
                     <div
                       className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
                         isActive
@@ -259,7 +258,6 @@ const CourseBooking = () => {
               })}
             </div>
 
-            {/* Postcode Alert Box */}
             <div className="mt-8 p-4 rounded-2xl bg-gray-50 border border-dashed border-gray-200">
               <p className="text-[13px] text-gray-500 leading-relaxed">
                 <button className="text-[#F15A24] font-bold hover:underline">
@@ -268,13 +266,15 @@ const CourseBooking = () => {
                 to unlock distance-based filters.
               </p>
             </div>
-          </aside>
+          </aside> */}
 
           {/* 5. Center Content (Search & Locations) */}
           <div className="flex-1 space-y-6">
             {/* Search Card */}
             <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
-              <h3 className="font-bold text-[#1C1C1C] mb-5">Your Location</h3>
+              <h3 className="font-bold text-xl text-[#1C1C1C] mb-2">
+                Your Location
+              </h3>
               <div className="flex gap-4">
                 <div className="relative flex-1">
                   <MapPin
@@ -316,28 +316,34 @@ const CourseBooking = () => {
             </div>
 
             {/* Locations Card */}
-            <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
-              <div className="flex justify-between items-center mb-8">
-                <h3 className="font-bold text-[#1C1C1C]">Locations</h3>
-                <span className="text-[12px] text-gray-400 font-medium">
-                  Click to select
+            <div className="bg-white rounded-[24px] border border-gray-200 p-8 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl font-bold text-[#1C1C1C]">
+                  Available Locations
+                </h3>
+
+                <span className="text-sm text-gray-400 font-medium">
+                  Pick a location to continue
                 </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4">
-                <div className="bg-[#FFF5F1] text-[#F15A24] px-4 py-3 rounded-lg text-sm font-bold flex items-center justify-start cursor-pointer w-fit pr-20">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Active */}
+                <button className=" h-14 px-5 rounded-2xl border-2 border-[#F15A24] bg-[#FFF5F1] text-[#F15A24] font-semibold text-left transition-all">
                   All
-                </div>
+                </button>
+
                 {availableLocations.map((loc) => (
-                  <div
+                  <button
                     key={loc}
                     onClick={() => {
                       setSearchLocation(loc);
                       handleSearch(loc);
                     }}
-                    className="text-gray-700 hover:text-[#F15A24] px-4 py-3 text-sm font-medium cursor-pointer transition-colors"
+                    className=" h-14 px-5 rounded-2xl border border-gray-200 bg-white text-gray-700 font-medium text-left transition-all hover:border-[#F15A24] hover:bg-[#FFF5F1] hover:text-[#F15A24] hover:shadow-md"
                   >
                     {loc}
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -352,7 +358,7 @@ const CourseBooking = () => {
                   size={16}
                   className="text-gray-300 group-hover:text-[#F15A24] transition-colors"
                 />
-                <span className="text-sm font-medium text-gray-400 group-hover:text-[#F15A24] transition-colors">
+                <span className="text-md font-medium text-gray-400 group-hover:text-[#F15A24] transition-colors">
                   Back to {course.title}
                 </span>
               </Link>

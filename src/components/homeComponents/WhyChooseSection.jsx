@@ -106,12 +106,12 @@ const WhyChooseTrainingCentres = () => {
                 </div>
 
                 {/* TITLE */}
-                <h3 className="text-xl font-bold text-[#111111] mb-4 tracking-tight">
+                <h3 className="text-2xl font-bold text-[#111111] mb-4 tracking-tight">
                   {item.title}
                 </h3>
 
                 {/* DESCRIPTION */}
-                <p className="text-gray-500 text-sm leading-relaxed font-medium">
+                <p className="text-gray-500 text-base leading-relaxed font-medium">
                   {item.description}
                 </p>
 

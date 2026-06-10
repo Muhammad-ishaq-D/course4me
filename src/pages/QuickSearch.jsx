@@ -89,9 +89,7 @@ const QuickSearch = () => {
 
         const suggestions = [
           ...new Set((res.data || []).map((item) => item.location)),
-        ].filter((loc) =>
-          loc.toLowerCase().includes(location.toLowerCase()),
-        );
+        ].filter((loc) => loc.toLowerCase().includes(location.toLowerCase()));
 
         setLocationSuggestions(suggestions);
         setShowLocationSuggestions(suggestions.length > 0);
@@ -132,42 +130,54 @@ const QuickSearch = () => {
           promises.push(
             courseService.getAllCourses(params).then((res) => {
               const data = res.data?.data || [];
-              data.forEach((c) => suggestions.push({ title: c.title, type: "Course" }));
-            })
+              data.forEach((c) =>
+                suggestions.push({ title: c.title, type: "Course" }),
+              );
+            }),
           );
         }
         if (type === "all" || type === "license") {
           promises.push(
             licenseService.getAllLicenses(params).then((res) => {
               const data = res.data?.data || [];
-              data.forEach((l) => suggestions.push({ title: l.title, type: "License" }));
-            })
+              data.forEach((l) =>
+                suggestions.push({ title: l.title, type: "License" }),
+              );
+            }),
           );
         }
         if (type === "all" || type === "career") {
           promises.push(
             careerService.getAllCareers(params).then((res) => {
               const data = res.data?.data || [];
-              data.forEach((c) => suggestions.push({ title: c.title, type: "Career" }));
-            })
+              data.forEach((c) =>
+                suggestions.push({ title: c.title, type: "Career" }),
+              );
+            }),
           );
         }
         if (type === "all" || type === "location") {
           promises.push(
-            locationService.searchLocations({ search: search.trim() }).then((res) => {
-              const data = res.data || [];
-              data.forEach((loc) => {
-                (loc.centers || []).forEach((center) => {
-                  if (center.name?.toLowerCase().includes(search.toLowerCase())) {
-                    suggestions.push({ title: center.name, type: "Center" });
-                  }
+            locationService
+              .searchLocations({ search: search.trim() })
+              .then((res) => {
+                const data = res.data || [];
+                data.forEach((loc) => {
+                  (loc.centers || []).forEach((center) => {
+                    if (
+                      center.name?.toLowerCase().includes(search.toLowerCase())
+                    ) {
+                      suggestions.push({ title: center.name, type: "Center" });
+                    }
+                  });
                 });
-              });
-            })
+              }),
           );
         }
 
-        await Promise.all(promises.map(p => p.catch(e => console.error(e))));
+        await Promise.all(
+          promises.map((p) => p.catch((e) => console.error(e))),
+        );
 
         if (cancelled) return;
 
@@ -324,7 +334,9 @@ const QuickSearch = () => {
 
               const countCoursesForCenter = (loc, centerId) => {
                 const courses = coursesByLocation[loc._id] || [];
-                const hasCenterLinks = courses.some((course) => course.centerId);
+                const hasCenterLinks = courses.some(
+                  (course) => course.centerId,
+                );
 
                 if (hasCenterLinks) {
                   return courses.filter(
@@ -426,9 +438,9 @@ const QuickSearch = () => {
             {/* TOP */}
 
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Quick Search</h2>
+              <h2 className="text-3xl font-bold text-gray-900">Quick Search</h2>
 
-              <p className="text-gray-500 mt-1 text-sm">
+              <p className="text-gray-500 mt-1 text-lg">
                 Search everything from one intelligent search system
               </p>
             </div>
@@ -439,7 +451,7 @@ const QuickSearch = () => {
               {/* TYPE */}
 
               <div className="relative">
-                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                <label className="text-base font-semibold text-gray-700 mb-2 block">
                   Search Type
                 </label>
 
@@ -459,7 +471,7 @@ const QuickSearch = () => {
               {/* SEARCH */}
 
               <div className="relative" ref={searchRef}>
-                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                <label className="text-base font-semibold text-gray-700 mb-2 block">
                   Search Keyword
                 </label>
 
@@ -501,7 +513,7 @@ const QuickSearch = () => {
                           <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center group-hover:scale-110 transition-transform">
                             <Search size={16} className="text-[#F15A24]" />
                           </div>
-                          <h4 className="text-sm font-semibold text-gray-800">
+                          <h4 className="text-base font-semibold text-gray-800">
                             {item.title}
                           </h4>
                         </div>
@@ -517,7 +529,7 @@ const QuickSearch = () => {
               {/* LOCATION */}
 
               <div className="relative" ref={locationRef}>
-                <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                <label className="text-base font-semibold text-gray-700 mb-2 block">
                   Location
                 </label>
 
@@ -561,7 +573,7 @@ const QuickSearch = () => {
                         </div>
 
                         <div>
-                          <h4 className="text-sm font-semibold text-gray-800">
+                          <h4 className="text-base font-semibold text-gray-800">
                             {loc}
                           </h4>
                         </div>

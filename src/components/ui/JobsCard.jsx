@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  ArrowRight,
-  Clock,
-  DollarSign,
-  MapPin,
-  Star
-} from "lucide-react";
+import { ArrowRight, Clock, DollarSign, MapPin, Star } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const JobsCard = ({ job }) => {
@@ -36,30 +30,30 @@ const JobsCard = ({ job }) => {
       <div className="flex items-center gap-2 flex-wrap">
         {/* FEATURED */}
         {job.isFeatured && (
-          <div className="flex items-center gap-1 bg-[#F15A24] text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
+          <div className="flex items-center gap-1 bg-[#F15A24] text-white text-[12px] font-bold px-3 py-1.5 rounded-full">
             <Star size={10} fill="white" />
             Featured
           </div>
         )}
 
         {/* TYPE */}
-        <div className="bg-[#EEF4FF] text-[#155DFC] text-[10px] font-semibold px-3 py-1.5 rounded-full">
+        <div className="bg-[#EEF4FF] text-[#155DFC] text-[12px] font-semibold px-3 py-1.5 rounded-full">
           {job.type}
         </div>
 
         {/* ROLE */}
-        <div className="bg-[#155DFC] text-white text-[10px] font-semibold px-3 py-1.5 rounded-full">
+        <div className="bg-[#155DFC] text-white text-[12px] font-semibold px-3 py-1.5 rounded-full">
           {roleBadge}
         </div>
       </div>
 
       {/* ================= TITLE ================= */}
       <div className="mt-5">
-        <h3 className="text-[28px] leading-[1.2] font-black text-[#111111] group-hover:text-[#F15A24] transition duration-300 line-clamp-2">
+        <h3 className="text-3xl leading-[1.2] font-black text-[#111111] group-hover:text-[#F15A24] transition duration-300 line-clamp-2">
           {job.title}
         </h3>
 
-        <p className="mt-1.5 text-[14px] text-gray-500 font-medium">
+        <p className="mt-1.5 text-lg text-gray-500 font-medium">
           {job.company}
         </p>
       </div>
@@ -70,23 +64,21 @@ const JobsCard = ({ job }) => {
         <div className="flex items-center gap-2.5">
           <MapPin size={16} className="text-[#F15A24] shrink-0" />
 
-          <p className="text-[15px] text-[#111111] font-medium">
-            {job.location}
-          </p>
+          <p className="text-base text-[#111111] font-medium">{job.location}</p>
         </div>
 
         {/* SALARY */}
         <div className="flex items-center gap-2.5">
           <DollarSign size={16} className="text-[#00A63E] shrink-0" />
 
-          <p className="text-[15px] font-bold text-[#00A63E]">{job.salary}</p>
+          <p className="text-base font-bold text-[#00A63E]">{job.salary}</p>
         </div>
 
         {/* POSTED */}
         <div className="flex items-center gap-2.5">
           <Clock size={16} className="text-gray-500 shrink-0" />
 
-          <p className="text-[15px] text-gray-500 font-medium">
+          <p className="text-base text-gray-500 font-medium">
             Posted {formatPosted(job.createdAt || job.posted)}
           </p>
         </div>
@@ -94,14 +86,14 @@ const JobsCard = ({ job }) => {
 
       {/* ================= DESCRIPTION ================= */}
       <div className="mt-5">
-        <p className="text-[14px] text-gray-600 leading-[1.8] line-clamp-2">
+        <p className="text-base text-gray-600 leading-[1.8] line-clamp-2">
           {job.description}
         </p>
       </div>
 
       {/* ================= REQUIREMENTS ================= */}
       <div className="mt-5">
-        <h4 className="text-[11px] uppercase tracking-wide font-bold text-gray-400 mb-2.5">
+        <h4 className="text-sm uppercase tracking-wide font-bold text-gray-400 mb-2.5">
           Key Requirements
         </h4>
 
@@ -110,7 +102,7 @@ const JobsCard = ({ job }) => {
             job.requirements.slice(0, 2).map((req, i) => (
               <span
                 key={i}
-                className="bg-[#F4F6F8] text-[#4B5563] text-[12px] font-medium px-3 py-1.5 rounded-full"
+                className="bg-[#F4F6F8] text-[#4B5563] text-sm font-medium px-3 py-1.5 rounded-full"
               >
                 {req}
               </span>
@@ -127,12 +119,12 @@ const JobsCard = ({ job }) => {
       <div className="mt-6 flex items-center justify-between gap-4">
         {/* STATUS */}
         <div>
-          <p className="text-[10px] uppercase tracking-wide text-gray-400 font-semibold">
+          <p className="text-[12px] uppercase tracking-wide text-gray-400 font-semibold">
             Hiring Status
           </p>
 
           <div className="flex items-center gap-1.5 mt-1">
-            <p className="text-[13px] font-bold text-[#00A63E]">Recruiting</p>
+            <p className="text-[15px] font-bold text-[#00A63E]">Recruiting</p>
           </div>
         </div>
 

@@ -44,14 +44,14 @@ const CourseResultsFilter = ({ filter, setFilter }) => {
 
                   <div className="flex flex-col">
                     <span
-                      className={`text-[14px] font-bold leading-tight transition-colors ${
+                      className={`text-[16px] font-bold leading-tight transition-colors ${
                         isActive ? "text-white" : "text-gray-700"
                       }`}
                     >
                       {option.label}
                     </span>
                     {!isActive && (
-                      <span className="text-[11px] text-gray-400 font-medium">
+                      <span className="text-[14px] text-gray-400 font-medium">
                         View results
                       </span>
                     )}
@@ -60,7 +60,7 @@ const CourseResultsFilter = ({ filter, setFilter }) => {
 
                 <div className="text-right">
                   <span
-                    className={`text-[15px] font-black transition-colors ${
+                    className={`text-[16px] font-black transition-colors ${
                       isActive ? "text-white" : "text-gray-900"
                     }`}
                   >
@@ -72,25 +72,6 @@ const CourseResultsFilter = ({ filter, setFilter }) => {
           })}
         </div>
       </div>
-
-      {/* Modern Postcode Info Card */}
-      {/* <div className="mt-4 bg-slate-900 rounded-[22px] p-5 relative overflow-hidden group">
-        <div className="relative z-10 flex gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#F15A24] flex items-center justify-center shrink-0">
-            <MapPin size={16} className="text-white" />
-          </div>
-          <div>
-            <p className="text-[13px] text-white font-bold mb-1">
-              Location Sorting
-            </p>
-            <p className="text-[11px] text-slate-400 leading-relaxed">
-              Enter your postcode above to find courses closer to your home.
-            </p>
-          </div>
-        </div>
-
-        <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-white/5 rounded-full" />
-      </div> */}
     </aside>
   );
 };
