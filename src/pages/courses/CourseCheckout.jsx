@@ -140,44 +140,37 @@ const CourseCheckout = () => {
 
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(term)}&format=json&addressdetails=1&limit=5`);
+        const res = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(term)}/autocomplete`);
         if (cancelled) return;
         const data = await res.json();
-
-        const seen = new Set();
+        
         const suggestions = [];
 
-        (data || []).forEach((item) => {
-          const label = item.display_name;
-          if (label && !seen.has(label)) {
-            seen.add(label);
-
-            const addr = item.address || {};
-            let postcode = addr.postcode || "";
-            
-            if (!postcode) {
-              const ukPostcodeRegex = /\b([A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2})\b/i;
-              const usZipRegex = /\b(\d{5}(?:-\d{4})?)\b/;
-              const ukMatch = label.match(ukPostcodeRegex);
-              const usMatch = label.match(usZipRegex);
-              
-              if (ukMatch) postcode = ukMatch[0];
-              else if (usMatch) postcode = usMatch[0];
-            }
-
-            const city = addr.city || addr.town || addr.village || addr.county || "";
-
-            const addr1Parts = [addr.house_number, addr.road, addr.suburb].filter(Boolean);
-            const address = addr1Parts.length > 0 ? addr1Parts.join(", ") : item.display_name.split(",")[0];
-
-            suggestions.push({
-              label,
-              postcode: postcode || term,
-              address,
-              city,
+        if (data.status === 200 && data.result) {
+          const topPostcodes = data.result.slice(0, 5);
+          
+          const detailRes = await fetch('https://api.postcodes.io/postcodes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ postcodes: topPostcodes })
+          });
+          const detailData = await detailRes.json();
+          
+          if (detailData.status === 200 && detailData.result) {
+            detailData.result.forEach(item => {
+              if (item.result) {
+                const pc = item.result;
+                const city = pc.parish || pc.admin_district || pc.region || "";
+                suggestions.push({
+                  label: `${pc.postcode}, ${city}`,
+                  postcode: pc.postcode,
+                  address: "",
+                  city: city,
+                });
+              }
             });
           }
-        });
+        }
 
         setPostcodeSuggestions(suggestions);
         setShowPostcodeSuggestions(suggestions.length > 0);
@@ -983,7 +976,7 @@ const CourseCheckout = () => {
                   <div className="relative" ref={postcodeRef}>
                     <FieldInput
                       label="Post code"
-                      placeholder="Enter postcode, city, or address..."
+                      placeholder="Post code"
                       value={billing.postcode}
                       onChange={(v) => updateBilling("postcode", v)}
                       onFocus={() => postcodeSuggestions.length > 0 && setShowPostcodeSuggestions(true)}
