@@ -140,27 +140,35 @@ const CourseCheckout = () => {
 
     const timer = setTimeout(async () => {
       try {
-        const res = await courseService.getAllCourses({ status: "Published", location: term });
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(term)}&format=json&addressdetails=1&limit=5`);
         if (cancelled) return;
-
+        const data = await res.json();
+        
         const seen = new Set();
         const suggestions = [];
-        (res?.data?.data || []).forEach((course) => {
-          course.locations?.forEach((loc) => {
-            const label = [loc.name, loc.address, loc.postcode].filter(Boolean).join(", ");
-            if (label && !seen.has(label)) {
-              seen.add(label);
-              suggestions.push({
-                label,
-                postcode: loc.postcode || "",
-                address: loc.address || "",
-                city: loc.name || "",
-              });
-            }
-          });
+
+        (data || []).forEach((item) => {
+          const label = item.display_name;
+          if (label && !seen.has(label)) {
+            seen.add(label);
+            
+            const addr = item.address || {};
+            const postcode = addr.postcode || "";
+            const city = addr.city || addr.town || addr.village || addr.county || "";
+            
+            const addr1Parts = [addr.house_number, addr.road, addr.suburb].filter(Boolean);
+            const address = addr1Parts.length > 0 ? addr1Parts.join(", ") : item.display_name.split(",")[0];
+
+            suggestions.push({
+              label,
+              postcode,
+              address,
+              city,
+            });
+          }
         });
 
-        setPostcodeSuggestions(suggestions.slice(0, 8));
+        setPostcodeSuggestions(suggestions);
         setShowPostcodeSuggestions(suggestions.length > 0);
       } catch {
         if (!cancelled) {
@@ -170,7 +178,7 @@ const CourseCheckout = () => {
       } finally {
         if (!cancelled) setLoadingPostcode(false);
       }
-    }, 300);
+    }, 500);
 
     return () => {
       cancelled = true;
@@ -963,8 +971,8 @@ const CourseCheckout = () => {
                   </p>
                   <div className="relative" ref={postcodeRef}>
                     <FieldInput
-                      label="Post code"
-                      placeholder="Post code"
+                      label="Search Address / Post code"
+                      placeholder="Enter postcode, city, or address..."
                       value={billing.postcode}
                       onChange={(v) => updateBilling("postcode", v)}
                       onFocus={() => postcodeSuggestions.length > 0 && setShowPostcodeSuggestions(true)}
