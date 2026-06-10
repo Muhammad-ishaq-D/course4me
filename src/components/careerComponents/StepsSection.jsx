@@ -101,11 +101,11 @@ const StepsSection = () => {
 
                   {/* Content */}
                   <div className="relative mt-5">
-                    <h3 className="text-[20px] font-bold text-[#111111] leading-tight">
+                    <h3 className="text-2xl font-bold text-[#111111] leading-tight">
                       {step.title}
                     </h3>
 
-                    <p className="mt-3 text-[#6B7280] leading-relaxed text-[14px]">
+                    <p className="mt-3 text-[#6B7280] leading-relaxed text-base">
                       {step.description}
                     </p>
                   </div>

@@ -103,7 +103,7 @@ const TestimonialsSection = () => {
                   4.6/5 Rating
                 </h4>
 
-                <p className="text-xs text-[#8A8A8A] mt-1">
+                <p className="text-sm text-[#8A8A8A] mt-1">
                   Based on verified students
                 </p>
               </div>
@@ -112,11 +112,11 @@ const TestimonialsSection = () => {
             {/* FOOTER */}
             <div className="mt-7 pt-5 border-t border-[#F4E7E2] flex items-center justify-between relative z-10">
               <div>
-                <p className="text-sm font-semibold text-[#1A1A1A]">
+                <p className="text-md font-semibold text-[#1A1A1A]">
                   Excellent Student Satisfaction
                 </p>
 
-                <p className="text-xs text-[#8A8A8A] mt-1">
+                <p className="text-sm text-[#8A8A8A] mt-1">
                   Trusted by thousands of learners
                 </p>
               </div>
@@ -185,7 +185,7 @@ const TestimonialsSection = () => {
                   4.9/5 Rating
                 </h4>
 
-                <p className="text-xs text-[#8A8A8A] mt-1">
+                <p className="text-sm text-[#8A8A8A] mt-1">
                   Average Student Feedback
                 </p>
               </div>
@@ -194,11 +194,11 @@ const TestimonialsSection = () => {
             {/* FOOTER */}
             <div className="mt-7 pt-5 border-t border-[#F4E7E2] flex items-center justify-between relative z-10">
               <div>
-                <p className="text-sm font-semibold text-[#1A1A1A]">
+                <p className="text-base font-semibold text-[#1A1A1A]">
                   Outstanding Learning Experience
                 </p>
 
-                <p className="text-xs text-[#8A8A8A] mt-1">
+                <p className="text-sm text-[#8A8A8A] mt-1">
                   Highly rated by our students
                 </p>
               </div>
@@ -223,7 +223,7 @@ const TestimonialsSection = () => {
               className="w-full h-full object-cover"
             />
 
-            <span className="absolute bottom-3 left-3 text-white text-xs">
+            <span className="absolute bottom-3 left-3 text-white text-sm">
               Conflict & Security Guard Training – January 2026
             </span>
           </motion.div>
@@ -242,7 +242,7 @@ const TestimonialsSection = () => {
               className="w-full h-full object-cover"
             />
 
-            <span className="absolute bottom-3 left-3 text-white text-xs">
+            <span className="absolute bottom-3 left-3 text-white text-sm">
               Callie Champion
             </span>
           </motion.div>
@@ -274,17 +274,17 @@ const TestimonialsSection = () => {
 
               {/* CLIENT INFO */}
               <div className="mb-5">
-                <h3 className="text-[22px] font-bold text-[#F15A24] leading-none">
+                <h3 className="text-2xl font-bold text-[#F15A24] leading-none">
                   {t.name}
                 </h3>
 
-                <p className="text-[12px] text-[#8A8A8A] mt-2 font-medium">
+                <p className="text-sm text-[#8A8A8A] mt-2 font-medium">
                   {t.role}
                 </p>
               </div>
 
               {/* TEXT */}
-              <p className="text-[13px] leading-[24px] text-[#666666] pr-3 min-h-[120px]">
+              <p className="text-md leading-[24px] text-[#666666] pr-3 min-h-[120px]">
                 {t.text}
               </p>
 
@@ -331,7 +331,7 @@ const TestimonialsSection = () => {
             <div>
               <h4 className="font-semibold">Industry-Leading Pass Rate</h4>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-md text-gray-500">
                 Our students consistently achieve outstanding results
               </p>
             </div>

@@ -88,7 +88,7 @@ const ItemCard = ({ icon: Icon, title, description, onClick }) => (
             className="
             font-bold
             text-[#111111]
-            text-[16px]
+            text-lg
             leading-snug
             group-hover:text-[#FF5421]
             transition-colors
@@ -101,7 +101,7 @@ const ItemCard = ({ icon: Icon, title, description, onClick }) => (
           {description && (
             <p
               className="
-              text-[13px]
+              text-sm
               text-gray-500
               mt-1
               font-medium
@@ -231,47 +231,19 @@ const CoursesLicencesSection = () => {
         {/* HEADER */}
         <div className="max-w-3xl">
           {/* LABEL */}
-          <div
-            className="
-        inline-flex items-center
-        bg-[#FF54210D]
-        border border-[#FF54211A]
-        text-[#FF5421]
-        px-4 py-2
-        rounded-full
-        text-sm
-        font-bold
-        mb-5
-      "
-          >
+          <div className=" inline-flex items-center bg-[#FF54210D] border border-[#FF54211A] text-[#FF5421] px-4 py-2 rounded-full text-sm font-bold mb-5">
             Courses & Licences
           </div>
 
           {/* TITLE */}
-          <h2
-            className="
-        text-3xl sm:text-4xl lg:text-5xl
-        font-black
-        text-[#111111]
-        leading-tight
-        tracking-tight
-      "
-          >
+          <h2 className=" text-3xl sm:text-4xl lg:text-5xl font-black text-[#111111] leading-tight tracking-tight">
             Pick Your Course.
             <br />
             <span className="text-[#FF5421]">Build Your Future.</span>
           </h2>
 
           {/* DESC */}
-          <p
-            className="
-        mt-5
-        text-base sm:text-lg
-        text-gray-500
-        leading-relaxed
-        max-w-2xl
-      "
-          >
+          <p className=" mt-3 text-base sm:text-lg text-gray-500 leading-relaxed max-w-2xl">
             Explore industry-recognised training courses and licences designed
             to help you start and grow your career in security.
           </p>
@@ -283,12 +255,7 @@ const CoursesLicencesSection = () => {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`
-            px-6 py-3
-            rounded-2xl
-            text-sm
-            font-bold
-            transition-all duration-300
+              className={` px-6 py-3 rounded-2xl text-[15px] font-bold transition-all duration-300
 
             ${
               activeCategory === cat
@@ -305,16 +272,7 @@ const CoursesLicencesSection = () => {
         {/* CONTENT GRID */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-7">
           {/* LEFT */}
-          <div
-            className="
-        rounded-[32px]
-        bg-white/80
-        backdrop-blur-xl
-        border border-white/40
-        p-4 md:p-8
-        shadow-[0_20px_60px_rgba(0,0,0,0.05)]
-      "
-          >
+          <div className=" rounded-4xl bg-white/80 backdrop-blur-xl border border-white/40 p-4 md:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.05)]">
             {/* HEADER */}
             <div className="flex items-center justify-between mb-8">
               <div>
@@ -322,21 +280,14 @@ const CoursesLicencesSection = () => {
                   Popular Courses
                 </h3>
 
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-base text-gray-500 mt-1">
                   Most enrolled training programmes
                 </p>
               </div>
 
               <button
                 onClick={() => navigate("/courses")}
-                className="
-              hidden sm:flex
-              items-center gap-2
-              text-[#FF5421]
-              font-bold
-              hover:gap-3
-              transition-all duration-300
-            "
+                className=" hidden sm:flex items-center gap-2 text-[#FF5421] font-bold hover:gap-3 transition-all duration-300"
               >
                 View All
                 <ArrowRight className="w-4 h-4" />
@@ -360,16 +311,7 @@ const CoursesLicencesSection = () => {
           </div>
 
           {/* RIGHT */}
-          <div
-            className="
-        rounded-[32px]
-        bg-[#111111]
-        p-4 md:p-8
-        shadow-[0_20px_60px_rgba(0,0,0,0.12)]
-        relative
-        overflow-hidden
-      "
-          >
+          <div className=" rounded-4xl bg-[#111111] p-4 md:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.12)] relative overflow-hidden">
             {/* GLOW */}
             <div className="absolute top-0 right-0 w-52 h-52 bg-[#FF5421]/20 blur-3xl rounded-full" />
 
@@ -380,7 +322,7 @@ const CoursesLicencesSection = () => {
                   Popular Licences
                 </h3>
 
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-base text-gray-400 mt-1">
                   Most requested licence training
                 </p>
               </div>

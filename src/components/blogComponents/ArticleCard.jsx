@@ -90,7 +90,7 @@ const ArticleCard = ({
 
         {/* READ TIME */}
         <div className="absolute bottom-5 right-5">
-          <div className="flex items-center gap-2 bg-black/30 backdrop-blur-md border border-white/10 text-white px-4 py-2 rounded-full text-[11px] font-semibold">
+          <div className="flex items-center gap-2 bg-black/30 backdrop-blur-md border border-white/10 text-white px-4 py-2 rounded-full text-xs font-semibold">
             <Clock size={13} />
 
             {readTime}
@@ -101,7 +101,7 @@ const ArticleCard = ({
       {/* ================= CONTENT ================= */}
       <div className="relative flex flex-col flex-1 p-7">
         {/* DATE */}
-        <div className="flex items-center gap-2 text-[#F15A24] text-xs font-bold uppercase tracking-[0.15em]">
+        <div className="flex items-center gap-2 text-[#F15A24] text-sm font-bold uppercase tracking-[0.15em]">
           <Calendar size={14} />
 
           {date}
@@ -113,7 +113,7 @@ const ArticleCard = ({
         </h3>
 
         {/* DESCRIPTION */}
-        <p className="mt-5 text-[#6B7280] text-[15px] leading-relaxed flex-1 line-clamp-3">
+        <p className="mt-5 text-[#6B7280] text-base leading-relaxed flex-1 line-clamp-3">
           {excerpt}
         </p>
 
@@ -130,7 +130,7 @@ const ArticleCard = ({
             <div>
               <p className="text-[14px] font-bold text-[#111827]">{author}</p>
 
-              <span className="text-xs text-gray-400">Courses4me Team</span>
+              <span className="text-sm text-gray-400">Courses4me Team</span>
             </div>
           </div>
 

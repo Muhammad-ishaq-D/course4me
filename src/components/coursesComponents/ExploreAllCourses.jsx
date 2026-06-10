@@ -202,7 +202,7 @@ const ExploreAllCourses = () => {
             Explore all courses
           </h2>
 
-          <p className="text-[#141414]/60 mt-4 max-w-2xl text-base leading-relaxed">
+          <p className="text-[#141414]/60 mt-2 max-w-2xl text-base leading-relaxed">
             Browse our wide range of professional training courses and
             certifications designed to help you build your career and gain
             industry-recognized qualifications.
@@ -245,7 +245,7 @@ const ExploreAllCourses = () => {
                     : categoryParam}
                 </h2>
 
-                <p className="text-gray-500 mt-1 text-sm">
+                <p className="text-gray-500  text-md">
                   {filteredCourses.length}{" "}
                   {filteredCourses.length === 1 ? "course" : "courses"}{" "}
                   available
@@ -274,11 +274,11 @@ const ExploreAllCourses = () => {
 
                 {/* TEXT */}
                 <div className="text-left">
-                  <h3 className="text-[#141414] text-sm font-bold leading-none">
+                  <h3 className="text-[#141414] text-xl font-bold leading-none">
                     Filter Courses
                   </h3>
 
-                  <p className="text-gray-500 text-xs mt-1">
+                  <p className="text-gray-500 text-sm mt-1">
                     Categories & featured courses
                   </p>
                 </div>

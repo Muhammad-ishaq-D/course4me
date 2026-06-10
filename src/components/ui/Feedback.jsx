@@ -21,26 +21,26 @@ const Feedback = () => {
           Trusted By Thousands
         </h3>
 
-        <p className="text-slate-500 text-sm leading-relaxed mb-6">
+        <p className="text-slate-500 text-md leading-relaxed mb-6">
           Join thousands of learners who have successfully completed their
           training through Courses4Me.
         </p>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           <div className="bg-slate-50 rounded-xl p-3 text-center">
             <h4 className="text-lg font-black text-[#F15A24]">4.9★</h4>
-            <p className="text-[11px] text-slate-500">Rating</p>
+            <p className="text-xs text-slate-500">Rating</p>
           </div>
 
           <div className="bg-slate-50 rounded-xl p-3 text-center">
             <h4 className="text-lg font-black text-[#F15A24]">10K+</h4>
-            <p className="text-[11px] text-slate-500">Students</p>
+            <p className="text-xs text-slate-500">Students</p>
           </div>
 
           <div className="bg-slate-50 rounded-xl p-3 text-center">
             <h4 className="text-lg font-black text-[#F15A24]">95%</h4>
-            <p className="text-[11px] text-slate-500">Pass Rate</p>
+            <p className="text-xs text-slate-500">Pass Rate</p>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@ const Feedback = () => {
               Rated by Students
             </p>
 
-            <p className="text-slate-500 text-xs">
+            <p className="text-slate-500 text-sm">
               Based on 9,511 verified reviews
             </p>
           </div>
@@ -98,12 +98,12 @@ const Feedback = () => {
         <div className="grid grid-cols-2 gap-3 pt-5 border-t border-slate-100">
           <div className="bg-slate-50 rounded-xl p-3 text-center">
             <p className="text-2xl font-black text-slate-900">95%</p>
-            <p className="text-xs text-slate-500 font-medium">Pass Rate</p>
+            <p className="text-sm text-slate-500 font-medium">Pass Rate</p>
           </div>
 
           <div className="bg-slate-50 rounded-xl p-3 text-center">
             <p className="text-2xl font-black text-slate-900">9.5k+</p>
-            <p className="text-xs text-slate-500 font-medium">Reviews</p>
+            <p className="text-sm text-slate-500 font-medium">Reviews</p>
           </div>
         </div>
       </div>
@@ -116,28 +116,30 @@ const Feedback = () => {
           </div>
 
           <div className="space-y-3">
-            <h3 className="font-bold text-white text-[15px] mb-2">
+            <h3 className="font-bold text-white text-[18px] mb-2">
               Need Help?
             </h3>
 
-            <div className="space-y-2">
-              <button
-                // href="tel:08006894621"
+            <div className="space-y-0">
+              {/* Phone */}
+              <a
+                href="tel:+448006894621"
                 className="flex items-center gap-2 group"
               >
-                <span className="text-[18px] font-black text-[#F15A24] group-hover:text-[#ff7241] transition-colors">
+                <span className="text-[20px] font-extrabold text-[#F15A24] group-hover:text-[#ff7241] transition-colors">
                   0800 689 4621
                 </span>
-              </button>
+              </a>
 
-              <button
-                // href="mailto:info@courses4me.co.uk"
+              {/* Email */}
+              <a
+                href="mailto:info@courses4me.co.uk?subject=Course Enquiry"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
               >
-                <span className="text-[14px] font-medium border-b border-transparent group-hover:border-white/20 pb-0.5">
+                <span className="text-[15px] font-medium border-b border-transparent group-hover:border-white/20 pb-0.5">
                   info@courses4me.co.uk
                 </span>
-              </button>
+              </a>
             </div>
           </div>
         </div>

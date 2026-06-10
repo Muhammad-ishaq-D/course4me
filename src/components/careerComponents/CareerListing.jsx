@@ -117,7 +117,7 @@ const CareerListing = () => {
 ====================================================== */}
         <div className="mb-5">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm mb-5">
+          <div className="flex items-center gap-2 text-base mb-5">
             <NavLink
               to="/"
               className="text-[#98A2B3] cursor-pointer font-medium"
@@ -158,7 +158,7 @@ const CareerListing = () => {
                   </h1>
 
                   {/* Description */}
-                  <p className="mt-5 text-[15px] md:text-[16px] leading-relaxed text-[#667085] max-w-2xl">
+                  <p className="mt-3 text-base leading-relaxed text-[#667085] max-w-2xl">
                     Discover the right career path for you. Get trained, get
                     licensed and build your future in the security industry.
                   </p>
@@ -204,11 +204,11 @@ const CareerListing = () => {
                 {/* Search Box */}
                 <div className="w-full xl:w-[390px]">
                   <div className="bg-white rounded-[28px] border border-white shadow-[0_20px_50px_rgba(0,0,0,0.06)] p-5">
-                    <h2 className="text-xl font-black text-[#111827]">
+                    <h2 className="text-2xl font-black text-[#111827]">
                       Quick Search
                     </h2>
 
-                    <p className="text-sm text-[#667085] mt-2">
+                    <p className="text-base text-[#667085] mt-2">
                       Find the perfect career instantly.
                     </p>
 
@@ -237,7 +237,7 @@ const CareerListing = () => {
                       </div>
 
                       {/* Button */}
-                      <button className="w-full h-13 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] transition-all text-white font-bold shadow-lg shadow-[#F8510C]/20">
+                      <button className="w-full px-3 py-4 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] transition-all text-white font-bold shadow-lg shadow-[#F8510C]/20">
                         Search Careers
                       </button>
                     </div>
@@ -270,7 +270,7 @@ const CareerListing = () => {
               />
 
               {/* Sidebar */}
-              <div className="fixed top-0 left-0 h-full w-77.5 bg-white z-40 shadow-2xl overflow-y-auto xl:hidden">
+              <div className="fixed top-0 left-0 h-full w-77.5 bg-white z-50 shadow-2xl overflow-y-auto xl:hidden">
                 {/* Header */}
                 <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between">
                   <h2 className="text-lg font-black text-[#111827]">Filters</h2>
@@ -306,10 +306,10 @@ const CareerListing = () => {
                 {/* Left Content */}
                 <div className="flex items-center gap-4">
                   <div>
-                    <h2 className="text-[22px] font-black text-[#111827] leading-none">
+                    <h2 className="text-2xl font-black text-[#111827] leading-none">
                       {selectedCategory}
                     </h2>
-                    <p className="text-sm text-[#667085] mt-2 font-medium">
+                    <p className="text-base text-[#667085] mt-2 font-medium">
                       Showing{" "}
                       <span className="text-[#F8510C] font-bold">
                         {filteredCareers.length}
@@ -323,7 +323,7 @@ const CareerListing = () => {
                   {/* Mobile Filter Button */}
                   <button
                     onClick={() => setShowFilters(true)}
-                    className="xl:hidden h-11 px-5 rounded-2xl border border-gray-200 bg-white flex items-center gap-2 font-semibold text-[#111827]"
+                    className="xl:hidden py-3 px-5 rounded-2xl text-base border border-gray-200 bg-white flex items-center gap-2 font-semibold text-[#111827]"
                   >
                     <Filter className="w-4 h-4 text-[#F8510C]" /> Filters
                   </button>
@@ -423,11 +423,13 @@ const CareerListing = () => {
                 ].map((skill, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">
+                      <span className="text-base font-medium text-gray-700">
                         {skill[0]}
                       </span>
 
-                      <span className="text-sm text-gray-500">{skill[1]}</span>
+                      <span className="text-base text-gray-500">
+                        {skill[1]}
+                      </span>
                     </div>
 
                     <div className="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
@@ -447,7 +449,7 @@ const CareerListing = () => {
                 Need Help Choosing?
               </h2>
 
-              <p className="text-sm text-gray-500 mt-2 leading-relaxed">
+              <p className="text-base text-gray-500 mt-2 leading-relaxed">
                 Our career advisors are here to help you find the right path.
               </p>
 

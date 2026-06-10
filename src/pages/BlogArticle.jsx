@@ -407,7 +407,7 @@ const BlogArticle = () => {
                     Ready to Get Qualified?
                   </h3>
 
-                  <p className="mt-3 text-gray-400 text-sm leading-relaxed">
+                  <p className="mt-2 text-gray-400 text-base leading-relaxed">
                     Browse SIA approved courses near you and start working in
                     the security industry fast.
                   </p>

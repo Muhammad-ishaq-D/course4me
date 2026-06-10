@@ -115,7 +115,7 @@ const HeroCareerDetails = ({ career }) => {
                     const el = document.getElementById("jobs-section");
                     if (el) el.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="inline-flex cursor-pointer items-center gap-3 h-12 px-6 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] text-white text-[14px] font-bold shadow-[0_15px_35px_rgba(248,81,12,0.30)] transition-all duration-300 hover:gap-4 active:scale-95"
+                  className="inline-flex cursor-pointer items-center gap-3 py-3 px-6 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] text-white text-base font-bold shadow-[0_15px_35px_rgba(248,81,12,0.30)] transition-all duration-300 hover:gap-4 active:scale-95"
                 >
                   Apply for This Career Jobs
                   <ArrowRight className="w-4 h-4" />
@@ -149,7 +149,7 @@ const HeroCareerDetails = ({ career }) => {
 
                 {/* Salary */}
                 <div className="mt-4">
-                  <p className="text-white/60 text-xs">Average Salary</p>
+                  <p className="text-white/60 text-sm">Average Salary</p>
 
                   <h2 className="mt-1 text-3xl font-black text-white">
                     {career.salary}
@@ -157,7 +157,7 @@ const HeroCareerDetails = ({ career }) => {
                 </div>
 
                 {/* Details */}
-                <div className="mt-5 space-y-3 text-sm">
+                <div className="mt-5 space-y-3 text-base">
                   <div className="flex items-center justify-between text-white/80">
                     <div className="flex items-center gap-2.5">
                       <Briefcase className="w-4 h-4 text-[#F8510C]" />
@@ -185,15 +185,18 @@ const HeroCareerDetails = ({ career }) => {
 
                 {/* Bottom Card */}
                 <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-[#00C853] mt-0.5" />
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2
+                      size={22}
+                      className=" text-[#00C853] mt-0.5"
+                    />
 
                     <div>
-                      <h3 className="text-white text-sm font-bold">
+                      <h3 className="text-white text-base font-bold">
                         Career Growth Opportunity
                       </h3>
 
-                      <p className="text-xs text-white/60 mt-1 leading-relaxed">
+                      <p className="text-sm text-white/60 mt-1 leading-relaxed">
                         Strong long-term demand and career progression
                         opportunities.
                       </p>

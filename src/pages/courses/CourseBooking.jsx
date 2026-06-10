@@ -23,10 +23,10 @@ import Feedback from "../../components/ui/Feedback";
 const fmtDate = (d) =>
   d
     ? new Date(d).toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })
     : null;
 
 const CourseBooking = () => {
@@ -53,7 +53,7 @@ const CourseBooking = () => {
     if (!courseIdFromUrl) { setIsLoadingCourse(false); return; }
     courseService.getCourseById(courseIdFromUrl)
       .then((res) => setCourse(res.data.data))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setIsLoadingCourse(false));
   }, [courseIdFromUrl]);
 
@@ -179,11 +179,10 @@ const CourseBooking = () => {
                   <button
                     key={option}
                     onClick={() => setFilter(option)}
-                    className={`flex items-center justify-between px-5 py-4 rounded-2xl border-2 transition-all duration-300 group ${
-                      isActive
+                    className={`flex items-center justify-between px-5 py-4 rounded-2xl border-2 transition-all duration-300 group ${isActive
                         ? "border-[#F15A24] bg-[#F15A24]/5 shadow-sm"
                         : "border-gray-100 bg-white hover:border-gray-200"
-                    }`}
+                      }`}
                   >
                     <span className={`text-[15px] font-bold ${isActive ? "text-[#F15A24]" : "text-gray-600"}`}>
                       {option}
@@ -202,7 +201,7 @@ const CourseBooking = () => {
                 to unlock distance-based filters.
               </p>
             </div>
-          </aside>
+          </aside> */}
 
           {/* Center Content */}
           <div className="flex-1 space-y-6">

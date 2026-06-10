@@ -14,7 +14,7 @@ const CareerSidebar = ({
       {/* Header */}
       <div className="flex items-center justify-between mb-6 px-2">
         <div>
-          <p className="text-[12px] font-extrabold tracking-[0.16em] uppercase text-[#98A2B3]">
+          <p className="text-sm font-extrabold tracking-[0.16em] uppercase text-[#98A2B3]">
             Categories
           </p>
         </div>

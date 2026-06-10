@@ -23,9 +23,9 @@ const Footer = () => {
       try {
         const [coursesRes, licensesRes] = await Promise.all([
           courseService.getAllCourses({ status: "Published" }),
-          licenseService.getAllLicenses()
+          licenseService.getAllLicenses(),
         ]);
-        
+
         setCourses(coursesRes.data?.data?.slice(0, 5) || []);
         setLicenses(licensesRes.data?.data?.slice(0, 5) || []);
       } catch (error) {
@@ -43,7 +43,7 @@ const Footer = () => {
           {/* Column 1 - About & Contact */}
           <div>
             <img src={Logo} alt="logo" className="w-40  md:w-44 " />
-            <p className="text-[#A1A1A1] text-[14px] mt-2 leading-relaxed mb-10">
+            <p className="text-[#A1A1A1] text-base mt-2 leading-relaxed mb-10">
               Courses4Me helps you get SIA trained, licensed, and ready for real
               security jobs — trusted by 400,000+ people across the UK.
             </p>
@@ -64,44 +64,54 @@ const Footer = () => {
 
           {/* Column 2 - Popular Licences */}
           <div>
-            <h4 className="font-bold text-white text-[15px] mb-8 tracking-wider uppercase">
+            <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               POPULAR LICENCES
             </h4>
-            <ul className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
+            <ul className="space-y-5 text-[#A1A1A1] text-base font-medium">
               {licenses.map((licence) => (
-                <li key={licence._id} className="hover:text-white transition-colors cursor-pointer line-clamp-1">
+                <li
+                  key={licence._id}
+                  className="hover:text-white transition-colors cursor-pointer line-clamp-1"
+                >
                   <Link to="/licences">{licence.title}</Link>
                 </li>
               ))}
               {licenses.length === 0 && (
-                <li className="hover:text-white transition-colors cursor-pointer">Loading...</li>
+                <li className="hover:text-white transition-colors cursor-pointer">
+                  Loading...
+                </li>
               )}
             </ul>
           </div>
 
           {/* Column 3 - Popular Courses */}
           <div>
-            <h4 className="font-bold text-white text-[15px] mb-8 tracking-wider uppercase">
+            <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               POPULAR COURSES
             </h4>
-            <ul className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
+            <ul className="space-y-5 text-[#A1A1A1] text-base font-medium">
               {courses.map((course) => (
-                <li key={course._id} className="hover:text-white transition-colors cursor-pointer line-clamp-1">
+                <li
+                  key={course._id}
+                  className="hover:text-white transition-colors cursor-pointer line-clamp-1"
+                >
                   <Link to={`/course/${course._id}`}>{course.title}</Link>
                 </li>
               ))}
               {courses.length === 0 && (
-                <li className="hover:text-white transition-colors cursor-pointer">Loading...</li>
+                <li className="hover:text-white transition-colors cursor-pointer">
+                  Loading...
+                </li>
               )}
             </ul>
           </div>
 
           {/* Column 4 - Training Locations */}
           <div>
-            <h4 className="font-bold text-white text-[15px] mb-8 tracking-wider uppercase">
+            <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               TRAINING LOCATIONS
             </h4>
-            <ul className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
+            <ul className="space-y-5 text-[#A1A1A1] text-base font-medium">
               {["Bradford", "Manchester", "Sheffield", "Leeds"].map(
                 (loc, i) => (
                   <li
@@ -121,7 +131,7 @@ const Footer = () => {
 
           {/* Column 5 - Contact Us */}
           <div>
-            <h4 className="font-bold text-white text-[15px] mb-8 tracking-wider uppercase">
+            <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               CONTACT US
             </h4>
             <ul className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
@@ -130,7 +140,7 @@ const Footer = () => {
                   <div className="w-5 h-5 flex items-center justify-center">
                     <Phone className="text-[#FF5421]" size={18} />
                   </div>
-                  <span className="text-white font-bold text-[15px]">
+                  <span className="text-white font-bold text-base">
                     Call Us 08006894621
                   </span>
                 </div>
@@ -139,7 +149,7 @@ const Footer = () => {
                   <div className="w-5 h-5 flex items-center justify-center">
                     <Mail className="text-[#00A3FF]" size={18} />
                   </div>
-                  <span className="text-[#A1A1A1] text-[15px]">
+                  <span className="text-[#A1A1A1] text-base">
                     info@courses4me.co.uk
                   </span>
                 </div>
@@ -152,11 +162,11 @@ const Footer = () => {
         <div className="border-t border-white/5 pt-12">
           {/* BOTTOM ROW */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-[#666666] text-[12px]">
+            <div className="text-[#666666] text-sm">
               © 2026 Courses4Me. All rights reserved.
             </div>
 
-            <div className="flex gap-8 text-[#666666] text-[12px]">
+            <div className="flex gap-8 text-[#666666] text-sm">
               <span className="hover:text-white transition-colors cursor-pointer">
                 Privacy Policy
               </span>
@@ -170,7 +180,7 @@ const Footer = () => {
           </div>
 
           {/* Cookie Notice */}
-          <div className="mt-10 text-center text-[#666666] text-[12px] max-w-2xl mx-auto leading-relaxed">
+          <div className="mt-10 text-center text-[#666666] text-sm max-w-2xl mx-auto leading-relaxed">
             We use cookies to enhance your experience on our website. By
             continuing to use our website, you consent to the use of cookies.
             For more information, please see our{" "}

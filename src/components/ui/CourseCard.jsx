@@ -40,7 +40,7 @@ const CourseCard = ({
         {/* BADGES */}
         {isPopular && (
           <div className="absolute top-3 left-3 flex gap-2">
-            <div className="bg-black text-white text-[10px] font-bold px-3 py-1 rounded-lg flex items-center gap-1">
+            <div className="bg-black text-white text-[12px] font-bold px-3 py-1 rounded-lg flex items-center gap-1">
               <TrendingUp size={11} />
               Popular
             </div>
@@ -48,7 +48,7 @@ const CourseCard = ({
         )}
 
         {isOnline && (
-          <div className="absolute top-3 right-3 bg-white text-[#F15A24] text-[10px] font-bold px-3 py-1 rounded-lg shadow-sm">
+          <div className="absolute top-3 right-3 bg-white text-[#F15A24] text-[12px] font-bold px-3 py-1 rounded-lg shadow-sm">
             Online
           </div>
         )}
@@ -57,19 +57,19 @@ const CourseCard = ({
       {/* CONTENT */}
       <div className="p-4 flex flex-col flex-1">
         {/* TITLE */}
-        <h3 className="text-[#141414] text-[22px] font-bold leading-snug mb-2 line-clamp-2 group-hover:text-[#F15A24] transition-colors duration-300">
+        <h3 className="text-[#141414] text-2xl font-bold leading-snug mb-2 line-clamp-2 group-hover:text-[#F15A24] transition-colors duration-300">
           {title}
         </h3>
 
         {/* DESCRIPTION */}
-        <p className="text-[#666666] text-[15px] leading-[1.6] line-clamp-2 mb-4">
+        <p className="text-[#666666] text-base leading-[1.6] line-clamp-2 mb-4">
           {description}
         </p>
 
         {/* PRICE + DATE */}
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-[13px] text-gray-400 font-medium">
+            <p className="text-[14px] text-gray-400 font-medium">
               Starting From
             </p>
 
@@ -78,11 +78,11 @@ const CourseCard = ({
 
           {date && (
             <div className="text-right">
-              <p className="text-[13px] text-gray-400 font-medium">
+              <p className="text-[14px] text-gray-400 font-medium">
                 Next Batch
               </p>
 
-              <p className="text-[#F15A24] text-[15px] font-bold">{date}</p>
+              <p className="text-[#F15A24] text-[16px] font-bold">{date}</p>
             </div>
           )}
         </div>

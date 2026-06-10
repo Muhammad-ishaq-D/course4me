@@ -28,14 +28,14 @@ const ContentCareerDetails = ({ career }) => {
                   About This Career
                 </h2>
 
-                <p className="mt-2 text-sm text-[#667085] leading-relaxed">
+                <p className="mt-2 text-base text-[#667085] leading-relaxed">
                   Learn about the responsibilities, work environment and
                   opportunities in this profession.
                 </p>
               </div>
             </div>
 
-            <p className="mt-5 md:mt-6 text-[#667085] leading-[1.9] text-[14px] sm:text-[15px]">
+            <p className="mt-5 md:mt-6 text-[#667085] leading-[1.9] text-[14px] sm:text-base">
               {career.jobDescription}
             </p>
           </div>
@@ -53,7 +53,7 @@ const ContentCareerDetails = ({ career }) => {
                   How To Become a {career.title}
                 </h2>
 
-                <p className="mt-2 text-sm text-[#667085] leading-relaxed">
+                <p className="mt-2 text-base text-[#667085] leading-relaxed">
                   Follow these professional steps to start your career journey.
                 </p>
               </div>
@@ -98,16 +98,17 @@ const ContentCareerDetails = ({ career }) => {
 
                   {/* Content */}
                   <div
-                    className={`flex-1 pl-5 sm:pl-6 ml-[-10px] ${index !== 4
-                      ? "pb-6 md:pb-7 border-l-2 border-dashed border-[#FFD5C4]"
-                      : ""
-                      }`}
+                    className={`flex-1 pl-5 sm:pl-6 ml-[-10px] ${
+                      index !== 4
+                        ? "pb-6 md:pb-7 border-l-2 border-dashed border-[#FFD5C4]"
+                        : ""
+                    }`}
                   >
-                    <h3 className="text-[17px] sm:text-[18px] font-black text-[#111827] leading-snug">
+                    <h3 className="text-[18px] sm:text-lg font-black text-[#111827] leading-snug">
                       {step.title}
                     </h3>
 
-                    <p className="mt-2 text-[14px] sm:text-[15px] leading-[1.8] text-[#667085]">
+                    <p className="mt-2 text-[14px] sm:text-[16px] leading-[1.8] text-[#667085]">
                       {step.desc}
                     </p>
 
@@ -136,7 +137,7 @@ const ContentCareerDetails = ({ career }) => {
                   Personality Traits
                 </h2>
 
-                <p className="mt-1 text-sm text-[#667085]">
+                <p className="mt-1 text-base text-[#667085]">
                   Important qualities and strengths required for success.
                 </p>
               </div>
@@ -175,21 +176,21 @@ const ContentCareerDetails = ({ career }) => {
                 {career.salary}
               </h2>
 
-              <p className="mt-4 text-sm text-white/70 leading-relaxed">
+              <p className="mt-4 text-base text-white/70 leading-relaxed">
                 Estimated salary based on experience and employer demand.
               </p>
 
               <div className="mt-6 grid grid-cols-2 gap-3">
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <p className="text-xs text-white/50">Entry Level</p>
+                  <p className="text-sm text-white/50">Entry Level</p>
 
-                  <h4 className="mt-2 font-black text-base sm:text-lg">£22K</h4>
+                  <h4 className="mt-2 font-black text-lg sm:text-xl">£22K</h4>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <p className="text-xs text-white/50">Demand</p>
+                  <p className="text-sm text-white/50">Demand</p>
 
-                  <h4 className="mt-2 font-black text-base sm:text-lg">High</h4>
+                  <h4 className="mt-2 font-black text-lg sm:text-xl">High</h4>
                 </div>
               </div>
             </div>
@@ -208,9 +209,9 @@ const ContentCareerDetails = ({ career }) => {
                 </div>
 
                 <div>
-                  <p className="text-sm text-[#667085]">Experience Level</p>
+                  <p className="text-base text-[#667085]">Experience Level</p>
 
-                  <h4 className="mt-1 font-bold text-[#111827]">
+                  <h4 className="mt-1 text-lg font-bold text-[#111827]">
                     {career.level}
                   </h4>
                 </div>

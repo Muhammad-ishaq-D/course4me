@@ -172,7 +172,7 @@ const CoursePackages = () => {
         <div className="max-w-[1200px] mx-auto pt-6">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest mb-6"
+            className="flex items-center gap-2 cursor-pointer text-gray-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest mb-6"
           >
             <ArrowLeft size={16} /> Back
           </button>
@@ -182,39 +182,32 @@ const CoursePackages = () => {
               <h1 className="text-3xl md:text-[42px] leading-tight font-extrabold text-white mb-6">
                 The #1 Choice for {baseTitle} in the UK
               </h1>
-              <div className="flex items-center gap-4">
-                <div className="flex -space-x-3">
-                  <div className="w-10 h-10 rounded-full border-2 border-[#1C1C1C] bg-[#00b67a] flex items-center justify-center text-white">
-                    <Star size={16} />
-                  </div>
-                  <div className="w-10 h-10 rounded-full border-2 border-[#1C1C1C] bg-[#7344ff] flex items-center justify-center text-white">
-                    <Users size={16} />
-                  </div>
-                  <div className="w-10 h-10 rounded-full border-2 border-[#1C1C1C] bg-white text-[#F15A24] flex items-center justify-center font-black text-xs">
-                    95%
+            </div>
+
+            <div className="relative hidden lg:block overflow-hidden rounded-2xl border border-[#F15A24]/15 bg-gradient-to-br from-[#FFF8F5] to-white p-5 shadow-lg shadow-[#F15A24]/5 hover:shadow-xl hover:shadow-[#F15A24]/10 transition-all duration-300 group">
+              {/* Decorative Circle */}
+              <div className="absolute -top-8 -right-8 w-24 h-24 bg-[#F15A24]/5 rounded-full"></div>
+
+              <div className="relative flex items-center gap-2 justify-between">
+                <div className="flex-shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-[#F15A24] flex items-center justify-center shadow-lg shadow-[#F15A24]/20">
+                    <ShieldCheck size={28} className="text-white" />
                   </div>
                 </div>
                 <div>
-                  <p className="text-white font-bold text-sm">
-                    Excellent 4.9/5
+                  <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#F15A24]/10 text-[#F15A24] text-[11px] font-bold uppercase tracking-wider mb-3">
+                    Trusted Protection
+                  </div>
+
+                  <h4 className="text-[#1C1C1C] text-base font-extrabold leading-tight">
+                    Training Guarantee
+                  </h4>
+
+                  <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                    Book with confidence and enjoy complete peace of mind.
                   </p>
-                  <p className="text-gray-400 text-xs">Over 35,000+ Reviews</p>
                 </div>
               </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-5 flex items-start gap-4">
-              <div>
-                <p className="text-[#1C1C1C] font-extrabold text-sm mb-1">
-                  Zero Risk With
-                  <br />
-                  Training Guarantee
-                </p>
-                <p className="text-xs text-gray-500 font-bold hover:underline cursor-pointer">
-                  More details
-                </p>
-              </div>
-              <ShieldCheck className="text-[#F15A24]" size={36} />
             </div>
           </div>
         </div>
@@ -224,26 +217,28 @@ const CoursePackages = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-6 -mt-[120px] relative z-10 mb-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Saver Card */}
-          <div className="bg-white rounded-2xl shadow-xl shadow-black/5 border border-gray-100 flex flex-col overflow-hidden">
+          <div className=" relative bg-white rounded-3xl border-2 border-transparent shadow-lg shadow-black/5 flex flex-col overflow-hidden transition-all duration-500 hover:border-[#F15A24] hover:-translate-y-3 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#F15A24]/15 group">
             <div className=" p-4 lg:p-8 pb-6 flex-1">
-              <span className="inline-block px-3 py-1 bg-gray-100 text-gray-500 text-[10px] font-black uppercase tracking-widest rounded mb-4">
+              <span className="inline-block px-3 py-1 bg-gray-100 text-gray-500 text-[12px] font-black uppercase tracking-widest rounded mb-4">
                 Standard
               </span>
-              <h2 className="text-2xl font-black text-[#1C1C1C] mb-1">Saver</h2>
-              <p className="text-xs text-gray-400 font-medium mb-6">
+              <h2 className="text-3xl font-black text-[#1C1C1C] mb-1 transition-colors duration-300 group-hover:text-[#F15A24]">
+                Saver
+              </h2>
+              <p className="text-sm text-gray-400 font-medium mb-6">
                 If you strictly need to complete the course
               </p>
 
-              <div className="mb-6">
+              <div className="mb-3">
                 <span className="text-3xl font-black text-[#1C1C1C]">
                   £{saverPrice}
                 </span>
-                <span className="text-xs text-gray-400 font-medium ml-1">
+                <span className="text-sm text-gray-400 font-medium ml-1">
                   / Inc VAT
                 </span>
               </div>
 
-              <div className="bg-[#F8FAFC] border border-gray-100 rounded-xl p-4 flex gap-3 items-start mb-8 text-[13px] text-gray-600">
+              <div className="bg-[#F8FAFC] border border-gray-100 rounded-xl p-2 flex gap-3 items-start mb-6 text-[14px] text-gray-600">
                 <CheckCircle2
                   className="text-gray-400 shrink-0 mt-0.5"
                   size={16}
@@ -254,7 +249,7 @@ const CoursePackages = () => {
                 </p>
               </div>
 
-              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-4">
+              <p className="text-[13px] text-gray-400 font-bold uppercase tracking-widest mb-4">
                 What's included
               </p>
               <ul className="space-y-4">
@@ -262,9 +257,9 @@ const CoursePackages = () => {
                   <li key={idx} className="flex items-start gap-3">
                     <Check
                       className="text-[#F15A24] shrink-0 mt-0.5"
-                      size={16}
+                      size={18}
                     />
-                    <span className="text-[13px] text-gray-600 leading-snug">
+                    <span className="text-[15px] text-gray-600 leading-snug">
                       {feature}
                     </span>
                   </li>
@@ -275,8 +270,8 @@ const CoursePackages = () => {
             <div className="p-4 lg:p-8 pt-0 mt-auto border-t border-gray-50/50">
               <div className="bg-red-50 text-red-600 rounded-xl p-4 text-[12px] leading-relaxed mb-6 border border-red-100 font-medium space-y-2">
                 <div className="flex gap-2 items-start">
-                  <XIcon size={14} className="shrink-0 mt-0.5" />{" "}
-                  <p>
+                  <XIcon size={16} className="shrink-0 mt-0.5" />{" "}
+                  <p className="text-[15px]">
                     You will have to{" "}
                     <b className="font-bold border-b border-red-600">
                       pay up to £49
@@ -285,8 +280,8 @@ const CoursePackages = () => {
                   </p>
                 </div>
                 <div className="flex gap-2 items-start">
-                  <XIcon size={14} className="shrink-0 mt-0.5" />{" "}
-                  <p>
+                  <XIcon size={16} className="shrink-0 mt-0.5" />{" "}
+                  <p className="text-[15px]">
                     You are missing out on the{" "}
                     <b className="font-bold border-b border-red-600">
                       Free Name Change Guarantee and Zero Risk Refund Guarantee
@@ -300,7 +295,7 @@ const CoursePackages = () => {
                     `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Saver`,
                   )
                 }
-                className="w-full py-4 rounded-xl border-2 border-gray-200 text-[#1C1C1C] font-black text-sm hover:border-[#F15A24] hover:text-[#F15A24] active:scale-95 transition-all"
+                className="w-full py-4 cursor-pointer rounded-xl border-2 border-gray-200 text-[#1C1C1C] font-black text-md hover:border-[#F15A24] hover:text-[#F15A24] active:scale-95 transition-all"
               >
                 Select Saver
               </button>
@@ -308,18 +303,18 @@ const CoursePackages = () => {
           </div>
 
           {/* Flexi+ Card */}
-          <div className="bg-white rounded-2xl shadow-xl shadow-black/5 border-[3px] border-[#F15A24] flex flex-col overflow-hidden relative transform md:-translate-y-4">
-            <div className="absolute top-0 w-full bg-[#F15A24] text-white text-[10px] font-black uppercase tracking-widest py-1.5 text-center">
+          <div className=" relative bg-white rounded-3xl border-[3px] border-[#F15A24]  shadow-lg shadow-black/5 flex flex-col overflow-hidden transition-all duration-500 hover:border-[#F15A24] hover:-translate-y-3 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#F15A24]/15 group">
+            <div className="absolute top-0 w-full bg-[#F15A24] text-white text-[14px] font-black uppercase tracking-widest py-1.5 text-center">
               Our Most Popular Plan
             </div>
-            <div className="p-4 lg:p-8 pb-6 flex-1 mt-6">
-              <span className="inline-block px-3 py-1 bg-[#FFF5F1] text-[#F15A24] text-[10px] font-black uppercase tracking-widest rounded mb-4">
+            <div className="p-4 lg:p-8 pb-6 flex-1 mt-3">
+              <span className="inline-block px-3 py-1 bg-[#FFF5F1] text-[#F15A24] text-[12px] font-black uppercase tracking-widest rounded mb-4">
                 Recommended
               </span>
-              <h2 className="text-2xl font-black text-[#1C1C1C] mb-1">
+              <h2 className="text-3xl font-black text-[#1C1C1C] mb-1">
                 Flexi+
               </h2>
-              <p className="text-xs text-gray-400 font-medium mb-6">
+              <p className="text-sm text-gray-400 font-medium mb-4">
                 Guaranteed pass or your money back
               </p>
 
@@ -327,28 +322,28 @@ const CoursePackages = () => {
                 <span className="text-3xl font-black text-[#1C1C1C]">
                   £{flexiPrice}
                 </span>
-                <span className="text-xs text-gray-400 font-medium ml-1">
+                <span className="text-sm text-gray-400 font-medium ml-1">
                   / Inc VAT
                 </span>
               </div>
 
-              <div className="bg-[#FFF5F1] border border-[#F15A24]/20 rounded-xl p-4 flex gap-3 items-start mb-8 text-[13px] text-[#F15A24] font-medium leading-relaxed">
-                <CheckCircle2 className="shrink-0 mt-0.5" size={16} />
+              <div className="bg-[#FFF5F1] border border-[#F15A24]/20 rounded-xl p-4 flex gap-3 items-start mb-5 text-[13px] text-[#F15A24] font-medium leading-relaxed">
+                <CheckCircle2 className="shrink-0 mt-0.5" size={18} />
                 <div>
-                  <p className="font-bold mb-1">
+                  <p className="font-bold text-[14px] mb-1">
                     Passing guaranteed or your money back. 100% of course fee
                     completely refunded
                   </p>
-                  <p className="text-[11px] opacity-80">
+                  <p className="text-[13px] opacity-80">
                     (After attending, studying & failing the exam up to 3 times)
                   </p>
                 </div>
               </div>
 
-              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-4">
+              <p className="text-[14px] text-gray-400 font-bold uppercase tracking-widest mb-4">
                 What's included
               </p>
-              <ul className="space-y-4">
+              <ul className="space-y-3">
                 {features.flexi.map((feature, idx) => {
                   // Highlighting specific words for exact match
                   const isZeroRisk = feature.includes("Zero Risk Guarantee");
@@ -358,9 +353,9 @@ const CoursePackages = () => {
                     <li key={idx} className="flex items-start gap-3">
                       <Check
                         className="text-[#F15A24] shrink-0 mt-0.5"
-                        size={16}
+                        size={18}
                       />
-                      <span className="text-[13px] text-gray-600 leading-snug">
+                      <span className="text-[15px] text-gray-600 leading-snug">
                         {isZeroRisk ? (
                           <>
                             <b className="text-[#F15A24] underline">
@@ -379,7 +374,7 @@ const CoursePackages = () => {
                               (worth £49 per retake)
                             </span>{" "}
                             -{" "}
-                            <span className="bg-[#FFF5F1] text-[#F15A24] text-[9px] font-black uppercase px-1.5 py-0.5 rounded">
+                            <span className="bg-[#FFF5F1] text-[#F15A24] text-[12px] font-black uppercase px-1.5 py-0.5 rounded">
                               Popular
                             </span>
                           </>
@@ -400,7 +395,7 @@ const CoursePackages = () => {
                     `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi+`,
                   )
                 }
-                className="w-full py-4 rounded-xl bg-[#F15A24] text-white font-black text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#F15A24]/20"
+                className="w-full py-4 rounded-xl cursor-pointer bg-[#F15A24] text-white font-black text-md hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#F15A24]/20"
               >
                 Select Flexi+
               </button>
@@ -408,15 +403,15 @@ const CoursePackages = () => {
           </div>
 
           {/* Premium Card */}
-          <div className="bg-white rounded-2xl shadow-xl shadow-black/5 border border-gray-100 flex flex-col overflow-hidden">
+          <div className=" relative bg-white rounded-3xl border-2 border-transparent shadow-lg shadow-black/5 flex flex-col overflow-hidden transition-all duration-500 hover:border-[#F15A24] hover:-translate-y-3 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#F15A24]/15 group">
             <div className="p-4 lg:p-8 pb-6 flex-1">
-              <span className="inline-block px-3 py-1 bg-purple-50 text-[#7344ff] text-[10px] font-black uppercase tracking-widest rounded mb-4">
+              <span className="inline-block px-3 py-1 bg-purple-50 text-[#7344ff] text-[12px] font-black uppercase tracking-widest rounded mb-4">
                 Best Service
               </span>
-              <h2 className="text-2xl font-black text-[#1C1C1C] mb-1">
+              <h2 className="text-3xl font-black text-[#1C1C1C] mb-1 transition-colors duration-300 group-hover:text-[#F15A24]">
                 Premium
               </h2>
-              <p className="text-xs text-gray-400 font-medium mb-6">
+              <p className="text-sm text-gray-400 font-medium mb-6">
                 VIP treatment & exclusive privileges
               </p>
 
@@ -424,7 +419,7 @@ const CoursePackages = () => {
                 <span className="text-3xl font-black text-[#1C1C1C]">
                   £{premiumPrice}
                 </span>
-                <span className="text-xs text-gray-400 font-medium ml-1">
+                <span className="text-sm text-gray-400 font-medium ml-1">
                   / Inc VAT
                 </span>
               </div>
@@ -432,23 +427,23 @@ const CoursePackages = () => {
               <div className="bg-purple-50 border border-purple-100 rounded-xl p-4 flex gap-3 items-start mb-8 text-[13px] text-gray-600">
                 <CheckCircle2
                   className="text-[#7344ff] shrink-0 mt-0.5"
-                  size={16}
+                  size={18}
                 />
-                <p>
+                <p className="text-[14px]">
                   Same day results - We will fast track your results! <br />
-                  <span className="text-[11px] text-gray-400">
+                  <span className="text-[13px] text-gray-400">
                     (Instead of waiting for up to 14 days)
                   </span>
                 </p>
               </div>
 
-              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-4">
+              <p className="text-[13px] text-gray-400 font-bold uppercase tracking-widest mb-4">
                 What's included
               </p>
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
                   <Check className="text-[#F15A24] shrink-0 mt-0.5" size={16} />
-                  <span className="text-[13px] text-gray-600 font-bold">
+                  <span className="text-[15px] text-gray-600 font-bold">
                     Everything included in Flexi+
                   </span>
                 </li>
@@ -456,9 +451,9 @@ const CoursePackages = () => {
                   <li key={idx} className="flex items-start gap-3">
                     <Check
                       className="text-[#F15A24] shrink-0 mt-0.5"
-                      size={16}
+                      size={18}
                     />
-                    <span className="text-[13px] text-gray-600 leading-snug">
+                    <span className="text-[15px] text-gray-600 leading-snug">
                       {feature}
                     </span>
                   </li>
@@ -473,7 +468,7 @@ const CoursePackages = () => {
                     `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Premium`,
                   )
                 }
-                className="w-full py-4 rounded-xl bg-[#7344ff] text-white font-black text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#7344ff]/20"
+                className="w-full cursor-pointer py-4 rounded-xl bg-[#7344ff] text-white font-black text-md hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#7344ff]/20"
               >
                 Select Premium
               </button>
@@ -483,31 +478,84 @@ const CoursePackages = () => {
       </div>
 
       {/* FAQ Section */}
-      <div className="max-w-5xl mx-auto px-4 mb-20">
-        <h2 className="text-2xl font-black text-[#1C1C1C] text-center mb-8">
-          Got Questions? We Have Answers
-        </h2>
-        <div className="space-y-3">
+      <div className="max-w-5xl mx-auto px-4 lg:px-0 mb-24">
+        {/* Section Header */}
+        <div className="text-center mb-8">
+          <h2 className="mt-5 text-3xl md:text-4xl font-black text-[#1C1C1C]">
+            Got Questions?
+            <span className="block text-[#F15A24]">We Have Answers</span>
+          </h2>
+
+          <p className="mt-4 text-gray-500 text-sm md:text-base max-w-2xl mx-auto">
+            Everything you need to know before booking your training course.
+          </p>
+        </div>
+
+        {/* FAQ List */}
+        <div className="space-y-4">
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className="bg-white border border-gray-100 rounded-xl overflow-hidden hover:border-gray-200 transition-colors shadow-sm"
+              className={` group cursor-pointer bg-white rounded-2xl border overflow-hidden transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-[#F15A24]/10
+          ${
+            openFaq === idx
+              ? "border-[#F15A24] shadow-lg shadow-[#F15A24]/10"
+              : "border-gray-100 hover:border-[#F15A24]/30"
+          }
+        `}
             >
+              {/* Question */}
               <button
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                className="w-full px-6 py-5 flex items-center justify-between font-bold text-[#1C1C1C] text-[13px] text-left"
+                className="w-full flex cursor-pointer  items-center justify-between px-4 md:px-8 py-5 text-left"
               >
-                {faq.question}
+                <div className="flex items-center gap-2 md:gap-4">
+                  <div
+                    className={`
+                w-9 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all
+                ${
+                  openFaq === idx
+                    ? "bg-[#F15A24] text-white"
+                    : "bg-[#FFF5F1] text-[#F15A24]"
+                }
+              `}
+                  >
+                    ?
+                  </div>
+
+                  <h3
+                    className={`text-lg font-bold transition-colors
+                ${openFaq === idx ? "text-[#F15A24]" : "text-[#1C1C1C]"}
+              `}
+                  >
+                    {faq.question}
+                  </h3>
+                </div>
+
                 <ChevronDown
-                  size={16}
-                  className={`text-gray-400 transition-transform ${openFaq === idx ? "rotate-180" : ""}`}
+                  size={20}
+                  className={`
+              transition-all duration-300
+              ${openFaq === idx ? "rotate-180 text-[#F15A24]" : "text-gray-400"}
+            `}
                 />
               </button>
-              {openFaq === idx && (
-                <div className="px-6 pb-5 text-gray-500 text-[13px] leading-relaxed">
-                  {faq.answer}
+
+              {/* Answer */}
+              <div
+                className={`
+            transition-all duration-300 cursor-pointer overflow-hidden
+            ${openFaq === idx ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}
+          `}
+              >
+                <div className="px-6 md:px-8 pb-6">
+                  <div className="pl-12 border-l-2 border-[#F15A24]/20">
+                    <p className="text-base text-gray-600 leading-7">
+                      {faq.answer}
+                    </p>
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
@@ -515,67 +563,87 @@ const CoursePackages = () => {
 
       {/* Comparison Table */}
       <div className="bg-white py-20 border-t border-gray-100">
-        <div className="max-w-[900px] mx-auto px-4 md:px-6">
-          <div className="text-center mb-10">
-            <span className="inline-block px-4 py-1 border border-gray-200 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">
-              View Compare Summary
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center px-4 py-2 rounded-full bg-[#FFF5F1] text-[#F15A24] text-xs font-bold uppercase tracking-[0.2em]">
+              Compare Packages
             </span>
-            <h2 className="text-2xl font-black text-[#1C1C1C]">
+
+            <h2 className="mt-5 text-3xl md:text-4xl font-black text-[#1C1C1C]">
               Compare All Plans
             </h2>
+
+            <p className="mt-3 text-gray-500 text-sm md:text-base max-w-2xl mx-auto">
+              Choose the package that best suits your training needs.
+            </p>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-[13px] border-collapse min-w-[700px]">
               <thead>
-                <tr>
-                  <th className="p-4 text-left font-black text-[#1C1C1C] border border-gray-100 w-[40%] bg-gray-50 rounded-tl-xl">
+                <tr className="bg-slate-50">
+                  <th className="p-5 text-left text-sm lg:text-base font-black text-[#1C1C1C] w-[40%]">
                     Features
                   </th>
-                  <th className="p-4 text-center font-black text-[#1C1C1C] border border-gray-100 w-[20%]">
+
+                  <th className="p-5 text-center text-sm lg:text-base font-black text-[#1C1C1C]">
                     Saver
                   </th>
-                  <th className="p-4 text-center font-black text-[#1C1C1C] border border-gray-100 w-[20%]">
+
+                  <th className="p-5 text-center bg-[#FFF5F1] text-sm lg:text-base font-black text-[#F15A24] relative">
                     Flexi+
+                    <span className="absolute top-2 right-2 bg-[#F15A24] text-white text-[10px] px-2 py-1 rounded-full font-bold uppercase">
+                      Popular
+                    </span>
                   </th>
-                  <th className="p-4 text-center font-black text-[#1C1C1C] border border-gray-100 w-[20%] rounded-tr-xl">
+
+                  <th className="p-5 text-center text-sm lg:text-base font-black text-[#7344ff]">
                     Premium
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td className="p-4 text-gray-600 font-bold border border-gray-100">
+                  <td className="p-5 text-gray-700 font-bold text-sm lg:text-base border-t border-gray-100">
                     Total Price
                   </td>
-                  <td className="p-4 text-center text-[#1C1C1C] font-black border border-gray-100">
+
+                  <td className="p-5 text-center font-black text-lg border-t border-gray-100">
                     £{saverPrice}
                   </td>
-                  <td className="p-4 text-center text-[#F15A24] font-black border border-gray-100">
+
+                  <td className="p-5 text-center font-black text-xl text-[#F15A24] bg-[#FFF5F1] border-t border-gray-100">
                     £{flexiPrice}
                   </td>
-                  <td className="p-4 text-center text-[#7344ff] font-black border border-gray-100">
+
+                  <td className="p-5 text-center font-black text-xl text-[#7344ff] border-t border-gray-100">
                     £{premiumPrice}
                   </td>
                 </tr>
-                <tr className="bg-gray-50/50">
-                  <td className="p-4 text-[#F15A24] font-bold border border-gray-100 text-[11px] uppercase tracking-wider">
-                    Top features rating summary
+
+                <tr className="bg-slate-50">
+                  <td className="p-4 text-[#F15A24] font-bold text-xs uppercase tracking-widest">
+                    Service Summary
                   </td>
-                  <td className="p-4 text-center text-gray-400 font-medium text-[11px] border border-gray-100">
-                    Meeting Needs
+
+                  <td className="p-4 text-center text-gray-500 text-sm font-medium">
+                    Essential
                   </td>
-                  <td className="p-4 text-center text-[#F15A24] font-bold text-[11px] border border-gray-100">
-                    Outstanding
+
+                  <td className="p-4 text-center text-[#F15A24] text-sm font-bold bg-[#FFF5F1]">
+                    Most Popular
                   </td>
-                  <td className="p-4 text-center text-gray-400 font-medium text-[11px] border border-gray-100">
-                    100% Guaranteed
+
+                  <td className="p-4 text-center text-[#7344ff] text-sm font-bold">
+                    Premium Experience
                   </td>
                 </tr>
+
                 <tr>
                   <td
-                    className="p-4 text-left font-black text-[#1C1C1C] border border-gray-100 bg-gray-50"
                     colSpan={4}
+                    className="bg-slate-50 p-4 text-sm md:text-base font-black text-[#1C1C1C]"
                   >
                     General Features
                   </td>
@@ -638,70 +706,76 @@ const CoursePackages = () => {
                 ].map((row, idx) => (
                   <tr
                     key={idx}
-                    className="hover:bg-gray-50/30 transition-colors"
+                    className="hover:bg-[#FFF5F1]/40 transition-colors"
                   >
-                    <td className="p-4 text-gray-600 font-medium border border-gray-100">
+                    <td className="p-5 text-sm md:text-[15px] text-gray-700 font-medium leading-relaxed border-t border-gray-100">
                       {row.name}
                     </td>
-                    <td className="p-4 text-center border border-gray-100">
+
+                    <td className="p-5 text-center border-t border-gray-100">
                       {row.saver ? (
-                        <Check className="text-[#00b67a] mx-auto" size={18} />
+                        <Check className="text-[#00B67A] mx-auto" size={20} />
                       ) : (
-                        <XIcon className="text-red-400 mx-auto" size={14} />
+                        <XIcon className="text-red-400 mx-auto" size={16} />
                       )}
                     </td>
-                    <td className="p-4 text-center border border-gray-100">
+
+                    <td className="p-5 text-center bg-[#FFF5F1] border-t border-gray-100">
                       {row.flexi ? (
-                        <Check className="text-[#00b67a] mx-auto" size={18} />
+                        <Check className="text-[#00B67A] mx-auto" size={20} />
                       ) : (
-                        <XIcon className="text-red-400 mx-auto" size={14} />
+                        <XIcon className="text-red-400 mx-auto" size={16} />
                       )}
                     </td>
-                    <td className="p-4 text-center border border-gray-100">
+
+                    <td className="p-5 text-center border-t border-gray-100">
                       {row.prem ? (
-                        <Check className="text-[#00b67a] mx-auto" size={18} />
+                        <Check className="text-[#00B67A] mx-auto" size={20} />
                       ) : (
-                        <XIcon className="text-red-400 mx-auto" size={14} />
+                        <XIcon className="text-red-400 mx-auto" size={16} />
                       )}
                     </td>
                   </tr>
                 ))}
                 <tr>
-                  <td className="p-4 border border-gray-100 rounded-bl-xl bg-gray-50"></td>
-                  <td className="p-4 text-center border border-gray-100 bg-gray-50">
+                  <td className="p-6 bg-slate-50"></td>
+
+                  <td className="p-6 text-center bg-slate-50">
                     <button
                       onClick={() =>
                         navigate(
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Saver`,
                         )
                       }
-                      className="px-4 py-2 bg-white text-[#1C1C1C] border border-gray-200 rounded font-black text-xs hover:border-[#F15A24] transition-colors"
+                      className="px-6 py-3 rounded-xl cursor-pointer border border-gray-300 font-bold text-sm hover:border-[#F15A24] hover:text-[#F15A24] transition-all"
                     >
-                      Select
+                      Select Saver
                     </button>
                   </td>
-                  <td className="p-4 text-center border border-gray-100 bg-[#FFF5F1]">
+
+                  <td className="p-6 text-center bg-[#FFF5F1]">
                     <button
                       onClick={() =>
                         navigate(
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi+`,
                         )
                       }
-                      className="px-4 py-2 bg-[#F15A24] text-white rounded font-black text-xs hover:brightness-110 transition-colors"
+                      className="px-6 py-3 rounded-xl cursor-pointer bg-[#F15A24] text-white font-bold text-sm shadow-lg shadow-[#F15A24]/20 hover:scale-105 transition-all"
                     >
-                      Select
+                      Select Flexi+
                     </button>
                   </td>
-                  <td className="p-4 text-center border border-gray-100 bg-purple-50 rounded-br-xl">
+
+                  <td className="p-6 text-center bg-purple-50">
                     <button
                       onClick={() =>
                         navigate(
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Premium`,
                         )
                       }
-                      className="px-4 py-2 bg-[#7344ff] text-white rounded font-black text-xs hover:brightness-110 transition-colors"
+                      className="px-6 py-3 rounded-xl cursor-pointer bg-[#7344ff] text-white font-bold text-sm shadow-lg shadow-[#7344ff]/20 hover:scale-105 transition-all"
                     >
-                      Select
+                      Select Premium
                     </button>
                   </td>
                 </tr>

@@ -1,3 +1,18 @@
+import React, { useState, useEffect, useMemo } from "react";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
+import {
+  Search,
+  MessageCircle,
+  Calendar,
+  Star,
+  Users,
+  Zap,
+  CreditCard,
+  GraduationCap,
+  Loader2,
+  Navigation,
+  ArrowLeft,
+} from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import courseService from "../../api/services/courseService";
@@ -202,6 +217,12 @@ const CourseResults = () => {
   return (
     <div className="bg-[#F8FAFC] min-h-screen mt-5">
       <main className="max-w-300 mx-auto px-4 py-6 md:py-20">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-[#d84a1a] transition-colors text-xs font-bold uppercase tracking-widest mb-6"
+        >
+          <ArrowLeft size={16} /> Back
+        </button>
         <div className="flex flex-col lg:flex-row gap-5">
           <CourseResultsFilter filter={filter} setFilter={setFilter} />
 

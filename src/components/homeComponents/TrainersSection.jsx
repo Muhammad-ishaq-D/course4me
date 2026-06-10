@@ -65,7 +65,7 @@ export default function TrainersSection() {
         </div>
 
         {/* Heading */}
-        <h2 className="text-center text-[44px] md:text-[52px] font-bold mb-6 tracking-tight">
+        <h2 className="text-center text-[44px] md:text-[52px] font-bold mb-3 tracking-tight">
           Meet Our Trainers
         </h2>
 

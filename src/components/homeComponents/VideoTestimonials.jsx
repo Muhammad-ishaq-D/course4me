@@ -115,7 +115,7 @@ function VideoTestimonials() {
                   </div>
 
                   {/* DURATION */}
-                  <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white text-[11px] font-semibold px-3 py-1 rounded-full border border-white/10">
+                  <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white text-sm font-semibold px-3 py-1 rounded-full border border-white/10">
                     {t.duration}
                   </div>
 
@@ -137,7 +137,7 @@ function VideoTestimonials() {
                       {[...Array(5)].map((_, index) => (
                         <Star
                           key={index}
-                          size={14}
+                          size={16}
                           fill="#FF5421"
                           stroke="none"
                         />
@@ -145,10 +145,10 @@ function VideoTestimonials() {
                     </div>
 
                     {/* NAME */}
-                    <h4 className="text-lg font-bold text-white">{t.name}</h4>
+                    <h4 className="text-xl font-bold text-white">{t.name}</h4>
 
                     {/* JOB */}
-                    <p className="text-sm text-gray-300">{t.job}</p>
+                    <p className="text-base text-gray-300">{t.job}</p>
                   </div>
                 </div>
 
@@ -156,7 +156,7 @@ function VideoTestimonials() {
                 <div className="p-5">
                   <Quote className="w-6 h-6 text-[#FF5421] mb-3 opacity-80" />
 
-                  <p className="text-sm text-gray-300 leading-relaxed">
+                  <p className="text-base text-gray-300 leading-relaxed">
                     "{t.quote}"
                   </p>
                 </div>
