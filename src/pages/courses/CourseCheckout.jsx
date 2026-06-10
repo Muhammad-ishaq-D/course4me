@@ -143,7 +143,7 @@ const CourseCheckout = () => {
         const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(term)}&format=json&addressdetails=1&limit=5`);
         if (cancelled) return;
         const data = await res.json();
-        
+
         const seen = new Set();
         const suggestions = [];
 
@@ -151,17 +151,28 @@ const CourseCheckout = () => {
           const label = item.display_name;
           if (label && !seen.has(label)) {
             seen.add(label);
-            
+
             const addr = item.address || {};
-            const postcode = addr.postcode || "";
-            const city = addr.city || addr.town || addr.village || addr.county || "";
+            let postcode = addr.postcode || "";
             
+            if (!postcode) {
+              const ukPostcodeRegex = /\b([A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2})\b/i;
+              const usZipRegex = /\b(\d{5}(?:-\d{4})?)\b/;
+              const ukMatch = label.match(ukPostcodeRegex);
+              const usMatch = label.match(usZipRegex);
+              
+              if (ukMatch) postcode = ukMatch[0];
+              else if (usMatch) postcode = usMatch[0];
+            }
+
+            const city = addr.city || addr.town || addr.village || addr.county || "";
+
             const addr1Parts = [addr.house_number, addr.road, addr.suburb].filter(Boolean);
             const address = addr1Parts.length > 0 ? addr1Parts.join(", ") : item.display_name.split(",")[0];
 
             suggestions.push({
               label,
-              postcode,
+              postcode: postcode || term,
               address,
               city,
             });
@@ -971,7 +982,7 @@ const CourseCheckout = () => {
                   </p>
                   <div className="relative" ref={postcodeRef}>
                     <FieldInput
-                      label="Search Address / Post code"
+                      label="Post code"
                       placeholder="Enter postcode, city, or address..."
                       value={billing.postcode}
                       onChange={(v) => updateBilling("postcode", v)}
@@ -1289,7 +1300,7 @@ const CourseCheckout = () => {
                     </label>
                   </div>
 
-                   {error && (
+                  {error && (
                     <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3 text-red-600 text-sm">
                       <AlertCircle size={18} className="shrink-0 mt-0.5" />
                       <p>{error}</p>
@@ -1352,11 +1363,11 @@ const CourseCheckout = () => {
             date={
               selectedSchedule?.startDate
                 ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  })
+                  weekday: "long",
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
                 : null
             }
             courseId={courseId}
