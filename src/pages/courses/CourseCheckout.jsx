@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import bookingService from "../../api/services/bookingService";
 import courseService from "../../api/services/courseService";
+import courseLocationService from "../../api/services/courseLocationService";
 import { useSearchParams } from "react-router-dom";
 import {
   checkoutDetailsSchema,
@@ -298,19 +299,29 @@ const CourseCheckout = () => {
           return;
         }
 
-        const response = await courseService.getCourseById(courseId);
-        const course = response.data.data;
+        const [courseRes, locRes] = await Promise.all([
+          courseService.getCourseById(courseId),
+          courseLocationService.getByCourse(courseId).catch(() => ({ data: { data: [] } })),
+        ]);
+        const course = courseRes.data.data;
         setCourseData(course);
 
-        // Find selected schedule
+        // Find selected schedule from CourseLocationDate records
         let foundSchedule = null;
         if (scheduleId) {
-          for (const loc of course.locations) {
-            const sch = loc.schedules.find(
-              (s) => s._id.toString() === scheduleId.toString(),
+          const links = locRes.data.data || [];
+          for (const link of links) {
+            const date = (link.dates || []).find(
+              (d) => d._id?.toString() === scheduleId.toString(),
             );
-            if (sch) {
-              foundSchedule = { ...sch, locationName: loc.name };
+            if (date) {
+              foundSchedule = {
+                _id: date._id,
+                startDate: date.startDate,
+                endDate: date.endDate,
+                price: link.price,
+                locationName: link.locationId?.name || "",
+              };
               break;
             }
           }

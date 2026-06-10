@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Search, MapPin, ArrowRight, Sparkles } from "lucide-react";
 
 import CourseCard from "../components/ui/CourseCard";
@@ -12,6 +12,7 @@ import CustomDropdown from "../components/ui/CustomDropdown";
 import courseService from "../api/services/courseService";
 import licenseService from "../api/services/licenseService";
 import careerService from "../api/services/careerService";
+import courseLocationService from "../api/services/courseLocationService";
 
 const QuickSearch = () => {
   // ================= STATES =================
@@ -23,10 +24,11 @@ const QuickSearch = () => {
   const [filteredResults, setFilteredResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // All active course-location links — loaded once, used for location suggestions + filtering
+  const [allCourseLinks, setAllCourseLinks] = useState([]);
+
   // ================= LOCATION SUGGESTIONS =================
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
-  const [locationSuggestions, setLocationSuggestions] = useState([]);
-  const [loadingLocations, setLoadingLocations] = useState(false);
 
   // ================= KEYWORD SUGGESTIONS =================
   const [showKeywordSuggestions, setShowKeywordSuggestions] = useState(false);
@@ -38,63 +40,44 @@ const QuickSearch = () => {
   const searchRef = useRef(null);
 
   // =====================================================================
-  // LOCATION SUGGESTIONS — derived from real course location data
+  // LOAD ALL COURSE-LOCATION LINKS ONCE (used for location suggestions)
   // =====================================================================
   useEffect(() => {
-    let cancelled = false;
+    courseLocationService
+      .getAll()
+      .then((res) => setAllCourseLinks(res?.data?.data || []))
+      .catch(() => {});
+  }, []);
 
-    const fetchLocationSuggestions = async () => {
-      if (!location.trim()) {
-        setLocationSuggestions([]);
-        setShowLocationSuggestions(false);
-        setLoadingLocations(false);
-        return;
-      }
+  // =====================================================================
+  // LOCATION SUGGESTIONS — derived from course-location links (new model)
+  // =====================================================================
+  const locationSuggestions = useMemo(() => {
+    if (!location.trim()) return [];
+    const term = location.trim().toLowerCase();
+    const seen = new Set();
+    const results = [];
+    allCourseLinks.forEach((link) => {
+      const loc = link.locationId;
+      if (!loc || typeof loc !== "object") return;
+      const matches =
+        loc.name?.toLowerCase().includes(term) ||
+        loc.city?.toLowerCase().includes(term) ||
+        loc.postcode?.toLowerCase().includes(term) ||
+        loc.addressLine1?.toLowerCase().includes(term);
+      if (!matches) return;
+      const label = [loc.name, loc.city, loc.postcode].filter(Boolean).join(", ");
+      if (!label || seen.has(label)) return;
+      seen.add(label);
+      results.push({ label, filterKey: loc.postcode || loc.city || loc.name || label });
+    });
+    return results.slice(0, 8);
+  }, [location, allCourseLinks]);
 
-      setLoadingLocations(true);
-      setShowLocationSuggestions(true);
-
-      try {
-        const res = await courseService.getAllCourses({
-          status: "Published",
-          location: location.trim(),
-        });
-        if (cancelled) return;
-
-        const courses = res?.data?.data || [];
-        const seen = new Set();
-        const suggestions = [];
-
-        courses.forEach((course) => {
-          course.locations?.forEach((loc) => {
-            const label = [loc.name, loc.address, loc.postcode]
-              .filter(Boolean)
-              .join(", ");
-            if (label && !seen.has(label)) {
-              seen.add(label);
-              suggestions.push({ label, filterKey: loc.postcode || loc.name || label });
-            }
-          });
-        });
-
-        setLocationSuggestions(suggestions.slice(0, 8));
-        setShowLocationSuggestions(suggestions.length > 0);
-      } catch {
-        if (!cancelled) {
-          setLocationSuggestions([]);
-          setShowLocationSuggestions(false);
-        }
-      } finally {
-        if (!cancelled) setLoadingLocations(false);
-      }
-    };
-
-    const debounce = setTimeout(fetchLocationSuggestions, 300);
-    return () => {
-      cancelled = true;
-      clearTimeout(debounce);
-    };
-  }, [location]);
+  // Show/hide dropdown reactively
+  useEffect(() => {
+    setShowLocationSuggestions(locationSuggestions.length > 0 && location.trim().length > 0);
+  }, [locationSuggestions, location]);
 
   // =====================================================================
   // KEYWORD SUGGESTIONS — courses, licenses, careers
@@ -186,7 +169,7 @@ const QuickSearch = () => {
   }, []);
 
   // =====================================================================
-  // SEARCH — fetch courses, licenses, careers
+  // SEARCH — fetch courses/licenses/careers, then filter by location
   // =====================================================================
   const handleSearch = async () => {
     setLoading(true);
@@ -199,7 +182,6 @@ const QuickSearch = () => {
     try {
       const params = { status: "Published" };
       if (search.trim()) params.search = search.trim();
-      if (location.trim()) params.location = location.trim();
 
       let fetchedCourses = [];
       let fetchedLicenses = [];
@@ -224,7 +206,6 @@ const QuickSearch = () => {
       }
 
       if (type === "all" || type === "license") {
-        // licenses don't have location data — filter only by keyword
         const licenseParams = { status: "Published" };
         if (search.trim()) licenseParams.search = search.trim();
         promises.push(
@@ -242,7 +223,6 @@ const QuickSearch = () => {
       }
 
       if (type === "all" || type === "career") {
-        // careers don't have location data — filter only by keyword
         const careerParams = { status: "Published" };
         if (search.trim()) careerParams.search = search.trim();
         promises.push(
@@ -260,6 +240,29 @@ const QuickSearch = () => {
       }
 
       await Promise.all(promises.map((p) => p?.catch(() => {})));
+
+      // Filter courses by location using course-location links (new model)
+      if (location.trim() && fetchedCourses.length > 0) {
+        const term = location.trim().toLowerCase();
+        const matchingCourseIds = new Set(
+          allCourseLinks
+            .filter((link) => {
+              const loc = link.locationId;
+              if (!loc || typeof loc !== "object") return false;
+              return (
+                loc.name?.toLowerCase().includes(term) ||
+                loc.city?.toLowerCase().includes(term) ||
+                loc.postcode?.toLowerCase().includes(term) ||
+                loc.addressLine1?.toLowerCase().includes(term)
+              );
+            })
+            .map((link) => String(link.courseId?._id || link.courseId))
+            .filter(Boolean)
+        );
+        fetchedCourses = fetchedCourses.filter((c) =>
+          matchingCourseIds.has(String(c._id || c.id))
+        );
+      }
 
       setFilteredResults([...fetchedCourses, ...fetchedLicenses, ...fetchedCareers]);
     } catch (error) {
@@ -394,33 +397,26 @@ const QuickSearch = () => {
                   className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none"
                 />
 
-                {showLocationSuggestions && (
+                {showLocationSuggestions && locationSuggestions.length > 0 && (
                   <div className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
-                    {loadingLocations ? (
-                      <div className="flex items-center justify-center gap-3 px-5 py-5">
-                        <div className="w-5 h-5 rounded-full border-[3px] border-orange-200 border-t-[#F15A24] animate-spin shrink-0" />
-                        <p className="text-sm text-gray-400 font-medium">Searching locations...</p>
-                      </div>
-                    ) : locationSuggestions.length > 0 ? (
-                      locationSuggestions.map((item, i) => (
-                        <button
-                          key={i}
-                          type="button"
-                          onClick={() => {
-                            setLocation(item.filterKey);
-                            setShowLocationSuggestions(false);
-                          }}
-                          className="w-full px-5 py-4 flex items-center gap-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
-                        >
-                          <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center shrink-0">
-                            <MapPin size={16} className="text-[#F15A24]" />
-                          </div>
-                          <p className="text-sm font-medium text-gray-800 line-clamp-2">
-                            {item.label}
-                          </p>
-                        </button>
-                      ))
-                    ) : null}
+                    {locationSuggestions.map((item, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => {
+                          setLocation(item.filterKey);
+                          setShowLocationSuggestions(false);
+                        }}
+                        className="w-full px-5 py-4 flex items-center gap-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center shrink-0">
+                          <MapPin size={16} className="text-[#F15A24]" />
+                        </div>
+                        <p className="text-sm font-medium text-gray-800 line-clamp-2">
+                          {item.label}
+                        </p>
+                      </button>
+                    ))}
                   </div>
                 )}
               </div>

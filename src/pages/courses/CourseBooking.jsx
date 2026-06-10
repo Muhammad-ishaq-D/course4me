@@ -10,83 +10,107 @@ import {
   MessageCircle,
   ChevronRight,
   MapPin,
-  ShieldCheck,
-  ArrowLeft,
   ChevronLeft,
-  Search,
+  CalendarDays,
+  PoundSterling,
 } from "lucide-react";
-import { courses } from "../../data/courseData";
-import SearchModal from "../../components/shared/SearchModal";
 import courseService from "../../api/services/courseService";
+import courseLocationService from "../../api/services/courseLocationService";
 import BookingSkeleton from "../../components/ui/BookingSkeleton";
 import Loader from "../../components/ui/Loader";
 import Feedback from "../../components/ui/Feedback";
+
+const fmtDate = (d) =>
+  d
+    ? new Date(d).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+    : null;
 
 const CourseBooking = () => {
   const navigate = useNavigate();
   const { courseId: paramCourseId } = useParams();
   const [searchParams] = useSearchParams();
 
-  // Unified course ID retrieval: URL param first, then query param
   const courseIdFromUrl = paramCourseId || searchParams.get("courseid");
 
   const [course, setCourse] = useState(null);
-  const [error, setError] = useState("");
+  const [courseLocations, setCourseLocations] = useState([]);
   const [isLoadingCourse, setIsLoadingCourse] = useState(true);
+  const [isLoadingLocations, setIsLoadingLocations] = useState(true);
 
   const [searchLocation, setSearchLocation] = useState(
     searchParams.get("postcode") || "",
   );
   const [filter, setFilter] = useState("Closest");
-  const [loadingStep, setLoadingStep] = useState(0); // 0: not loading, 1-3: steps
+  const [loadingStep, setLoadingStep] = useState(0);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-  // Extract all location names from the course data
-  const availableLocations = React.useMemo(() => {
-    if (!course?.locations) return [];
-    return course.locations.map((loc) => loc.name);
-  }, [course]);
-
+  // Fetch course
   useEffect(() => {
-    const fetchCourse = async () => {
-      if (!courseIdFromUrl) {
-        setIsLoadingCourse(false);
-        return;
-      }
-      try {
-        const response = await courseService.getCourseById(courseIdFromUrl);
-        setCourse(response.data.data);
-      } catch (err) {
-        console.error("Error fetching course:", err);
-        setError("Course not found");
-      } finally {
-        setIsLoadingCourse(false);
-      }
-    };
-    fetchCourse();
+    if (!courseIdFromUrl) { setIsLoadingCourse(false); return; }
+    courseService.getCourseById(courseIdFromUrl)
+      .then((res) => setCourse(res.data.data))
+      .catch(() => {})
+      .finally(() => setIsLoadingCourse(false));
+  }, [courseIdFromUrl]);
+
+  // Fetch linked locations
+  useEffect(() => {
+    if (!courseIdFromUrl) { setIsLoadingLocations(false); return; }
+    courseLocationService.getByCourse(courseIdFromUrl)
+      .then((res) => setCourseLocations(res.data.data || []))
+      .catch(() => setCourseLocations([]))
+      .finally(() => setIsLoadingLocations(false));
   }, [courseIdFromUrl]);
 
   useEffect(() => {
-    if (loadingStep > 0) {
-      window.scrollTo(0, 0);
-    }
+    if (loadingStep > 0) window.scrollTo(0, 0);
   }, [loadingStep]);
 
-  const handleSearch = (location) => {
-    const loc = location || searchLocation;
+  // Active linked locations with a populated locationId object
+  const linkedLocations = React.useMemo(
+    () =>
+      courseLocations.filter(
+        (link) => link.locationId && typeof link.locationId === "object",
+      ),
+    [courseLocations],
+  );
+
+  // Suggestions shown in the dropdown (filter by typed text)
+  const filteredSuggestions = React.useMemo(() => {
+    if (!searchLocation.trim()) return linkedLocations;
+    const q = searchLocation.toLowerCase();
+    return linkedLocations.filter(
+      (link) =>
+        link.locationId.name?.toLowerCase().includes(q) ||
+        link.locationId.city?.toLowerCase().includes(q) ||
+        link.locationId.postcode?.toLowerCase().includes(q) ||
+        link.locationId.addressLine1?.toLowerCase().includes(q),
+    );
+  }, [linkedLocations, searchLocation]);
+
+  const handleSearch = (locationText) => {
+    const loc = locationText || searchLocation;
     if (!loc) return;
-
     setLoadingStep(1);
-
     setTimeout(() => setLoadingStep(2), 1200);
     setTimeout(() => setLoadingStep(3), 2400);
     setTimeout(() => {
-      // Navigate to results page (unified path)
       navigate(
-        `/booking/results?courseid=${course._id}&postcode=${loc}&sortby=distance&view=all`,
+        `/booking/results?courseid=${course._id}&postcode=${encodeURIComponent(loc)}&sortby=distance&view=all`,
       );
     }, 3600);
+  };
+
+  const selectLocation = (link) => {
+    const loc = link.locationId;
+    const searchTerm = loc.postcode || loc.city || loc.name;
+    setSearchLocation(searchTerm);
+    setShowSuggestions(false);
+    handleSearch(searchTerm);
   };
 
   if (isLoadingCourse) {
@@ -97,9 +121,7 @@ const CourseBooking = () => {
     );
   }
 
-  if (!course) {
-    return <Navigate to="/courses" replace />;
-  }
+  if (!course) return <Navigate to="/courses" replace />;
 
   if (loadingStep > 0) {
     const steps = [
@@ -119,110 +141,37 @@ const CourseBooking = () => {
         progress: 100,
       },
     ];
-    const currentStep = steps[loadingStep - 1];
-
-    return <BookingSkeleton currentStep={currentStep} />;
+    return <BookingSkeleton currentStep={steps[loadingStep - 1]} />;
   }
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen mt-5">
-      {/* <SearchModal
-        isOpen={isSearchModalOpen}
-        onClose={() => setIsSearchModalOpen(false)}
-        initialCourse={course.title}
-        initialLocation={searchLocation}
-      /> */}
-
-      {/* BOOKING HEADER */}
-      {/* <header className="sticky top-0 z-30 w-full border-b border-gray-200 bg-white/95 backdrop-blur-md shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3">
-            <div className="w-full sm:flex-1 sm:max-w-[620px] relative">
-              <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
-
-              <input
-                type="text"
-                readOnly
-                value={course.title}
-                onClick={() => setIsSearchModalOpen(true)}
-                placeholder="Search course..."
-                className="
-            w-full
-            pl-10 pr-4 py-3
-            bg-white
-            border border-gray-200
-            rounded-xl
-            text-sm sm:text-[15px]
-            outline-none
-            focus:ring-2 focus:ring-[#F15A24]/20
-            focus:border-[#F15A24]
-            cursor-pointer
-            hover:bg-gray-50
-            transition-all duration-300
-            text-[#1C1C1C]
-            font-medium
-          "
-              />
-            </div>
-
-            <div className="flex items-center justify-between sm:justify-end gap-2 text-sm font-medium whitespace-nowrap">
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-[#F15A24]/10 flex items-center justify-center">
-                  <MessageCircle className="text-[#F15A24]" size={18} />
-                </div>
-
-                <div className="flex flex-col leading-tight">
-                  <span className="text-gray-500 text-xs sm:text-sm">
-                    Need help?
-                  </span>
-
-                  <button className="text-[#F15A24] hover:underline font-bold text-sm text-left cursor-pointer">
-                    Chat with us
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header> */}
-
       <main className="max-w-300 mx-auto px-4 md:px-6 py-8">
-        {/* 2. Breadcrumbs */}
+        {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-[13px] text-gray-400 mb-8 overflow-x-auto no-scrollbar">
-          <Link to="/" className="hover:text-gray-600">
-            Home
-          </Link>
+          <Link to="/" className="hover:text-gray-600">Home</Link>
           <ChevronRight size={14} />
-          <Link to="/courses" className="hover:text-gray-600">
-            Courses
-          </Link>
+          <Link to="/courses" className="hover:text-gray-600">Courses</Link>
           <ChevronRight size={14} />
-          <Link to={`/course/${course._id}`} className="hover:text-gray-600">
-            {course.title}
-          </Link>
+          <Link to={`/course/${course._id}`} className="hover:text-gray-600">{course.title}</Link>
           <ChevronRight size={14} />
           <span className="text-[#F15A24] font-medium">Book</span>
         </nav>
 
-        {/* 3. Title & Subtitle */}
+        {/* Title */}
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#1C1C1C] mb-2">
           {course.title}
         </h1>
         <p className="text-[#64748B] mb-10 text-lg">
-          Search for training centres near you and choose the date and location
-          that best suits your schedule.
+          Search for training centres near you and choose the date and location that best suits your schedule.
         </p>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* 4. Left Sidebar (Filters) */}
+          {/* Left Sidebar — Sort filters */}
           <aside className="w-full lg:w-64 shrink-0">
             <h3 className="text-[11px] font-black text-gray-400 tracking-[2px] uppercase mb-5">
               Sort Results By
             </h3>
-
             <div className="flex flex-col gap-2">
               {["Closest", "Cheapest", "Earliest"].map((option) => {
                 const isActive = filter === option;
@@ -236,78 +185,62 @@ const CourseBooking = () => {
                         : "border-gray-100 bg-white hover:border-gray-200"
                     }`}
                   >
-                    <span
-                      className={`text-[15px] font-bold ${isActive ? "text-[#F15A24]" : "text-gray-600"}`}
-                    >
+                    <span className={`text-[15px] font-bold ${isActive ? "text-[#F15A24]" : "text-gray-600"}`}>
                       {option}
                     </span>
-
-                    {/* Custom Radio Indicator */}
-                    <div
-                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                        isActive
-                          ? "border-[#F15A24] bg-[#F15A24]"
-                          : "border-gray-200"
-                      }`}
-                    >
-                      {isActive && (
-                        <div className="w-2 h-2 rounded-full bg-white" />
-                      )}
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isActive ? "border-[#F15A24] bg-[#F15A24]" : "border-gray-200"}`}>
+                      {isActive && <div className="w-2 h-2 rounded-full bg-white" />}
                     </div>
                   </button>
                 );
               })}
             </div>
 
-            {/* Postcode Alert Box */}
             <div className="mt-8 p-4 rounded-2xl bg-gray-50 border border-dashed border-gray-200">
               <p className="text-[13px] text-gray-500 leading-relaxed">
-                <button className="text-[#F15A24] font-bold hover:underline">
-                  Add your postcode
-                </button>{" "}
+                <button className="text-[#F15A24] font-bold hover:underline">Add your postcode</button>{" "}
                 to unlock distance-based filters.
               </p>
             </div>
           </aside>
 
-          {/* 5. Center Content (Search & Locations) */}
+          {/* Center Content */}
           <div className="flex-1 space-y-6">
             {/* Search Card */}
             <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
               <h3 className="font-bold text-[#1C1C1C] mb-5">Your Location</h3>
-              <div className="flex gap-4">
-                <div className="relative flex-1">
-                  <MapPin
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"
-                    size={20}
-                  />
+              <div className="flex gap-4" onClick={() => setShowSuggestions(false)}>
+                <div className="relative flex-1" onClick={(e) => e.stopPropagation()}>
+                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={20} />
                   <input
                     type="text"
-                    placeholder="Enter postcode or address"
+                    placeholder="Enter postcode, city or address"
                     className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#F15A24] transition-colors"
                     value={searchLocation}
-                    onChange={(e) => setSearchLocation(e.target.value)}
+                    onChange={(e) => { setSearchLocation(e.target.value); setShowSuggestions(true); }}
                     onFocus={() => setShowSuggestions(true)}
+                    onKeyDown={(e) => { if (e.key === "Enter") { setShowSuggestions(false); handleSearch(); } }}
                   />
-                  {showSuggestions && searchLocation === "" && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-gray-100 shadow-xl z-10 py-2 max-h-75 overflow-y-auto">
-                      {availableLocations.map((loc) => (
+                  {showSuggestions && filteredSuggestions.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-gray-100 shadow-xl z-10 py-2 max-h-72 overflow-y-auto">
+                      {filteredSuggestions.map((link) => (
                         <div
-                          key={loc}
-                          onClick={() => {
-                            setSearchLocation(loc);
-                            setShowSuggestions(false);
-                          }}
-                          className="px-4 py-3 hover:bg-[#FFF5F1] hover:text-[#F15A24] cursor-pointer text-sm font-medium border-b border-gray-50 last:border-0"
+                          key={link._id}
+                          onMouseDown={() => selectLocation(link)}
+                          className="px-4 py-3 hover:bg-[#FFF5F1] cursor-pointer border-b border-gray-50 last:border-0 flex items-center gap-3"
                         >
-                          {loc}
+                          <MapPin size={14} className="text-[#F15A24] shrink-0" />
+                          <div>
+                            <p className="text-sm font-semibold text-[#1C1C1C]">{link.locationId.name}</p>
+                            <p className="text-xs text-gray-400">{[link.locationId.city, link.locationId.postcode].filter(Boolean).join(" · ")}</p>
+                          </div>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
                 <button
-                  onClick={() => handleSearch()}
+                  onClick={() => { setShowSuggestions(false); handleSearch(); }}
                   className="bg-[#F15A24] text-white px-8 py-3.5 rounded-xl font-bold hover:brightness-110 transition-all shadow-md shadow-[#F15A24]/10"
                 >
                   Search
@@ -317,41 +250,90 @@ const CourseBooking = () => {
 
             {/* Locations Card */}
             <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
-              <div className="flex justify-between items-center mb-8">
-                <h3 className="font-bold text-[#1C1C1C]">Locations</h3>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-bold text-[#1C1C1C]">Available Locations</h3>
                 <span className="text-[12px] text-gray-400 font-medium">
-                  Click to select
+                  {isLoadingLocations ? "Loading..." : `${linkedLocations.length} venue${linkedLocations.length !== 1 ? "s" : ""}`}
                 </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4">
-                <div className="bg-[#FFF5F1] text-[#F15A24] px-4 py-3 rounded-lg text-sm font-bold flex items-center justify-start cursor-pointer w-fit pr-20">
-                  All
+
+              {isLoadingLocations ? (
+                <div className="flex items-center justify-center py-10">
+                  <div className="w-6 h-6 rounded-full border-[3px] border-orange-200 border-t-[#F15A24] animate-spin" />
                 </div>
-                {availableLocations.map((loc) => (
-                  <div
-                    key={loc}
-                    onClick={() => {
-                      setSearchLocation(loc);
-                      handleSearch(loc);
-                    }}
-                    className="text-gray-700 hover:text-[#F15A24] px-4 py-3 text-sm font-medium cursor-pointer transition-colors"
+              ) : linkedLocations.length === 0 ? (
+                <div className="text-center py-10 text-gray-400">
+                  <MapPin size={32} className="mx-auto mb-3 opacity-30" />
+                  <p className="text-sm font-medium">No locations available for this course yet.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* "All" tile */}
+                  <button
+                    onClick={() => handleSearch(searchLocation || linkedLocations[0]?.locationId?.city || "")}
+                    className="flex items-center gap-3 bg-[#FFF5F1] text-[#F15A24] px-5 py-4 rounded-2xl text-sm font-bold border-2 border-[#F15A24]/20 hover:border-[#F15A24]/50 transition-all"
                   >
-                    {loc}
-                  </div>
-                ))}
-              </div>
+                    <MapPin size={16} />
+                    All Locations
+                  </button>
+
+                  {linkedLocations.map((link) => {
+                    const loc = link.locationId;
+                    const upcomingDates = (link.dates || []).filter(
+                      (d) => d.startDate && new Date(d.startDate) >= new Date(),
+                    );
+                    const nextDate = upcomingDates[0];
+
+                    return (
+                      <button
+                        key={link._id}
+                        onClick={() => selectLocation(link)}
+                        className="flex flex-col items-start gap-2 bg-white border border-gray-100 hover:border-[#F15A24]/30 hover:bg-[#FFF5F1]/50 px-5 py-4 rounded-2xl text-left transition-all group shadow-sm"
+                      >
+                        <div className="flex items-start justify-between w-full gap-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
+                              <MapPin size={14} className="text-[#F15A24]" />
+                            </div>
+                            <div>
+                              <p className="text-[13px] font-bold text-[#1C1C1C] group-hover:text-[#F15A24] transition-colors leading-tight">
+                                {loc.name}
+                              </p>
+                              <p className="text-[11px] text-gray-400 font-medium mt-0.5">
+                                {[loc.city, loc.postcode].filter(Boolean).join(" · ")}
+                              </p>
+                            </div>
+                          </div>
+                          {link.price && (
+                            <span className="text-[12px] font-bold text-[#F15A24] shrink-0 flex items-center gap-0.5">
+                              <PoundSterling size={11} />
+                              {link.price}
+                            </span>
+                          )}
+                        </div>
+
+                        {nextDate && (
+                          <div className="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium pl-10">
+                            <CalendarDays size={11} className="text-gray-300" />
+                            Next: {fmtDate(nextDate.startDate)}
+                            {upcomingDates.length > 1 && (
+                              <span className="ml-1 text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full font-semibold">
+                                +{upcomingDates.length - 1} more
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Back link */}
             <div className="flex justify-center pt-8">
-              <Link
-                to={`/course/${course._id}`}
-                className="flex items-center gap-2 group"
-              >
-                <ChevronLeft
-                  size={16}
-                  className="text-gray-300 group-hover:text-[#F15A24] transition-colors"
-                />
+              <Link to={`/course/${course._id}`} className="flex items-center gap-2 group">
+                <ChevronLeft size={16} className="text-gray-300 group-hover:text-[#F15A24] transition-colors" />
                 <span className="text-sm font-medium text-gray-400 group-hover:text-[#F15A24] transition-colors">
                   Back to {course.title}
                 </span>
@@ -359,7 +341,7 @@ const CourseBooking = () => {
             </div>
           </div>
 
-          {/* 6. Right Sidebar */}
+          {/* Right Sidebar */}
           <Feedback />
         </div>
       </main>

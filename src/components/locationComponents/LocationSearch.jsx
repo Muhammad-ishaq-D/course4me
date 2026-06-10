@@ -13,7 +13,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import courseService from "../../api/services/courseService";
+import courseLocationService from "../../api/services/courseLocationService";
 
 const BACKEND_URL = import.meta.env.VITE_API_URL?.replace("/api", "") || "";
 
@@ -23,94 +23,70 @@ const getImageSrc = (thumbnail) => {
   return `${BACKEND_URL}/${thumbnail.replace(/\\/g, "/")}`;
 };
 
-const getCoursePrice = (course) => {
-  const schedulePrice = course.locations?.[0]?.schedules?.[0]?.price;
-  return schedulePrice || course.pricing?.salePrice || course.pricing?.basePrice || 0;
-};
-
-const getNextDate = (course) => {
-  const startDate = course.locations?.[0]?.schedules?.[0]?.startDate;
-  if (!startDate) return null;
-  return new Date(startDate).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-};
-
-const getLocationDisplay = (course) => {
-  const loc = course.locations?.[0];
-  if (!loc) return "";
-  return [loc.name, loc.address, loc.postcode].filter(Boolean).join(", ");
-};
-
 const ITEMS_PER_PAGE = 6;
 
 const LocationSearch = () => {
   const navigate = useNavigate();
 
-  // ===================== STATES =====================
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
-  const [allCourses, setAllCourses] = useState([]);
+  const [allLinks, setAllLinks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [activeCourse, setActiveCourse] = useState(null);
+  const [activeLinkId, setActiveLinkId] = useState(null);
   const [page, setPage] = useState(1);
 
-  // ===================== FETCH ALL COURSES ONCE =====================
+  // Fetch all active course-location links for published courses
   useEffect(() => {
-    courseService
-      .getAllCourses({ status: "Published" })
-      .then((res) => setAllCourses(res?.data?.data || []))
+    courseLocationService
+      .getAll()
+      .then((res) => setAllLinks(res?.data?.data || []))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
-  // ===================== FILTER COURSES CLIENT-SIDE BY LOCATION =====================
-  const courses = useMemo(() => {
+  // Filter links client-side by location name/city/postcode/address
+  const filteredLinks = useMemo(() => {
     if (!search.trim()) return [];
     const term = search.trim().toLowerCase();
-    return allCourses.filter((course) =>
-      course.locations?.some(
-        (loc) =>
-          loc.name?.toLowerCase().includes(term) ||
-          loc.address?.toLowerCase().includes(term) ||
-          loc.postcode?.toLowerCase().includes(term)
-      )
-    );
-  }, [search, allCourses]);
+    return allLinks.filter((link) => {
+      const loc = link.locationId;
+      if (!loc || typeof loc !== "object") return false;
+      return (
+        loc.name?.toLowerCase().includes(term) ||
+        loc.city?.toLowerCase().includes(term) ||
+        loc.postcode?.toLowerCase().includes(term) ||
+        loc.addressLine1?.toLowerCase().includes(term)
+      );
+    });
+  }, [search, allLinks]);
 
-  // ===================== LOCATION SUGGESTIONS FROM COURSES =====================
+  // Dropdown suggestions while typing
   const locationSuggestions = useMemo(() => {
     if (!searchInput.trim()) return [];
     const term = searchInput.trim().toLowerCase();
     const seen = new Set();
     const results = [];
-    allCourses.forEach((course) => {
-      course.locations?.forEach((loc) => {
-        const matches =
-          loc.name?.toLowerCase().includes(term) ||
-          loc.address?.toLowerCase().includes(term) ||
-          loc.postcode?.toLowerCase().includes(term);
-        if (!matches) return;
-
-        // Build full combined address label
-        const label = [loc.name, loc.address, loc.postcode].filter(Boolean).join(", ");
-        if (!label || seen.has(label)) return;
-        seen.add(label);
-
-        // Use postcode (most specific) or name as the filter key
-        const filterKey = loc.postcode || loc.name || label;
-        results.push({ label, filterKey });
-      });
+    allLinks.forEach((link) => {
+      const loc = link.locationId;
+      if (!loc || typeof loc !== "object") return;
+      const matches =
+        loc.name?.toLowerCase().includes(term) ||
+        loc.city?.toLowerCase().includes(term) ||
+        loc.postcode?.toLowerCase().includes(term) ||
+        loc.addressLine1?.toLowerCase().includes(term);
+      if (!matches) return;
+      const label = [loc.name, loc.city, loc.postcode].filter(Boolean).join(", ");
+      if (!label || seen.has(label)) return;
+      seen.add(label);
+      const filterKey = loc.postcode || loc.city || loc.name || label;
+      results.push({ label, filterKey });
     });
     return results.slice(0, 8);
-  }, [searchInput, allCourses]);
+  }, [searchInput, allLinks]);
 
-  // ===================== PAGINATION =====================
-  const totalPages = Math.ceil(courses.length / ITEMS_PER_PAGE);
-  const paginated = courses.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredLinks.length / ITEMS_PER_PAGE);
+  const paginated = filteredLinks.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
   const handleSearch = () => {
     setPage(1);
@@ -219,7 +195,7 @@ const LocationSearch = () => {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
 
           {/* =========================================================
-                LEFT SIDE — COURSES
+                LEFT SIDE — COURSE CARDS
           ========================================================= */}
           <div className="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
 
@@ -233,9 +209,9 @@ const LocationSearch = () => {
                   {search ? (
                     <>
                       <span className="text-orange-500 font-semibold">
-                        {loading ? "..." : courses.length}
+                        {loading ? "..." : filteredLinks.length}
                       </span>{" "}
-                      {courses.length === 1 ? "course" : "courses"} found near &quot;{search}&quot;
+                      {filteredLinks.length === 1 ? "course" : "courses"} found near &quot;{search}&quot;
                     </>
                   ) : (
                     "Search a location to see results"
@@ -264,102 +240,117 @@ const LocationSearch = () => {
                 </div>
               )}
 
-              {/* Course cards */}
+              {/* Course-location cards */}
               {!loading &&
-                paginated.map((course) => (
-                  <div
-                    key={course._id}
-                    onMouseEnter={() => setActiveCourse(course._id)}
-                    onMouseLeave={() => setActiveCourse(null)}
-                    className={`group relative bg-white border rounded-[28px] p-3 transition-all duration-300 cursor-pointer overflow-hidden
-                    ${
-                      activeCourse === course._id
-                        ? "border-orange-300 shadow-[0_20px_60px_rgba(249,115,22,0.15)]"
-                        : "border-gray-200 hover:border-orange-200 hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]"
-                    }`}
-                  >
-                    {/* Hover gradient */}
-                    <div className="absolute inset-0 bg-linear-to-r from-orange-50/0 via-orange-50/40 to-orange-50/0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />
+                paginated.map((link) => {
+                  const loc = link.locationId || {};
+                  const course = link.courseId || {};
+                  const address = [loc.name, loc.city, loc.postcode].filter(Boolean).join(", ");
+                  const upcomingDates = (link.dates || [])
+                    .filter((d) => d.startDate && new Date(d.startDate) >= new Date())
+                    .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+                  const nextDate = upcomingDates[0]?.startDate
+                    ? new Date(upcomingDates[0].startDate).toLocaleDateString("en-GB", {
+                        day: "numeric", month: "short", year: "numeric",
+                      })
+                    : null;
+                  const price = link.price || course.pricing?.salePrice || course.pricing?.basePrice || 0;
 
-                    <div className="relative flex flex-col sm:flex-row gap-4">
+                  return (
+                    <div
+                      key={link._id}
+                      onMouseEnter={() => setActiveLinkId(link._id)}
+                      onMouseLeave={() => setActiveLinkId(null)}
+                      className={`group relative bg-white border rounded-[28px] p-3 transition-all duration-300 cursor-pointer overflow-hidden
+                      ${
+                        activeLinkId === link._id
+                          ? "border-orange-300 shadow-[0_20px_60px_rgba(249,115,22,0.15)]"
+                          : "border-gray-200 hover:border-orange-200 hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]"
+                      }`}
+                    >
+                      {/* Hover gradient */}
+                      <div className="absolute inset-0 bg-linear-to-r from-orange-50/0 via-orange-50/40 to-orange-50/0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />
 
-                      {/* Thumbnail */}
-                      <div className="w-full sm:w-32 md:w-36 h-52 sm:h-32 md:h-28 rounded-3xl overflow-hidden shrink-0 bg-orange-50 flex items-center justify-center">
-                        {getImageSrc(course.thumbnail) ? (
-                          <img
-                            src={getImageSrc(course.thumbnail)}
-                            alt={course.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                        ) : (
-                          <BookOpen className="w-10 h-10 text-orange-300" />
-                        )}
-                      </div>
+                      <div className="relative flex flex-col sm:flex-row gap-4">
 
-                      {/* Right content */}
-                      <div className="flex-1 min-w-0 flex flex-col">
-                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                        {/* Thumbnail */}
+                        <div className="w-full sm:w-32 md:w-36 h-52 sm:h-32 md:h-28 rounded-3xl overflow-hidden shrink-0 bg-orange-50 flex items-center justify-center">
+                          {getImageSrc(course.thumbnail) ? (
+                            <img
+                              src={getImageSrc(course.thumbnail)}
+                              alt={course.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          ) : (
+                            <BookOpen className="w-10 h-10 text-orange-300" />
+                          )}
+                        </div>
 
-                          {/* Left info */}
-                          <div className="flex-1 min-w-0">
-                            {/* Category badge */}
-                            {course.category && (
-                              <span className="inline-block text-[11px] font-semibold px-3 py-1 rounded-full bg-orange-50 text-orange-600 mb-2">
-                                {course.category}
-                              </span>
-                            )}
+                        {/* Right content */}
+                        <div className="flex-1 min-w-0 flex flex-col">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
 
-                            {/* Title */}
-                            <h3 className="text-[16px] sm:text-[18px] font-bold text-gray-900 leading-tight wrap-break-word line-clamp-2">
-                              {course.title}
-                            </h3>
-
-                            {/* Location */}
-                            {getLocationDisplay(course) && (
-                              <div className="flex items-center gap-2 mt-2">
-                                <div className="w-7 h-7 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                                  <MapPin className="w-3.5 h-3.5 text-orange-500" />
-                                </div>
-                                <p className="text-sm text-gray-500 leading-relaxed line-clamp-1">
-                                  {getLocationDisplay(course)}
-                                </p>
-                              </div>
-                            )}
-
-                            {/* Price & date */}
-                            <div className="flex flex-wrap items-center gap-3 mt-3">
-                              <span className="text-lg font-black text-gray-900">
-                                £{getCoursePrice(course)}
-                              </span>
-                              {getNextDate(course) && (
-                                <span className="text-sm text-orange-500 font-semibold">
-                                  Next: {getNextDate(course)}
+                            {/* Left info */}
+                            <div className="flex-1 min-w-0">
+                              {/* Category badge */}
+                              {course.category && (
+                                <span className="inline-block text-[11px] font-semibold px-3 py-1 rounded-full bg-orange-50 text-orange-600 mb-2">
+                                  {course.category}
                                 </span>
                               )}
-                            </div>
-                          </div>
 
-                          {/* Actions */}
-                          <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
-                            <button
-                              onClick={() => navigate(`/booking/course?courseid=${course._id}`)}
-                              className="h-10 px-5 rounded-2xl bg-linear-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-orange-200 whitespace-nowrap"
-                            >
-                              Book Now
-                            </button>
-                            <button
-                              onClick={() => navigate(`/locations/locationdetails/${course._id}`)}
-                              className="h-10 px-5 rounded-2xl border border-gray-200 hover:border-orange-200 hover:bg-orange-50 text-sm font-semibold flex items-center gap-1.5 transition-all duration-300 whitespace-nowrap"
-                            >
-                              Details
-                              <ArrowRight className="w-3.5 h-3.5" />
-                            </button>
+                              {/* Title */}
+                              <h3 className="text-[16px] sm:text-[18px] font-bold text-gray-900 leading-tight wrap-break-word line-clamp-2">
+                                {course.title}
+                              </h3>
+
+                              {/* Location address */}
+                              {address && (
+                                <div className="flex items-center gap-2 mt-2">
+                                  <div className="w-7 h-7 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
+                                    <MapPin className="w-3.5 h-3.5 text-orange-500" />
+                                  </div>
+                                  <p className="text-sm text-gray-500 leading-relaxed line-clamp-1">
+                                    {address}
+                                  </p>
+                                </div>
+                              )}
+
+                              {/* Price & next date */}
+                              <div className="flex flex-wrap items-center gap-3 mt-3">
+                                <span className="text-lg font-black text-gray-900">
+                                  £{price}
+                                </span>
+                                {nextDate && (
+                                  <span className="text-sm text-orange-500 font-semibold">
+                                    Next: {nextDate}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
+                              <button
+                                onClick={() => navigate(`/booking/course?courseid=${course._id}`)}
+                                className="h-10 px-5 rounded-2xl bg-linear-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-orange-200 whitespace-nowrap"
+                              >
+                                Book Now
+                              </button>
+                              <button
+                                onClick={() => navigate(`/locations/locationdetails/${link._id}`)}
+                                className="h-10 px-5 rounded-2xl border border-gray-200 hover:border-orange-200 hover:bg-orange-50 text-sm font-semibold flex items-center gap-1.5 transition-all duration-300 whitespace-nowrap"
+                              >
+                                Details
+                                <ArrowRight className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
 
               {/* Empty state — no search entered yet */}
               {!loading && !search && (
@@ -377,7 +368,7 @@ const LocationSearch = () => {
               )}
 
               {/* Empty state — searched but no results */}
-              {!loading && search && courses.length === 0 && (
+              {!loading && search && filteredLinks.length === 0 && (
                 <div className="py-20 flex items-center justify-center">
                   <div className="text-center">
                     <GraduationCap className="w-14 h-14 text-gray-300 mx-auto mb-4" />
@@ -395,12 +386,12 @@ const LocationSearch = () => {
             {/* =========================================================
                   PAGINATION
             ========================================================= */}
-            {!loading && courses.length > 0 && (
+            {!loading && filteredLinks.length > 0 && (
               <div className="border-t border-gray-100 p-5 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <p className="text-sm text-gray-500">
                   Showing {(page - 1) * ITEMS_PER_PAGE + 1}–
-                  {Math.min(page * ITEMS_PER_PAGE, courses.length)} of{" "}
-                  {courses.length} results
+                  {Math.min(page * ITEMS_PER_PAGE, filteredLinks.length)} of{" "}
+                  {filteredLinks.length} results
                 </p>
 
                 <div className="flex items-center gap-2">

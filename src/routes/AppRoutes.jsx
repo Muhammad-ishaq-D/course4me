@@ -1,4 +1,3 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Courses from "../pages/courses/Courses";
@@ -42,6 +41,7 @@ const AppRoutes = () => {
       <Route path="/blog/article" element={<BlogArticle />} />
       <Route path="/locations" element={<Locations />} />
       <Route path="/locations/locationdetails" element={<LocationDetails />} />
+      <Route path="/locations/locationdetails/:courseLocationId" element={<LocationDetails />} />
       <Route path="/careers" element={<Careers />} />
       <Route path="/careers/careerdetails/:id" element={<CareerDetails />} />
       <Route path="/apply-job/:id" element={<ApplyJob />} />

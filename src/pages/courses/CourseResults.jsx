@@ -1,20 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { useSearchParams, Link } from "react-router-dom";
-import {
-  Search,
-  MessageCircle,
-  Calendar,
-  Star,
-  Users,
-  Zap,
-  CreditCard,
-  GraduationCap,
-  Loader2,
-  Navigation,
-} from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import courseService from "../../api/services/courseService";
-import { courses as fallbackCourses } from "../../data/courseData";
-import SearchModal from "../../components/shared/SearchModal";
+import courseLocationService from "../../api/services/courseLocationService";
 import LocationCards from "../../components/ui/LocationCards";
 import Loader from "../../components/ui/Loader";
 import Feedback from "../../components/ui/Feedback";
@@ -25,7 +12,6 @@ import {
   geocodePostcode,
   calculateDistanceMiles,
   formatDistanceFromUser,
-  formatVenueAddress,
   getGoogleMapsUrl,
 } from "../../utils/distance";
 import { deriveLocationAmenities } from "../../utils/locationAmenities";
@@ -36,172 +22,114 @@ const CourseResults = () => {
   const courseId = searchParams.get("courseid");
 
   const [course, setCourse] = useState(null);
+  const [courseLocations, setCourseLocations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
 
   const [filter, setFilter] = useState("Closest");
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [distanceByLocationId, setDistanceByLocationId] = useState({});
-  const [amenitiesByLocationId, setAmenitiesByLocationId] = useState({});
+  const [distanceByLinkId, setDistanceByLinkId] = useState({});
+  const [amenitiesByLinkId, setAmenitiesByLinkId] = useState({});
   const [isCalculatingDistances, setIsCalculatingDistances] = useState(false);
 
+  // Fetch course + linked locations in parallel
   useEffect(() => {
-    const fetchCourse = async () => {
-      try {
-        if (!courseId) {
-          setIsLoading(false);
-          return;
-        }
-        const response = await courseService.getCourseById(courseId);
-        setCourse(response.data.data);
-      } catch (err) {
-        console.error("Error fetching course:", err);
-        setError("Failed to load results");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCourse();
+    if (!courseId) { setIsLoading(false); return; }
+
+    Promise.all([
+      courseService.getCourseById(courseId),
+      courseLocationService.getByCourse(courseId),
+    ])
+      .then(([courseRes, locRes]) => {
+        setCourse(courseRes.data.data);
+        setCourseLocations(locRes.data.data || []);
+      })
+      .catch((err) => console.error("Error fetching course data:", err))
+      .finally(() => setIsLoading(false));
   }, [courseId]);
 
-  useEffect(() => {
-    if (!course?.locations?.length) {
-      setAmenitiesByLocationId({});
-      return;
-    }
+  // Active links with a populated locationId object
+  const activeLinks = useMemo(
+    () => courseLocations.filter((l) => l.locationId && typeof l.locationId === "object"),
+    [courseLocations],
+  );
 
+  // Derive amenities (uses postcode geocoding for parking/commute)
+  useEffect(() => {
+    if (!activeLinks.length) { setAmenitiesByLinkId({}); return; }
     let cancelled = false;
 
-    const loadAmenities = async () => {
+    (async () => {
       const entries = await Promise.all(
-        course.locations.map(async (loc) => {
+        activeLinks.map(async (link) => {
+          const loc = link.locationId;
           let geocodeMeta = {};
-
           if (loc.postcode) {
             const lookup = await geocodePostcode(loc.postcode).catch(() => null);
-            if (lookup) {
-              geocodeMeta = {
-                region: lookup.region,
-                adminDistrict: lookup.adminDistrict,
-              };
-            }
+            if (lookup) geocodeMeta = { region: lookup.region, adminDistrict: lookup.adminDistrict };
           }
-
-          return [
-            String(loc._id),
-            deriveLocationAmenities(loc, geocodeMeta),
-          ];
+          return [String(link._id), deriveLocationAmenities(loc, geocodeMeta)];
         }),
       );
+      if (!cancelled) setAmenitiesByLinkId(Object.fromEntries(entries));
+    })();
 
-      if (!cancelled) {
-        setAmenitiesByLocationId(Object.fromEntries(entries));
-      }
-    };
+    return () => { cancelled = true; };
+  }, [activeLinks]);
 
-    loadAmenities();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [course]);
-
+  // Calculate distances from user's postcode to each venue
   useEffect(() => {
-    if (!course?.locations?.length) {
-      setDistanceByLocationId({});
+    if (!activeLinks.length || !postcode.trim()) {
+      setDistanceByLinkId({});
       setIsCalculatingDistances(false);
       return;
     }
-
-    if (!postcode.trim()) {
-      setDistanceByLocationId({});
-      setIsCalculatingDistances(false);
-      return;
-    }
-
     let cancelled = false;
 
-    const calculateDistances = async () => {
+    (async () => {
       setIsCalculatingDistances(true);
-      setDistanceByLocationId({});
-
+      setDistanceByLinkId({});
       try {
-        const userCoords = postcode
-          ? await geocodeLocation(postcode).catch(() => null)
-          : null;
-
+        const userCoords = await geocodeLocation(postcode).catch(() => null);
         const entries = await Promise.all(
-          course.locations.map(async (loc) => {
-            let latitude = loc.latitude;
-            let longitude = loc.longitude;
-
-            if ((latitude == null || longitude == null) && loc.postcode) {
-              const venueCoords = await geocodePostcode(loc.postcode).catch(
-                () => null,
-              );
-              if (venueCoords) {
-                latitude = venueCoords.latitude;
-                longitude = venueCoords.longitude;
-              }
+          activeLinks.map(async (link) => {
+            const loc = link.locationId;
+            let lat = loc.latitude;
+            let lng = loc.longitude;
+            if ((lat == null || lng == null) && loc.postcode) {
+              const vc = await geocodePostcode(loc.postcode).catch(() => null);
+              if (vc) { lat = vc.latitude; lng = vc.longitude; }
             }
-
-            if (!userCoords || latitude == null || longitude == null) {
-              return [String(loc._id), null];
-            }
-
-            const miles = calculateDistanceMiles(
-              userCoords.latitude,
-              userCoords.longitude,
-              latitude,
-              longitude,
-            );
-
-            return [
-              String(loc._id),
-              {
-                miles,
-                label: formatDistanceFromUser(miles),
-              },
-            ];
+            if (!userCoords || lat == null || lng == null) return [String(link._id), null];
+            const miles = calculateDistanceMiles(userCoords.latitude, userCoords.longitude, lat, lng);
+            return [String(link._id), { miles, label: formatDistanceFromUser(miles) }];
           }),
         );
-
-        if (!cancelled) {
-          setDistanceByLocationId(Object.fromEntries(entries));
-        }
+        if (!cancelled) setDistanceByLinkId(Object.fromEntries(entries));
       } finally {
-        if (!cancelled) {
-          setIsCalculatingDistances(false);
-        }
+        if (!cancelled) setIsCalculatingDistances(false);
       }
-    };
+    })();
 
-    calculateDistances();
+    return () => { cancelled = true; };
+  }, [activeLinks, postcode]);
 
-    return () => {
-      cancelled = true;
-    };
-  }, [course, postcode]);
-
-  // Map Backend Hierarchy to UI Format
+  // Map CourseLocation links → format LocationCards expects
   const locations = useMemo(() => {
-    if (!course?.locations) return [];
+    return activeLinks.map((link) => {
+      const loc = link.locationId;
+      const address = [loc.addressLine1, loc.city, loc.postcode].filter(Boolean).join(", ");
+      const distanceInfo = distanceByLinkId[String(link._id)];
+      const amenities = amenitiesByLinkId[String(link._id)] || deriveLocationAmenities(loc);
 
-    const flatLocations = [];
-    course.locations.forEach((loc) => {
-      const venueAddress = formatVenueAddress(loc);
-      const distanceInfo = distanceByLocationId[String(loc._id)];
-      const amenities =
-        amenitiesByLocationId[String(loc._id)] ||
-        deriveLocationAmenities(loc);
+      const upcomingDates = (link.dates || [])
+        .filter((d) => d.startDate)
+        .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
 
-      flatLocations.push({
-        id: loc._id,
+      return {
+        id: link._id,
         name: loc.name,
-        recommended:
-          loc.name.includes("Central") || loc.name.includes("Ilford"),
-        address: venueAddress || loc.name,
-        mapsUrl: getGoogleMapsUrl(loc),
+        recommended: loc.name?.includes("Central") || loc.name?.includes("Ilford"),
+        address,
+        mapsUrl: loc.mapsUrl || getGoogleMapsUrl({ ...loc, address: loc.addressLine1 }),
         latitude: loc.latitude,
         longitude: loc.longitude,
         distance: postcode.trim()
@@ -212,30 +140,25 @@ const CourseResults = () => {
         distanceMiles: distanceInfo?.miles ?? null,
         parking: amenities.parking,
         commute: amenities.commute,
-        duration: course.duration,
+        duration: course?.duration,
         booked: "500+",
-        price: course.pricing?.basePrice || 139.99,
-        nextDate: loc.schedules?.[0]?.startDate
-          ? new Date(loc.schedules[0].startDate).toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "short",
-            })
+        price: link.price || course?.pricing?.basePrice || 139.99,
+        nextDate: upcomingDates[0]?.startDate
+          ? new Date(upcomingDates[0].startDate).toLocaleDateString("en-GB", { day: "numeric", month: "short" })
           : "TBA",
-        dates: loc.schedules.map((sch) => ({
-          id: sch._id,
-          range: `${new Date(sch.startDate).toLocaleDateString("en-GB", { day: "numeric", month: "short" })} - ${new Date(sch.endDate).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
-          price: sch.price || course.pricing?.basePrice,
-          bookingFee: sch.seatsAvailable < 5,
-          startDate: sch.startDate,
+        dates: upcomingDates.map((d) => ({
+          id: d._id,
+          range: `${new Date(d.startDate).toLocaleDateString("en-GB", { day: "numeric", month: "short" })} – ${new Date(d.endDate).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
+          price: link.price || course?.pricing?.basePrice,
+          bookingFee: d.availableSeats != null && d.availableSeats < 5,
+          startDate: d.startDate,
         })),
-      });
+      };
     });
-    return flatLocations;
-  }, [course, distanceByLocationId, amenitiesByLocationId, isCalculatingDistances, postcode]);
+  }, [activeLinks, distanceByLinkId, amenitiesByLinkId, isCalculatingDistances, postcode, course]);
 
   const sortedLocations = useMemo(() => {
     const copy = [...locations];
-
     if (filter === "Closest") {
       copy.sort((a, b) => {
         if (a.distanceMiles == null && b.distanceMiles == null) return 0;
@@ -247,26 +170,17 @@ const CourseResults = () => {
       copy.sort((a, b) => a.price - b.price);
     } else if (filter === "Earliest") {
       copy.sort((a, b) => {
-        const aDate = a.dates?.[0]?.startDate
-          ? new Date(a.dates[0].startDate).getTime()
-          : Infinity;
-        const bDate = b.dates?.[0]?.startDate
-          ? new Date(b.dates[0].startDate).getTime()
-          : Infinity;
+        const aDate = a.dates?.[0]?.startDate ? new Date(a.dates[0].startDate).getTime() : Infinity;
+        const bDate = b.dates?.[0]?.startDate ? new Date(b.dates[0].startDate).getTime() : Infinity;
         return aDate - bDate;
       });
     }
-
     return copy;
   }, [locations, filter]);
 
   const totalSchedules = useMemo(
-    () =>
-      course?.locations?.reduce(
-        (count, loc) => count + (loc.schedules?.length || 0),
-        0,
-      ) || 0,
-    [course],
+    () => activeLinks.reduce((sum, l) => sum + (l.dates?.length || 0), 0),
+    [activeLinks],
   );
 
   if (isLoading) {
@@ -286,44 +200,11 @@ const CourseResults = () => {
   }
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen mt-5 ">
-      {/* <SearchModal
-        isOpen={isSearchModalOpen}
-        onClose={() => setIsSearchModalOpen(false)}
-        initialCourse={course.title}
-        initialLocation={postcode}
-      /> */}
-      {/* Search Header */}
-      {/* <header className="sticky bg-white border-b border-gray-200 py-3 top-0 w-full shadow-xs z-30">
-        <div className="max-w-[1200px] mx-auto px-4 flex items-center justify-between">
-          <div className="flex-1 max-w-[600px] relative">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              size={16}
-            />
-            <input
-              type="text"
-              readOnly
-              value={`${course.title} - ${postcode}`}
-              onClick={() => setIsSearchModalOpen(true)}
-              className="w-full pl-9 pr-4 py-2 bg-[#F8FAFC] border border-gray-200 rounded-md text-sm outline-none cursor-pointer hover:bg-gray-50 focus:ring-1 focus:ring-[#F15A24] transition-colors font-medium text-[#1C1C1C]"
-            />
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <MessageCircle className="text-[#F15A24]" size={16} />
-            <span className="text-gray-500">Not sure?</span>
-            <span className="text-[#F15A24] font-bold cursor-pointer hover:underline">
-              Chat with us
-            </span>
-          </div>
-        </div>
-      </header> */}
-
+    <div className="bg-[#F8FAFC] min-h-screen mt-5">
       <main className="max-w-300 mx-auto px-4 py-6 md:py-20">
         <div className="flex flex-col lg:flex-row gap-5">
-          {/* 4. Left Sidebar (Filters) */}
           <CourseResultsFilter filter={filter} setFilter={setFilter} />
-          {/* 5. Main Content (Course Listings) */}
+
           <div className="flex-1 space-y-6">
             <div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-[#1C1C1C] mb-1">
@@ -341,36 +222,21 @@ const CourseResults = () => {
               </p>
             </div>
 
-            {/* Weekend Alert */}
-            {/* <div className="bg-white rounded-xl border border-gray-100 p-4 flex items-start gap-4">
-              <div className="bg-[#FFF5F1] p-2 rounded-lg">
-                <Calendar className="text-[#F15A24]" size={20} />
+            {sortedLocations.length === 0 ? (
+              <div className="bg-white rounded-3xl border border-gray-100 p-12 text-center shadow-sm">
+                <p className="text-gray-500 font-medium text-lg">No locations available for this course yet.</p>
+                <p className="text-gray-400 text-sm mt-2">Please check back soon or contact us for more information.</p>
               </div>
-              <div className="text-sm">
-                <p className="font-bold text-[#1C1C1C] mb-0.5">
-                  Weekend Training Now Available!
-                </p>
-                <p className="text-gray-500">
-                  Complete your training on Saturdays and Sundays across three
-                  weekends.{" "}
-                  <span className="text-[#F15A24] cursor-pointer hover:underline">
-                    Learn more
-                  </span>
-                </p>
-              </div>
-            </div> */}
+            ) : (
+              sortedLocations.map((loc) => (
+                <LocationCards key={loc.id} loc={loc} course={course} />
+              ))
+            )}
 
-            {/* Location Cards */}
-            {sortedLocations.map((loc) => (
-              <LocationCards key={loc.id} loc={loc} course={course} />
-            ))}
-
-            {/* Trust Badges */}
             <TrustBadges />
           </div>
 
-          {/* Right Sidebar */}
-          <Feedback price={course.pricing.basePrice} date={course.date} />
+          <Feedback price={course.pricing?.basePrice} date={course.date} />
         </div>
       </main>
     </div>
