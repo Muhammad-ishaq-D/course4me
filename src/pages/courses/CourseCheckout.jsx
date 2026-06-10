@@ -140,37 +140,63 @@ const CourseCheckout = () => {
 
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(term)}/autocomplete`);
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(term)}&format=json&addressdetails=1&limit=5`);
         if (cancelled) return;
         const data = await res.json();
-        
+
+        const seen = new Set();
         const suggestions = [];
 
-        if (data.status === 200 && data.result) {
-          const topPostcodes = data.result.slice(0, 5);
-          
-          const detailRes = await fetch('https://api.postcodes.io/postcodes', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ postcodes: topPostcodes })
-          });
-          const detailData = await detailRes.json();
-          
-          if (detailData.status === 200 && detailData.result) {
-            detailData.result.forEach(item => {
-              if (item.result) {
-                const pc = item.result;
-                const city = pc.parish || pc.admin_district || pc.region || "";
-                suggestions.push({
-                  label: `${pc.postcode}, ${city}`,
-                  postcode: pc.postcode,
-                  address: "",
-                  city: city,
-                });
+        (data || []).forEach((item) => {
+          const label = item.display_name;
+          if (label && !seen.has(label)) {
+            seen.add(label);
+
+            const addr = item.address || {};
+            let postcode = addr.postcode || "";
+            
+            if (!postcode) {
+              const ukPostcodeRegex = /\b([A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2})\b/i;
+              const usZipRegex = /\b(\d{5}(?:-\d{4})?)\b/;
+              const ukMatch = label.match(ukPostcodeRegex);
+              const usMatch = label.match(usZipRegex);
+              
+              if (ukMatch) postcode = ukMatch[0];
+              else if (usMatch) postcode = usMatch[0];
+            }
+
+            const city = addr.city || addr.town || addr.village || addr.county || "";
+
+            const addr1Parts = [addr.house_number, addr.road].filter(Boolean);
+            let address = "";
+            if (addr1Parts.length > 0) {
+              address = addr1Parts.join(", ");
+              if (addr.suburb && !address.includes(addr.suburb)) {
+                address += ", " + addr.suburb;
               }
+            } else {
+              // Fallback to splitting display_name
+              const parts = item.display_name.split(",").map(p => p.trim());
+              // Find the first part that is NOT the postcode, city, county, country
+              for (const p of parts) {
+                if (p !== postcode && p !== city && p !== addr.county && p !== addr.state && p !== addr.country) {
+                  address = p;
+                  break;
+                }
+              }
+            }
+
+            // If we still couldn't find a good address line 1, leave it blank so user can type it
+            if (address === postcode) address = "";
+
+            suggestions.push({
+              label,
+              postcode: postcode || term,
+              address,
+              city,
             });
           }
-        }
+        });
 
         setPostcodeSuggestions(suggestions);
         setShowPostcodeSuggestions(suggestions.length > 0);
