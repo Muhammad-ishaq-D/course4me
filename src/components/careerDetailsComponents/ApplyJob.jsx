@@ -89,7 +89,10 @@ const ApplyJob = () => {
           const appsResult = await careerService.getMyApplications();
           if (appsResult && appsResult.success) {
             const apps = appsResult.applications || [];
-            const applied = apps.some(app => app.jobId === id || app.jobId?._id === id);
+            const applied = apps.some(app => {
+              const appJobId = app.jobId?._id || app.jobId?.id || app.jobId;
+              return String(appJobId) === String(id);
+            });
             setHasApplied(applied);
           }
         } catch (error) {
