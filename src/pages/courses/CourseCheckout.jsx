@@ -1277,9 +1277,6 @@ const CourseCheckout = () => {
                           <p className="text-[14px] font-black text-[#1C1C1C]">Pay with Card</p>
                           <p className="text-[11px] text-gray-400 font-medium">Secure &amp; instant payment</p>
                         </div>
-                        <span className="text-base font-bold text-[#1C1C1C]">
-                          {opt.label}
-                        </span>
                       </div>
                       {/* Card brand logos */}
                       <div className="flex items-center gap-1.5">
