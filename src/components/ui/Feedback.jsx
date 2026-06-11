@@ -7,7 +7,7 @@ const Feedback = () => {
       {/* 1. Guarantee Box */}
       <div className="bg-white rounded-[28px] border border-slate-200 p-6 shadow-lg overflow-hidden relative">
         {/* Badge */}
-        <div className="absolute top-4 right-4 bg-[#FFF5F1] text-[#F15A24] text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+        <div className="absolute top-4 right-4 bg-[#FFF5F1] text-[#F15A24] text-[12px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
           Trusted
         </div>
 
@@ -30,17 +30,17 @@ const Feedback = () => {
         <div className="grid grid-cols-3 gap-2">
           <div className="bg-slate-50 rounded-xl p-3 text-center">
             <h4 className="text-lg font-black text-[#F15A24]">4.9★</h4>
-            <p className="text-xs text-slate-500">Rating</p>
+            <p className="text-sm text-slate-500">Rating</p>
           </div>
 
           <div className="bg-slate-50 rounded-xl p-3 text-center">
             <h4 className="text-lg font-black text-[#F15A24]">10K+</h4>
-            <p className="text-xs text-slate-500">Students</p>
+            <p className="text-sm text-slate-500">Students</p>
           </div>
 
-          <div className="bg-slate-50 rounded-xl p-3 text-center">
+          <div className="bg-slate-50 rounded-xl px-2 py-3 text-center">
             <h4 className="text-lg font-black text-[#F15A24]">95%</h4>
-            <p className="text-xs text-slate-500">Pass Rate</p>
+            <p className="text-sm text-slate-500">Pass Rate</p>
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@ const Feedback = () => {
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <div>
-            <p className="text-[11px] uppercase tracking-[2px] font-bold text-slate-400">
+            <p className="text-[12px] uppercase tracking-[2px] font-bold text-slate-400">
               Student Rating
             </p>
 
@@ -88,7 +88,7 @@ const Feedback = () => {
               Rated by Students
             </p>
 
-            <p className="text-slate-500 text-sm">
+            <p className="text-slate-500 text-base">
               Based on 9,511 verified reviews
             </p>
           </div>

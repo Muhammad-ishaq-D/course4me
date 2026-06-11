@@ -80,6 +80,9 @@ const CareerListing = () => {
 
   const mainSectionRef = useRef(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const careersPerPage = 6;
+
   const filteredCareers = careersData.filter((career) => {
     const categoryMatch =
       selectedCategory === "All Careers"
@@ -91,7 +94,16 @@ const CareerListing = () => {
     return categoryMatch && popularMatch;
   });
 
+  const totalPages = Math.ceil(filteredCareers.length / careersPerPage);
+  const startIndex = (currentPage - 1) * careersPerPage;
+
+  const currentCareers = filteredCareers.slice(
+    startIndex,
+    startIndex + careersPerPage,
+  );
+
   useEffect(() => {
+    setCurrentPage(1);
     setLoading(true);
 
     if (mainSectionRef.current) {
@@ -108,6 +120,17 @@ const CareerListing = () => {
 
     return () => clearTimeout(timer);
   }, [selectedCategory, sortBy]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+
+    setTimeout(() => {
+      mainSectionRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 50);
+  };
 
   return (
     <div className="bg-[#F7F8FA] max-w-8xl  min-h-screen">
@@ -158,7 +181,7 @@ const CareerListing = () => {
                   </h1>
 
                   {/* Description */}
-                  <p className="mt-3 text-base leading-relaxed text-[#667085] max-w-2xl">
+                  <p className="mt-3 text-lg leading-relaxed text-[#667085] max-w-2xl">
                     Discover the right career path for you. Get trained, get
                     licensed and build your future in the security industry.
                   </p>
@@ -170,7 +193,7 @@ const CareerListing = () => {
                         120+
                       </h3>
 
-                      <p className="text-sm text-[#667085] mt-1">
+                      <p className="text-base text-[#667085] mt-1">
                         Career Opportunities
                       </p>
                     </div>
@@ -182,7 +205,7 @@ const CareerListing = () => {
                         45K+
                       </h3>
 
-                      <p className="text-sm text-[#667085] mt-1">
+                      <p className="text-base text-[#667085] mt-1">
                         Students Trained
                       </p>
                     </div>
@@ -194,7 +217,7 @@ const CareerListing = () => {
                         98%
                       </h3>
 
-                      <p className="text-sm text-[#667085] mt-1">
+                      <p className="text-base text-[#667085] mt-1">
                         Success Rate
                       </p>
                     </div>
@@ -204,7 +227,7 @@ const CareerListing = () => {
                 {/* Search Box */}
                 <div className="w-full xl:w-[390px]">
                   <div className="bg-white rounded-[28px] border border-white shadow-[0_20px_50px_rgba(0,0,0,0.06)] p-5">
-                    <h2 className="text-2xl font-black text-[#111827]">
+                    <h2 className="text-3xl font-black text-[#111827]">
                       Quick Search
                     </h2>
 
@@ -358,7 +381,7 @@ const CareerListing = () => {
                               setSortBy(item.value);
                               setOpen(false);
                             }}
-                            className={` w-full px-5 py-3 flex items-center justify-between text-sm transition-all ${sortBy === item.value ? "bg-[#F8510C] text-white" : "text-[#111827] hover:bg-[#FFF1EB]"} `}
+                            className={` w-full px-5 py-3 flex items-center justify-between text-[15px] font-semibold transition-all ${sortBy === item.value ? "bg-[#F8510C] text-white" : "text-[#111827] hover:bg-[#FFF1EB]"} `}
                           >
                             {item.label}
                           </button>
@@ -374,32 +397,51 @@ const CareerListing = () => {
               <Loader text={`Loading Careers...`} />
             ) : filteredCareers.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 relative z-10 gap-3">
-                <CareerCards filteredCareers={filteredCareers} />
+                <CareerCards filteredCareers={currentCareers} />
               </div>
             ) : (
               <EmptyState text={selectedCategory} />
             )}
             {/* Pagination */}
             <div className="flex items-center justify-center gap-2 mt-10">
-              <button className="w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center">
-                <ChevronLeft className="w-4 h-4" />
+              <button
+                className="w-10 h-10 rounded-xl  border border-gray-200 bg-white flex items-center justify-center cursor-pointer"
+                onClick={() => {
+                  if (currentPage > 1) {
+                    handlePageChange(currentPage - 1);
+                  }
+                }}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft />
               </button>
 
-              {[1, 2, 3, 4, 5].map((page) => (
-                <button
-                  key={page}
-                  className={`w-10 h-10 rounded-xl text-sm font-semibold ${
-                    page === 1
-                      ? "bg-[#F8510C] text-white"
-                      : "bg-white border border-gray-200 text-gray-700"
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`w-10 h-10 rounded-xl cursor-pointer text-base font-semibold ${
+                      page === currentPage
+                        ? "bg-[#F8510C] text-white"
+                        : "bg-white border border-gray-200 text-gray-700"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
 
-              <button className="w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center">
-                <ChevronRight className="w-4 h-4" />
+              <button
+                className="w-10 h-10 rounded-xl cursor-pointer border border-gray-200 bg-white flex items-center justify-center"
+                onClick={() => {
+                  if (currentPage < totalPages) {
+                    handlePageChange(currentPage + 1);
+                  }
+                }}
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight />
               </button>
             </div>
           </div>

@@ -202,7 +202,7 @@ const ExploreAllCourses = () => {
             Explore all courses
           </h2>
 
-          <p className="text-[#141414]/60 mt-2 max-w-2xl text-base leading-relaxed">
+          <p className="text-[#141414]/60 mt-2 max-w-2xl text-lg leading-relaxed">
             Browse our wide range of professional training courses and
             certifications designed to help you build your career and gain
             industry-recognized qualifications.

@@ -78,7 +78,7 @@ const Footer = () => {
               ))}
               {licenses.length === 0 && (
                 <li className="hover:text-white transition-colors cursor-pointer">
-                  Loading...
+                  No Popular Licences
                 </li>
               )}
             </ul>
@@ -100,7 +100,7 @@ const Footer = () => {
               ))}
               {courses.length === 0 && (
                 <li className="hover:text-white transition-colors cursor-pointer">
-                  Loading...
+                  No Popular Courses
                 </li>
               )}
             </ul>

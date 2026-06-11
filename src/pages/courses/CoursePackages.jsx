@@ -168,7 +168,7 @@ const CoursePackages = () => {
   return (
     <div className=" min-h-screen bg-[#F8FAFC]">
       {/* Dark Header */}
-      <div className="bg-[#1C1C1C] pt-[90px] pb-[160px] relative px-4 md:px-0">
+      <div className="bg-[#1C1C1C] pt-12 pb-40 relative px-4 md:px-0">
         <div className="max-w-[1200px] mx-auto pt-6">
           <button
             onClick={() => navigate(-1)}
@@ -486,7 +486,7 @@ const CoursePackages = () => {
             <span className="block text-[#F15A24]">We Have Answers</span>
           </h2>
 
-          <p className="mt-4 text-gray-500 text-sm md:text-base max-w-2xl mx-auto">
+          <p className="mt-4 text-gray-500 text-base md:text-lg max-w-2xl mx-auto">
             Everything you need to know before booking your training course.
           </p>
         </div>
@@ -574,7 +574,7 @@ const CoursePackages = () => {
               Compare All Plans
             </h2>
 
-            <p className="mt-3 text-gray-500 text-sm md:text-base max-w-2xl mx-auto">
+            <p className="mt-3 text-gray-500 text-base md:text-lg max-w-2xl mx-auto">
               Choose the package that best suits your training needs.
             </p>
           </div>
@@ -623,19 +623,19 @@ const CoursePackages = () => {
                 </tr>
 
                 <tr className="bg-slate-50">
-                  <td className="p-4 text-[#F15A24] font-bold text-xs uppercase tracking-widest">
+                  <td className="p-4 text-[#F15A24] font-bold text-sm uppercase tracking-widest">
                     Service Summary
                   </td>
 
-                  <td className="p-4 text-center text-gray-500 text-sm font-medium">
+                  <td className="p-4 text-center text-gray-500 text-base font-medium">
                     Essential
                   </td>
 
-                  <td className="p-4 text-center text-[#F15A24] text-sm font-bold bg-[#FFF5F1]">
+                  <td className="p-4 text-center text-[#F15A24] text-base font-bold bg-[#FFF5F1]">
                     Most Popular
                   </td>
 
-                  <td className="p-4 text-center text-[#7344ff] text-sm font-bold">
+                  <td className="p-4 text-center text-[#7344ff] text-base font-bold">
                     Premium Experience
                   </td>
                 </tr>
@@ -708,7 +708,7 @@ const CoursePackages = () => {
                     key={idx}
                     className="hover:bg-[#FFF5F1]/40 transition-colors"
                   >
-                    <td className="p-5 text-sm md:text-[15px] text-gray-700 font-medium leading-relaxed border-t border-gray-100">
+                    <td className="p-5 text-sm md:text-base text-gray-700 font-medium leading-relaxed border-t border-gray-100">
                       {row.name}
                     </td>
 

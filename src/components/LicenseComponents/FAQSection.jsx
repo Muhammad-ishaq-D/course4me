@@ -115,7 +115,7 @@ const FAQSection = () => {
                       </h3>
 
                       {!isOpen && (
-                        <p className="text-sm text-gray-400 mt-2 hidden sm:block">
+                        <p className="text-base text-gray-400 mt-2 hidden sm:block">
                           Click to view answer
                         </p>
                       )}

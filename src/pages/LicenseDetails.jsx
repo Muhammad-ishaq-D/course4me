@@ -207,7 +207,7 @@ const LicenseDetails = () => {
                             : "bg-[#FCFCFD] hover:bg-[#FFF4EF] border-transparent text-[#344054] hover:text-[#F15A24]"
                         }`}
                       >
-                        <span className="font-semibold text-[14px] leading-none">
+                        <span className="font-semibold text-base leading-none">
                           {section.title}
                         </span>
 
@@ -239,10 +239,10 @@ const LicenseDetails = () => {
                     <div className="flex items-center gap-3 text-[#667085]">
                       <Clock3 size={18} />
 
-                      <span className="text-[15px]">Duration</span>
+                      <span className="text-base">Duration</span>
                     </div>
 
-                    <span className="font-bold text-[#101828] text-[15px]">
+                    <span className="font-bold text-[#101828] text-base">
                       {license?.duration || "6 days"}
                     </span>
                   </div>
@@ -252,10 +252,10 @@ const LicenseDetails = () => {
                     <div className="flex items-center gap-3 text-[#667085]">
                       <Shield size={18} />
 
-                      <span className="text-[15px]">Validity</span>
+                      <span className="text-base">Validity</span>
                     </div>
 
-                    <span className="font-bold text-[#101828] text-[15px]">
+                    <span className="font-bold text-[#101828] text-base">
                       {license?.valid || "3 years"}
                     </span>
                   </div>
@@ -265,10 +265,10 @@ const LicenseDetails = () => {
                     <div className="flex items-center gap-3 text-[#667085]">
                       <span className="text-[18px] font-semibold">£</span>
 
-                      <span className="text-[15px]">Training From</span>
+                      <span className="text-base">Training From</span>
                     </div>
 
-                    <span className="font-bold text-[#101828] text-[15px]">
+                    <span className="font-bold text-[#101828] text-base">
                       {license?.pricing && typeof license.pricing === "object"
                         ? `£${license.pricing.salePrice || license.pricing.basePrice}`
                         : "£219"}
@@ -304,7 +304,7 @@ const LicenseDetails = () => {
 
                   {/* ==============ABOUT / DESCRIPTION=============== */}
                   {section.content && (
-                    <p className="text-[#667085] leading-7 text-[15px]">
+                    <p className="text-[#667085] leading-7 text-base">
                       {section.content}
                     </p>
                   )}
@@ -317,11 +317,11 @@ const LicenseDetails = () => {
                           key={i}
                           className="flex items-center gap-3 border border-[#E4E7EC] rounded-2xl px-4 py-4 bg-[#FCFCFD]"
                         >
-                          <div className="w-7 h-7 rounded-full bg-[#22C55E]/10 border border-[#22C55E]/20 flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-full bg-orange-50 border border-[#22C55E]/20 flex items-center justify-center shrink-0">
                             <Check size={15} className="text-[#F15A24]" />
                           </div>
 
-                          <p className="text-[#101828] text-sm font-medium">
+                          <p className="text-[#101828] text-base font-medium">
                             {item}
                           </p>
                         </div>
@@ -346,12 +346,12 @@ const LicenseDetails = () => {
                           </div>
 
                           {/* CARD */}
-                          <div className="flex-1 border border-[#E4E7EC] rounded-[24px] p-5 bg-[#FCFCFD]">
+                          <div className="flex-1 border border-[#E4E7EC] rounded-[24px] p-4 bg-[#FCFCFD]">
                             <h3 className="text-lg font-bold text-[#1D2939]">
                               {step.title}
                             </h3>
 
-                            <p className="mt-2 text-sm text-[#667085] leading-6">
+                            <p className="mt-2 text-base text-[#667085] leading-6">
                               {step.desc}
                             </p>
                           </div>
@@ -365,9 +365,9 @@ const LicenseDetails = () => {
                     <div className="border border-[#E4E7EC] rounded-[24px] p-5 bg-[#FCFCFD]">
                       {/* DURATION */}
                       <div className="flex items-center gap-2 text-[#667085] mb-5">
-                        <Clock3 size={17} />
+                        <Clock3 size={18} />
 
-                        <p className="text-sm">
+                        <p className="text-base">
                           Course duration:
                           <span className="font-bold text-[#101828] ml-2">
                             {license?.duration || "6 days (approx. 54 hours)"}
@@ -386,7 +386,7 @@ const LicenseDetails = () => {
                               0{i + 1}
                             </div>
 
-                            <p className="font-medium text-sm text-[#101828]">
+                            <p className="font-medium text-base text-[#101828]">
                               {module}
                             </p>
                           </div>
@@ -401,11 +401,11 @@ const LicenseDetails = () => {
                       <div className="border border-[#E4E7EC] rounded-[24px] overflow-hidden bg-[#FCFCFD]">
                         {/* HEADER */}
                         <div className="grid grid-cols-2 px-5 py-4 border-b border-[#E4E7EC] bg-[#F9FAFB]">
-                          <p className="text-xs font-bold text-[#667085] uppercase tracking-wider">
+                          <p className="text-sm font-bold text-[#667085] uppercase tracking-wider">
                             Item
                           </p>
 
-                          <p className="text-xs font-bold text-right text-[#667085] uppercase tracking-wider">
+                          <p className="text-sm font-bold text-right text-[#667085] uppercase tracking-wider">
                             Price
                           </p>
                         </div>
@@ -416,11 +416,11 @@ const LicenseDetails = () => {
                             key={i}
                             className="grid grid-cols-2 px-5 py-5 border-b last:border-none border-[#E4E7EC]"
                           >
-                            <p className="font-medium text-sm text-[#101828]">
+                            <p className="font-medium text-base text-[#101828]">
                               {item.label}
                             </p>
 
-                            <p className="text-right text-sm font-bold text-[#101828]">
+                            <p className="text-right text-base font-bold text-[#101828]">
                               {item.price}
                             </p>
                           </div>

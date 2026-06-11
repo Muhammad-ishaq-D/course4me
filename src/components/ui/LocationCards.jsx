@@ -46,7 +46,7 @@ const LocationCards = ({ loc, course }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Open in Google Maps"
-                    className="text-gray-500 hover:text-[#F15A24] hover:underline underline-offset-2 transition-colors"
+                    className="text-gray-500 hover:text-[#F15A24] text-base hover:underline underline-offset-2 transition-colors"
                   >
                     {loc.address}
                   </a>
@@ -59,8 +59,8 @@ const LocationCards = ({ loc, course }) => {
                     <span
                       className={
                         loc.distance === "Calculating..."
-                          ? "text-gray-400"
-                          : "text-[#F15A24] font-semibold"
+                          ? "text-gray-400 text-sm "
+                          : "text-[#F15A24] text-sm font-semibold"
                       }
                     >
                       {loc.distance}
@@ -72,7 +72,7 @@ const LocationCards = ({ loc, course }) => {
 
             <div className="md:text-right">
               <p className="text-xs sm:text-sm font-bold text-[#F15A24] mb-1">
-                Next Session: {loc.nextDate}
+                Next Session: <span className="text-base">{loc.nextDate}</span>
               </p>
 
               <div className="flex items-baseline md:justify-end">

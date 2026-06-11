@@ -66,17 +66,24 @@ const QuickSearch = () => {
         loc.postcode?.toLowerCase().includes(term) ||
         loc.addressLine1?.toLowerCase().includes(term);
       if (!matches) return;
-      const label = [loc.name, loc.city, loc.postcode].filter(Boolean).join(", ");
+      const label = [loc.name, loc.city, loc.postcode]
+        .filter(Boolean)
+        .join(", ");
       if (!label || seen.has(label)) return;
       seen.add(label);
-      results.push({ label, filterKey: loc.postcode || loc.city || loc.name || label });
+      results.push({
+        label,
+        filterKey: loc.postcode || loc.city || loc.name || label,
+      });
     });
     return results.slice(0, 8);
   }, [location, allCourseLinks]);
 
   // Show/hide dropdown reactively
   useEffect(() => {
-    setShowLocationSuggestions(locationSuggestions.length > 0 && location.trim().length > 0);
+    setShowLocationSuggestions(
+      locationSuggestions.length > 0 && location.trim().length > 0,
+    );
   }, [locationSuggestions, location]);
 
   // =====================================================================
@@ -260,14 +267,18 @@ const QuickSearch = () => {
               );
             })
             .map((link) => String(link.courseId?._id || link.courseId))
-            .filter(Boolean)
+            .filter(Boolean),
         );
         fetchedCourses = fetchedCourses.filter((c) =>
-          matchingCourseIds.has(String(c._id || c.id))
+          matchingCourseIds.has(String(c._id || c.id)),
         );
       }
 
-      setFilteredResults([...fetchedCourses, ...fetchedLicenses, ...fetchedCareers]);
+      setFilteredResults([
+        ...fetchedCourses,
+        ...fetchedLicenses,
+        ...fetchedCareers,
+      ]);
     } catch (error) {
       console.error("Search error:", error);
       setFilteredResults([]);
@@ -308,8 +319,8 @@ const QuickSearch = () => {
           {/* ================= SEARCH BOX ================= */}
           <div className="mt-10 bg-white border border-gray-100 shadow-2xl shadow-gray-100 rounded-[32px] p-5 md:p-7">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Quick Search</h2>
-              <p className="text-gray-500 mt-1 text-sm">
+              <h2 className="text-3xl font-bold text-gray-900">Quick Search</h2>
+              <p className="text-gray-500 mt-1 text-base">
                 Search everything from one intelligent search system
               </p>
             </div>
@@ -340,7 +351,7 @@ const QuickSearch = () => {
                 </label>
                 <Search
                   size={18}
-                  className="absolute left-5 top-[55px] -translate-y-1/2 text-gray-400 z-10"
+                  className="absolute left-5 top-15 -translate-y-1/2 text-gray-400 z-10"
                 />
                 <input
                   type="text"
@@ -368,14 +379,11 @@ const QuickSearch = () => {
                         className="w-full px-5 py-4 flex items-center justify-between hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100 group"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <Search size={16} className="text-[#F15A24]" />
-                          </div>
-                          <h4 className="text-sm font-semibold text-gray-800">
+                          <h4 className="text-base font-medium text-gray-800">
                             {item.title}
                           </h4>
                         </div>
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50 px-2 py-1 rounded-md">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-50 px-2 py-1 rounded-md">
                           {item.type}
                         </span>
                       </button>
@@ -391,7 +399,7 @@ const QuickSearch = () => {
                 </label>
                 <MapPin
                   size={18}
-                  className="absolute left-5 top-[55px] -translate-y-1/2 text-gray-400 z-10"
+                  className="absolute left-5 top-15 -translate-y-1/2 text-gray-400 z-10"
                 />
                 <input
                   type="text"
@@ -418,10 +426,10 @@ const QuickSearch = () => {
                         }}
                         className="w-full px-5 py-4 flex items-center gap-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
                       >
-                        <div className="w-10 h-10 rounded-full bg-[#FFF1EB] flex items-center justify-center shrink-0">
+                        <div className="p-3 rounded-full bg-[#FFF1EB] flex items-center justify-center shrink-0">
                           <MapPin size={16} className="text-[#F15A24]" />
                         </div>
-                        <p className="text-sm font-medium text-gray-800 line-clamp-2">
+                        <p className="text-base font-medium text-gray-800 line-clamp-2">
                           {item.label}
                         </p>
                       </button>
@@ -494,13 +502,14 @@ const QuickSearch = () => {
                             Course
                           </div>
                         </div>
+                        {console.log(item)}
                         <CourseCard
                           id={item.id}
                           image={item.image}
                           title={item.title}
-                          description={item.description}
+                          description={item.fullDescription}
                           badge={item.badge}
-                          price={item.price}
+                          price={item.pricing.basePrice}
                           date={item.date}
                           category={item.category}
                           duration={item.duration}

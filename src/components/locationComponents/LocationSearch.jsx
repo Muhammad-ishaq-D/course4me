@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import courseLocationService from "../../api/services/courseLocationService";
+import Loader from "../ui/Loader";
 
 const BACKEND_URL = import.meta.env.VITE_API_URL?.replace("/api", "") || "";
 
@@ -76,7 +77,9 @@ const LocationSearch = () => {
         loc.postcode?.toLowerCase().includes(term) ||
         loc.addressLine1?.toLowerCase().includes(term);
       if (!matches) return;
-      const label = [loc.name, loc.city, loc.postcode].filter(Boolean).join(", ");
+      const label = [loc.name, loc.city, loc.postcode]
+        .filter(Boolean)
+        .join(", ");
       if (!label || seen.has(label)) return;
       seen.add(label);
       const filterKey = loc.postcode || loc.city || loc.name || label;
@@ -86,7 +89,10 @@ const LocationSearch = () => {
   }, [searchInput, allLinks]);
 
   const totalPages = Math.ceil(filteredLinks.length / ITEMS_PER_PAGE);
-  const paginated = filteredLinks.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  const paginated = filteredLinks.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE,
+  );
 
   const handleSearch = () => {
     setPage(1);
@@ -97,7 +103,6 @@ const LocationSearch = () => {
   return (
     <div className="min-h-screen bg-[#F4F7FB] py-6 px-4">
       <div className="max-w-7xl mx-auto">
-
         {/* =========================================================
               SEARCH SECTION
         ========================================================= */}
@@ -106,22 +111,20 @@ const LocationSearch = () => {
 
           <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] px-5 py-5 overflow-visible z-999">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-
               {/* Left */}
               <div>
-                <h2 className="text-[26px] font-bold text-gray-900 leading-tight">
+                <h2 className="text-3xl font-bold text-gray-900 leading-tight">
                   Find Courses Near You
                 </h2>
-                <p className="text-sm text-gray-500 mt-1 max-w-xl leading-relaxed">
+                <p className="text-lg text-gray-500 mt-1 max-w-xl leading-relaxed">
                   Search by town, city, or postcode to discover available
                   training courses at your nearest location.
                 </p>
               </div>
 
               {/* ================= SEARCH BAR ================= */}
-              <div className="sticky top-0 z-50 lg:static bg-[#F4F7FB] py-3">
+              <div className="sticky top-0 z-50 lg:static py-3">
                 <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
-
                   {/* Search Input */}
                   <div className="relative flex-1 lg:w-[420px]">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-2xl bg-orange-50 flex items-center justify-center z-20">
@@ -133,13 +136,15 @@ const LocationSearch = () => {
                       placeholder="Search by town, city or postcode..."
                       value={searchInput}
                       onFocus={() => setShowSuggestions(true)}
-                      onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                      onBlur={() =>
+                        setTimeout(() => setShowSuggestions(false), 150)
+                      }
                       onChange={(e) => {
                         setSearchInput(e.target.value);
                         setShowSuggestions(true);
                       }}
                       onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                      className="w-full h-14 pl-16 pr-5 rounded-2xl border border-gray-200 bg-[#FAFBFD] focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-100 outline-none transition-all text-[15px] font-medium text-gray-700 placeholder:text-gray-400"
+                      className="w-full h-14 pl-16 pr-5 rounded-2xl border border-gray-200 bg-[#FAFBFD] focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-100 outline-none transition-all text-base font-medium text-gray-700 placeholder:text-gray-400"
                     />
 
                     {/* ===================== DROPDOWN ===================== */}
@@ -163,9 +168,12 @@ const LocationSearch = () => {
                               className="w-full flex items-center gap-3 px-4 py-4 hover:bg-orange-50 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0"
                             >
                               <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                                <MapPin className="w-4 h-4 text-orange-500" />
+                                <MapPin
+                                  size={18}
+                                  className=" text-orange-500"
+                                />
                               </div>
-                              <p className="text-sm font-medium text-gray-800 line-clamp-2">
+                              <p className="text-base font-medium text-gray-800 line-clamp-2">
                                 {item.label}
                               </p>
                             </button>
@@ -178,7 +186,7 @@ const LocationSearch = () => {
                   {/* Search Button */}
                   <button
                     onClick={handleSearch}
-                    className="h-14 px-7 rounded-2xl bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold shadow-lg shadow-orange-200 transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap w-full md:w-auto"
+                    className="py-4 px-7 rounded-2xl bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold shadow-lg shadow-orange-200 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap w-full md:w-auto"
                   >
                     <Search className="w-4 h-4" />
                     <span>Search</span>
@@ -193,75 +201,76 @@ const LocationSearch = () => {
               CONTENT AREA
         ========================================================= */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
-
           {/* =========================================================
                 LEFT SIDE — COURSE CARDS
           ========================================================= */}
           <div className="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
-
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">
                   Available Courses
                 </h2>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-base text-gray-500 mt-1">
                   {search ? (
                     <>
                       <span className="text-orange-500 font-semibold">
                         {loading ? "..." : filteredLinks.length}
                       </span>{" "}
-                      {filteredLinks.length === 1 ? "course" : "courses"} found near &quot;{search}&quot;
+                      {filteredLinks.length === 1 ? "course" : "courses"} found
+                      near &quot;{search}&quot;
                     </>
                   ) : (
                     "Search a location to see results"
                   )}
                 </p>
               </div>
-
-              <button className="h-12 px-5 rounded-2xl border border-gray-200 hover:bg-gray-50 transition-all flex items-center gap-2">
-                <Filter className="w-4 h-4" />
-                <span className="text-sm font-medium">Filters</span>
-              </button>
             </div>
 
             {/* =========================================================
                   CARDS
             ========================================================= */}
             <div className="p-5 space-y-3">
-
               {/* Loading skeleton */}
-              {loading && (
-                <div className="py-20 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-10 h-10 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin mx-auto" />
-                    <p className="text-gray-500 mt-4 text-sm">Searching courses...</p>
-                  </div>
-                </div>
-              )}
+              {loading && <Loader text="Loading Details" />}
 
               {/* Course-location cards */}
               {!loading &&
                 paginated.map((link) => {
                   const loc = link.locationId || {};
                   const course = link.courseId || {};
-                  const address = [loc.name, loc.city, loc.postcode].filter(Boolean).join(", ");
+                  const address = [loc.name, loc.city, loc.postcode]
+                    .filter(Boolean)
+                    .join(", ");
                   const upcomingDates = (link.dates || [])
-                    .filter((d) => d.startDate && new Date(d.startDate) >= new Date())
-                    .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+                    .filter(
+                      (d) => d.startDate && new Date(d.startDate) >= new Date(),
+                    )
+                    .sort(
+                      (a, b) => new Date(a.startDate) - new Date(b.startDate),
+                    );
                   const nextDate = upcomingDates[0]?.startDate
-                    ? new Date(upcomingDates[0].startDate).toLocaleDateString("en-GB", {
-                        day: "numeric", month: "short", year: "numeric",
-                      })
+                    ? new Date(upcomingDates[0].startDate).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        },
+                      )
                     : null;
-                  const price = link.price || course.pricing?.salePrice || course.pricing?.basePrice || 0;
+                  const price =
+                    link.price ||
+                    course.pricing?.salePrice ||
+                    course.pricing?.basePrice ||
+                    0;
 
                   return (
                     <div
                       key={link._id}
                       onMouseEnter={() => setActiveLinkId(link._id)}
                       onMouseLeave={() => setActiveLinkId(null)}
-                      className={`group relative bg-white border rounded-[28px] p-3 transition-all duration-300 cursor-pointer overflow-hidden
+                      className={`group relative bg-white border rounded-[28px] p-3 transition-all duration-300  overflow-hidden
                       ${
                         activeLinkId === link._id
                           ? "border-orange-300 shadow-[0_20px_60px_rgba(249,115,22,0.15)]"
@@ -272,7 +281,6 @@ const LocationSearch = () => {
                       <div className="absolute inset-0 bg-linear-to-r from-orange-50/0 via-orange-50/40 to-orange-50/0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />
 
                       <div className="relative flex flex-col sm:flex-row gap-4">
-
                         {/* Thumbnail */}
                         <div className="w-full sm:w-32 md:w-36 h-52 sm:h-32 md:h-28 rounded-3xl overflow-hidden shrink-0 bg-orange-50 flex items-center justify-center">
                           {getImageSrc(course.thumbnail) ? (
@@ -289,18 +297,17 @@ const LocationSearch = () => {
                         {/* Right content */}
                         <div className="flex-1 min-w-0 flex flex-col">
                           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-
                             {/* Left info */}
                             <div className="flex-1 min-w-0">
                               {/* Category badge */}
                               {course.category && (
-                                <span className="inline-block text-[11px] font-semibold px-3 py-1 rounded-full bg-orange-50 text-orange-600 mb-2">
+                                <span className="inline-block text-sm font-semibold px-3 py-1 rounded-full bg-orange-50 text-orange-600 mb-2">
                                   {course.category}
                                 </span>
                               )}
 
                               {/* Title */}
-                              <h3 className="text-[16px] sm:text-[18px] font-bold text-gray-900 leading-tight wrap-break-word line-clamp-2">
+                              <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight wrap-break-word line-clamp-2">
                                 {course.title}
                               </h3>
 
@@ -308,7 +315,10 @@ const LocationSearch = () => {
                               {address && (
                                 <div className="flex items-center gap-2 mt-2">
                                   <div className="w-7 h-7 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                                    <MapPin className="w-3.5 h-3.5 text-orange-500" />
+                                    <MapPin
+                                      size={16}
+                                      className=" text-orange-500"
+                                    />
                                   </div>
                                   <p className="text-sm text-gray-500 leading-relaxed line-clamp-1">
                                     {address}
@@ -318,12 +328,15 @@ const LocationSearch = () => {
 
                               {/* Price & next date */}
                               <div className="flex flex-wrap items-center gap-3 mt-3">
-                                <span className="text-lg font-black text-gray-900">
+                                <span className="text-xl font-black text-gray-900">
                                   £{price}
                                 </span>
                                 {nextDate && (
                                   <span className="text-sm text-orange-500 font-semibold">
-                                    Next: {nextDate}
+                                    Next:{" "}
+                                    <span className="text-base">
+                                      {nextDate}
+                                    </span>
                                   </span>
                                 )}
                               </div>
@@ -332,14 +345,22 @@ const LocationSearch = () => {
                             {/* Actions */}
                             <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
                               <button
-                                onClick={() => navigate(`/booking/course?courseid=${course._id}`)}
-                                className="h-10 px-5 rounded-2xl bg-linear-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-orange-200 whitespace-nowrap"
+                                onClick={() =>
+                                  navigate(
+                                    `/booking/course?courseid=${course._id}`,
+                                  )
+                                }
+                                className="h-10 px-5 rounded-xl cursor-pointer bg-linear-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-orange-200 whitespace-nowrap"
                               >
                                 Book Now
                               </button>
                               <button
-                                onClick={() => navigate(`/locations/locationdetails/${link._id}`)}
-                                className="h-10 px-5 rounded-2xl border border-gray-200 hover:border-orange-200 hover:bg-orange-50 text-sm font-semibold flex items-center gap-1.5 transition-all duration-300 whitespace-nowrap"
+                                onClick={() =>
+                                  navigate(
+                                    `/locations/locationdetails/${link._id}`,
+                                  )
+                                }
+                                className="h-10 px-5 rounded-xl cursor-pointer border border-gray-200 hover:border-orange-200 hover:bg-orange-50 text-sm font-semibold flex items-center gap-1.5 transition-all duration-300 whitespace-nowrap"
                               >
                                 Details
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -360,8 +381,9 @@ const LocationSearch = () => {
                     <h3 className="text-xl font-bold text-gray-700">
                       Search for a Location
                     </h3>
-                    <p className="text-gray-400 mt-2 text-sm">
-                      Enter a town, city, or postcode above to see available courses near you.
+                    <p className="text-gray-400 mt-2 text-base">
+                      Enter a town, city, or postcode above to see available
+                      courses near you.
                     </p>
                   </div>
                 </div>
@@ -376,7 +398,8 @@ const LocationSearch = () => {
                       No Courses Found
                     </h3>
                     <p className="text-gray-500 mt-2">
-                      No courses available at &quot;{search}&quot;. Try a different location or postcode.
+                      No courses available at &quot;{search}&quot;. Try a
+                      different location or postcode.
                     </p>
                   </div>
                 </div>
@@ -403,19 +426,21 @@ const LocationSearch = () => {
                     <ChevronLeft className="w-4 h-4" />
                   </button>
 
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                    <button
-                      key={p}
-                      onClick={() => setPage(p)}
-                      className={`w-11 h-11 rounded-2xl font-semibold transition ${
-                        p === page
-                          ? "bg-orange-500 text-white"
-                          : "border border-gray-200 hover:bg-gray-50"
-                      }`}
-                    >
-                      {p}
-                    </button>
-                  ))}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (p) => (
+                      <button
+                        key={p}
+                        onClick={() => setPage(p)}
+                        className={`w-11 h-11 rounded-2xl font-semibold transition ${
+                          p === page
+                            ? "bg-orange-500 text-white"
+                            : "border border-gray-200 hover:bg-gray-50"
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    ),
+                  )}
 
                   <button
                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}

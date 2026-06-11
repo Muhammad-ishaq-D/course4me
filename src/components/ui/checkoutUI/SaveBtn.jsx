@@ -10,7 +10,7 @@ const SaveBtn = ({
   <button
     onClick={onClick}
     disabled={loading}
-    className={`${fullWidth ? "w-full" : "px-8"} bg-[#F15A24] cursor-pointer text-white py-3.5 rounded-lg font-black text-sm hover:bg-[#be3a0a] active:scale-95 transition-all mt-2 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed`}
+    className={`${fullWidth ? "w-full" : "px-8"} bg-[#F15A24] cursor-pointer text-white py-3.5 rounded-lg font-black text-base hover:bg-[#be3a0a] active:scale-95 transition-all mt-2 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed`}
   >
     {loading && <Loader2 size={16} className="animate-spin" />}
     {label}

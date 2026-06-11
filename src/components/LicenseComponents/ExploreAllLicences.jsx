@@ -187,7 +187,7 @@ const ExploreAllLicences = () => {
             Explore all licences
           </h2>
 
-          <p className="text-[#141414]/60 mt-4 max-w-2xl text-base leading-relaxed">
+          <p className="text-[#141414]/60 mt-4 max-w-2xl text-lg leading-relaxed">
             Browse professional SIA licences, first aid qualifications,
             workplace safety training and specialist certification courses.
           </p>
@@ -202,7 +202,7 @@ const ExploreAllLicences = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search licences by name, category..."
-              className="w-full pl-11 pr-10 py-3.5 bg-white border border-[#E4E7EC] rounded-2xl text-[15px] text-[#101828] placeholder-[#98A2B3] focus:outline-none focus:border-[#F15A24]/40 focus:shadow-[0_0_0_3px_rgba(241,90,36,0.08)] transition-all duration-300"
+              className="w-full pl-11 pr-10 py-3.5 bg-white border border-[#E4E7EC] rounded-2xl text-base text-[#101828] placeholder-[#98A2B3] focus:outline-none focus:border-[#F15A24]/40 focus:shadow-[0_0_0_3px_rgba(241,90,36,0.08)] transition-all duration-300"
             />
             {searchQuery && (
               <button

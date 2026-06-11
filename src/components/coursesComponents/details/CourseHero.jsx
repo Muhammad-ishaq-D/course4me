@@ -33,7 +33,7 @@ const CourseHero = ({ course }) => {
       {/* 🔥 HERO */}
       <section className="relative text-white py-10 lg:py-12 overflow-hidden bg-[#141414]">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-4">
-          <div className="flex items-center flex-wrap gap-2 text-[13px]">
+          <div className="flex items-center flex-wrap gap-2 text-sm">
             {/* Home */}
             <NavLink
               to="/"
@@ -72,33 +72,31 @@ const CourseHero = ({ course }) => {
             <div className="text-left">
               {/* TAGS */}
               <div className="flex gap-2 mb-5 flex-wrap">
-                <span className="bg-green-500/10 text-green-400 px-3 py-1 rounded-full text-xs flex items-center gap-1">
+                <span className="bg-green-500/10 text-green-400 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                   <CheckCircle2 size={12} /> In-Person
                 </span>
 
                 {course.isPopular && (
-                  <span className="bg-orange-500/10 text-orange-400 px-3 py-1 rounded-full text-xs">
+                  <span className="bg-orange-500/10 text-orange-400 px-3 py-1 rounded-full text-sm">
                     Popular
                   </span>
                 )}
 
-                <span className="bg-white/10 px-3 py-1 rounded-full text-xs flex items-center gap-1">
+                <span className="bg-white/10 px-3 py-1 rounded-full text-sm flex items-center gap-1">
                   <ShieldCheck size={12} /> SIA Approved
                 </span>
               </div>
 
               {/* TITLE */}
-              <h1 className="text-[36px] md:text-[48px] font-extrabold leading-tight mb-2">
+              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-2">
                 {course.title}
               </h1>
 
               {/* SUBTITLE */}
-              <p className="text-white/60 text-[15px] md:text-[16px] mb-6">
-                {course.subtitle}
-              </p>
+              <p className="text-white/60 text-lg mb-6">{course.subtitle}</p>
 
               {/* RATING */}
-              <div className="flex flex-wrap items-center gap-5 mb-8 text-sm">
+              <div className="flex flex-wrap items-center gap-5 mb-8 text-[15px]">
                 <div className="flex items-center gap-2">
                   <div className="flex text-yellow-400">
                     {[...Array(5)].map((_, i) => (
@@ -123,7 +121,7 @@ const CourseHero = ({ course }) => {
               </div>
 
               {/* FEATURES */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 mb-8 text-sm text-white/70">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 mb-8 text-base text-white/70">
                 {displayHighlights.map((item, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00A3F4]" />
@@ -136,7 +134,7 @@ const CourseHero = ({ course }) => {
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => navigate(`/course/${course._id}/book`)}
-                  className="bg-[#F15A24] px-7 py-3 rounded-full font-semibold text-sm flex items-center gap-2 shadow-lg shadow-[#F15A24]/20 hover:brightness-110 transition"
+                  className="bg-[#F15A24] cursor-pointer px-7 py-3 rounded-full font-semibold text-base flex items-center gap-2 shadow-lg shadow-[#F15A24]/20 hover:brightness-110 transition"
                 >
                   Book This Course <ChevronRight size={16} />
                 </button>
@@ -159,19 +157,19 @@ const CourseHero = ({ course }) => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
                   <button className="absolute top-3 left-3 w-9 h-9 bg-red-500 rounded-full flex items-center justify-center">
-                    <Heart size={14} />
+                    <Heart size={16} />
                   </button>
 
-                  <div className="absolute bottom-3 right-3 bg-black/50 px-3 py-1 rounded-full text-xs">
+                  <div className="absolute bottom-3 right-3 bg-black/50 px-3 py-1 rounded-full text-sm">
                     {displayPassRate} pass rate
                   </div>
                 </div>
 
                 {/* CONTENT */}
                 <div className="mt-4">
-                  <p className="text-white/50 text-xs">Price from</p>
+                  <p className="text-white/50 text-base">Price from</p>
 
-                  <h2 className="text-[24px] font-bold mt-1">
+                  <h2 className="text-3xl font-bold mt-1">
                     {displayPrice}
                     <span className="text-sm text-white/40 ml-1">
                       per person
@@ -181,17 +179,19 @@ const CourseHero = ({ course }) => {
                   {/* INFO */}
                   <div className="mt-4 space-y-3 text-sm">
                     <div className="flex justify-between">
-                      <div className="flex items-center gap-2 text-white/50">
-                        <Clock size={14} /> Duration
+                      <div className="flex items-center text-base gap-2 text-white/50">
+                        <Clock size={16} /> Duration
                       </div>
-                      <span className="text-white">{course.duration}</span>
+                      <span className="text-white text-base">
+                        {course.duration}
+                      </span>
                     </div>
 
                     <div className="flex justify-between">
-                      <div className="flex items-center gap-2 text-white/50">
-                        <Calendar size={14} /> Next Date
+                      <div className="flex items-center text-base gap-2 text-white/50">
+                        <Calendar size={16} /> Next Date
                       </div>
-                      <span className="text-white">
+                      <span className="text-white text-base">
                         {course.sessions?.find(
                           (s) => s.availabilityStatus !== "Sold Out",
                         )?.startDate
@@ -208,29 +208,31 @@ const CourseHero = ({ course }) => {
                     </div>
 
                     <div className="flex justify-between">
-                      <div className="flex items-center gap-2 text-white/50">
-                        <CheckCircle2 size={14} /> Format
+                      <div className="flex items-center text-base gap-2 text-white/50">
+                        <CheckCircle2 size={16} /> Format
                       </div>
-                      <span className="text-white">In-Person</span>
+                      <span className="text-white text-base">In-Person</span>
                     </div>
 
                     <div className="flex justify-between">
-                      <div className="flex items-center gap-2 text-white/50">
-                        <Users size={14} /> Pass Rate
+                      <div className="flex items-center text-base gap-2 text-white/50">
+                        <Users size={16} /> Pass Rate
                       </div>
-                      <span className="text-white">{displayPassRate}</span>
+                      <span className="text-white text-base">
+                        {displayPassRate}
+                      </span>
                     </div>
                   </div>
 
                   {/* GUARANTEE */}
                   <div className="mt-4 p-3 rounded-xl bg-white/5 border border-white/10">
-                    <div className="flex items-start gap-2">
-                      <ShieldCheck size={16} className="text-[#00A3F4]" />
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck size={24} className="text-[#00A3F4]" />
                       <div>
                         <p className="text-sm font-semibold text-white">
                           {course.guarantee?.title || "Training Guarantee"}
                         </p>
-                        <p className="text-xs text-white/50">
+                        <p className="text-sm text-white/50">
                           {course.guarantee?.description ||
                             "Free exam retakes if you don't pass first time"}
                         </p>

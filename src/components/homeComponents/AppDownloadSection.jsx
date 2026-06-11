@@ -48,16 +48,7 @@ const AppPromotionSection = () => {
               {/* APP STORE */}
               <a
                 href="#"
-                className="
-      group
-      bg-white
-      hover:bg-[#F9FAFB]
-      px-6 py-3
-      rounded-2xl
-      shadow-[0_10px_30px_rgba(0,0,0,0.15)]
-      transition-all duration-300
-      flex items-center gap-4
-    "
+                className=" group bg-white hover:bg-[#F9FAFB] px-6 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] transition-all duration-300 flex items-center gap-4"
               >
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
@@ -79,17 +70,7 @@ const AppPromotionSection = () => {
               {/* GOOGLE PLAY */}
               <a
                 href="#"
-                className="
-      group
-      bg-[#1F1F1F]
-      hover:bg-[#2A2A2A]
-      border border-white/10
-      px-6 py-3
-      rounded-2xl
-      shadow-[0_10px_30px_rgba(0,0,0,0.2)]
-      transition-all duration-300
-      flex items-center gap-4
-    "
+                className=" group bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 px-6 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] transition-all duration-300 flex items-center gap-4"
               >
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg"

@@ -102,7 +102,6 @@ const CourseCheckout = () => {
   const [detailsErrors, setDetailsErrors] = useState({});
   const [billingErrors, setBillingErrors] = useState({});
 
-
   // Clear individual detail error on change
   const updateDetail = (field, value) => {
     setDetails((d) => ({ ...d, [field]: value }));
@@ -140,7 +139,9 @@ const CourseCheckout = () => {
 
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(term)}&format=json&addressdetails=1&limit=5`);
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(term)}&format=json&addressdetails=1&limit=5`,
+        );
         if (cancelled) return;
         const data = await res.json();
 
@@ -154,18 +155,20 @@ const CourseCheckout = () => {
 
             const addr = item.address || {};
             let postcode = addr.postcode || "";
-            
+
             if (!postcode) {
-              const ukPostcodeRegex = /\b([A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2})\b/i;
+              const ukPostcodeRegex =
+                /\b([A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2})\b/i;
               const usZipRegex = /\b(\d{5}(?:-\d{4})?)\b/;
               const ukMatch = label.match(ukPostcodeRegex);
               const usMatch = label.match(usZipRegex);
-              
+
               if (ukMatch) postcode = ukMatch[0];
               else if (usMatch) postcode = usMatch[0];
             }
 
-            const city = addr.city || addr.town || addr.village || addr.county || "";
+            const city =
+              addr.city || addr.town || addr.village || addr.county || "";
 
             const addr1Parts = [addr.house_number, addr.road].filter(Boolean);
             let address = "";
@@ -176,10 +179,16 @@ const CourseCheckout = () => {
               }
             } else {
               // Fallback to splitting display_name
-              const parts = item.display_name.split(",").map(p => p.trim());
+              const parts = item.display_name.split(",").map((p) => p.trim());
               // Find the first part that is NOT the postcode, city, county, country
               for (const p of parts) {
-                if (p !== postcode && p !== city && p !== addr.county && p !== addr.state && p !== addr.country) {
+                if (
+                  p !== postcode &&
+                  p !== city &&
+                  p !== addr.county &&
+                  p !== addr.state &&
+                  p !== addr.country
+                ) {
                   address = p;
                   break;
                 }
@@ -339,7 +348,9 @@ const CourseCheckout = () => {
 
         const [courseRes, locRes] = await Promise.all([
           courseService.getCourseById(courseId),
-          courseLocationService.getByCourse(courseId).catch(() => ({ data: { data: [] } })),
+          courseLocationService
+            .getByCourse(courseId)
+            .catch(() => ({ data: { data: [] } })),
         ]);
         const course = courseRes.data.data;
         setCourseData(course);
@@ -388,46 +399,67 @@ const CourseCheckout = () => {
     const urlBookingId = searchParams.get("bookingId");
     if (urlBookingId) {
       // First check if this booking is already paid before reopening the modal
-      bookingService.getMyBookingStatus(courseId).then(statusRes => {
-        if (statusRes.data?.status === 'PAID') {
-          // Already paid — just reflect the PAID state, do NOT reopen modal
-          setBookingStatus('PAID');
-          setPaymentModalOpen(false);
-          setIsSubmitting(false);
-          return;
-        }
-        // Still pending — safe to reopen the payment modal
-        bookingService.createPaymentIntent(urlBookingId).then(piRes => {
-          if (piRes.data.success && piRes.data.clientSecret) {
-            setClientSecret(piRes.data.clientSecret);
+      bookingService
+        .getMyBookingStatus(courseId)
+        .then((statusRes) => {
+          if (statusRes.data?.status === "PAID") {
+            // Already paid — just reflect the PAID state, do NOT reopen modal
+            setBookingStatus("PAID");
+            setPaymentModalOpen(false);
             setIsSubmitting(false);
-            setPaymentModalOpen(true);
-          } else {
-            setError("Failed to initialize payment for existing booking. " + (piRes.data?.message || ""));
+            return;
           }
-        }).catch(err => {
-          setError(err.response?.data?.message || "Could not load payment session. You may have already completed this payment.");
+          // Still pending — safe to reopen the payment modal
+          bookingService
+            .createPaymentIntent(urlBookingId)
+            .then((piRes) => {
+              if (piRes.data.success && piRes.data.clientSecret) {
+                setClientSecret(piRes.data.clientSecret);
+                setIsSubmitting(false);
+                setPaymentModalOpen(true);
+              } else {
+                setError(
+                  "Failed to initialize payment for existing booking. " +
+                    (piRes.data?.message || ""),
+                );
+              }
+            })
+            .catch((err) => {
+              setError(
+                err.response?.data?.message ||
+                  "Could not load payment session. You may have already completed this payment.",
+              );
+            });
+        })
+        .catch(() => {
+          // Status check failed — fall through to try opening the modal anyway
+          bookingService
+            .createPaymentIntent(urlBookingId)
+            .then((piRes) => {
+              if (piRes.data.success && piRes.data.clientSecret) {
+                setClientSecret(piRes.data.clientSecret);
+                setIsSubmitting(false);
+                setPaymentModalOpen(true);
+              } else {
+                setError(
+                  "Failed to initialize payment for existing booking. " +
+                    (piRes.data?.message || ""),
+                );
+              }
+            })
+            .catch((err) => {
+              setError(
+                err.response?.data?.message ||
+                  "Could not load payment session. You may have already completed this payment.",
+              );
+            });
         });
-      }).catch(() => {
-        // Status check failed — fall through to try opening the modal anyway
-        bookingService.createPaymentIntent(urlBookingId).then(piRes => {
-          if (piRes.data.success && piRes.data.clientSecret) {
-            setClientSecret(piRes.data.clientSecret);
-            setIsSubmitting(false);
-            setPaymentModalOpen(true);
-          } else {
-            setError("Failed to initialize payment for existing booking. " + (piRes.data?.message || ""));
-          }
-        }).catch(err => {
-          setError(err.response?.data?.message || "Could not load payment session. You may have already completed this payment.");
-        });
-      });
     }
   }, [searchParams]);
 
   // Close modal and reset state if booking is/becomes PAID
   useEffect(() => {
-    if (bookingStatus === 'PAID') {
+    if (bookingStatus === "PAID") {
       setPaymentModalOpen(false);
       setIsSubmitting(false);
       // Don't clear existingBookingId here — we still need it to show the PAID banner
@@ -437,18 +469,21 @@ const CourseCheckout = () => {
   // Load current booking status for this course
   React.useEffect(() => {
     if (user && courseData?._id) {
-      bookingService.getMyBookingStatus(courseData._id).then(res => {
-        if (res.data?.success) {
-          setBookingStatus(res.data.status);
-          // If there's already a pending booking, set its ID so the
-          // "Complete Pending Payment" button shows immediately on page load
-          if (res.data.status === 'PENDING' && res.data.bookingId) {
-            setExistingBookingId(res.data.bookingId);
+      bookingService
+        .getMyBookingStatus(courseData._id)
+        .then((res) => {
+          if (res.data?.success) {
+            setBookingStatus(res.data.status);
+            // If there's already a pending booking, set its ID so the
+            // "Complete Pending Payment" button shows immediately on page load
+            if (res.data.status === "PENDING" && res.data.bookingId) {
+              setExistingBookingId(res.data.bookingId);
+            }
           }
-        }
-      }).catch(err => {
-        console.error('Failed to fetch booking status', err);
-      });
+        })
+        .catch((err) => {
+          console.error("Failed to fetch booking status", err);
+        });
     }
   }, [user, courseData?._id]);
   useEffect(() => {
@@ -498,7 +533,8 @@ const CourseCheckout = () => {
 
       if (existingBookingId) {
         // Resume payment for existing pending booking
-        const piRes = await bookingService.createPaymentIntent(existingBookingId);
+        const piRes =
+          await bookingService.createPaymentIntent(existingBookingId);
         if (piRes.data.success && piRes.data.clientSecret) {
           setClientSecret(piRes.data.clientSecret);
           if (piRes.data.bookingReference) {
@@ -506,7 +542,10 @@ const CourseCheckout = () => {
           }
           setPaymentModalOpen(true);
         } else {
-          setError("Failed to initialize payment for existing booking. " + (piRes.data?.message || ""));
+          setError(
+            "Failed to initialize payment for existing booking. " +
+              (piRes.data?.message || ""),
+          );
         }
         setIsSubmitting(false);
         return;
@@ -564,16 +603,19 @@ const CourseCheckout = () => {
       // Show specific validation errors from backend if available
       const backendErrors = err.response?.data?.errors;
       if (backendErrors && backendErrors.length > 0) {
-        setError(backendErrors.map(e => e.message).join(" | "));
+        setError(backendErrors.map((e) => e.message).join(" | "));
       } else {
         setError(
           err.response?.data?.message ||
-          "An error occurred during booking. Please try again.",
+            "An error occurred during booking. Please try again.",
         );
-        if (err.response?.data?.existingBookingId && err.response?.data?.existingBookingStatus === 'PENDING') {
+        if (
+          err.response?.data?.existingBookingId &&
+          err.response?.data?.existingBookingStatus === "PENDING"
+        ) {
           setExistingBookingId(err.response.data.existingBookingId);
-          setBookingStatus('PENDING');
-          setError('');
+          setBookingStatus("PENDING");
+          setError("");
         }
       }
     } finally {
@@ -620,7 +662,7 @@ const CourseCheckout = () => {
         const bookingReference = response.data.data.bookingReference;
         setExistingBookingId(bookingId);
         setBookingRef(bookingReference);
-        setBookingStatus('PENDING');
+        setBookingStatus("PENDING");
       } else {
         setError(response.data.message || "Failed to create booking.");
       }
@@ -629,13 +671,15 @@ const CourseCheckout = () => {
       // If backend says a pending booking already exists, switch to "Complete Pending Payment" flow
       if (
         err.response?.data?.existingBookingId &&
-        err.response?.data?.existingBookingStatus === 'PENDING'
+        err.response?.data?.existingBookingStatus === "PENDING"
       ) {
         setExistingBookingId(err.response.data.existingBookingId);
-        setBookingStatus('PENDING');
-        setError(''); // clear error so UI is clean when button switches
+        setBookingStatus("PENDING");
+        setError(""); // clear error so UI is clean when button switches
       } else {
-        setError(err.response?.data?.message || "An error occurred during booking.");
+        setError(
+          err.response?.data?.message || "An error occurred during booking.",
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -649,11 +693,11 @@ const CourseCheckout = () => {
   if (isConfirmed) {
     const formattedDate = selectedSchedule?.startDate
       ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+          weekday: "long",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })
       : "Pending Date";
 
     return (
@@ -679,9 +723,9 @@ const CourseCheckout = () => {
       <div className="flex items-start gap-3">
         <StepCheck />
         <div>
-          <p className="text-[14px] font-black text-[#1C1C1C]">{title}</p>
+          <p className="text-lg font-bold  text-[#1C1C1C]">{title}</p>
           {summary.map((l, i) => (
-            <p key={i} className="text-[13px] text-gray-500">
+            <p key={i} className="text-base text-gray-500">
               {l}
             </p>
           ))}
@@ -689,9 +733,9 @@ const CourseCheckout = () => {
       </div>
       <button
         onClick={onEdit}
-        className="flex items-center gap-1.5 text-[#F15A24] text-[12px] font-bold hover:underline shrink-0"
+        className="flex items-center gap-1.5 text-[#F15A24] text-base cursor-pointer font-bold hover:underline shrink-0"
       >
-        <Edit2 size={13} /> Edit
+        <Edit2 size={16} /> Edit
       </button>
     </div>
   );
@@ -700,7 +744,7 @@ const CourseCheckout = () => {
   const CollapsedStep = ({ stepNum, title, badge }) => (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-4 flex items-center gap-4">
       <StepNumber n={stepNum} active={false} />
-      <span className="text-[14px] font-bold text-gray-400">{title}</span>
+      <span className="text-lg font-bold text-gray-400">{title}</span>
       {badge && (
         <span className="inline-block px-2 py-0.5 bg-[#F15A24] text-white text-[9px] font-black uppercase tracking-widest rounded">
           {badge}
@@ -721,21 +765,21 @@ const CourseCheckout = () => {
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-8">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <h1 className="text-2xl font-extrabold text-[#1C1C1C]">
+              <h1 className="text-3xl font-extrabold text-[#1C1C1C]">
                 Secure Checkout
               </h1>
-              <Lock size={18} className="text-gray-400" />
+              <Lock size={22} className="text-gray-400" />
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div className="flex items-center gap-2 text-md text-gray-500">
               <span>Your seat is reserved. Complete your booking in</span>
               <span className="flex items-center gap-1.5 text-[#F15A24] font-black">
-                <Clock size={14} /> {fmt(timeLeft)}
+                <Clock size={18} /> {fmt(timeLeft)}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6 items-center">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
           {/* ══ LEFT COLUMN ══ */}
           <div className="flex-1 w-full space-y-3">
             {/* ── Step 1: Your Details ── */}
@@ -755,7 +799,7 @@ const CourseCheckout = () => {
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-50">
                   <StepNumber n={1} active />
-                  <span className="text-[14px] font-black text-[#1C1C1C]">
+                  <span className="text-lg font-black text-[#1C1C1C]">
                     Your Details
                   </span>
                 </div>
@@ -767,7 +811,7 @@ const CourseCheckout = () => {
                     </div>
                   )}
                   {detailsErrors.alreadyRegistered && (
-                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-[13px] font-medium flex items-center gap-2 mb-2">
+                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-medium flex items-center gap-2 mb-2">
                       <AlertCircle size={16} />
                       User already registered. Please login to proceed.
                     </div>
@@ -776,7 +820,7 @@ const CourseCheckout = () => {
                   {user ? (
                     <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                       <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
-                        <p className="text-[13px] text-blue-700 font-semibold">
+                        <p className="text-sm text-orange-600 font-semibold">
                           Please complete your profile with your mobile number
                           and date of birth to proceed.
                         </p>
@@ -808,7 +852,7 @@ const CourseCheckout = () => {
                   ) : (
                     <>
                       <div className="mb-6">
-                        <p className="text-[13px] text-gray-500 font-bold mb-4 text-center uppercase tracking-wider">
+                        <p className="text-sm text-gray-500 font-bold mb-4 text-center uppercase tracking-wider">
                           Quick sign-in with
                         </p>
                         <SocialLogin />
@@ -816,7 +860,7 @@ const CourseCheckout = () => {
                           <div className="absolute inset-0 flex items-center">
                             <span className="w-full border-t border-gray-100"></span>
                           </div>
-                          <div className="relative flex justify-center text-xs uppercase text-gray-400 font-bold">
+                          <div className="relative flex justify-center text-sm uppercase text-gray-400 font-bold">
                             <span className="bg-white px-4 tracking-widest">
                               or use email
                             </span>
@@ -828,7 +872,7 @@ const CourseCheckout = () => {
                         /* ── Inline Login Fields ── */
                         <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                           <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
-                            <p className="text-[13px] text-[#F15A24] font-semibold">
+                            <p className="text-sm text-[#F15A24] font-semibold">
                               Login to your account to proceed with your
                               booking.
                             </p>
@@ -873,7 +917,7 @@ const CourseCheckout = () => {
                             </button>
                             <button
                               onClick={() => setIsLoggingIn(false)}
-                              className="text-[13px] text-gray-500 font-bold cursor-pointer hover:text-[#F15A24] transition-colors"
+                              className="text-sm text-gray-500 font-bold cursor-pointer hover:text-[#F15A24] transition-colors"
                             >
                               Don't have an account? Register here
                             </button>
@@ -959,7 +1003,7 @@ const CourseCheckout = () => {
                           />
 
                           <div className="text-center pt-2">
-                            <p className="text-[13px] text-gray-500 font-medium">
+                            <p className="text-sm text-gray-500 font-medium">
                               Already registered?{" "}
                               <button
                                 onClick={() => setIsLoggingIn(true)}
@@ -991,12 +1035,12 @@ const CourseCheckout = () => {
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-50">
                   <StepNumber n={2} active />
-                  <span className="text-[14px] font-black text-[#1C1C1C]">
+                  <span className="text-lg font-black text-[#1C1C1C]">
                     Billing Address
                   </span>
                 </div>
                 <div className="p-6 space-y-4">
-                  <p className="text-[13px] text-gray-500">
+                  <p className="text-base text-gray-500">
                     Enter your postcode and select your address.
                   </p>
                   <div className="relative" ref={postcodeRef}>
@@ -1005,7 +1049,10 @@ const CourseCheckout = () => {
                       placeholder="Post code"
                       value={billing.postcode}
                       onChange={(v) => updateBilling("postcode", v)}
-                      onFocus={() => postcodeSuggestions.length > 0 && setShowPostcodeSuggestions(true)}
+                      onFocus={() =>
+                        postcodeSuggestions.length > 0 &&
+                        setShowPostcodeSuggestions(true)
+                      }
                       icon={MapPin}
                       error={billingErrors.postcode}
                     />
@@ -1015,7 +1062,9 @@ const CourseCheckout = () => {
                         {loadingPostcode ? (
                           <div className="flex items-center gap-3 px-4 py-4">
                             <div className="w-4 h-4 rounded-full border-2 border-orange-200 border-t-[#F15A24] animate-spin shrink-0" />
-                            <p className="text-sm text-gray-400 font-medium">Searching locations...</p>
+                            <p className="text-sm text-gray-400 font-medium">
+                              Searching locations...
+                            </p>
                           </div>
                         ) : (
                           postcodeSuggestions.map((item, i) => (
@@ -1090,15 +1139,15 @@ const CourseCheckout = () => {
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
                 <div className="flex items-center flex-wrap gap-3 px-5 py-4 border-b border-gray-50">
                   <StepNumber n={3} active />
-                  <span className="text-[14px] font-black text-[#1C1C1C]">
+                  <span className="text-lg font-black text-[#1C1C1C]">
                     Zero-Hassle Application Service - EasyApply™
                   </span>
-                  <span className="inline-block px-2 py-0.5 bg-[#F15A24] text-white text-[9px] font-black uppercase tracking-widest rounded">
+                  <span className="inline-block px-2 py-0.5 bg-[#F15A24] text-white text-xs font-black uppercase tracking-widest rounded">
                     Recommended
                   </span>
                 </div>
                 <div className="p-6 space-y-4">
-                  <p className="text-[13px] text-gray-500">
+                  <p className="text-base text-gray-500">
                     The hassle-free way to get your licence. We'll prepare your
                     application and arrange all the requirements including your
                     DBS (criminality) check.
@@ -1118,16 +1167,16 @@ const CourseCheckout = () => {
                             <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
                           )}
                         </div>
-                        <span className="text-[14px] font-black text-[#1C1C1C]">
+                        <span className="text-base font-black text-[#1C1C1C]">
                           Get EasyApply
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[14px] font-black text-[#1C1C1C]">
+                        <span className="text-base font-black text-[#1C1C1C]">
                           £149.99
                         </span>
                         {easyApply === "get" && (
-                          <Check size={16} className="text-[#F15A24]" />
+                          <Check size={18} className="text-[#F15A24]" />
                         )}
                       </div>
                     </div>
@@ -1141,10 +1190,10 @@ const CourseCheckout = () => {
                       ].map((f, i) => (
                         <li
                           key={i}
-                          className="flex items-center gap-2 text-[12px] text-gray-600"
+                          className="flex items-center gap-2 text-base text-gray-600"
                         >
                           <Check
-                            size={12}
+                            size={16}
                             className="text-[#F15A24] shrink-0"
                           />{" "}
                           {f}
@@ -1166,7 +1215,7 @@ const CourseCheckout = () => {
                           <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
                         )}
                       </div>
-                      <span className="text-[14px] font-black text-[#1C1C1C]">
+                      <span className="text-base font-black text-[#1C1C1C]">
                         I will apply myself
                       </span>
                     </div>
@@ -1179,18 +1228,20 @@ const CourseCheckout = () => {
                       ].map((f, i) => (
                         <li
                           key={i}
-                          className="flex items-start gap-2 text-[12px] text-gray-500"
+                          className="flex items-start gap-2 text-base text-gray-500"
                         >
-                          <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#F15A24] shrink-0" />{" "}
+                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#F15A24] shrink-0" />{" "}
                           {f}
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <button className="flex items-center gap-2 text-[#F15A24] text-[12px] font-bold hover:underline">
+                  <button className="flex items-center gap-2 text-[#F15A24] text-sm font-bold ">
                     <span className="text-base">💬</span> Not Sure?{" "}
-                    <span className="underline">Chat with us</span>
+                    <span className=" cursor-pointer hover:underline">
+                      Chat with us
+                    </span>
                   </button>
                   <SaveBtn
                     loading={isSubmitting}
@@ -1211,12 +1262,12 @@ const CourseCheckout = () => {
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-50">
                   <StepNumber n={4} active />
-                  <span className="text-[14px] font-black text-[#1C1C1C]">
+                  <span className="text-lg font-black text-[#1C1C1C]">
                     Payment
                   </span>
                 </div>
                 <div className="p-6 space-y-4">
-                  <p className="text-[13px] text-gray-500">
+                  <p className="text-base text-gray-500">
                     Select your payment method.
                   </p>
 
@@ -1278,7 +1329,7 @@ const CourseCheckout = () => {
                             <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
                           )}
                         </div>
-                        <span className="text-[13px] font-bold text-[#1C1C1C]">
+                        <span className="text-base font-bold text-[#1C1C1C]">
                           {opt.label}
                         </span>
                       </div>
@@ -1294,7 +1345,7 @@ const CourseCheckout = () => {
                         onChange={(e) => setAgree1(e.target.checked)}
                         className="mt-0.5 w-4 h-4 accent-[#F15A24]"
                       />
-                      <span className="text-[12px] text-gray-600">
+                      <span className="text-sm text-gray-600">
                         Send me the latest job opportunities, industry changes
                         and course advice
                       </span>
@@ -1306,7 +1357,7 @@ const CourseCheckout = () => {
                         onChange={(e) => setAgree2(e.target.checked)}
                         className="mt-0.5 w-4 h-4 accent-[#F15A24]"
                       />
-                      <span className="text-[12px] text-gray-600">
+                      <span className="text-sm text-gray-600">
                         I agree to the Courses4Me{" "}
                         <span className="text-[#F15A24] underline cursor-pointer">
                           Privacy Policy
@@ -1327,26 +1378,41 @@ const CourseCheckout = () => {
                   )}
 
                   {/* Info banner: booking created, awaiting payment */}
-                  {existingBookingId && bookingStatus === 'PENDING' && !error && (
-                    <div className="p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3 text-green-700 text-sm">
-                      <Check size={18} className="shrink-0 mt-0.5 text-green-600" />
-                      <p>
-                        <span className="font-bold">Booking created!</span> Click{" "}
-                        <span className="font-bold">"Complete Pending Payment"</span> below to finalise your purchase.
+                  {existingBookingId &&
+                    bookingStatus === "PENDING" &&
+                    !error && (
+                      <div className="p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3 text-green-700 text-sm">
+                        <Check
+                          size={18}
+                          className="shrink-0 mt-0.5 text-green-600"
+                        />
+                        <p>
+                          <span className="font-bold">Booking created!</span>{" "}
+                          Click{" "}
+                          <span className="font-bold">
+                            "Complete Pending Payment"
+                          </span>{" "}
+                          below to finalise your purchase.
+                        </p>
+                      </div>
+                    )}
+
+                  {/* Warning: already paid */}
+                  {bookingStatus === "PAID" && (
+                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3 text-blue-700 text-sm">
+                      <Check
+                        size={18}
+                        className="shrink-0 mt-0.5 text-blue-600"
+                      />
+                      <p className="font-bold">
+                        You are already enrolled in this course. No further
+                        payment is needed.
                       </p>
                     </div>
                   )}
 
-                  {/* Warning: already paid */}
-                  {bookingStatus === 'PAID' && (
-                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3 text-blue-700 text-sm">
-                      <Check size={18} className="shrink-0 mt-0.5 text-blue-600" />
-                      <p className="font-bold">You are already enrolled in this course. No further payment is needed.</p>
-                    </div>
-                  )}
-
                   {/* Button to create a pending booking when none exists */}
-                  {!existingBookingId && bookingStatus !== 'PAID' && (
+                  {!existingBookingId && bookingStatus !== "PAID" && (
                     <SaveBtn
                       loading={isSubmitting}
                       onClick={createPendingBooking}
@@ -1357,12 +1423,16 @@ const CourseCheckout = () => {
                   )}
 
                   {/* Button to complete payment for an existing pending booking */}
-                  {existingBookingId && bookingStatus !== 'PAID' && (
+                  {existingBookingId && bookingStatus !== "PAID" && (
                     <SaveBtn
                       loading={isSubmitting}
                       onClick={handlePayment}
                       fullWidth
-                      label={isSubmitting ? "Processing..." : "Complete Pending Payment"}
+                      label={
+                        isSubmitting
+                          ? "Processing..."
+                          : "Complete Pending Payment"
+                      }
                       disabled={isSubmitting}
                     />
                   )}
@@ -1381,12 +1451,15 @@ const CourseCheckout = () => {
             easyApply={easyApply === "get"}
             date={
               selectedSchedule?.startDate
-                ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })
+                ? new Date(selectedSchedule.startDate).toLocaleDateString(
+                    "en-GB",
+                    {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    },
+                  )
                 : null
             }
             courseId={courseId}
@@ -1397,7 +1470,7 @@ const CourseCheckout = () => {
 
       {/* Bottom strip */}
       <div className="bg-[#F0F0F0] py-3 mt-8">
-        <p className="text-center text-[11px] text-gray-500 px-4">
+        <p className="text-center text-sm text-gray-500 px-4">
           Courses4Me is a registered trademark of Courses4Me Limited. Courses4Me
           is a training &amp; staffing platform — we help people book training
           courses with approved providers and help them find work.
@@ -1413,12 +1486,10 @@ const CourseCheckout = () => {
           // Payment succeeded in-app — close modal and show confirmation
           setPaymentModalOpen(false);
           setIsSubmitting(false);
-          setBookingStatus('PAID');
+          setBookingStatus("PAID");
           setIsConfirmed(true);
         }}
       />
-
-
     </div>
   );
 };

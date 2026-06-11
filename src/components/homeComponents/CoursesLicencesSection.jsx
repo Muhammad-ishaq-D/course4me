@@ -88,7 +88,7 @@ const ItemCard = ({ icon: Icon, title, description, onClick }) => (
             className="
             font-bold
             text-[#111111]
-            text-lg
+            text-xl
             leading-snug
             group-hover:text-[#FF5421]
             transition-colors
@@ -101,7 +101,7 @@ const ItemCard = ({ icon: Icon, title, description, onClick }) => (
           {description && (
             <p
               className="
-              text-sm
+              text-base
               text-gray-500
               mt-1
               font-medium

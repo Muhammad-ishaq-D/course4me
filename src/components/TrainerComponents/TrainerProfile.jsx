@@ -77,7 +77,7 @@ const TrainerProfile = () => {
               <div className="absolute -bottom-5 left-6 right-6 bg-white/10 backdrop-blur-xl border border-white/10 rounded-[24px] p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-400 text-[10px] uppercase tracking-[2px] font-bold">
+                    <p className="text-gray-400 text-xs uppercase tracking-[2px] font-bold">
                       Experience
                     </p>
 
@@ -109,7 +109,7 @@ const TrainerProfile = () => {
                 {trainer.title}
               </h2>
               {/* DESCRIPTION */}
-              <p className="text-gray-400 text-base leading-[1.8] mt-6 max-w-2xl">
+              <p className="text-gray-400 text-lg leading-[1.8] mt-6 max-w-2xl">
                 Certified trainer focused on practical learning experiences,
                 real-world skills, and helping professionals build successful
                 careers in the security industry.
@@ -152,7 +152,7 @@ const TrainerProfile = () => {
                           {item.value}
                         </h3>
 
-                        <p className="text-gray-400 text-xs mt-1">
+                        <p className="text-gray-400 text-base mt-1">
                           {item.label}
                         </p>
                       </div>
@@ -203,11 +203,11 @@ const TrainerProfile = () => {
 
                         {/* CONTENT */}
                         <div>
-                          <h4 className="text-[#111111] font-black text-[17px] leading-tight">
+                          <h4 className="text-[#111111] font-black text-base leading-tight">
                             {item.title}
                           </h4>
 
-                          <p className="text-gray-500 text-sm mt-1 font-medium">
+                          <p className="text-gray-500 text-base mt-1 font-medium">
                             {item.desc}
                           </p>
                         </div>

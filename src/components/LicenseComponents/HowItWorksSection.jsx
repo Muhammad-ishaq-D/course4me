@@ -1,5 +1,12 @@
 import React from "react";
-import { Target, BookOpen, Medal, Award, ShieldCheck, Briefcase } from "lucide-react";
+import {
+  Target,
+  BookOpen,
+  Medal,
+  Award,
+  ShieldCheck,
+  Briefcase,
+} from "lucide-react";
 
 const steps = [
   {
@@ -97,7 +104,7 @@ const HowItWorksSection = () => {
                 )}
 
                 {/* Step Number */}
-                <div className="absolute top-6 right-6 text-5xl font-extrabold text-gray-200 select-none">
+                <div className="absolute top-6 right-6 text-5xl font-extrabold text-gray-300 select-none">
                   0{index + 1}
                 </div>
 
@@ -114,7 +121,7 @@ const HowItWorksSection = () => {
                 </h3>
 
                 {/* Description */}
-                <p className="relative z-10 text-gray-500 mt-4 leading-relaxed text-[15px]">
+                <p className="relative z-10 text-gray-500 mt-4 leading-relaxed text-lg">
                   {item.desc}
                 </p>
 
