@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
@@ -29,9 +30,8 @@ axiosInstance.interceptors.response.use(
 
             // Show alert with reason if provided
             if (error.response?.data?.message) {
-                alert(error.response.data.message);
+                toast.error(error.response.data.message);
             }
-
             window.location.href = '/signin';
         }
         return Promise.reject(error);

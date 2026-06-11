@@ -9,6 +9,7 @@ import TopNav from './components/shared/TopNav'
 import ScrollToTop from './components/shared/ScrollToTop'
 
 import { AuthProvider } from './context/AuthContext'
+import { Toaster } from 'react-hot-toast'
 
 const AppContent = () => {
   const location = useLocation();
@@ -17,6 +18,7 @@ const AppContent = () => {
 
   return (
     <div className="h-screen flex flex-col overflow-hidden">
+      <Toaster position="top-center" />
       <ScrollToTop />
       <Header />
       <main id="main-scroll-container" className="flex-1 overflow-y-auto">

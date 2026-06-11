@@ -22,6 +22,7 @@ import { useAuth } from "../../context/AuthContext";
 import SocialLogin from "../../pages/Authentication/components/SocialLogin";
 import * as yup from "yup";
 import Loader from "../ui/Loader";
+import toast from "react-hot-toast";
 
 const ApplyJob = () => {
   const { id } = useParams();
@@ -128,7 +129,7 @@ const ApplyJob = () => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        alert("File size exceeds 5MB limit.");
+        toast.error("File size exceeds 5MB limit.");
         return;
       }
       setCvName(file.name);
@@ -264,10 +265,10 @@ const ApplyJob = () => {
         behavior: "smooth",
       });
     } catch (error) {
-      console.error("Submit application failed:", error);
-      alert(
+      console.error("Submission failed:", error);
+      toast.error(
         error.response?.data?.message ||
-          "Failed to submit application. Please try again.",
+          "Failed to submit application. Please try again later.",
       );
     } finally {
       setSubmitting(false);

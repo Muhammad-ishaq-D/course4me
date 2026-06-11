@@ -3,6 +3,7 @@ import {
   X, MapPin, Clock, Calendar, Phone, Mail, CheckCircle
 } from "lucide-react";
 import { bookingModalSchema, validateAll } from "../../utils/validationSchemas";
+import toast from 'react-hot-toast';
 
 const BookCourseModal = ({ centre, onClose, showModal }) => {
   if (!centre || !showModal) return null;
@@ -21,7 +22,7 @@ const BookCourseModal = ({ centre, onClose, showModal }) => {
     const errs = await validateAll(bookingModalSchema, form);
     setErrors(errs);
     if (Object.keys(errs).length === 0) {
-      alert("Booking submitted successfully!");
+      toast.success("Booking submitted successfully!");
       onClose();
     }
   };
