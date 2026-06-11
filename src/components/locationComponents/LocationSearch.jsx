@@ -15,14 +15,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import courseLocationService from "../../api/services/courseLocationService";
 
-const BACKEND_URL = import.meta.env.VITE_API_URL?.replace("/api", "") || "";
-
-const getImageSrc = (thumbnail) => {
-  if (!thumbnail) return null;
-  if (thumbnail.startsWith("http")) return thumbnail;
-  return `${BACKEND_URL}/${thumbnail.replace(/\\/g, "/")}`;
-};
-
 const ITEMS_PER_PAGE = 6;
 
 const LocationSearch = () => {
@@ -35,6 +27,7 @@ const LocationSearch = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeLinkId, setActiveLinkId] = useState(null);
   const [page, setPage] = useState(1);
+  const [imgErrors, setImgErrors] = useState({});
 
   // Fetch all active course-location links for published courses
   useEffect(() => {
@@ -45,13 +38,14 @@ const LocationSearch = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  // Filter links client-side by location name/city/postcode/address
+  // Filter links client-side by location name/city/postcode/address (active locations only)
   const filteredLinks = useMemo(() => {
     if (!search.trim()) return [];
     const term = search.trim().toLowerCase();
     return allLinks.filter((link) => {
       const loc = link.locationId;
       if (!loc || typeof loc !== "object") return false;
+      if (loc.status !== 'Active') return false;
       return (
         loc.name?.toLowerCase().includes(term) ||
         loc.city?.toLowerCase().includes(term) ||
@@ -80,7 +74,7 @@ const LocationSearch = () => {
       if (!label || seen.has(label)) return;
       seen.add(label);
       const filterKey = loc.postcode || loc.city || loc.name || label;
-      results.push({ label, filterKey });
+      results.push({ label, filterKey, isInactive: loc.status !== 'Active' });
     });
     return results.slice(0, 8);
   }, [searchInput, allLinks]);
@@ -160,14 +154,19 @@ const LocationSearch = () => {
                                 setSearch(item.filterKey);
                                 setShowSuggestions(false);
                               }}
-                              className="w-full flex items-center gap-3 px-4 py-4 hover:bg-orange-50 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0"
+                              className={`w-full flex items-center gap-3 px-4 py-4 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0 ${item.isInactive ? 'opacity-50 cursor-default hover:bg-gray-50' : 'hover:bg-orange-50'}`}
                             >
-                              <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                                <MapPin className="w-4 h-4 text-orange-500" />
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${item.isInactive ? 'bg-gray-100' : 'bg-orange-50'}`}>
+                                <MapPin className={`w-4 h-4 ${item.isInactive ? 'text-gray-400' : 'text-orange-500'}`} />
                               </div>
-                              <p className="text-sm font-medium text-gray-800 line-clamp-2">
-                                {item.label}
-                              </p>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-gray-800 line-clamp-2">
+                                  {item.label}
+                                </p>
+                                {item.isInactive && (
+                                  <span className="text-[11px] font-semibold text-red-400">Inactive — no courses available</span>
+                                )}
+                              </div>
                             </button>
                           ))}
                         </div>
@@ -275,11 +274,12 @@ const LocationSearch = () => {
 
                         {/* Thumbnail */}
                         <div className="w-full sm:w-32 md:w-36 h-52 sm:h-32 md:h-28 rounded-3xl overflow-hidden shrink-0 bg-orange-50 flex items-center justify-center">
-                          {getImageSrc(course.thumbnail) ? (
+                          {course.thumbnail && !imgErrors[link._id] ? (
                             <img
-                              src={getImageSrc(course.thumbnail)}
+                              src={course.thumbnail}
                               alt={course.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              onError={() => setImgErrors(prev => ({ ...prev, [link._id]: true }))}
                             />
                           ) : (
                             <BookOpen className="w-10 h-10 text-orange-300" />
