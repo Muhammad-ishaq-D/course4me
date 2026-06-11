@@ -83,7 +83,7 @@ const CourseCheckout = () => {
     addr2: "",
     city: "",
   });
-  const [easyApply, setEasyApply] = useState("get"); // "get" | "self"
+  const [easyApply, setEasyApply] = useState("self"); // "get" | "self"
   const [payment, setPayment] = useState("card");
   const [agree1, setAgree1] = useState(true);
   const [agree2, setAgree2] = useState(true);
@@ -420,14 +420,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                    (piRes.data?.message || ""),
+                  (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                  "Could not load payment session. You may have already completed this payment.",
+                "Could not load payment session. You may have already completed this payment.",
               );
             });
         })
@@ -443,14 +443,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                    (piRes.data?.message || ""),
+                  (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                  "Could not load payment session. You may have already completed this payment.",
+                "Could not load payment session. You may have already completed this payment.",
               );
             });
         });
@@ -544,7 +544,7 @@ const CourseCheckout = () => {
         } else {
           setError(
             "Failed to initialize payment for existing booking. " +
-              (piRes.data?.message || ""),
+            (piRes.data?.message || ""),
           );
         }
         setIsSubmitting(false);
@@ -607,7 +607,7 @@ const CourseCheckout = () => {
       } else {
         setError(
           err.response?.data?.message ||
-            "An error occurred during booking. Please try again.",
+          "An error occurred during booking. Please try again.",
         );
         if (
           err.response?.data?.existingBookingId &&
@@ -693,11 +693,11 @@ const CourseCheckout = () => {
   if (isConfirmed) {
     const formattedDate = selectedSchedule?.startDate
       ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-          weekday: "long",
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        })
+        weekday: "long",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
       : "Pending Date";
 
     return (
@@ -1153,6 +1153,41 @@ const CourseCheckout = () => {
                     DBS (criminality) check.
                   </p>
 
+                  {/* Self apply option */}
+                  <div
+                    onClick={() => setEasyApply("self")}
+                    className={`rounded-xl border-2 p-4 cursor-pointer transition-all ${easyApply === "self" ? "border-[#F15A24]" : "border-gray-200 hover:border-[#d25e33]"}`}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div
+                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${easyApply === "self" ? "border-[#F15A24]" : "border-gray-300"}`}
+                      >
+                        {easyApply === "self" && (
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
+                        )}
+                      </div>
+                      <span className="text-[14px] font-black text-[#1C1C1C]">
+                        I will apply myself
+                      </span>
+                    </div>
+                    <ul className="space-y-1.5">
+                      {[
+                        "You take all the risk of the application",
+                        "You will have to arrange a valid DBS check",
+                        "You will need a solicitor or a person of standing in the community to endorse your photographs",
+                        "Your application is not checked by an expert before submission",
+                      ].map((f, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 text-[12px] text-gray-500"
+                        >
+                          <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#F15A24] shrink-0" />{" "}
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
                   {/* Get EasyApply option */}
                   <div
                     onClick={() => setEasyApply("get")}
@@ -1202,47 +1237,6 @@ const CourseCheckout = () => {
                     </ul>
                   </div>
 
-                  {/* Self apply option */}
-                  <div
-                    onClick={() => setEasyApply("self")}
-                    className={`rounded-xl border-2 p-4 cursor-pointer transition-all ${easyApply === "self" ? "border-[#F15A24]" : "border-gray-200 hover:border-[#d25e33]"}`}
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${easyApply === "self" ? "border-[#F15A24]" : "border-gray-300"}`}
-                      >
-                        {easyApply === "self" && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
-                        )}
-                      </div>
-                      <span className="text-base font-black text-[#1C1C1C]">
-                        I will apply myself
-                      </span>
-                    </div>
-                    <ul className="space-y-1.5">
-                      {[
-                        "You take all the risk of the application",
-                        "You will have to arrange a valid DBS check",
-                        "You will need a solicitor or a person of standing in the community to endorse your photographs",
-                        "Your application is not checked by an expert before submission",
-                      ].map((f, i) => (
-                        <li
-                          key={i}
-                          className="flex items-start gap-2 text-base text-gray-500"
-                        >
-                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#F15A24] shrink-0" />{" "}
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <button className="flex items-center gap-2 text-[#F15A24] text-sm font-bold ">
-                    <span className="text-base">💬</span> Not Sure?{" "}
-                    <span className=" cursor-pointer hover:underline">
-                      Chat with us
-                    </span>
-                  </button>
                   <SaveBtn
                     loading={isSubmitting}
                     onClick={() => setActiveStep(4)}
@@ -1271,71 +1265,48 @@ const CourseCheckout = () => {
                     Select your payment method.
                   </p>
 
-                  {[
-                    {
-                      id: "card",
-                      label: "Pay with card",
-                      badge: (
-                        <div className="flex items-center gap-1">
-                          <div className="bg-blue-700 text-white text-[8px] font-black px-1.5 py-0.5 rounded">
-                            VISA
-                          </div>
-                          <div className="bg-[#F15A24] w-6 h-4 rounded-full flex items-center justify-center">
-                            <div className="bg-red-600 w-2.5 h-2.5 rounded-full -ml-1" />
-                          </div>
-                          <div className="bg-[#FF6600] text-white text-[8px] font-black px-1.5 py-0.5 rounded">
-                            DISC
-                          </div>
-                        </div>
-                      ),
-                    },
-                    {
-                      id: "paypal",
-                      label: "Pay with PayPal",
-                      badge: (
-                        <div className="bg-[#003087] text-white text-[9px] font-black px-2 py-0.5 rounded">
-                          Pay<span className="text-[#009cde]">Pal</span>
-                        </div>
-                      ),
-                    },
-                    {
-                      id: "instalments",
-                      label: "Pay in 3 monthly interest free instalments",
-                      badge: null,
-                    },
-                    {
-                      id: "klarna",
-                      label:
-                        "Pay in 30 days or in 3 interest free instalments. (Includes a soft credit check)",
-                      badge: (
-                        <div className="bg-[#FFB3C7] text-[#1C1C1C] text-[9px] font-black px-2 py-1 rounded">
-                          klarna
-                        </div>
-                      ),
-                    },
-                  ].map((opt) => (
-                    <div
-                      key={opt.id}
-                      onClick={() => {
-                        setPayment(opt.id);
-                      }}
-                      className={`rounded-xl border-2 px-4 py-3.5 cursor-pointer transition-all flex items-center justify-between gap-3 ${payment === opt.id ? "border-[#F15A24] bg-blue-50/20" : "border-gray-200 hover:border-gray-300"}`}
-                    >
+                  {/* Pay with card — only payment method */}
+                  <div className="rounded-2xl border-2 border-[#F15A24] bg-gradient-to-br from-orange-50/60 to-white overflow-hidden">
+                    {/* Header bar */}
+                    <div className="flex items-center justify-between px-5 py-4 border-b border-orange-100">
                       <div className="flex items-center gap-3">
-                        <div
-                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${payment === opt.id ? "border-[#F15A24]" : "border-gray-300"}`}
-                        >
-                          {payment === opt.id && (
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
-                          )}
+                        <div className="w-9 h-9 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-sm shadow-orange-200">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="5" rx="2" /><line x1="2" x2="22" y1="10" y2="10" /></svg>
+                        </div>
+                        <div>
+                          <p className="text-[14px] font-black text-[#1C1C1C]">Pay with Card</p>
+                          <p className="text-[11px] text-gray-400 font-medium">Secure &amp; instant payment</p>
                         </div>
                         <span className="text-base font-bold text-[#1C1C1C]">
                           {opt.label}
                         </span>
                       </div>
-                      {opt.badge}
+                      {/* Card brand logos */}
+                      <div className="flex items-center gap-1.5">
+                        <div className="h-7 px-2 bg-blue-700 text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">VISA</div>
+                        <div className="h-7 px-1.5 bg-white border border-gray-200 rounded-md flex items-center justify-center gap-0.5">
+                          <div className="w-4 h-4 rounded-full bg-red-500 opacity-90" />
+                          <div className="w-4 h-4 rounded-full bg-amber-400 opacity-90 -ml-2" />
+                        </div>
+                        <div className="h-7 px-2 bg-[#FF6600] text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">DISC</div>
+                        <div className="h-7 px-2 bg-[#1A1F71] text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">AMEX</div>
+                      </div>
                     </div>
-                  ))}
+
+                    {/* Security trust row */}
+                    <div className="px-5 py-3.5 flex flex-wrap items-center gap-4">
+                      {[
+                        { icon: "🔒", text: "256-bit SSL encryption" },
+                        { icon: "✅", text: "PCI DSS compliant" },
+                        { icon: "⚡", text: "Instant confirmation" },
+                      ].map((item) => (
+                        <div key={item.text} className="flex items-center gap-1.5">
+                          <span className="text-[12px]">{item.icon}</span>
+                          <span className="text-[11px] font-semibold text-gray-500">{item.text}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
                   <div className="space-y-3 pt-2">
                     <label className="flex items-start gap-3 cursor-pointer">
@@ -1452,14 +1423,14 @@ const CourseCheckout = () => {
             date={
               selectedSchedule?.startDate
                 ? new Date(selectedSchedule.startDate).toLocaleDateString(
-                    "en-GB",
-                    {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    },
-                  )
+                  "en-GB",
+                  {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  },
+                )
                 : null
             }
             courseId={courseId}

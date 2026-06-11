@@ -16,14 +16,6 @@ import { useNavigate } from "react-router-dom";
 import courseLocationService from "../../api/services/courseLocationService";
 import Loader from "../ui/Loader";
 
-const BACKEND_URL = import.meta.env.VITE_API_URL?.replace("/api", "") || "";
-
-const getImageSrc = (thumbnail) => {
-  if (!thumbnail) return null;
-  if (thumbnail.startsWith("http")) return thumbnail;
-  return `${BACKEND_URL}/${thumbnail.replace(/\\/g, "/")}`;
-};
-
 const ITEMS_PER_PAGE = 6;
 
 const LocationSearch = () => {
@@ -36,23 +28,25 @@ const LocationSearch = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeLinkId, setActiveLinkId] = useState(null);
   const [page, setPage] = useState(1);
+  const [imgErrors, setImgErrors] = useState({});
 
   // Fetch all active course-location links for published courses
   useEffect(() => {
     courseLocationService
       .getAll()
       .then((res) => setAllLinks(res?.data?.data || []))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, []);
 
-  // Filter links client-side by location name/city/postcode/address
+  // Filter links client-side by location name/city/postcode/address (active locations only)
   const filteredLinks = useMemo(() => {
     if (!search.trim()) return [];
     const term = search.trim().toLowerCase();
     return allLinks.filter((link) => {
       const loc = link.locationId;
       if (!loc || typeof loc !== "object") return false;
+      if (loc.status !== 'Active') return false;
       return (
         loc.name?.toLowerCase().includes(term) ||
         loc.city?.toLowerCase().includes(term) ||
@@ -83,7 +77,7 @@ const LocationSearch = () => {
       if (!label || seen.has(label)) return;
       seen.add(label);
       const filterKey = loc.postcode || loc.city || loc.name || label;
-      results.push({ label, filterKey });
+      results.push({ label, filterKey, isInactive: loc.status !== 'Active' });
     });
     return results.slice(0, 8);
   }, [searchInput, allLinks]);
@@ -165,7 +159,7 @@ const LocationSearch = () => {
                                 setSearch(item.filterKey);
                                 setShowSuggestions(false);
                               }}
-                              className="w-full flex items-center gap-3 px-4 py-4 hover:bg-orange-50 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0"
+                              className={`w-full flex items-center gap-3 px-4 py-4 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0 ${item.isInactive ? 'opacity-50 cursor-default hover:bg-gray-50' : 'hover:bg-orange-50'}`}
                             >
                               <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
                                 <MapPin
@@ -251,13 +245,13 @@ const LocationSearch = () => {
                     );
                   const nextDate = upcomingDates[0]?.startDate
                     ? new Date(upcomingDates[0].startDate).toLocaleDateString(
-                        "en-GB",
-                        {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        },
-                      )
+                      "en-GB",
+                      {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      },
+                    )
                     : null;
                   const price =
                     link.price ||
@@ -271,11 +265,10 @@ const LocationSearch = () => {
                       onMouseEnter={() => setActiveLinkId(link._id)}
                       onMouseLeave={() => setActiveLinkId(null)}
                       className={`group relative bg-white border rounded-[28px] p-3 transition-all duration-300  overflow-hidden
-                      ${
-                        activeLinkId === link._id
+                      ${activeLinkId === link._id
                           ? "border-orange-300 shadow-[0_20px_60px_rgba(249,115,22,0.15)]"
                           : "border-gray-200 hover:border-orange-200 hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]"
-                      }`}
+                        }`}
                     >
                       {/* Hover gradient */}
                       <div className="absolute inset-0 bg-linear-to-r from-orange-50/0 via-orange-50/40 to-orange-50/0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />
@@ -283,11 +276,12 @@ const LocationSearch = () => {
                       <div className="relative flex flex-col sm:flex-row gap-4">
                         {/* Thumbnail */}
                         <div className="w-full sm:w-32 md:w-36 h-52 sm:h-32 md:h-28 rounded-3xl overflow-hidden shrink-0 bg-orange-50 flex items-center justify-center">
-                          {getImageSrc(course.thumbnail) ? (
+                          {course.thumbnail && !imgErrors[link._id] ? (
                             <img
-                              src={getImageSrc(course.thumbnail)}
+                              src={course.thumbnail}
                               alt={course.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              onError={() => setImgErrors(prev => ({ ...prev, [link._id]: true }))}
                             />
                           ) : (
                             <BookOpen className="w-10 h-10 text-orange-300" />
@@ -431,11 +425,10 @@ const LocationSearch = () => {
                       <button
                         key={p}
                         onClick={() => setPage(p)}
-                        className={`w-11 h-11 rounded-2xl font-semibold transition ${
-                          p === page
+                        className={`w-11 h-11 rounded-2xl font-semibold transition ${p === page
                             ? "bg-orange-500 text-white"
                             : "border border-gray-200 hover:bg-gray-50"
-                        }`}
+                          }`}
                       >
                         {p}
                       </button>
