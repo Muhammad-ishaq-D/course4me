@@ -452,9 +452,19 @@ const ApplyJob = () => {
                       Hiring Status
                     </p>
 
-                    <p className="mt-1 text-[15px] font-semibold text-green-600">
-                      Active / Recruiting
-                    </p>
+                    {job.status === "Closed" ? (
+                      <p className="mt-1 text-[15px] font-semibold text-[#F15A24]">
+                        Closed
+                      </p>
+                    ) : job.status === "Paused" ? (
+                      <p className="mt-1 text-[15px] font-semibold text-[#F59E0B]">
+                        Paused
+                      </p>
+                    ) : (
+                      <p className="mt-1 text-[15px] font-semibold text-[#00A63E]">
+                        Active / Recruiting
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -497,17 +507,34 @@ const ApplyJob = () => {
           </div>
 
           {/* ================= FORM CARD ================= */}
-          <div className="mt-5 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-5 sm:p-7 lg:p-8">
-            {/* Header */}
-            <div className="mb-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF7F3] border border-[#FFE2D6] text-[#F15A24] text-xs font-black uppercase tracking-[0.12em]">
-                Candidate Information
-              </div>
-
-              <h2 className="mt-4 text-[30px] sm:text-[36px] leading-tight font-black text-[#111827]">
-                Complete Your Application
+          {job.status === "Closed" || job.status === "Paused" ? (
+            <div className="mt-5 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-10 text-center">
+              <AlertTriangle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h2 className="text-2xl font-black text-[#111827]">
+                {job.status === "Closed" ? "Applications Closed" : "Applications Paused"}
               </h2>
+              <p className="mt-3 text-gray-500">
+                We are no longer accepting new applications for this position at the moment. Please explore our other active career opportunities!
+              </p>
+              <NavLink
+                to="/careers"
+                className="mt-6 inline-flex items-center justify-center h-13 px-7 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] text-white font-bold transition-all duration-300"
+              >
+                Browse Other Jobs
+              </NavLink>
             </div>
+          ) : (
+            <div className="mt-5 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-5 sm:p-7 lg:p-8">
+              {/* Header */}
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF7F3] border border-[#FFE2D6] text-[#F15A24] text-xs font-black uppercase tracking-[0.12em]">
+                  Candidate Information
+                </div>
+
+                <h2 className="mt-4 text-[30px] sm:text-[36px] leading-tight font-black text-[#111827]">
+                  Complete Your Application
+                </h2>
+              </div>
 
             {/* AUTH STATE HANDLING */}
             {user ? (
@@ -973,6 +1000,7 @@ const ApplyJob = () => {
               </form>
             )}
           </div>
+          )}
         </div>
       )}
     </div>

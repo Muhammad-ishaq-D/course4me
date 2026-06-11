@@ -17,7 +17,6 @@ const JobsInCareerDetails = ({ career }) => {
         
         // Strictly filter jobs matching the specific career title or career category
         const filtered = allJobs.filter(job => 
-          job.status === 'Active' && 
           (job.category === career.title || 
            job.category?.toLowerCase() === career.title?.toLowerCase() ||
            career.title?.toLowerCase().includes(job.category?.toLowerCase()) ||

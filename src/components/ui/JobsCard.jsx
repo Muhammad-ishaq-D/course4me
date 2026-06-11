@@ -124,21 +124,36 @@ const JobsCard = ({ job }) => {
           </p>
 
           <div className="flex items-center gap-1.5 mt-1">
-            <p className="text-[15px] font-bold text-[#00A63E]">Recruiting</p>
+            {job.status === "Closed" ? (
+              <p className="text-[15px] font-bold text-[#F15A24]">Closed</p>
+            ) : job.status === "Paused" ? (
+              <p className="text-[15px] font-bold text-[#F59E0B]">Paused</p>
+            ) : (
+              <p className="text-[15px] font-bold text-[#00A63E]">Recruiting</p>
+            )}
           </div>
         </div>
 
         {/* BUTTON */}
-        <NavLink
-          to={`/apply-job/${jobId}`}
-          className="group/button px-5 py-3 rounded-full bg-[#111111] hover:bg-[#F15A24] text-white text-[15px] font-semibold flex items-center justify-center gap-2 transition-all duration-300"
-        >
-          Apply Now
-          <ArrowRight
-            size={16}
-            className="group-hover/button:translate-x-1 transition"
-          />
-        </NavLink>
+        {job.status === "Closed" || job.status === "Paused" ? (
+          <button
+            disabled
+            className="px-5 py-3 rounded-full bg-gray-100 text-gray-400 text-[15px] font-semibold flex items-center justify-center cursor-not-allowed"
+          >
+            {job.status === "Closed" ? "Applications Closed" : "Currently Paused"}
+          </button>
+        ) : (
+          <NavLink
+            to={`/apply-job/${jobId}`}
+            className="group/button px-5 py-3 rounded-full bg-[#111111] hover:bg-[#F15A24] text-white text-[15px] font-semibold flex items-center justify-center gap-2 transition-all duration-300"
+          >
+            Apply Now
+            <ArrowRight
+              size={16}
+              className="group-hover/button:translate-x-1 transition"
+            />
+          </NavLink>
+        )}
       </div>
     </div>
   );
