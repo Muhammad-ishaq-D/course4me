@@ -40,6 +40,9 @@ const ApplyJob = () => {
   const [cvBase64, setCvBase64] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
+  const [hasApplied, setHasApplied] = useState(false);
+  const [checkingStatus, setCheckingStatus] = useState(false);
+
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -76,6 +79,28 @@ const ApplyJob = () => {
       }));
     }
   }, [user]);
+
+  // Check if already applied
+  useEffect(() => {
+    const checkApplicationStatus = async () => {
+      if (user && id) {
+        setCheckingStatus(true);
+        try {
+          const appsResult = await careerService.getMyApplications();
+          if (appsResult && appsResult.success) {
+            const apps = appsResult.applications || [];
+            const applied = apps.some(app => app.jobId === id || app.jobId?._id === id);
+            setHasApplied(applied);
+          }
+        } catch (error) {
+          console.error("Failed to check application status:", error);
+        } finally {
+          setCheckingStatus(false);
+        }
+      }
+    };
+    checkApplicationStatus();
+  }, [user, id]);
 
   useEffect(() => {
     const fetchJobDetails = async () => {
@@ -508,7 +533,12 @@ const ApplyJob = () => {
           </div>
 
           {/* ================= FORM CARD ================= */}
-          {job.status === "Closed" || job.status === "Paused" ? (
+          {checkingStatus ? (
+            <div className="mt-5 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-10 flex flex-col items-center justify-center">
+              <Loader2 className="animate-spin w-10 h-10 text-[#F15A24] mb-4" />
+              <p className="text-gray-500 font-medium">Checking application status...</p>
+            </div>
+          ) : job.status === "Closed" || job.status === "Paused" ? (
             <div className="mt-5 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-10 text-center">
               <AlertTriangle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h2 className="text-2xl font-black text-[#111827]">
@@ -522,6 +552,24 @@ const ApplyJob = () => {
                 className="mt-6 inline-flex items-center justify-center h-13 px-7 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] text-white font-bold transition-all duration-300"
               >
                 Browse Other Jobs
+              </NavLink>
+            </div>
+          ) : hasApplied ? (
+            <div className="mt-5 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-10 text-center">
+              <div className="w-16 h-16 rounded-full bg-[#DCFCE7] flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-8 h-8 text-[#16A34A]" />
+              </div>
+              <h2 className="text-2xl font-black text-[#111827]">
+                Already Applied
+              </h2>
+              <p className="mt-3 text-gray-500">
+                You have already submitted an application for this position. You can track its status in your Student Dashboard.
+              </p>
+              <NavLink
+                to="/dashboard"
+                className="mt-6 inline-flex items-center justify-center h-13 px-7 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] text-white font-bold transition-all duration-300"
+              >
+                Go to Dashboard
               </NavLink>
             </div>
           ) : (
