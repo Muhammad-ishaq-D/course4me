@@ -43,21 +43,20 @@ const BookingSuccess = () => {
   }, [bookingRef]);
 
   useEffect(() => {
-    const scrollToTop = () => {
-      window.scrollTo(0, 0);
+    if (!loading) {
+      const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        const container = document.getElementById("main-scroll-container");
+        if (container) {
+          container.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      };
 
-      const container = document.getElementById("main-scroll-container");
-
-      if (container) {
-        container.scrollTop = 0;
-      }
-    };
-
-    scrollToTop();
-
-    setTimeout(scrollToTop, 100);
-    setTimeout(scrollToTop, 500);
-  }, []);
+      scrollToTop();
+      setTimeout(scrollToTop, 100);
+      setTimeout(scrollToTop, 500);
+    }
+  }, [loading]);
 
   if (loading) {
     return (
