@@ -20,6 +20,8 @@ import Loader from "../../components/ui/Loader";
 import Feedback from "../../components/ui/Feedback";
 import TrustBadges from "../../components/ui/TrustBadges";
 import CourseResultsFilter from "../../components/ui/CourseResultsFilter";
+import { useAuth } from "../../context/AuthContext";
+import bookingService from "../../api/services/bookingService";
 import {
   geocodeLocation,
   geocodePostcode,
@@ -43,6 +45,9 @@ const CourseResults = () => {
   const [distanceByLinkId, setDistanceByLinkId] = useState({});
   const [amenitiesByLinkId, setAmenitiesByLinkId] = useState({});
   const [isCalculatingDistances, setIsCalculatingDistances] = useState(false);
+  const [bookedSchedules, setBookedSchedules] = useState([]);
+  
+  const { user } = useAuth();
 
   // Fetch course + linked locations in parallel
   useEffect(() => {
@@ -58,7 +63,17 @@ const CourseResults = () => {
       })
       .catch((err) => console.error("Error fetching course data:", err))
       .finally(() => setIsLoading(false));
-  }, [courseId]);
+
+    if (user) {
+      bookingService.getMyBookingStatus(courseId)
+        .then(res => {
+          if (res.data && res.data.bookedSchedules) {
+            setBookedSchedules(res.data.bookedSchedules);
+          }
+        })
+        .catch(err => console.error("Error fetching booking status:", err));
+    }
+  }, [courseId, user]);
 
   // Active links with a populated locationId object
   const activeLinks = useMemo(
@@ -275,7 +290,7 @@ const CourseResults = () => {
               </div>
             ) : (
               sortedLocations.map((loc) => (
-                <LocationCards key={loc.id} loc={loc} course={course} />
+                <LocationCards key={loc.id} loc={loc} course={course} bookedSchedules={bookedSchedules} />
               ))
             )}
 

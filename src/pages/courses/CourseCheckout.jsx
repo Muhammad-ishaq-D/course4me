@@ -1365,22 +1365,8 @@ const CourseCheckout = () => {
                       </div>
                     )}
 
-                  {/* Warning: already paid */}
-                  {bookingStatus === "PAID" && (
-                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3 text-blue-700 text-sm">
-                      <Check
-                        size={18}
-                        className="shrink-0 mt-0.5 text-blue-600"
-                      />
-                      <p className="font-bold">
-                        You are already enrolled in this course. No further
-                        payment is needed.
-                      </p>
-                    </div>
-                  )}
-
                   {/* Button to create a pending booking when none exists */}
-                  {!existingBookingId && bookingStatus !== "PAID" && (
+                  {!existingBookingId && (
                     <SaveBtn
                       loading={isSubmitting}
                       onClick={createPendingBooking}
@@ -1391,7 +1377,7 @@ const CourseCheckout = () => {
                   )}
 
                   {/* Button to complete payment for an existing pending booking */}
-                  {existingBookingId && bookingStatus !== "PAID" && (
+                  {existingBookingId && (
                     <SaveBtn
                       loading={isSubmitting}
                       onClick={handlePayment}
