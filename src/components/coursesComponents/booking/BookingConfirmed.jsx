@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   ShieldCheck,
   ArrowRight,
@@ -40,6 +40,19 @@ const BookingConfirmed = ({
   const courseOnlyPrice = easyApply
     ? (price || 0) - EASY_APPLY_FEE
     : price || 0;
+
+  useEffect(() => {
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      const container = document.getElementById("main-scroll-container");
+      if (container) {
+        container.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
+    scrollToTop();
+    setTimeout(scrollToTop, 100);
+    setTimeout(scrollToTop, 500);
+  }, []);
 
   const handleDownloadReceipt = async () => {
     if (!receiptRef.current) return;
@@ -183,7 +196,7 @@ const BookingConfirmed = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]  pt-10">
+    <div className="min-h-screen bg-[#F8FAFC]">
       {/* Dark hero */}
       <div className="bg-[#1C1C1C] pt-12 pb-16 text-center px-4">
         <div className="w-16 h-16 rounded-full bg-[#F15A24] flex items-center justify-center mx-auto mb-5">
