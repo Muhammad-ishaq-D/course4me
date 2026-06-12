@@ -17,7 +17,7 @@ import {
   PlayCircle,
   AlertTriangle,
   XCircle,
-  Briefcase
+  Briefcase,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import courseService from "../../../api/services/courseService";
@@ -52,8 +52,9 @@ const OverviewTab = () => {
     const [timeLeft, setTimeLeft] = useState(0);
 
     useEffect(() => {
-      const expirationTime = new Date(booking.createdAt).getTime() + 30 * 60 * 1000;
-      
+      const expirationTime =
+        new Date(booking.createdAt).getTime() + 30 * 60 * 1000;
+
       const updateTimer = () => {
         const now = new Date().getTime();
         const diff = expirationTime - now;
@@ -75,14 +76,24 @@ const OverviewTab = () => {
         <div className="flex items-center gap-3 mb-3 sm:mb-0">
           <AlertTriangle size={24} className="text-yellow-600 animate-pulse" />
           <div>
-            <p className="font-bold text-lg">⚠️ You have a pending booking for {booking.title}.</p>
+            <p className="font-bold text-lg">
+              ⚠️ You have a pending booking for {booking.title}.
+            </p>
             <p className="text-sm font-medium">
-              Your spot is held for another <span className="text-red-600 font-black">{minutes}:{seconds < 10 ? '0'+seconds : seconds}</span> minutes.
+              Your spot is held for another{" "}
+              <span className="text-red-600 font-black">
+                {minutes}:{seconds < 10 ? "0" + seconds : seconds}
+              </span>{" "}
+              minutes.
             </p>
           </div>
         </div>
-        <button 
-          onClick={() => navigate(`/booking/checkout?courseId=${booking.courseId}&bookingId=${booking.id}`)}
+        <button
+          onClick={() =>
+            navigate(
+              `/booking/checkout?courseId=${booking.courseId}&bookingId=${booking.id}`,
+            )
+          }
           className="bg-[#F15A24] hover:bg-[#D94E1F] text-white px-6 py-2.5 rounded-xl font-bold shadow-md transition-all active:scale-95 whitespace-nowrap"
         >
           Complete Payment Now
@@ -96,7 +107,7 @@ const OverviewTab = () => {
       try {
         const result = await courseService.getUserCourses();
         let apps = [];
-        
+
         try {
           const appsResult = await careerService.getMyApplications();
           if (appsResult && appsResult.success) {
@@ -156,7 +167,7 @@ const OverviewTab = () => {
         userName: user?.name || "Valued Student",
         courseTitle: course.title,
         completionDate: course.endDateFormatted || course.date,
-        certificateId: `CERT-${course.id.substring(0, 8).toUpperCase()}-${Math.floor(Math.random() * 1000)}`
+        certificateId: `CERT-${course.id.substring(0, 8).toUpperCase()}-${Math.floor(Math.random() * 1000)}`,
       });
     } catch (error) {
       console.error("Download failed", error);
@@ -175,7 +186,7 @@ const OverviewTab = () => {
         {/* Pending Bookings Banner */}
         {data.pendingBookings && data.pendingBookings.length > 0 && (
           <div className="space-y-3">
-            {data.pendingBookings.map(pb => (
+            {data.pendingBookings.map((pb) => (
               <PendingBanner key={pb.id} booking={pb} />
             ))}
           </div>
@@ -252,13 +263,15 @@ const OverviewTab = () => {
                         <h3 className="font-bold text-lg text-gray-900">
                           {course.title}
                         </h3>
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                          course.lifecycleStatus === "Extended" 
-                            ? "bg-purple-100 text-purple-700 animate-pulse" 
-                            : course.lifecycleStatus === "Postponed"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : "bg-blue-100 text-blue-700"
-                        }`}>
+                        <span
+                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                            course.lifecycleStatus === "Extended"
+                              ? "bg-purple-100 text-purple-700 animate-pulse"
+                              : course.lifecycleStatus === "Postponed"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-blue-100 text-blue-700"
+                          }`}
+                        >
                           {course.lifecycleStatus}
                         </span>
                       </div>
@@ -273,18 +286,24 @@ const OverviewTab = () => {
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right hidden sm:block">
-                        <p className="text-xs font-bold text-gray-400 uppercase">Progress</p>
-                        <p className="text-lg font-black text-gray-900">{course.progress}%</p>
+                        <p className="text-xs font-bold text-gray-400 uppercase">
+                          Progress
+                        </p>
+                        <p className="text-lg font-black text-gray-900">
+                          {course.progress}%
+                        </p>
                       </div>
-                      <button 
-                        onClick={() => navigate(`/dashboard/course/${course.id}`)}
+                      <button
+                        onClick={() =>
+                          navigate(`/dashboard/course/${course.id}`)
+                        }
                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2"
                       >
                         <PlayCircle size={16} /> Continue
                       </button>
                     </div>
                   </div>
-                  
+
                   {/* Progress Bar */}
                   <div className="relative pt-1">
                     <div className="overflow-hidden h-2 text-xs flex rounded-full bg-blue-50">
@@ -297,12 +316,14 @@ const OverviewTab = () => {
 
                   {course.lifecycleStatus === "Extended" && (
                     <p className="text-[11px] font-bold text-purple-600 flex items-center gap-1">
-                      <Activity size={12} /> This course has been extended by the administrator.
+                      <Activity size={12} /> This course has been extended by
+                      the administrator.
                     </p>
                   )}
                   {course.lifecycleStatus === "Postponed" && (
                     <p className="text-[11px] font-bold text-yellow-600 flex items-center gap-1">
-                      <AlertTriangle size={12} /> This course is currently postponed. Check back for updates.
+                      <AlertTriangle size={12} /> This course is currently
+                      postponed. Check back for updates.
                     </p>
                   )}
                 </div>
@@ -413,7 +434,12 @@ const OverviewTab = () => {
                       </div>
                       <div className="flex flex-wrap items-center gap-4 text-sm text-[#667085]">
                         <span className="flex items-center gap-1.5">
-                          <Calendar size={14} /> Applied on {new Date(app.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                          <Calendar size={14} /> Applied on{" "}
+                          {new Date(app.createdAt).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
                         </span>
                         {app.jobId?.location && (
                           <span className="flex items-center gap-1.5">
@@ -428,17 +454,18 @@ const OverviewTab = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      {app.cvFile && app.cvFile.startsWith('data:') && (
+                      {app.cvFile && app.cvFile.startsWith("data:") && (
                         <button
                           onClick={() => {
-                            const link = document.createElement('a');
+                            const link = document.createElement("a");
                             link.href = app.cvFile;
-                            let ext = 'pdf';
-                            if (app.cvFile.includes('msword')) ext = 'doc';
-                            else if (app.cvFile.includes('officedocument')) ext = 'docx';
-                            
-                            const applicantName = `${app.firstName || ''}_${app.lastName || ''}`;
-                            link.download = `${applicantName.replace(/\s+/g, '_')}_CV.${ext}`;
+                            let ext = "pdf";
+                            if (app.cvFile.includes("msword")) ext = "doc";
+                            else if (app.cvFile.includes("officedocument"))
+                              ext = "docx";
+
+                            const applicantName = `${app.firstName || ""}_${app.lastName || ""}`;
+                            link.download = `${applicantName.replace(/\s+/g, "_")}_CV.${ext}`;
                             document.body.appendChild(link);
                             link.click();
                             document.body.removeChild(link);
@@ -493,7 +520,9 @@ const OverviewTab = () => {
                     <h3 className="font-bold text-lg text-gray-400 line-through">
                       {course.title}
                     </h3>
-                    <p className="text-xs font-bold text-red-500 uppercase">Booking Cancelled</p>
+                    <p className="text-xs font-bold text-red-500 uppercase">
+                      Booking Cancelled
+                    </p>
                   </div>
                 </div>
               ))}
@@ -533,7 +562,7 @@ const OverviewTab = () => {
                         <MapPin size={14} /> {course.location}
                       </span>
                     </div>
-                    <button 
+                    <button
                       onClick={() => handleDownloadCertificate(course)}
                       disabled={downloading === course.id}
                       className="mt-3 flex items-center gap-2 text-[#F15A24] font-semibold text-sm hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
@@ -543,7 +572,9 @@ const OverviewTab = () => {
                       ) : (
                         <Download size={14} />
                       )}
-                      {downloading === course.id ? "Generating..." : "Download Certificate"}
+                      {downloading === course.id
+                        ? "Generating..."
+                        : "Download Certificate"}
                     </button>
                   </div>
                 </div>
@@ -603,11 +634,11 @@ const OverviewTab = () => {
         <div className="bg-[#2D2D2D] p-8 rounded-3xl text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-[#F15A24]/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
           <h2 className="text-2xl font-bold mb-2">Need Help?</h2>
-          <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+          <p className="text-gray-400 text-base mb-6 leading-relaxed">
             Our support team is available Mon-Fri 8am-6pm to assist you with any
             questions.
           </p>
-          <button className="w-full bg-[#F15A24] hover:bg-[#D94E1F] text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-3">
+          <button className="w-full bg-[#F15A24] cursor-pointer hover:bg-[#D94E1F] text-white font-bold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-3">
             <Phone size={20} />
             Call 08006894621
           </button>

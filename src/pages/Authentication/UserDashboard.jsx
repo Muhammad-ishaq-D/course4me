@@ -59,7 +59,7 @@ const UserDashboard = () => {
               {/* ================= USER INFO ================= */}
               <div className="text-center sm:text-left flex-1">
                 {/* TOP BADGE */}
-                <div className="inline-flex items-center gap-2 bg-[#F15A24]/10 border border-[#F15A24]/20 text-[#F15A24] text-xs font-semibold px-4 py-2 rounded-full backdrop-blur-sm">
+                <div className="inline-flex items-center gap-2 bg-[#F15A24]/10 border border-[#F15A24]/20 text-[#F15A24] text-sm font-semibold px-4 py-2 rounded-full backdrop-blur-sm">
                   Student Dashboard
                 </div>
 
@@ -78,14 +78,16 @@ const UserDashboard = () => {
 
                 {/* EXTRA INFO */}
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-5">
-                  <div className="flex items-center gap-2 text-sm text-gray-300">
+                  <div className="flex items-center gap-2 text-base text-gray-300">
                     <div className="w-2 h-2 rounded-full bg-green-500" />
                     Active Account
                   </div>
 
                   <div className="hidden sm:block w-1 h-1 rounded-full bg-gray-600" />
 
-                  <div className="text-sm text-gray-400">Courses4me Member</div>
+                  <div className="text-base text-gray-400">
+                    Courses4me Member
+                  </div>
                 </div>
               </div>
             </div>
@@ -94,15 +96,15 @@ const UserDashboard = () => {
             <div className="flex flex-col sm:flex-row items-center gap-4">
               {/* STATS CARD */}
               <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-3xl px-6 py-5 text-center min-w-[170px]">
-                <p className="text-gray-400 text-sm font-medium">
+                <p className="text-gray-400 text-base font-medium">
                   Profile Status
                 </p>
 
-                <h3 className="text-[#F15A24] text-2xl font-extrabold mt-2">
+                <h3 className="text-[#F15A24] text-3xl font-extrabold mt-2">
                   100%
                 </h3>
 
-                <p className="text-xs text-gray-500 mt-1">Completed</p>
+                <p className="text-sm text-gray-500 mt-1">Completed</p>
               </div>
 
               {/* LOGOUT BUTTON
@@ -124,9 +126,9 @@ const UserDashboard = () => {
             {/* OVERVIEW */}
             <button
               onClick={() => setActiveTab("overview")}
-              className={`flex items-center gap-2.5 px-6 sm:px-8 py-3 rounded-xl font-bold transition-all duration-300 ${
+              className={`flex items-center gap-2.5 cursor-pointer px-6 sm:px-8 py-3 rounded-xl font-bold transition-all duration-300 ${
                 activeTab === "overview"
-                  ? "bg-[#F15A24] text-white shadow-[0_10px_30px_rgba(241,90,36,0.35)]"
+                  ? "bg-[#F15A24] text-white  shadow-[0_10px_30px_rgba(241,90,36,0.35)]"
                   : "text-gray-400 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -137,7 +139,7 @@ const UserDashboard = () => {
             {/* SETTINGS */}
             <button
               onClick={() => setActiveTab("settings")}
-              className={`flex items-center gap-2.5 px-6 sm:px-8 py-3 rounded-xl font-bold transition-all duration-300 ${
+              className={`flex items-center gap-2.5 px-6 cursor-pointer sm:px-8 py-3 rounded-xl font-bold transition-all duration-300 ${
                 activeTab === "settings"
                   ? "bg-[#F15A24] text-white shadow-[0_10px_30px_rgba(241,90,36,0.35)]"
                   : "text-gray-400 hover:text-white hover:bg-white/5"

@@ -89,7 +89,7 @@ const ApplyJob = () => {
           const appsResult = await careerService.getMyApplications();
           if (appsResult && appsResult.success) {
             const apps = appsResult.applications || [];
-            const applied = apps.some(app => {
+            const applied = apps.some((app) => {
               const appJobId = app.jobId?._id || app.jobId?.id || app.jobId;
               return String(appJobId) === String(id);
             });
@@ -288,10 +288,23 @@ const ApplyJob = () => {
         "REF-" + Math.random().toString(36).substring(2, 9).toUpperCase();
       setRefNumber(finalRef);
       setSuccessOpen(true);
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      setTimeout(() => {
+        const scrollContainer = document.getElementById(
+          "main-scroll-container",
+        );
+
+        if (scrollContainer) {
+          scrollContainer.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        } else {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }
+      }, 50);
     } catch (error) {
       console.error("Submission failed:", error);
       toast.error(
@@ -367,7 +380,7 @@ const ApplyJob = () => {
               Application Reference: {refNumber}
             </div>
 
-            <p className="mt-4 text-xs text-gray-500">
+            <p className="mt-4 text-sm text-gray-500">
               You can track your application status anytime inside your Student
               Dashboard.
             </p>
@@ -414,11 +427,11 @@ const ApplyJob = () => {
                   </div>
                 )}
 
-                <div className="bg-[#EEF4FF] text-[#155DFC] text-[11px] font-semibold px-4 py-2 rounded-full">
+                <div className="bg-[#EEF4FF] text-[#155DFC] text-sm font-semibold px-4 py-2 rounded-full">
                   {job.type}
                 </div>
 
-                <div className="bg-[#155DFC] text-white text-[11px] font-semibold px-4 py-2 rounded-full">
+                <div className="bg-orange-600 text-white text-xs font-semibold px-4 py-2 rounded-full">
                   {roleTag}
                 </div>
               </div>
@@ -443,11 +456,11 @@ const ApplyJob = () => {
                   </div>
 
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.1em] text-gray-400 font-bold">
+                    <p className="text-sm uppercase tracking-[0.1em] text-gray-400 font-bold">
                       Location
                     </p>
 
-                    <p className="mt-1 text-[15px] font-semibold text-[#111111]">
+                    <p className="mt-1 text-base font-semibold text-[#111111]">
                       {job.location}
                     </p>
                   </div>
@@ -460,11 +473,11 @@ const ApplyJob = () => {
                   </div>
 
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.1em] text-gray-400 font-bold">
+                    <p className="text-sm uppercase tracking-[0.1em] text-gray-400 font-bold">
                       Salary
                     </p>
 
-                    <p className="mt-1 text-[15px] font-bold text-[#00A63E]">
+                    <p className="mt-1 text-base font-bold text-[#00A63E]">
                       {job.salary}
                     </p>
                   </div>
@@ -477,20 +490,20 @@ const ApplyJob = () => {
                   </div>
 
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.1em] text-gray-400 font-bold">
+                    <p className="text-sm uppercase tracking-[0.1em] text-gray-400 font-bold">
                       Hiring Status
                     </p>
 
                     {job.status === "Closed" ? (
-                      <p className="mt-1 text-[15px] font-semibold text-[#F15A24]">
+                      <p className="mt-1 text-base font-semibold text-[#F15A24]">
                         Closed
                       </p>
                     ) : job.status === "Paused" ? (
-                      <p className="mt-1 text-[15px] font-semibold text-[#F59E0B]">
+                      <p className="mt-1 text-base font-semibold text-[#F59E0B]">
                         Paused
                       </p>
                     ) : (
-                      <p className="mt-1 text-[15px] font-semibold text-[#00A63E]">
+                      <p className="mt-1 text-base font-semibold text-[#00A63E]">
                         Active / Recruiting
                       </p>
                     )}
@@ -520,7 +533,7 @@ const ApplyJob = () => {
                     job.requirements.map((req, i) => (
                       <div
                         key={i}
-                        className="px-4 py-2 rounded-full bg-[#F4F6F8] text-[#4B5563] text-[13px] font-semibold"
+                        className="px-4 py-2 rounded-full bg-[#F4F6F8] text-[#4B5563] text-sm font-semibold"
                       >
                         {req}
                       </div>
@@ -539,16 +552,22 @@ const ApplyJob = () => {
           {checkingStatus ? (
             <div className="mt-5 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-10 flex flex-col items-center justify-center">
               <Loader2 className="animate-spin w-10 h-10 text-[#F15A24] mb-4" />
-              <p className="text-gray-500 font-medium">Checking application status...</p>
+              <p className="text-gray-500 font-medium">
+                Checking application status...
+              </p>
             </div>
           ) : job.status === "Closed" || job.status === "Paused" ? (
             <div className="mt-5 bg-white rounded-[32px] border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] p-10 text-center">
               <AlertTriangle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h2 className="text-2xl font-black text-[#111827]">
-                {job.status === "Closed" ? "Applications Closed" : "Applications Paused"}
+                {job.status === "Closed"
+                  ? "Applications Closed"
+                  : "Applications Paused"}
               </h2>
               <p className="mt-3 text-gray-500">
-                We are no longer accepting new applications for this position at the moment. Please explore our other active career opportunities!
+                We are no longer accepting new applications for this position at
+                the moment. Please explore our other active career
+                opportunities!
               </p>
               <NavLink
                 to="/careers"
@@ -566,7 +585,8 @@ const ApplyJob = () => {
                 Already Applied
               </h2>
               <p className="mt-3 text-gray-500">
-                You have already submitted an application for this position. You can track its status in your Student Dashboard.
+                You have already submitted an application for this position. You
+                can track its status in your Student Dashboard.
               </p>
               <NavLink
                 to="/dashboard"
@@ -588,470 +608,473 @@ const ApplyJob = () => {
                 </h2>
               </div>
 
-            {/* AUTH STATE HANDLING */}
-            {user ? (
-              <div className="bg-orange-50/50 border border-orange-200/50 p-4 rounded-2xl mb-6 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#F15A24] text-white flex items-center justify-center font-black">
-                  {user.name ? user.name[0].toUpperCase() : "S"}
+              {/* AUTH STATE HANDLING */}
+              {user ? (
+                <div className="bg-orange-50/50 border border-orange-200/50 p-4 rounded-2xl mb-6 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#F15A24] text-white flex items-center justify-center font-black">
+                    {user.name ? user.name[0].toUpperCase() : "S"}
+                  </div>
+                  <div>
+                    <p className="text-base font-bold text-gray-900">
+                      Logged in as {user.name || "Student"}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      We'll link this application to your verified student
+                      profile.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-bold text-gray-900">
-                    Logged in as {user.name || "Student"}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    We'll link this application to your verified student
-                    profile.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="mb-6">
-                {/* Tabs */}
-                <div className="flex bg-gray-100 p-1.5 rounded-2xl mb-6 max-w-md">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsLoggingIn(false);
-                      setErrors({});
-                    }}
-                    className={`flex-1 py-3 text-center text-sm font-black rounded-xl transition-all ${
-                      !isLoggingIn
-                        ? "bg-white text-gray-900 shadow-sm"
-                        : "text-gray-500 hover:text-gray-800"
-                    }`}
-                  >
-                    Register & Apply
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsLoggingIn(true);
-                      setErrors({});
-                    }}
-                    className={`flex-1 py-3 text-center text-sm font-black rounded-xl transition-all ${
-                      isLoggingIn
-                        ? "bg-white text-[#F15A24] shadow-sm"
-                        : "text-gray-500 hover:text-gray-800"
-                    }`}
-                  >
-                    Sign In & Apply
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* FORM CONTAINER */}
-            {isLoggingIn ? (
-              /* ================= INLINE SIGN IN FORM ================= */
-              <form onSubmit={handleInlineLogin} className="space-y-5 max-w-lg">
-                <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
-                  <p className="text-[13px] text-blue-700 font-semibold">
-                    Sign in to link this application to your existing student
-                    profile.
-                  </p>
-                </div>
-
+              ) : (
                 <div className="mb-6">
-                  <p className="text-[13px] text-gray-500 font-bold mb-4 text-center uppercase tracking-wider">
-                    Quick sign-in with
-                  </p>
-                  <SocialLogin />
-                  <div className="relative my-6">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t border-gray-100"></span>
+                  {/* Tabs */}
+                  <div className="flex bg-gray-100 p-1.5 rounded-2xl mb-6 max-w-md">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsLoggingIn(false);
+                        setErrors({});
+                      }}
+                      className={`flex-1 py-3 text-center text-sm font-black rounded-xl transition-all ${
+                        !isLoggingIn
+                          ? "bg-white text-gray-900 shadow-sm"
+                          : "text-gray-500 hover:text-gray-800"
+                      }`}
+                    >
+                      Register & Apply
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsLoggingIn(true);
+                        setErrors({});
+                      }}
+                      className={`flex-1 py-3 text-center text-sm font-black rounded-xl transition-all ${
+                        isLoggingIn
+                          ? "bg-white text-[#F15A24] shadow-sm"
+                          : "text-gray-500 hover:text-gray-800"
+                      }`}
+                    >
+                      Sign In & Apply
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* FORM CONTAINER */}
+              {isLoggingIn ? (
+                /* ================= INLINE SIGN IN FORM ================= */
+                <form
+                  onSubmit={handleInlineLogin}
+                  className="space-y-5 max-w-lg"
+                >
+                  <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-4">
+                    <p className="text-sm text-blue-700 font-semibold">
+                      Sign in to link this application to your existing student
+                      profile.
+                    </p>
+                  </div>
+
+                  <div className="mb-6">
+                    <p className="text-[13px] text-gray-500 font-bold mb-4 text-center uppercase tracking-wider">
+                      Quick sign-in with
+                    </p>
+                    <SocialLogin />
+                    <div className="relative my-6">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-gray-100"></span>
+                      </div>
+                      <div className="relative flex justify-center text-sm uppercase text-gray-400 font-bold">
+                        <span className="bg-white px-4 tracking-widest">
+                          or use email
+                        </span>
+                      </div>
                     </div>
-                    <div className="relative flex justify-center text-xs uppercase text-gray-400 font-bold">
-                      <span className="bg-white px-4 tracking-widest">
-                        or use email
-                      </span>
-                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="john@email.com"
-                    value={loginForm.email}
-                    onChange={handleLoginChange}
-                    className={inputClass("email")}
-                  />
-                </div>
-
-                <div>
-                  <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                    Password *
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="••••••••"
-                    value={loginForm.password}
-                    onChange={handleLoginChange}
-                    className={inputClass("password")}
-                  />
-                </div>
-
-                {errors.login && (
-                  <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-[13px] font-medium flex items-center gap-2">
-                    <AlertTriangle size={16} />
-                    {errors.login}
-                  </div>
-                )}
-
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full h-14 px-8 rounded-2xl bg-[#111827] hover:bg-black text-white font-bold text-[15px] transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_12px_35px_rgba(17,24,39,0.12)] disabled:opacity-50"
-                  >
-                    {submitting ? "Signing in..." : "Sign In & Prefill Form"}
-                  </button>
-                </div>
-              </form>
-            ) : (
-              /* ================= MAIN APPLICATION FORM ================= */
-              <form onSubmit={handleSubmit} className="space-y-5">
-                {/* ================= PERSONAL INFO ================= */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* First Name */}
                   <div>
-                    <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                      First Name *
-                    </label>
-                    <input
-                      name="firstName"
-                      placeholder="Enter your first name"
-                      value={form.firstName}
-                      onChange={handleChange}
-                      disabled={!!user}
-                      className={`${inputClass("firstName")} ${user ? "bg-gray-100/70 border-gray-100 cursor-not-allowed" : ""}`}
-                    />
-                    {errors.firstName && (
-                      <p className="mt-1 text-[12px] font-medium text-red-500">
-                        {errors.firstName}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Last Name */}
-                  <div>
-                    <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                      Last Name *
-                    </label>
-                    <input
-                      name="lastName"
-                      placeholder="Enter your last name"
-                      value={form.lastName}
-                      onChange={handleChange}
-                      disabled={!!user}
-                      className={`${inputClass("lastName")} ${user ? "bg-gray-100/70 border-gray-100 cursor-not-allowed" : ""}`}
-                    />
-                    {errors.lastName && (
-                      <p className="mt-1 text-[12px] font-medium text-red-500">
-                        {errors.lastName}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* ================= EMAIL + PHONE ================= */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Email */}
-                  <div>
-                    <label className="block mb-2 text-sm font-semibold text-[#111827]">
+                    <label className="block mb-2 text-base font-semibold text-[#111827]">
                       Email Address *
                     </label>
                     <input
+                      type="email"
                       name="email"
                       placeholder="john@email.com"
-                      value={form.email}
-                      onChange={handleChange}
-                      disabled={!!user}
-                      className={`${inputClass("email")} ${user ? "bg-gray-100/70 border-gray-100 cursor-not-allowed" : ""}`}
+                      value={loginForm.email}
+                      onChange={handleLoginChange}
+                      className={inputClass("email")}
                     />
-                    {errors.email && (
-                      <p className="mt-1 text-[12px] font-medium text-red-500">
-                        {errors.email}
-                      </p>
-                    )}
                   </div>
 
-                  {/* Phone */}
                   <div>
-                    <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                      Phone Number *
+                    <label className="block mb-2 text-base font-semibold text-[#111827]">
+                      Password *
                     </label>
                     <input
-                      name="phone"
-                      placeholder="+44 7XXX XXX XXX"
-                      value={form.phone}
-                      onChange={handleChange}
-                      className={inputClass("phone")}
+                      type="password"
+                      name="password"
+                      placeholder="••••••••"
+                      value={loginForm.password}
+                      onChange={handleLoginChange}
+                      className={inputClass("password")}
                     />
-                    {errors.phone && (
-                      <p className="mt-1 text-[12px] font-medium text-red-500">
-                        {errors.phone}
-                      </p>
-                    )}
                   </div>
-                </div>
 
-                {/* ================= ACCOUNT PASSWORD FOR GUESTS ================= */}
-                {!user && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-orange-50/20 p-5 rounded-2xl border border-dashed border-orange-200/50">
-                    <div className="sm:col-span-2">
-                      <h4 className="text-sm font-bold text-gray-800">
-                        Create Candidate Account
-                      </h4>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Register a secure password to automatically build your
-                        student profile and track application statuses.
-                      </p>
+                  {errors.login && (
+                    <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-medium flex items-center gap-2">
+                      <AlertTriangle size={16} />
+                      {errors.login}
                     </div>
+                  )}
 
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="w-full h-14 px-8 rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-[15px] transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_12px_35px_rgba(17,24,39,0.12)] disabled:opacity-50"
+                    >
+                      {submitting ? "Signing in..." : "Sign In & Prefill Form"}
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                /* ================= MAIN APPLICATION FORM ================= */
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* ================= PERSONAL INFO ================= */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* First Name */}
                     <div>
-                      <label className="block mb-2 text-xs font-semibold text-gray-700">
-                        Password *
+                      <label className="block mb-2 text-base font-semibold text-[#111827]">
+                        First Name *
                       </label>
                       <input
-                        type="password"
-                        name="password"
-                        placeholder="••••••••"
-                        value={form.password}
+                        name="firstName"
+                        placeholder="Enter your first name"
+                        value={form.firstName}
                         onChange={handleChange}
-                        className={inputClass("password")}
+                        disabled={!!user}
+                        className={`${inputClass("firstName")} ${user ? "bg-gray-100/70 border-gray-100 cursor-not-allowed" : ""}`}
                       />
-                      {errors.password && (
+                      {errors.firstName && (
                         <p className="mt-1 text-[12px] font-medium text-red-500">
-                          {errors.password}
+                          {errors.firstName}
                         </p>
                       )}
                     </div>
 
+                    {/* Last Name */}
                     <div>
-                      <label className="block mb-2 text-xs font-semibold text-gray-700">
-                        Confirm Password *
+                      <label className="block mb-2 text-base font-semibold text-[#111827]">
+                        Last Name *
                       </label>
                       <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="••••••••"
-                        value={form.confirmPassword}
+                        name="lastName"
+                        placeholder="Enter your last name"
+                        value={form.lastName}
                         onChange={handleChange}
-                        className={inputClass("confirmPassword")}
+                        disabled={!!user}
+                        className={`${inputClass("lastName")} ${user ? "bg-gray-100/70 border-gray-100 cursor-not-allowed" : ""}`}
                       />
-                      {errors.confirmPassword && (
+                      {errors.lastName && (
                         <p className="mt-1 text-[12px] font-medium text-red-500">
-                          {errors.confirmPassword}
+                          {errors.lastName}
                         </p>
                       )}
                     </div>
                   </div>
-                )}
 
-                {/* ================= ADDRESS ================= */}
-                <div>
-                  <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                    Address *
-                  </label>
-                  <input
-                    name="address"
-                    placeholder="Enter your address"
-                    value={form.address}
-                    onChange={handleChange}
-                    className={inputClass("address")}
-                  />
-                  {errors.address && (
-                    <p className="mt-1 text-[12px] font-medium text-red-500">
-                      {errors.address}
-                    </p>
+                  {/* ================= EMAIL + PHONE ================= */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Email */}
+                    <div>
+                      <label className="block mb-2 text-base font-semibold text-[#111827]">
+                        Email Address *
+                      </label>
+                      <input
+                        name="email"
+                        placeholder="john@email.com"
+                        value={form.email}
+                        onChange={handleChange}
+                        disabled={!!user}
+                        className={`${inputClass("email")} ${user ? "bg-gray-100/70 border-gray-100 cursor-not-allowed" : ""}`}
+                      />
+                      {errors.email && (
+                        <p className="mt-1 text-[12px] font-medium text-red-500">
+                          {errors.email}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Phone */}
+                    <div>
+                      <label className="block mb-2 text-base font-semibold text-[#111827]">
+                        Phone Number *
+                      </label>
+                      <input
+                        name="phone"
+                        placeholder="+44 7XXX XXX XXX"
+                        value={form.phone}
+                        onChange={handleChange}
+                        className={inputClass("phone")}
+                      />
+                      {errors.phone && (
+                        <p className="mt-1 text-[12px] font-medium text-red-500">
+                          {errors.phone}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* ================= ACCOUNT PASSWORD FOR GUESTS ================= */}
+                  {!user && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-orange-50/20 p-5 rounded-2xl border border-dashed border-orange-200/50">
+                      <div className="sm:col-span-2">
+                        <h4 className="text-base font-bold text-gray-800">
+                          Create Candidate Account
+                        </h4>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Register a secure password to automatically build your
+                          student profile and track application statuses.
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block mb-2 text-base font-semibold text-gray-700">
+                          Password *
+                        </label>
+                        <input
+                          type="password"
+                          name="password"
+                          placeholder="••••••••"
+                          value={form.password}
+                          onChange={handleChange}
+                          className={inputClass("password")}
+                        />
+                        {errors.password && (
+                          <p className="mt-1 text-[12px] font-medium text-red-500">
+                            {errors.password}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block mb-2 text-base font-semibold text-gray-700">
+                          Confirm Password *
+                        </label>
+                        <input
+                          type="password"
+                          name="confirmPassword"
+                          placeholder="••••••••"
+                          value={form.confirmPassword}
+                          onChange={handleChange}
+                          className={inputClass("confirmPassword")}
+                        />
+                        {errors.confirmPassword && (
+                          <p className="mt-1 text-[12px] font-medium text-red-500">
+                            {errors.confirmPassword}
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   )}
-                </div>
 
-                {/* ================= CITY + POSTCODE ================= */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* City */}
+                  {/* ================= ADDRESS ================= */}
                   <div>
-                    <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                      City *
+                    <label className="block mb-2 text-base font-semibold text-[#111827]">
+                      Address *
                     </label>
                     <input
-                      name="city"
-                      placeholder="London"
-                      value={form.city}
+                      name="address"
+                      placeholder="Enter your address"
+                      value={form.address}
                       onChange={handleChange}
-                      className={inputClass("city")}
+                      className={inputClass("address")}
                     />
-                    {errors.city && (
+                    {errors.address && (
                       <p className="mt-1 text-[12px] font-medium text-red-500">
-                        {errors.city}
+                        {errors.address}
                       </p>
                     )}
                   </div>
 
-                  {/* Postcode */}
+                  {/* ================= CITY + POSTCODE ================= */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* City */}
+                    <div>
+                      <label className="block mb-2 text-base font-semibold text-[#111827]">
+                        City *
+                      </label>
+                      <input
+                        name="city"
+                        placeholder="London"
+                        value={form.city}
+                        onChange={handleChange}
+                        className={inputClass("city")}
+                      />
+                      {errors.city && (
+                        <p className="mt-1 text-[12px] font-medium text-red-500">
+                          {errors.city}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Postcode */}
+                    <div>
+                      <label className="block mb-2 text-base font-semibold text-[#111827]">
+                        Postcode *
+                      </label>
+                      <input
+                        name="postcode"
+                        placeholder="SW1A 1AA"
+                        value={form.postcode}
+                        onChange={handleChange}
+                        className={inputClass("postcode")}
+                      />
+                      {errors.postcode && (
+                        <p className="mt-1 text-[12px] font-medium text-red-500">
+                          {errors.postcode}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* ================= LICENSE + EXPERIENCE ================= */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* License */}
+                    <div>
+                      <label className="block mb-2 text-base font-semibold text-[#111827]">
+                        SIA License Number *
+                      </label>
+                      <input
+                        name="license"
+                        placeholder="Enter your license number"
+                        value={form.license}
+                        onChange={handleChange}
+                        className={inputClass("license")}
+                      />
+                      {errors.license && (
+                        <p className="mt-1 text-[12px] font-medium text-red-500">
+                          {errors.license}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Experience */}
+                    <div>
+                      <label className="block mb-2 text-base font-semibold text-[#111827]">
+                        Years of Experience *
+                      </label>
+                      <input
+                        name="experience"
+                        placeholder="2 Years"
+                        value={form.experience}
+                        onChange={handleChange}
+                        className={inputClass("experience")}
+                      />
+                      {errors.experience && (
+                        <p className="mt-1 text-[12px] font-medium text-red-500">
+                          {errors.experience}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* ================= AVAILABILITY ================= */}
                   <div>
-                    <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                      Postcode *
+                    <label className="block mb-2 text-base font-semibold text-[#111827]">
+                      Availability *
                     </label>
                     <input
-                      name="postcode"
-                      placeholder="SW1A 1AA"
-                      value={form.postcode}
+                      name="availability"
+                      placeholder="Immediate / 2 Weeks"
+                      value={form.availability}
                       onChange={handleChange}
-                      className={inputClass("postcode")}
+                      className={inputClass("availability")}
                     />
-                    {errors.postcode && (
+                    {errors.availability && (
                       <p className="mt-1 text-[12px] font-medium text-red-500">
-                        {errors.postcode}
+                        {errors.availability}
                       </p>
                     )}
                   </div>
-                </div>
 
-                {/* ================= LICENSE + EXPERIENCE ================= */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* License */}
+                  {/* ================= COVER LETTER ================= */}
                   <div>
-                    <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                      SIA License Number *
+                    <label className="block mb-2 text-base font-semibold text-[#111827]">
+                      Cover Letter *
                     </label>
-                    <input
-                      name="license"
-                      placeholder="Enter your license number"
-                      value={form.license}
+                    <textarea
+                      name="cover"
+                      placeholder="Tell us why you're suitable for this role..."
+                      value={form.cover}
                       onChange={handleChange}
-                      className={inputClass("license")}
+                      className={`${inputClass("cover")} h-32`}
                     />
-                    {errors.license && (
+                    {errors.cover && (
                       <p className="mt-1 text-[12px] font-medium text-red-500">
-                        {errors.license}
+                        {errors.cover}
                       </p>
                     )}
                   </div>
 
-                  {/* Experience */}
+                  {/* ================= UPLOAD ================= */}
                   <div>
-                    <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                      Years of Experience *
+                    <label className="block mb-3 text-base font-semibold text-[#111827]">
+                      Upload CV / Resume
                     </label>
+
                     <input
-                      name="experience"
-                      placeholder="2 Years"
-                      value={form.experience}
-                      onChange={handleChange}
-                      className={inputClass("experience")}
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      accept=".pdf,.doc,.docx"
+                      className="hidden"
                     />
-                    {errors.experience && (
-                      <p className="mt-1 text-[12px] font-medium text-red-500">
-                        {errors.experience}
+
+                    <div
+                      onClick={() => fileInputRef.current.click()}
+                      className="border-2 border-dashed border-gray-300 rounded-2xl p-7 text-center hover:border-[#F15A24] transition-all cursor-pointer bg-[#FAFBFC] hover:bg-orange-50/10"
+                    >
+                      <Upload size={24} className="mx-auto text-gray-400" />
+
+                      <p className="mt-3 text-sm font-bold text-gray-700">
+                        {cvName
+                          ? `Selected File: ${cvName}`
+                          : "Click to select and upload your CV"}
                       </p>
-                    )}
+
+                      <p className="mt-1 text-xs text-gray-400">
+                        {cvName
+                          ? "Ready for submission"
+                          : "PDF, DOC, DOCX up to 5MB"}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                {/* ================= AVAILABILITY ================= */}
-                <div>
-                  <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                    Availability *
-                  </label>
-                  <input
-                    name="availability"
-                    placeholder="Immediate / 2 Weeks"
-                    value={form.availability}
-                    onChange={handleChange}
-                    className={inputClass("availability")}
-                  />
-                  {errors.availability && (
-                    <p className="mt-1 text-[12px] font-medium text-red-500">
-                      {errors.availability}
-                    </p>
-                  )}
-                </div>
-
-                {/* ================= COVER LETTER ================= */}
-                <div>
-                  <label className="block mb-2 text-sm font-semibold text-[#111827]">
-                    Cover Letter *
-                  </label>
-                  <textarea
-                    name="cover"
-                    placeholder="Tell us why you're suitable for this role..."
-                    value={form.cover}
-                    onChange={handleChange}
-                    className={`${inputClass("cover")} h-32`}
-                  />
-                  {errors.cover && (
-                    <p className="mt-1 text-[12px] font-medium text-red-500">
-                      {errors.cover}
-                    </p>
-                  )}
-                </div>
-
-                {/* ================= UPLOAD ================= */}
-                <div>
-                  <label className="block mb-3 text-sm font-semibold text-[#111827]">
-                    Upload CV / Resume
-                  </label>
-
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    accept=".pdf,.doc,.docx"
-                    className="hidden"
-                  />
-
-                  <div
-                    onClick={() => fileInputRef.current.click()}
-                    className="border-2 border-dashed border-gray-300 rounded-2xl p-7 text-center hover:border-[#F15A24] transition-all cursor-pointer bg-[#FAFBFC] hover:bg-orange-50/10"
-                  >
-                    <Upload size={24} className="mx-auto text-gray-400" />
-
-                    <p className="mt-3 text-sm font-bold text-gray-700">
-                      {cvName
-                        ? `Selected File: ${cvName}`
-                        : "Click to select and upload your CV"}
-                    </p>
-
-                    <p className="mt-1 text-xs text-gray-400">
-                      {cvName
-                        ? "Ready for submission"
-                        : "PDF, DOC, DOCX up to 5MB"}
-                    </p>
+                  {/* ================= SUBMIT ================= */}
+                  <div className="pt-5 flex justify-center">
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="group min-w-[240px] h-14 px-8 rounded-2xl bg-[#ea6230] hover:bg-[#F15A24] text-white font-bold text-[15px] transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_12px_35px_rgba(17,24,39,0.12)] hover:shadow-[0_12px_35px_rgba(241,90,36,0.25)] disabled:opacity-50"
+                    >
+                      {submitting ? (
+                        <>
+                          <Loader2 className="animate-spin" size={16} />
+                          Submitting Application...
+                        </>
+                      ) : (
+                        <>
+                          Submit Application
+                          <span className="group-hover:translate-x-1 transition">
+                            →
+                          </span>
+                        </>
+                      )}
+                    </button>
                   </div>
-                </div>
-
-                {/* ================= SUBMIT ================= */}
-                <div className="pt-5 flex justify-center">
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="group min-w-[240px] h-14 px-8 rounded-2xl bg-[#111827] hover:bg-[#F15A24] text-white font-bold text-[15px] transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_12px_35px_rgba(17,24,39,0.12)] hover:shadow-[0_12px_35px_rgba(241,90,36,0.25)] disabled:opacity-50"
-                  >
-                    {submitting ? (
-                      <>
-                        <Loader2 className="animate-spin" size={16} />
-                        Submitting Application...
-                      </>
-                    ) : (
-                      <>
-                        Submit Application
-                        <span className="group-hover:translate-x-1 transition">
-                          →
-                        </span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
+                </form>
+              )}
+            </div>
           )}
         </div>
       )}

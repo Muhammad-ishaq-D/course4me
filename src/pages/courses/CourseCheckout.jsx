@@ -420,14 +420,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                  (piRes.data?.message || ""),
+                    (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                "Could not load payment session. You may have already completed this payment.",
+                  "Could not load payment session. You may have already completed this payment.",
               );
             });
         })
@@ -443,14 +443,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                  (piRes.data?.message || ""),
+                    (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                "Could not load payment session. You may have already completed this payment.",
+                  "Could not load payment session. You may have already completed this payment.",
               );
             });
         });
@@ -544,7 +544,7 @@ const CourseCheckout = () => {
         } else {
           setError(
             "Failed to initialize payment for existing booking. " +
-            (piRes.data?.message || ""),
+              (piRes.data?.message || ""),
           );
         }
         setIsSubmitting(false);
@@ -607,7 +607,7 @@ const CourseCheckout = () => {
       } else {
         setError(
           err.response?.data?.message ||
-          "An error occurred during booking. Please try again.",
+            "An error occurred during booking. Please try again.",
         );
         if (
           err.response?.data?.existingBookingId &&
@@ -693,11 +693,11 @@ const CourseCheckout = () => {
   if (isConfirmed) {
     const formattedDate = selectedSchedule?.startDate
       ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+          weekday: "long",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })
       : "Pending Date";
 
     return (
@@ -1166,7 +1166,7 @@ const CourseCheckout = () => {
                           <div className="w-2.5 h-2.5 rounded-full bg-[#F15A24]" />
                         )}
                       </div>
-                      <span className="text-[14px] font-black text-[#1C1C1C]">
+                      <span className="text-base font-black text-[#1C1C1C]">
                         I will apply myself
                       </span>
                     </div>
@@ -1179,9 +1179,9 @@ const CourseCheckout = () => {
                       ].map((f, i) => (
                         <li
                           key={i}
-                          className="flex items-start gap-2 text-[12px] text-gray-500"
+                          className="flex items-start gap-2 text-base text-gray-500"
                         >
-                          <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#F15A24] shrink-0" />{" "}
+                          <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#F15A24] shrink-0" />{" "}
                           {f}
                         </li>
                       ))}
@@ -1271,22 +1271,45 @@ const CourseCheckout = () => {
                     <div className="flex items-center justify-between px-5 py-4 border-b border-orange-100">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-sm shadow-orange-200">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="5" rx="2" /><line x1="2" x2="22" y1="10" y2="10" /></svg>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <rect width="20" height="14" x="2" y="5" rx="2" />
+                            <line x1="2" x2="22" y1="10" y2="10" />
+                          </svg>
                         </div>
                         <div>
-                          <p className="text-[14px] font-black text-[#1C1C1C]">Pay with Card</p>
-                          <p className="text-[11px] text-gray-400 font-medium">Secure &amp; instant payment</p>
+                          <p className="text-base font-black text-[#1C1C1C]">
+                            Pay with Card
+                          </p>
+                          <p className="text-sm text-gray-400 font-medium">
+                            Secure &amp; instant payment
+                          </p>
                         </div>
                       </div>
                       {/* Card brand logos */}
                       <div className="flex items-center gap-1.5">
-                        <div className="h-7 px-2 bg-blue-700 text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">VISA</div>
+                        <div className="h-7 px-2 bg-blue-700 text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">
+                          VISA
+                        </div>
                         <div className="h-7 px-1.5 bg-white border border-gray-200 rounded-md flex items-center justify-center gap-0.5">
                           <div className="w-4 h-4 rounded-full bg-red-500 opacity-90" />
                           <div className="w-4 h-4 rounded-full bg-amber-400 opacity-90 -ml-2" />
                         </div>
-                        <div className="h-7 px-2 bg-[#FF6600] text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">DISC</div>
-                        <div className="h-7 px-2 bg-[#1A1F71] text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">AMEX</div>
+                        <div className="h-7 px-2 bg-[#FF6600] text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">
+                          DISC
+                        </div>
+                        <div className="h-7 px-2 bg-[#1A1F71] text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">
+                          AMEX
+                        </div>
                       </div>
                     </div>
 
@@ -1297,9 +1320,14 @@ const CourseCheckout = () => {
                         { icon: "✅", text: "PCI DSS compliant" },
                         { icon: "⚡", text: "Instant confirmation" },
                       ].map((item) => (
-                        <div key={item.text} className="flex items-center gap-1.5">
+                        <div
+                          key={item.text}
+                          className="flex items-center gap-1.5"
+                        >
                           <span className="text-[12px]">{item.icon}</span>
-                          <span className="text-[11px] font-semibold text-gray-500">{item.text}</span>
+                          <span className="text-sm font-semibold text-gray-500">
+                            {item.text}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -1406,14 +1434,14 @@ const CourseCheckout = () => {
             date={
               selectedSchedule?.startDate
                 ? new Date(selectedSchedule.startDate).toLocaleDateString(
-                  "en-GB",
-                  {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  },
-                )
+                    "en-GB",
+                    {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    },
+                  )
                 : null
             }
             courseId={courseId}

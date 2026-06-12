@@ -108,7 +108,7 @@ const RightSidebar = ({
               </div>
             ))}
           </div>
-          <span className="text-sm font-black text-[#1C1C1C]">Trustpilot</span>
+          {/* <span className="text-sm font-black text-[#1C1C1C]">Trustpilot</span> */}
         </div>
         <div className="flex items-center justify-center gap-2 mb-1">
           <svg viewBox="0 0 24 24" className="w-4 h-4">
