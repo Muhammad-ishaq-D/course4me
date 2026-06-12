@@ -9,6 +9,7 @@ import {
   Clock,
   Calendar,
   Zap,
+  CreditCard,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -229,9 +230,10 @@ const LocationCards = ({ loc, course, bookedSchedules = [], onPayPending }) => {
                           ) : (
                             <button
                               onClick={() => onPayPending(booking.bookingId, booking.bookingReference)}
-                              className="px-6 py-2.5 rounded-lg text-sm font-bold bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors shadow-sm"
+                              className="group flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold bg-white text-[#F15A24] border-2 border-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all shadow-sm"
                             >
-                              Payment Pending
+                              <CreditCard size={16} className="transition-colors" />
+                              <span>Complete Payment</span>
                             </button>
                           )
                         ) : (
