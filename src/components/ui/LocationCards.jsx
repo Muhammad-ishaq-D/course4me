@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const LocationCards = ({ loc, course }) => {
+const LocationCards = ({ loc, course, bookedSchedules = [] }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -214,12 +214,21 @@ const LocationCards = ({ loc, course }) => {
                       £{date.price}
                     </p>
                   </div>
-                  <Link
-                    to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
-                    className="hover:bg-[#d84a1a] text-white px-6 py-2.5 rounded-lg text-sm font-bold bg-[#F15A24] transition-all shadow-sm"
-                  >
-                    Book Now
-                  </Link>
+                  {bookedSchedules.includes(date.id) ? (
+                    <button
+                      disabled
+                      className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
+                    >
+                      Already Booked
+                    </button>
+                  ) : (
+                    <Link
+                      to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
+                      className="hover:bg-[#d84a1a] text-white px-6 py-2.5 rounded-lg text-sm font-bold bg-[#F15A24] transition-all shadow-sm"
+                    >
+                      Book Now
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
