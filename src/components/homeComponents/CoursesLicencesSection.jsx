@@ -354,8 +354,14 @@ const CoursesLicencesSection = () => {
                         key={licence.id}
                         icon={licence.icon}
                         title={licence.title}
-                        description={licence.description}
-                        onClick={() => navigate("/licences")}
+                        description={
+                          licence.shortDescription || licence.description
+                        }
+                        onClick={() =>
+                          navigate(
+                            `/licences/licencesdetails?id=${licence.id || licence.title}`,
+                          )
+                        }
                       />
                     ))}
             </div>

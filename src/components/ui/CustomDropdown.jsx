@@ -58,7 +58,7 @@ const CustomDropdown = ({
                 onChange(item.value);
                 setOpen(false);
               }}
-              className={` w-full px-5 py-4 flex items-center justify-between text-left text-base transition-all ${
+              className={` w-full px-5 py-4 flex items-center justify-between text-left text-base font-medium  transition-all ${
                 value === item.value
                   ? "bg-[#F15A24] text-white"
                   : "text-[#111827] hover:bg-[#FFF3EE]"

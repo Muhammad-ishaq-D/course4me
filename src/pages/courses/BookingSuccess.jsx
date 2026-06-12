@@ -14,6 +14,11 @@ const BookingSuccess = () => {
   const bookingRef = searchParams.get("bookingRef");
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
     const fetchBooking = async () => {
       if (!bookingRef) {
         setError("Invalid booking reference.");
@@ -37,11 +42,30 @@ const BookingSuccess = () => {
     fetchBooking();
   }, [bookingRef]);
 
+  useEffect(() => {
+    const scrollToTop = () => {
+      window.scrollTo(0, 0);
+
+      const container = document.getElementById("main-scroll-container");
+
+      if (container) {
+        container.scrollTop = 0;
+      }
+    };
+
+    scrollToTop();
+
+    setTimeout(scrollToTop, 100);
+    setTimeout(scrollToTop, 500);
+  }, []);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center">
         <Loader2 size={40} className="animate-spin text-[#F15A24] mb-4" />
-        <p className="text-gray-500 font-bold">Verifying payment and retrieving booking...</p>
+        <p className="text-gray-500 font-bold">
+          Verifying payment and retrieving booking...
+        </p>
       </div>
     );
   }
@@ -49,8 +73,12 @@ const BookingSuccess = () => {
   if (error || !bookingData) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center px-4 text-center">
-        <h2 className="text-2xl font-black text-red-500 mb-2">Oops! Something went wrong.</h2>
-        <p className="text-gray-600 mb-6">{error || "Could not find your booking details."}</p>
+        <h2 className="text-2xl font-black text-red-500 mb-2">
+          Oops! Something went wrong.
+        </h2>
+        <p className="text-gray-600 mb-6">
+          {error || "Could not find your booking details."}
+        </p>
         <button
           onClick={() => navigate("/")}
           className="bg-[#F15A24] text-white px-6 py-3 rounded-lg font-black text-sm"

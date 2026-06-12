@@ -47,6 +47,7 @@ const CourseBooking = () => {
   const [filter, setFilter] = useState("Closest");
   const [loadingStep, setLoadingStep] = useState(0);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const searchInputRef = React.useRef(null);
 
   // Fetch course
@@ -118,9 +119,17 @@ const CourseBooking = () => {
 
   const selectLocation = (link) => {
     const loc = link.locationId;
-    const searchTerm = loc.postcode || loc.city || loc.name;
-    setSearchLocation(searchTerm);
+    setSearchLocation([loc.city, loc.postcode].filter(Boolean).join(", "));
+
+    setSelectedLocation(link);
     setShowSuggestions(false);
+  };
+
+  const selectLocationAndSearch = (link) => {
+    const loc = link.locationId;
+
+    const searchTerm = loc.postcode || loc.city || loc.name;
+
     handleSearch(searchTerm);
   };
 
@@ -185,54 +194,6 @@ const CourseBooking = () => {
         </p>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Sidebar — Sort filters */}
-          {/* <aside className="w-full lg:w-64 shrink-0">
-            <h3 className="text-[11px] font-black text-gray-400 tracking-[2px] uppercase mb-5">
-              Sort Results By
-            </h3>
-            <div className="flex flex-col gap-2">
-              {["Closest", "Cheapest", "Earliest"].map((option) => {
-                const isActive = filter === option;
-                return (
-                  <button
-                    key={option}
-                    onClick={() => setFilter(option)}
-                    className={`flex items-center justify-between px-5 py-4 rounded-2xl border-2 transition-all duration-300 group ${
-                      isActive
-                        ? "border-[#F15A24] bg-[#F15A24]/5 shadow-sm"
-                        : "border-gray-100 bg-white hover:border-gray-200"
-                    }`}
-                  >
-                    <span
-                      className={`text-[15px] font-bold ${isActive ? "text-[#F15A24]" : "text-gray-600"}`}
-                    >
-                      {option}
-                    </span>
-                    <div
-                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${isActive ? "border-[#F15A24] bg-[#F15A24]" : "border-gray-200"}`}
-                    >
-                      {isActive && (
-                        <div className="w-2 h-2 rounded-full bg-white" />
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="mt-8 p-4 rounded-2xl bg-gray-50 border border-dashed border-gray-200">
-              <p className="text-[13px] text-gray-500 leading-relaxed">
-                <button
-                  className="text-[#F15A24] font-bold hover:underline"
-                  onClick={() => searchInputRef.current?.focus()}
-                >
-                  Add your postcode
-                </button>{" "}
-                to unlock distance-based filters.
-              </p>
-            </div>
-          </aside> */}
-
           {/* Center Content */}
           <div className="flex-1 space-y-6">
             {/* Search Card */}
@@ -259,48 +220,77 @@ const CourseBooking = () => {
                     className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#F15A24] transition-colors"
                     value={searchLocation}
                     onChange={(e) => {
-                      setSearchLocation(e.target.value);
-                      setShowSuggestions(true);
+                      const value = e.target.value;
+
+                      setSearchLocation(value);
+
+                      if (value.trim().length > 0) {
+                        setShowSuggestions(true);
+                      } else {
+                        setShowSuggestions(false);
+                      }
                     }}
-                    onFocus={() => setShowSuggestions(true)}
+                    // onFocus={() => setShowSuggestions(true)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         setShowSuggestions(false);
-                        handleSearch();
+
+                        if (selectedLocation) {
+                          const loc = selectedLocation.locationId;
+                          const searchTerm =
+                            loc.postcode || loc.city || loc.name;
+
+                          handleSearch(searchTerm);
+                        } else {
+                          handleSearch(searchLocation);
+                        }
                       }
                     }}
                   />
-                  {showSuggestions && filteredSuggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-gray-100 shadow-xl z-10 py-2 max-h-72 overflow-y-auto">
-                      {filteredSuggestions.map((link) => (
-                        <div
-                          key={link._id}
-                          onMouseDown={() => selectLocation(link)}
-                          className="px-4 py-3 hover:bg-[#FFF5F1] cursor-pointer border-b border-gray-50 last:border-0 flex items-center gap-3"
-                        >
-                          <MapPin
-                            size={14}
-                            className="text-[#F15A24] shrink-0"
-                          />
-                          <div>
-                            <p className="text-base font-semibold text-[#1C1C1C]">
+                  {showSuggestions &&
+                    searchLocation.trim() !== "" &&
+                    filteredSuggestions.length > 0 && (
+                      <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-gray-100 shadow-xl z-10 py-2 max-h-72 overflow-y-auto">
+                        {filteredSuggestions.map((link) => (
+                          <div
+                            key={link._id}
+                            onMouseDown={() => selectLocation(link)}
+                            className="px-4 py-3 hover:bg-[#FFF5F1] cursor-pointer border-b border-gray-50 last:border-0 flex items-center gap-3"
+                          >
+                            <MapPin
+                              size={14}
+                              className="text-[#F15A24] shrink-0"
+                            />
+                            <div>
+                              {/* <p className="text-base font-semibold text-[#1C1C1C]">
                               {link.locationId.name}
-                            </p>
-                            <p className="text-sm text-gray-400">
-                              {[link.locationId.city, link.locationId.postcode]
-                                .filter(Boolean)
-                                .join(" · ")}
-                            </p>
+                            </p> */}
+                              <p className="text-base  font-semibold text-[#1C1C1C]">
+                                {[
+                                  link.locationId.city,
+                                  link.locationId.postcode,
+                                ]
+                                  .filter(Boolean)
+                                  .join(", ")}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                        ))}
+                      </div>
+                    )}
                 </div>
                 <button
                   onClick={() => {
                     setShowSuggestions(false);
-                    handleSearch();
+
+                    if (selectedLocation) {
+                      const loc = selectedLocation.locationId;
+                      const searchTerm = loc.postcode || loc.city || loc.name;
+
+                      handleSearch(searchTerm);
+                    } else {
+                      handleSearch(searchLocation);
+                    }
                   }}
                   className="bg-[#F15A24] cursor-pointer text-white px-8 py-3.5 rounded-xl font-bold hover:brightness-110 transition-all shadow-md shadow-[#F15A24]/10"
                 >
@@ -360,11 +350,11 @@ const CourseBooking = () => {
                     return (
                       <button
                         key={link._id}
-                        onClick={() => selectLocation(link)}
+                        onClick={() => selectLocationAndSearch(link)}
                         className=" cursor-pointer  bg-white border border-gray-100 hover:border-[#F15A24]/30 hover:bg-[#FFF5F1]/50 px-5 py-4 rounded-2xl text-left transition-all group shadow-sm"
                       >
                         <p className="text-base font-medium text-[#1C1C1C] group-hover:text-[#F15A24] transition-colors leading-tight">
-                          {loc.name}
+                          {loc.city}
                         </p>
                       </button>
                     );

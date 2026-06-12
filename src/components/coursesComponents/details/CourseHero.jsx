@@ -223,22 +223,6 @@ const CourseHero = ({ course }) => {
                       </span>
                     </div>
                   </div>
-
-                  {/* GUARANTEE */}
-                  <div className="mt-4 p-3 rounded-xl bg-white/5 border border-white/10">
-                    <div className="flex items-center gap-2">
-                      <ShieldCheck size={24} className="text-[#00A3F4]" />
-                      <div>
-                        <p className="text-sm font-semibold text-white">
-                          {course.guarantee?.title || "Training Guarantee"}
-                        </p>
-                        <p className="text-sm text-white/50">
-                          {course.guarantee?.description ||
-                            "Free exam retakes if you don't pass first time"}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

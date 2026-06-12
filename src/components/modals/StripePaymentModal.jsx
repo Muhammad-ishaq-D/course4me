@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
+import React, { useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   useStripe,
   useElements,
   PaymentElement,
-} from '@stripe/react-stripe-js';
-import { Loader2, Lock } from 'lucide-react';
+} from "@stripe/react-stripe-js";
+import { Loader2, Lock } from "lucide-react";
 
 // Load stripe once – key from Vite env
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -18,7 +18,7 @@ function CheckoutForm({ bookingRef, onClose, onSuccess }) {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [isReady, setIsReady] = useState(false);   // PaymentElement mounted?
+  const [isReady, setIsReady] = useState(false); // PaymentElement mounted?
   const [processing, setProcessing] = useState(false);
   const [payError, setPayError] = useState(null);
 
@@ -36,19 +36,19 @@ function CheckoutForm({ bookingRef, onClose, onSuccess }) {
         return_url: `${window.location.origin}/booking-success?bookingRef=${bookingRef}`,
       },
       // For card payments, resolve in-app without a full redirect
-      redirect: 'if_required',
+      redirect: "if_required",
     });
 
     if (error) {
       // Card declined, validation error, etc.
       setPayError(error.message);
       setProcessing(false);
-    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+    } else if (paymentIntent && paymentIntent.status === "succeeded") {
       // Payment confirmed in-app — hand back to parent to show confirmation
       onSuccess?.();
     } else {
       // Unexpected state
-      setPayError('Payment could not be confirmed. Please try again.');
+      setPayError("Payment could not be confirmed. Please try again.");
       setProcessing(false);
     }
   };
@@ -58,7 +58,9 @@ function CheckoutForm({ bookingRef, onClose, onSuccess }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {/* Stripe PaymentElement – calls onReady when fully loaded */}
-      <div className={`transition-opacity duration-300 ${isReady ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div
+        className={`transition-opacity duration-300 ${isReady ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+      >
         <PaymentElement onReady={() => setIsReady(true)} />
       </div>
 
@@ -101,16 +103,22 @@ function CheckoutForm({ bookingRef, onClose, onSuccess }) {
 /* ─────────────────────────────────────────────
    Modal wrapper
 ───────────────────────────────────────────── */
-export default function StripePaymentModal({ clientSecret, bookingRef, isOpen, onClose, onSuccess }) {
+export default function StripePaymentModal({
+  clientSecret,
+  bookingRef,
+  isOpen,
+  onClose,
+  onSuccess,
+}) {
   if (!isOpen || !clientSecret) return null;
 
   const options = {
     clientSecret,
     appearance: {
-      theme: 'stripe',
+      theme: "stripe",
       variables: {
-        colorPrimary: '#F15A24',
-        borderRadius: '8px',
+        colorPrimary: "#F15A24",
+        borderRadius: "8px",
       },
     },
   };
@@ -121,8 +129,12 @@ export default function StripePaymentModal({ clientSecret, bookingRef, isOpen, o
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-lg font-black text-[#1C1C1C]">Complete Payment</h2>
-            <p className="text-xs text-gray-400 mt-0.5">Your booking is reserved — enter card details below</p>
+            <h2 className="text-xl font-black text-[#1C1C1C]">
+              Complete Payment
+            </h2>
+            <p className="text-sm text-gray-400 mt-0.5">
+              Your booking is reserved — enter card details below
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -133,11 +145,15 @@ export default function StripePaymentModal({ clientSecret, bookingRef, isOpen, o
         </div>
 
         <Elements stripe={stripePromise} options={options}>
-          <CheckoutForm bookingRef={bookingRef} onClose={onClose} onSuccess={onSuccess} />
+          <CheckoutForm
+            bookingRef={bookingRef}
+            onClose={onClose}
+            onSuccess={onSuccess}
+          />
         </Elements>
 
         {/* Security badge */}
-        <p className="text-center text-[11px] text-gray-400 mt-5 flex items-center justify-center gap-1">
+        <p className="text-center text-sm text-gray-400 mt-5 flex items-center justify-center gap-1">
           <Lock size={10} /> Payments are secured and encrypted by Stripe
         </p>
       </div>

@@ -33,11 +33,13 @@ const QuickSearch = () => {
   // ================= KEYWORD SUGGESTIONS =================
   const [showKeywordSuggestions, setShowKeywordSuggestions] = useState(false);
   const [keywordSuggestions, setKeywordSuggestions] = useState([]);
+  const [keywordLoading, setKeywordLoading] = useState(false);
 
   // ================= REFS =================
   const resultsRef = useRef(null);
   const locationRef = useRef(null);
   const searchRef = useRef(null);
+  const keywordInputRef = useRef(null);
 
   // =====================================================================
   // LOAD ALL COURSE-LOCATION LINKS ONCE (used for location suggestions)
@@ -66,14 +68,12 @@ const QuickSearch = () => {
         loc.postcode?.toLowerCase().includes(term) ||
         loc.addressLine1?.toLowerCase().includes(term);
       if (!matches) return;
-      const label = [loc.name, loc.city, loc.postcode]
-        .filter(Boolean)
-        .join(", ");
+      const label = [loc.city, loc.postcode].filter(Boolean).join(", ");
       if (!label || seen.has(label)) return;
       seen.add(label);
       results.push({
         label,
-        filterKey: loc.postcode || loc.city || loc.name || label,
+        value: [loc.city, loc.postcode].filter(Boolean).join(", "),
       });
     });
     return results.slice(0, 8);
@@ -95,9 +95,13 @@ const QuickSearch = () => {
     const fetchKeywordSuggestions = async () => {
       if (!search.trim()) {
         setKeywordSuggestions([]);
+        setKeywordLoading(false);
         setShowKeywordSuggestions(false);
         return;
       }
+
+      setKeywordLoading(true);
+      setShowKeywordSuggestions(true);
 
       try {
         const params = { status: "Published", search: search.trim() };
@@ -146,10 +150,12 @@ const QuickSearch = () => {
 
         setKeywordSuggestions(unique.slice(0, 8));
         setShowKeywordSuggestions(unique.length > 0);
+        setKeywordLoading(false);
       } catch {
         if (!cancelled) {
           setKeywordSuggestions([]);
           setShowKeywordSuggestions(false);
+          setKeywordLoading(false);
         }
       }
     };
@@ -354,40 +360,61 @@ const QuickSearch = () => {
                   className="absolute left-5 top-15 -translate-y-1/2 text-gray-400 z-10"
                 />
                 <input
+                  ref={keywordInputRef}
                   type="text"
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  onFocus={() =>
-                    keywordSuggestions.length > 0 &&
-                    setShowKeywordSuggestions(true)
-                  }
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+
+                    if (e.target.value.trim()) {
+                      setShowKeywordSuggestions(true);
+                    } else {
+                      setShowKeywordSuggestions(false);
+                    }
+                  }}
+                  onFocus={() => {
+                    if (search.trim()) {
+                      setShowKeywordSuggestions(true);
+                    }
+                  }}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   placeholder="Search courses, licenses, careers..."
                   className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none"
                 />
 
-                {showKeywordSuggestions && keywordSuggestions.length > 0 && (
+                {showKeywordSuggestions && (
                   <div className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
-                    {keywordSuggestions.map((item, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        onClick={() => {
-                          setSearch(item.title);
-                          setShowKeywordSuggestions(false);
-                        }}
-                        className="w-full px-5 py-4 flex items-center justify-between hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100 group"
-                      >
-                        <div className="flex items-center gap-3">
-                          <h4 className="text-base font-medium text-gray-800">
-                            {item.title}
-                          </h4>
-                        </div>
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-50 px-2 py-1 rounded-md">
-                          {item.type}
+                    {keywordLoading ? (
+                      <div className="px-5 py-4 flex items-center gap-3">
+                        <div className="w-4 h-4 border-2 border-[#F15A24] border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-sm text-gray-500">
+                          Searching...
                         </span>
-                      </button>
-                    ))}
+                      </div>
+                    ) : (
+                      keywordSuggestions.map((item, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => {
+                            setSearch(item.title);
+                            setShowKeywordSuggestions(false);
+
+                            keywordInputRef.current?.blur();
+                          }}
+                          className="w-full px-5 py-4 flex items-center justify-between hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100 group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <h4 className="text-base font-medium text-gray-800">
+                              {item.title}
+                            </h4>
+                          </div>
+                          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider bg-gray-50 px-2 py-1 rounded-md">
+                            {item.type}
+                          </span>
+                        </button>
+                      ))
+                    )}
                   </div>
                 )}
               </div>
@@ -421,8 +448,8 @@ const QuickSearch = () => {
                         key={i}
                         type="button"
                         onClick={() => {
-                          setLocation(item.filterKey);
                           setShowLocationSuggestions(false);
+                          setLocation(item.value);
                         }}
                         className="w-full px-5 py-4 flex items-center gap-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
                       >
