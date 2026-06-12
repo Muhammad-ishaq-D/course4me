@@ -20,6 +20,7 @@ import Loader from "../../components/ui/Loader";
 import Feedback from "../../components/ui/Feedback";
 import TrustBadges from "../../components/ui/TrustBadges";
 import CourseResultsFilter from "../../components/ui/CourseResultsFilter";
+import StripePaymentModal from "../../components/modals/StripePaymentModal";
 import { useAuth } from "../../context/AuthContext";
 import bookingService from "../../api/services/bookingService";
 import {
@@ -47,6 +48,10 @@ const CourseResults = () => {
   const [isCalculatingDistances, setIsCalculatingDistances] = useState(false);
   const [bookedSchedules, setBookedSchedules] = useState([]);
   
+  const [stripeModalOpen, setStripeModalOpen] = useState(false);
+  const [clientSecret, setClientSecret] = useState(null);
+  const [activeBookingRef, setActiveBookingRef] = useState(null);
+
   const { user } = useAuth();
 
   // Fetch course + linked locations in parallel
@@ -74,6 +79,19 @@ const CourseResults = () => {
         .catch(err => console.error("Error fetching booking status:", err));
     }
   }, [courseId, user]);
+
+  const handlePayPending = async (bookingId, bookingRef) => {
+    try {
+      const res = await bookingService.createPaymentIntent(bookingId);
+      if (res.data?.success) {
+        setClientSecret(res.data.clientSecret);
+        setActiveBookingRef(bookingRef);
+        setStripeModalOpen(true);
+      }
+    } catch (err) {
+      console.error("Error creating payment intent:", err);
+    }
+  };
 
   // Active links with a populated locationId object
   const activeLinks = useMemo(
@@ -290,7 +308,13 @@ const CourseResults = () => {
               </div>
             ) : (
               sortedLocations.map((loc) => (
-                <LocationCards key={loc.id} loc={loc} course={course} bookedSchedules={bookedSchedules} />
+                <LocationCards 
+                  key={loc.id} 
+                  loc={loc} 
+                  course={course} 
+                  bookedSchedules={bookedSchedules}
+                  onPayPending={handlePayPending}
+                />
               ))
             )}
 
@@ -300,6 +324,17 @@ const CourseResults = () => {
           <Feedback price={course.pricing?.basePrice} date={course.date} />
         </div>
       </main>
+
+      <StripePaymentModal
+        isOpen={stripeModalOpen}
+        onClose={() => setStripeModalOpen(false)}
+        clientSecret={clientSecret}
+        bookingRef={activeBookingRef}
+        onSuccess={() => {
+          setStripeModalOpen(false);
+          navigate(`/booking-success?bookingRef=${activeBookingRef}`);
+        }}
+      />
     </div>
   );
 };

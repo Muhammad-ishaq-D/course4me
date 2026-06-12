@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const LocationCards = ({ loc, course, bookedSchedules = [] }) => {
+const LocationCards = ({ loc, course, bookedSchedules = [], onPayPending }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -194,42 +194,58 @@ const LocationCards = ({ loc, course, bookedSchedules = [] }) => {
                 key={idx}
                 className="flex flex-col sm:row sm:flex-row lg:items-center justify-between gap-4 p-4 bg-white rounded-xl border border-[#F15A24] hover:shadow-md transition-all group/date"
               >
-                <div className="flex  items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center  bg-[#F15A24] text-white transition-colors">
-                    <Calendar size={20} />
-                  </div>
-                  <div>
-                    <p className="text-md font-bold text-slate-900">
-                      {date.range}
-                    </p>
-                    <p className="text-[14px] text-slate-500 font-semibold">
-                      9:00 AM - 5:00 PM Daily
-                    </p>
-                  </div>
-                </div>
+                {(() => {
+                  const booking = bookedSchedules.find(b => b.scheduleId === String(date.id));
+                  return (
+                    <>
+                      <div className="flex  items-center gap-4">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center  bg-[#F15A24] text-white transition-colors">
+                          <Calendar size={20} />
+                        </div>
+                        <div>
+                          <p className="text-md font-bold text-slate-900">
+                            {date.range}
+                          </p>
+                          <p className="text-[14px] text-slate-500 font-semibold">
+                            9:00 AM - 5:00 PM Daily
+                          </p>
+                        </div>
+                      </div>
 
-                <div className="flex items-center gap-6 w-full sm:w-auto justify-between">
-                  <div className="text-right">
-                    <p className="text-xl font-black text-slate-900">
-                      £{date.price}
-                    </p>
-                  </div>
-                  {bookedSchedules.includes(date.id) ? (
-                    <button
-                      disabled
-                      className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
-                    >
-                      Already Booked
-                    </button>
-                  ) : (
-                    <Link
-                      to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
-                      className="hover:bg-[#d84a1a] text-white px-6 py-2.5 rounded-lg text-sm font-bold bg-[#F15A24] transition-all shadow-sm"
-                    >
-                      Book Now
-                    </Link>
-                  )}
-                </div>
+                      <div className="flex items-center gap-6 w-full sm:w-auto justify-between">
+                        <div className="text-right">
+                          <p className="text-xl font-black text-slate-900">
+                            £{date.price}
+                          </p>
+                        </div>
+                        {booking ? (
+                          booking.status === 'PAID' ? (
+                            <button
+                              disabled
+                              className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
+                            >
+                              Already Booked
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => onPayPending(booking.bookingId, booking.bookingReference)}
+                              className="px-6 py-2.5 rounded-lg text-sm font-bold bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors shadow-sm"
+                            >
+                              Payment Pending
+                            </button>
+                          )
+                        ) : (
+                          <Link
+                            to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
+                            className="hover:bg-[#d84a1a] text-white px-6 py-2.5 rounded-lg text-sm font-bold bg-[#F15A24] transition-all shadow-sm"
+                          >
+                            Book Now
+                          </Link>
+                        )}
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
             ))}
           </div>
