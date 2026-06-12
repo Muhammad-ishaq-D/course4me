@@ -53,7 +53,7 @@ const OverviewTab = () => {
 
     useEffect(() => {
       const expirationTime =
-        new Date(booking.createdAt).getTime() + 30 * 60 * 1000;
+        new Date(booking.createdAt).getTime() + 60 * 60 * 1000;
 
       const updateTimer = () => {
         const now = new Date().getTime();
