@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   Search,
   MapPin,
@@ -101,6 +101,32 @@ const CareerListing = () => {
     startIndex,
     startIndex + careersPerPage,
   );
+
+  const topSkills = useMemo(() => {
+    const skillCounts = {};
+    let maxCount = 0;
+
+    const popularCareers = careersData.filter((c) => c.popular);
+
+    popularCareers.forEach((career) => {
+      if (career.personalityTraits) {
+        career.personalityTraits.forEach((skill) => {
+          skillCounts[skill] = (skillCounts[skill] || 0) + 1;
+          if (skillCounts[skill] > maxCount) {
+            maxCount = skillCounts[skill];
+          }
+        });
+      }
+    });
+
+    return Object.entries(skillCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([skill, count]) => {
+        const percentage = Math.round(60 + (count / maxCount) * 35);
+        return [skill, `${percentage}%`];
+      });
+  }, []);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -456,13 +482,7 @@ const CareerListing = () => {
               </h2>
 
               <div className="space-y-5">
-                {[
-                  ["Surveillance", "92%"],
-                  ["Communication", "88%"],
-                  ["Observation", "85%"],
-                  ["Conflict Management", "80%"],
-                  ["First Aid", "78%"],
-                ].map((skill, index) => (
+                {topSkills.map((skill, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-base font-medium text-gray-700">
