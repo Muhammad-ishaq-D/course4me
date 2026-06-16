@@ -61,7 +61,7 @@ function CheckoutForm({ bookingRef, onClose, onSuccess }) {
       <div
         className={`transition-opacity duration-300 ${isReady ? "opacity-100" : "opacity-0 pointer-events-none"}`}
       >
-        <PaymentElement onReady={() => setIsReady(true)} />
+        <PaymentElement options={{ layout: "tabs" }} onReady={() => setIsReady(true)} />
       </div>
 
       {/* Skeleton placeholder while element loads */}
@@ -125,7 +125,7 @@ export default function StripePaymentModal({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 px-4 py-4 sm:py-8">
-      <div className="bg-white rounded-2xl shadow-2xl p-5 sm:p-7 w-full max-w-md max-h-[90vh] overflow-y-auto relative animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="bg-white rounded-2xl shadow-2xl p-5 sm:p-7 w-full max-w-md max-h-[90vh] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-gray-300 relative animate-in fade-in slide-in-from-bottom-4 duration-300">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
