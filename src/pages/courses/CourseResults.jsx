@@ -173,7 +173,7 @@ const CourseResults = () => {
 
       return {
         id: link._id,
-        name: loc.name,
+        name: loc.name?.replace(/\s*training\s*cent(?:er|re)\s*/gi, '')?.trim() || loc.name,
         recommended: loc.name?.includes("Central") || loc.name?.includes("Ilford"),
         address,
         mapsUrl: loc.mapsUrl || getGoogleMapsUrl({ ...loc, address: loc.addressLine1 }),

@@ -120,7 +120,7 @@ const CourseLocationView = ({ link }) => {
             </NavLink>
             <span>›</span>
             <span className="text-white font-medium">
-              {loc.name || course.title}
+              {(loc.name || course.title)?.replace(/\s*training\s*cent(?:er|re)\s*/gi, '')?.trim()}
             </span>
           </div>
 
@@ -150,7 +150,7 @@ const CourseLocationView = ({ link }) => {
               </div>
 
               <h1 className="text-4xl md:text-5xl xl:text-6xl font-black text-white leading-[1.05] max-w-3xl">
-                {loc.name || "Training Centre"}
+                {loc.name?.replace(/\s*training\s*cent(?:er|re)\s*/gi, '')?.trim() || "Training Venue"}
               </h1>
 
               {loc.city && (
