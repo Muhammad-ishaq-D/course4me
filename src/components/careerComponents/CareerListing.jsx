@@ -447,11 +447,10 @@ const CareerListing = () => {
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`w-10 h-10 rounded-xl cursor-pointer text-base font-semibold ${
-                      page === currentPage
+                    className={`w-10 h-10 rounded-xl cursor-pointer text-base font-semibold ${page === currentPage
                         ? "bg-[#F8510C] text-white"
                         : "bg-white border border-gray-200 text-gray-700"
-                    }`}
+                      }`}
                   >
                     {page}
                   </button>
