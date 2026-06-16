@@ -228,13 +228,13 @@ const LocationCards = ({ loc, course, bookedSchedules = [], onPayPending }) => {
                               Already Booked
                             </button>
                           ) : (
-                            <button
-                              onClick={() => onPayPending(booking.bookingId, booking.bookingReference)}
+                            <Link
+                              to={`/booking/checkout?courseId=${course._id}&scheduleId=${date.id}&bookingId=${booking.bookingId}`}
                               className="group flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold bg-white text-[#F15A24] border-2 border-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all shadow-sm"
                             >
                               <CreditCard size={16} className="transition-colors" />
                               <span>Complete Payment</span>
-                            </button>
+                            </Link>
                           )
                         ) : (
                           <Link

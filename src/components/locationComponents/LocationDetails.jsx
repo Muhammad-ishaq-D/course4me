@@ -75,9 +75,24 @@ const CourseLocationView = ({ link }) => {
     .filter(Boolean)
     .join(", ");
 
-  const mapSrc = loc.mapsUrl
-    ? `https://www.google.com/maps?q=${encodeURIComponent(loc.mapsUrl)}&output=embed`
-    : `https://www.google.com/maps?q=${encodeURIComponent(`${loc.postcode || ""} ${loc.city || ""} ${loc.country || "UK"}`.trim())}&output=embed`;
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  let mapQuery = `${loc.postcode || ""} ${loc.city || ""} ${loc.country || "UK"}`.trim();
+  if (loc.mapsUrl) {
+      try {
+          const url = new URL(loc.mapsUrl);
+          const queryParam = url.searchParams.get('query');
+          if (queryParam) mapQuery = queryParam;
+          else mapQuery = loc.mapsUrl;
+      } catch {
+          mapQuery = loc.mapsUrl;
+      }
+  }
+
+  const mapSrc = apiKey
+    ? `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(mapQuery)}`
+    : loc.mapsUrl
+        ? `https://www.google.com/maps?q=${encodeURIComponent(loc.mapsUrl)}&output=embed`
+        : `https://www.google.com/maps?q=${encodeURIComponent(`${loc.postcode || ""} ${loc.city || ""} ${loc.country || "UK"}`.trim())}&output=embed`;
 
   const whatsIncludedList = (link.whatsIncluded || "")
     .split("\n")

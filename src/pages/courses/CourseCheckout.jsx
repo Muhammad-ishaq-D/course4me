@@ -409,14 +409,16 @@ const CourseCheckout = () => {
             setIsSubmitting(false);
             return;
           }
-          // Still pending — safe to reopen the payment modal
+          // Still pending — prepare payment details but do not auto-open modal
           bookingService
             .createPaymentIntent(urlBookingId)
             .then((piRes) => {
               if (piRes.data.success && piRes.data.clientSecret) {
                 setClientSecret(piRes.data.clientSecret);
+                setExistingBookingId(urlBookingId);
+                setBookingStatus("PENDING");
+                setActiveStep(4);
                 setIsSubmitting(false);
-                setPaymentModalOpen(true);
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
@@ -432,14 +434,16 @@ const CourseCheckout = () => {
             });
         })
         .catch(() => {
-          // Status check failed — fall through to try opening the modal anyway
+          // Status check failed — fall through to prepare payment details anyway
           bookingService
             .createPaymentIntent(urlBookingId)
             .then((piRes) => {
               if (piRes.data.success && piRes.data.clientSecret) {
                 setClientSecret(piRes.data.clientSecret);
+                setExistingBookingId(urlBookingId);
+                setBookingStatus("PENDING");
+                setActiveStep(4);
                 setIsSubmitting(false);
-                setPaymentModalOpen(true);
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +

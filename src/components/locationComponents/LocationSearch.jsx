@@ -454,7 +454,9 @@ const LocationSearch = () => {
             <div className="relative h-[88vh] rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-white">
               <iframe
                 title="Google Map"
-                src={`https://www.google.com/maps?q=${encodeURIComponent(search || "United Kingdom")}&output=embed`}
+                src={import.meta.env.VITE_GOOGLE_MAPS_API_KEY 
+                  ? `https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(search || "United Kingdom")}`
+                  : `https://www.google.com/maps?q=${encodeURIComponent(search || "United Kingdom")}&output=embed`}
                 loading="lazy"
                 className="w-full h-full"
               />
