@@ -47,7 +47,7 @@ const CourseResults = () => {
   const [amenitiesByLinkId, setAmenitiesByLinkId] = useState({});
   const [isCalculatingDistances, setIsCalculatingDistances] = useState(false);
   const [bookedSchedules, setBookedSchedules] = useState([]);
-  
+
   const [stripeModalOpen, setStripeModalOpen] = useState(false);
   const [clientSecret, setClientSecret] = useState(null);
   const [activeBookingRef, setActiveBookingRef] = useState(null);
@@ -173,7 +173,7 @@ const CourseResults = () => {
 
       return {
         id: link._id,
-        name: loc.name?.replace(/\s*training\s*cent(?:er|re)\s*/gi, '')?.trim() || loc.name,
+        name: loc.name,
         recommended: loc.name?.includes("Central") || loc.name?.includes("Ilford"),
         address,
         mapsUrl: loc.mapsUrl || getGoogleMapsUrl({ ...loc, address: loc.addressLine1 }),
@@ -308,10 +308,10 @@ const CourseResults = () => {
               </div>
             ) : (
               sortedLocations.map((loc) => (
-                <LocationCards 
-                  key={loc.id} 
-                  loc={loc} 
-                  course={course} 
+                <LocationCards
+                  key={loc.id}
+                  loc={loc}
+                  course={course}
                   bookedSchedules={bookedSchedules}
                   onPayPending={handlePayPending}
                 />

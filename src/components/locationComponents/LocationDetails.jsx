@@ -38,10 +38,10 @@ const FACILITY_LABELS = {
 const fmtDate = (d) =>
   d
     ? new Date(d).toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })
     : "—";
 
 const fmtTime = (t) => {
@@ -78,21 +78,21 @@ const CourseLocationView = ({ link }) => {
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   let mapQuery = `${loc.postcode || ""} ${loc.city || ""} ${loc.country || "UK"}`.trim();
   if (loc.mapsUrl) {
-      try {
-          const url = new URL(loc.mapsUrl);
-          const queryParam = url.searchParams.get('query');
-          if (queryParam) mapQuery = queryParam;
-          else mapQuery = loc.mapsUrl;
-      } catch {
-          mapQuery = loc.mapsUrl;
-      }
+    try {
+      const url = new URL(loc.mapsUrl);
+      const queryParam = url.searchParams.get('query');
+      if (queryParam) mapQuery = queryParam;
+      else mapQuery = loc.mapsUrl;
+    } catch {
+      mapQuery = loc.mapsUrl;
+    }
   }
 
   const mapSrc = apiKey
     ? `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(mapQuery)}`
     : loc.mapsUrl
-        ? `https://www.google.com/maps?q=${encodeURIComponent(loc.mapsUrl)}&output=embed`
-        : `https://www.google.com/maps?q=${encodeURIComponent(`${loc.postcode || ""} ${loc.city || ""} ${loc.country || "UK"}`.trim())}&output=embed`;
+      ? `https://www.google.com/maps?q=${encodeURIComponent(loc.mapsUrl)}&output=embed`
+      : `https://www.google.com/maps?q=${encodeURIComponent(`${loc.postcode || ""} ${loc.city || ""} ${loc.country || "UK"}`.trim())}&output=embed`;
 
   const whatsIncludedList = (link.whatsIncluded || "")
     .split("\n")
@@ -120,7 +120,7 @@ const CourseLocationView = ({ link }) => {
             </NavLink>
             <span>›</span>
             <span className="text-white font-medium">
-              {(loc.name || course.title)?.replace(/\s*training\s*cent(?:er|re)\s*/gi, '')?.trim()}
+              {loc.name || course.title}
             </span>
           </div>
 
@@ -150,7 +150,7 @@ const CourseLocationView = ({ link }) => {
               </div>
 
               <h1 className="text-4xl md:text-5xl xl:text-6xl font-black text-white leading-[1.05] max-w-3xl">
-                {loc.name?.replace(/\s*training\s*cent(?:er|re)\s*/gi, '')?.trim() || "Training Venue"}
+                {loc.name || "Training Centre"}
               </h1>
 
               {loc.city && (
@@ -248,10 +248,10 @@ const CourseLocationView = ({ link }) => {
                     <span className="text-white text-base font-semibold">
                       {upcomingDates[0]
                         ? Math.max(
-                            0,
-                            (upcomingDates[0].availableSeats || 0) -
-                              (upcomingDates[0].bookedSeats || 0),
-                          )
+                          0,
+                          (upcomingDates[0].availableSeats || 0) -
+                          (upcomingDates[0].bookedSeats || 0),
+                        )
                         : "—"}
                     </span>
                   </div>
@@ -775,11 +775,11 @@ const LocationDetails = () => {
               const centerId = center._id || center.id;
               allCourses = centerId
                 ? data.data.filter(
-                    (c) =>
-                      !c.centerId ||
-                      String(c.centerId) === String(centerId) ||
-                      c.centerName === center.name,
-                  )
+                  (c) =>
+                    !c.centerId ||
+                    String(c.centerId) === String(centerId) ||
+                    c.centerName === center.name,
+                )
                 : data.data;
             }
           } else if (center?.name) {
