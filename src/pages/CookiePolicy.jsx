@@ -4,28 +4,6 @@ import { Cookie, Shield, BarChart3, Settings, Mail } from "lucide-react";
 const CookiePolicy = () => {
   return (
     <div className="bg-white min-h-screen">
-      {/* HERO */}
-      <section className="bg-[#0F2B46] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#F15A24]/20 blur-[120px]" />
-
-        <div className="max-w-5xl mx-auto px-6 py-24 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 text-[#F15A24] text-sm font-semibold">
-            <Cookie size={16} />
-            Cookie Policy
-          </div>
-
-          <h1 className="mt-6 text-5xl md:text-6xl font-black text-white">
-            Cookies & Tracking Technologies
-          </h1>
-
-          <p className="mt-6 text-lg text-gray-300 max-w-3xl mx-auto">
-            Learn how Courses4Me uses cookies and similar technologies to
-            improve your experience, remember preferences, and enhance website
-            performance.
-          </p>
-        </div>
-      </section>
-
       {/* CONTENT */}
       <section className="max-w-4xl mx-auto px-6 py-16">
         <p className="text-sm text-gray-500 mb-12">Last Updated: June 2026</p>
