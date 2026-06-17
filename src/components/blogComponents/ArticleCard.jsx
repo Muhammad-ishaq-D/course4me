@@ -38,12 +38,13 @@ const getCategoryStyles = (category) => {
 };
 
 const ArticleCard = ({
+  id,
   image,
   category,
   title,
   excerpt,
   author,
-  date,
+  publishDate,
   readTime,
   isFeatured,
 }) => {
@@ -52,7 +53,7 @@ const ArticleCard = ({
 
   return (
     <div
-      onClick={() => navigate("/blog/article")}
+      onClick={() => navigate(`/blog/article/${id}`)}
       className="group relative flex flex-col h-full overflow-hidden rounded-[30px] bg-white border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] hover:shadow-[0_25px_80px_rgba(0,0,0,0.10)] transition-all duration-500 hover:-translate-y-2 cursor-pointer"
     >
       {/* HOVER GLOW */}
@@ -104,7 +105,7 @@ const ArticleCard = ({
         <div className="flex items-center gap-2 text-[#F15A24] text-sm font-bold uppercase tracking-[0.15em]">
           <Calendar size={14} />
 
-          {date}
+          {publishDate}
         </div>
 
         {/* TITLE */}

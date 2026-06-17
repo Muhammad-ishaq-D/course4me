@@ -2,158 +2,174 @@ import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import ArticleCard from "./ArticleCard";
+import { blogsData } from "../../data/blogs";
 
-import Blog2 from "../../assets/home/blog2.png";
-import Blog3 from "../../assets/home/blog3.png";
-import Blog4 from "../../assets/home/blog4.png";
-import Blog5 from "../../assets/home/blog5.png";
-import Blog6 from "../../assets/home/blog6.png";
-
-const articles = [
+const categories = [
+  { name: "All", count: blogsData.length },
   {
-    image: Blog2,
-    category: "Industry News",
-    title: "SIA Licence Changes 2026: What You Need to Know",
-    excerpt:
-      "The Security Industry Authority has announced important updates to licensing requirements, from training modules to renewals and background checks.",
-    author: "Emma Whitfield",
-    date: "Feb 22, 2026",
-    readTime: "5 min read",
+    name: "Career Guide",
+    count: blogsData.filter((b) => b.category === "Career Guide").length,
   },
   {
-    image: Blog3,
-    category: "Industry News",
-    title: "CCTV Operator Demand Surges Across Major UK Cities",
-    excerpt:
-      "New data reveals a 35% increase in demand for qualified CCTV Operators as businesses invest more in surveillance and smart city technology.",
-    author: "David Clarkson",
-    date: "Feb 15, 2026",
-    readTime: "4 min read",
+    name: "Industry News",
+    count: blogsData.filter((b) => b.category === "Industry News").length,
   },
   {
-    image: Blog4,
-    category: "Study Tips",
-    title: "5 Tips to Pass Your SIA Exam on the First Attempt",
-    excerpt:
-      "Our top instructors share proven study techniques, mental preparation, and insider tips that have helped thousands of students succeed.",
-    author: "John Redfern",
-    date: "Feb 10, 2026",
-    readTime: "6 min read",
+    name: "Study Tips",
+    count: blogsData.filter((b) => b.category === "Study Tips").length,
   },
   {
-    image: Blog5,
-    category: "Career Guide",
-    title: "Security Career Salaries in 2026: What to Expect",
-    excerpt:
-      "A detailed breakdown of average pay across security roles, from door supervision to close protection, and how to negotiate for better rates.",
-    author: "Marcus Thompson",
-    date: "Feb 3, 2026",
-    readTime: "7 min read",
+    name: "Company News",
+    count: blogsData.filter((b) => b.category === "Company News").length,
   },
   {
-    image: Blog6,
-    category: "Company News",
-    title: "Courses4Me Opens 10 New Training Centres Across the UK",
-    excerpt:
-      "Expanding our reach to serve more aspiring security professionals, with new locations in Manchester, Birmingham, Leeds, and beyond.",
-    author: "Courses4Me Team",
-    date: "Jan 26, 2026",
-    readTime: "3 min read",
+    name: "Training",
+    count: blogsData.filter((b) => b.category === "Training").length,
   },
-
-  /* EXTRA CARD */
   {
-    image: Blog2,
-    category: "Training",
-    title: "Why SIA Training is Essential for Your Security Career",
-    excerpt:
-      "Learn why professional training and certification can increase your job opportunities and salary expectations.",
-    author: "Alex Morgan",
-    date: "Jan 20, 2026",
-    readTime: "5 min read",
+    name: "Technology",
+    count: blogsData.filter((b) => b.category === "Technology").length,
   },
 ];
 
 const ArticleGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredBlogs =
+    activeCategory === "All"
+      ? blogsData
+      : blogsData.filter((blog) => blog.category === activeCategory);
 
   const articlesPerPage = 3;
-
-  const totalPages = Math.ceil(articles.length / articlesPerPage);
+  const totalPages = Math.ceil(filteredBlogs.length / articlesPerPage);
 
   const startIndex = (currentPage - 1) * articlesPerPage;
 
-  const currentArticles = articles.slice(
+  const currentArticles = filteredBlogs.slice(
     startIndex,
     startIndex + articlesPerPage,
   );
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 mb-20">
-      {/* TOP INFO */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
-        <p className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em]">
-          Showing {currentArticles.length} of {articles.length} articles
-        </p>
+    <>
+      <header className="relative ">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* FILTER WRAPPER */}
+          <div className="flex flex-wrap items-center gap-2">
+            {categories.map((cat, idx) => {
+              const isActive = activeCategory === cat.name;
 
-        <div className="text-sm text-gray-400">
-          Page {currentPage} of {totalPages}
+              return (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setActiveCategory(cat.name);
+                    setCurrentPage(1);
+                  }}
+                  className={`group relative overflow-hidden px-5 sm:px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 border whitespace-nowrap
+                  
+                  ${
+                    isActive
+                      ? "bg-[#F15A24] text-white border-[#F15A24] shadow-[0_10px_30px_rgba(241,90,36,0.35)]"
+                      : "bg-white text-[#374151] border-gray-200 hover:border-[#F15A24]/30 hover:text-[#F15A24] hover:shadow-md"
+                  }
+                `}
+                >
+                  {/* ACTIVE GLOW */}
+                  {isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#F15A24] to-[#ff6b35] opacity-90" />
+                  )}
+
+                  {/* CONTENT */}
+                  <span className="relative z-10 flex items-center gap-2">
+                    {cat.name}
+
+                    {cat.count !== null && (
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full font-bold ${
+                          isActive
+                            ? "bg-white/20 text-white"
+                            : "bg-[#F3F4F6] text-gray-500 group-hover:bg-[#FFF4EE] group-hover:text-[#F15A24]"
+                        }`}
+                      >
+                        {cat.count}
+                      </span>
+                    )}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      </header>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 mb-20">
+        {/* TOP INFO */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
+          <p className="text-sm font-bold text-gray-400 uppercase tracking-[0.2em]">
+            Showing {currentArticles.length} of {filteredBlogs.length}{" "}
+            articles{" "}
+          </p>
 
-      {/* ARTICLES GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {currentArticles.map((article, index) => (
-          <ArticleCard key={index} {...article} />
-        ))}
-      </div>
+          <div className="text-sm text-gray-400">
+            Page {currentPage} of {totalPages}
+          </div>
+        </div>
 
-      {/* ================= PAGINATION ================= */}
-      <div className="flex items-center justify-center gap-3 mt-12">
-        {/* PREVIOUS */}
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className={`w-12 h-12 rounded-full flex items-center justify-center border transition-all duration-300 ${
-            currentPage === 1
-              ? "bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed"
-              : "bg-white border-gray-200 text-[#111827] hover:bg-[#F15A24] hover:border-[#F15A24] hover:text-white shadow-sm"
-          }`}
-        >
-          <ChevronLeft size={18} />
-        </button>
+        {/* ARTICLES GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {currentArticles.map((article) => (
+            <ArticleCard key={article.id} {...article} />
+          ))}
+        </div>
 
-        {/* PAGE NUMBERS */}
-        {Array.from({ length: totalPages }, (_, index) => (
+        {/* ================= PAGINATION ================= */}
+        <div className="flex items-center justify-center gap-3 mt-12">
+          {/* PREVIOUS */}
           <button
-            key={index}
-            onClick={() => setCurrentPage(index + 1)}
-            className={`w-12 h-12 rounded-full font-bold transition-all duration-300 ${
-              currentPage === index + 1
-                ? "bg-[#0F2B46] text-white shadow-[0_10px_30px_rgba(15,43,70,0.25)]"
-                : "bg-white border border-gray-200 text-gray-500 hover:border-[#F15A24] hover:text-[#F15A24]"
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={`w-12 h-12 rounded-full flex items-center justify-center border transition-all duration-300 ${
+              currentPage === 1
+                ? "bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed"
+                : "bg-white border-gray-200 text-[#111827] hover:bg-[#F15A24] hover:border-[#F15A24] hover:text-white shadow-sm"
             }`}
           >
-            {index + 1}
+            <ChevronLeft size={18} />
           </button>
-        ))}
 
-        {/* NEXT */}
-        <button
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-          className={`w-12 h-12 rounded-full flex items-center justify-center border transition-all duration-300 ${
-            currentPage === totalPages
-              ? "bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed"
-              : "bg-white border-gray-200 text-[#111827] hover:bg-[#F15A24] hover:border-[#F15A24] hover:text-white shadow-sm"
-          }`}
-        >
-          <ChevronRight size={18} />
-        </button>
-      </div>
-    </section>
+          {/* PAGE NUMBERS */}
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentPage(index + 1)}
+              className={`w-12 h-12 rounded-full font-bold transition-all duration-300 ${
+                currentPage === index + 1
+                  ? "bg-[#0F2B46] text-white shadow-[0_10px_30px_rgba(15,43,70,0.25)]"
+                  : "bg-white border border-gray-200 text-gray-500 hover:border-[#F15A24] hover:text-[#F15A24]"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+
+          {/* NEXT */}
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className={`w-12 h-12 rounded-full flex items-center justify-center border transition-all duration-300 ${
+              currentPage === totalPages
+                ? "bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed"
+                : "bg-white border-gray-200 text-[#111827] hover:bg-[#F15A24] hover:border-[#F15A24] hover:text-white shadow-sm"
+            }`}
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      </section>
+    </>
   );
 };
 

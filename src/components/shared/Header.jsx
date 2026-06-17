@@ -106,7 +106,7 @@ const Header = () => {
 
                 {/* DROPDOWN */}
                 <div
-                  className={`absolute right-0 top-15 w-57.5 bg-white border border-[#edf1f5] rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 origin-top-right z-50 ${
+                  className={`absolute right-0 top-15 w-57.5 bg-white border border-[#edf1f5] rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 origin-top-right z-999 ${
                     profileOpen
                       ? "opacity-100 scale-100 visible"
                       : "opacity-0 scale-95 invisible"

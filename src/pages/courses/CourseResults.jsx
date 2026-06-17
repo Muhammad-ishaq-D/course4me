@@ -56,7 +56,10 @@ const CourseResults = () => {
 
   // Fetch course + linked locations in parallel
   useEffect(() => {
-    if (!courseId) { setIsLoading(false); return; }
+    if (!courseId) {
+      setIsLoading(false);
+      return;
+    }
 
     Promise.all([
       courseService.getCourseById(courseId),
@@ -70,13 +73,14 @@ const CourseResults = () => {
       .finally(() => setIsLoading(false));
 
     if (user) {
-      bookingService.getMyBookingStatus(courseId)
-        .then(res => {
+      bookingService
+        .getMyBookingStatus(courseId)
+        .then((res) => {
           if (res.data && res.data.bookedSchedules) {
             setBookedSchedules(res.data.bookedSchedules);
           }
         })
-        .catch(err => console.error("Error fetching booking status:", err));
+        .catch((err) => console.error("Error fetching booking status:", err));
     }
   }, [courseId, user]);
 
@@ -95,13 +99,19 @@ const CourseResults = () => {
 
   // Active links with a populated locationId object
   const activeLinks = useMemo(
-    () => courseLocations.filter((l) => l.locationId && typeof l.locationId === "object"),
+    () =>
+      courseLocations.filter(
+        (l) => l.locationId && typeof l.locationId === "object",
+      ),
     [courseLocations],
   );
 
   // Derive amenities (uses postcode geocoding for parking/commute)
   useEffect(() => {
-    if (!activeLinks.length) { setAmenitiesByLinkId({}); return; }
+    if (!activeLinks.length) {
+      setAmenitiesByLinkId({});
+      return;
+    }
     let cancelled = false;
 
     (async () => {
@@ -110,8 +120,14 @@ const CourseResults = () => {
           const loc = link.locationId;
           let geocodeMeta = {};
           if (loc.postcode) {
-            const lookup = await geocodePostcode(loc.postcode).catch(() => null);
-            if (lookup) geocodeMeta = { region: lookup.region, adminDistrict: lookup.adminDistrict };
+            const lookup = await geocodePostcode(loc.postcode).catch(
+              () => null,
+            );
+            if (lookup)
+              geocodeMeta = {
+                region: lookup.region,
+                adminDistrict: lookup.adminDistrict,
+              };
           }
           return [String(link._id), deriveLocationAmenities(loc, geocodeMeta)];
         }),
@@ -119,7 +135,9 @@ const CourseResults = () => {
       if (!cancelled) setAmenitiesByLinkId(Object.fromEntries(entries));
     })();
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [activeLinks]);
 
   // Calculate distances from user's postcode to each venue
@@ -143,11 +161,23 @@ const CourseResults = () => {
             let lng = loc.longitude;
             if ((lat == null || lng == null) && loc.postcode) {
               const vc = await geocodePostcode(loc.postcode).catch(() => null);
-              if (vc) { lat = vc.latitude; lng = vc.longitude; }
+              if (vc) {
+                lat = vc.latitude;
+                lng = vc.longitude;
+              }
             }
-            if (!userCoords || lat == null || lng == null) return [String(link._id), null];
-            const miles = calculateDistanceMiles(userCoords.latitude, userCoords.longitude, lat, lng);
-            return [String(link._id), { miles, label: formatDistanceFromUser(miles) }];
+            if (!userCoords || lat == null || lng == null)
+              return [String(link._id), null];
+            const miles = calculateDistanceMiles(
+              userCoords.latitude,
+              userCoords.longitude,
+              lat,
+              lng,
+            );
+            return [
+              String(link._id),
+              { miles, label: formatDistanceFromUser(miles) },
+            ];
           }),
         );
         if (!cancelled) setDistanceByLinkId(Object.fromEntries(entries));
@@ -156,16 +186,21 @@ const CourseResults = () => {
       }
     })();
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [activeLinks, postcode]);
 
   // Map CourseLocation links → format LocationCards expects
   const locations = useMemo(() => {
     return activeLinks.map((link) => {
       const loc = link.locationId;
-      const address = [loc.addressLine1, loc.city, loc.postcode].filter(Boolean).join(", ");
+      const address = [loc.addressLine1, loc.city, loc.postcode]
+        .filter(Boolean)
+        .join(", ");
       const distanceInfo = distanceByLinkId[String(link._id)];
-      const amenities = amenitiesByLinkId[String(link._id)] || deriveLocationAmenities(loc);
+      const amenities =
+        amenitiesByLinkId[String(link._id)] || deriveLocationAmenities(loc);
 
       const upcomingDates = (link.dates || [])
         .filter((d) => d.startDate)
@@ -174,9 +209,12 @@ const CourseResults = () => {
       return {
         id: link._id,
         name: loc.name,
-        recommended: loc.name?.includes("Central") || loc.name?.includes("Ilford"),
+        recommended:
+          loc.name?.includes("Central") || loc.name?.includes("Ilford"),
         address,
-        mapsUrl: loc.mapsUrl || getGoogleMapsUrl({ ...loc, address: loc.addressLine1 }),
+        mapsUrl:
+          loc.mapsUrl ||
+          getGoogleMapsUrl({ ...loc, address: loc.addressLine1 }),
         latitude: loc.latitude,
         longitude: loc.longitude,
         distance: postcode.trim()
@@ -191,7 +229,10 @@ const CourseResults = () => {
         booked: "500+",
         price: link.price || course?.pricing?.basePrice || 139.99,
         nextDate: upcomingDates[0]?.startDate
-          ? new Date(upcomingDates[0].startDate).toLocaleDateString("en-GB", { day: "numeric", month: "short" })
+          ? new Date(upcomingDates[0].startDate).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "short",
+            })
           : "TBA",
         dates: upcomingDates.map((d) => ({
           id: d._id,
@@ -202,7 +243,14 @@ const CourseResults = () => {
         })),
       };
     });
-  }, [activeLinks, distanceByLinkId, amenitiesByLinkId, isCalculatingDistances, postcode, course]);
+  }, [
+    activeLinks,
+    distanceByLinkId,
+    amenitiesByLinkId,
+    isCalculatingDistances,
+    postcode,
+    course,
+  ]);
 
   const sortedLocations = useMemo(() => {
     const copy = [...locations];
@@ -217,8 +265,12 @@ const CourseResults = () => {
       copy.sort((a, b) => a.price - b.price);
     } else if (filter === "Earliest") {
       copy.sort((a, b) => {
-        const aDate = a.dates?.[0]?.startDate ? new Date(a.dates[0].startDate).getTime() : Infinity;
-        const bDate = b.dates?.[0]?.startDate ? new Date(b.dates[0].startDate).getTime() : Infinity;
+        const aDate = a.dates?.[0]?.startDate
+          ? new Date(a.dates[0].startDate).getTime()
+          : Infinity;
+        const bDate = b.dates?.[0]?.startDate
+          ? new Date(b.dates[0].startDate).getTime()
+          : Infinity;
         return aDate - bDate;
       });
     }
@@ -227,7 +279,8 @@ const CourseResults = () => {
 
   const filterPrices = useMemo(() => {
     if (!locations.length) return {};
-    const fmt = (p) => (p != null && isFinite(p) ? `£${Number(p).toFixed(0)}` : "");
+    const fmt = (p) =>
+      p != null && isFinite(p) ? `£${Number(p).toFixed(0)}` : "";
 
     const byClosest = [...locations].sort((a, b) => {
       if (a.distanceMiles == null && b.distanceMiles == null) return 0;
@@ -239,8 +292,12 @@ const CourseResults = () => {
     const cheapest = Math.min(...locations.map((l) => l.price ?? Infinity));
 
     const byEarliest = [...locations].sort((a, b) => {
-      const aDate = a.dates?.[0]?.startDate ? new Date(a.dates[0].startDate).getTime() : Infinity;
-      const bDate = b.dates?.[0]?.startDate ? new Date(b.dates[0].startDate).getTime() : Infinity;
+      const aDate = a.dates?.[0]?.startDate
+        ? new Date(a.dates[0].startDate).getTime()
+        : Infinity;
+      const bDate = b.dates?.[0]?.startDate
+        ? new Date(b.dates[0].startDate).getTime()
+        : Infinity;
       return aDate - bDate;
     });
 
@@ -282,7 +339,11 @@ const CourseResults = () => {
           <ArrowLeft size={16} /> Back
         </button>
         <div className="flex flex-col lg:flex-row gap-5">
-          <CourseResultsFilter filter={filter} setFilter={setFilter} filterPrices={filterPrices} />
+          <CourseResultsFilter
+            filter={filter}
+            setFilter={setFilter}
+            filterPrices={filterPrices}
+          />
 
           <div className="flex-1 space-y-6">
             <div>
@@ -303,14 +364,21 @@ const CourseResults = () => {
 
             {sortedLocations.length === 0 ? (
               <div className="bg-white rounded-3xl border border-gray-100 p-12 text-center shadow-sm">
-                <p className="text-gray-500 font-medium text-lg">No locations available for this course yet.</p>
-                <p className="text-gray-400 text-sm mt-2">Please check back soon or contact us for more information.</p>
+                <p className="text-gray-500 font-medium text-lg">
+                  No locations available for this course yet.
+                </p>
+                <p className="text-gray-400 text-sm mt-2">
+                  Please check back soon or contact us for more information.
+                </p>
               </div>
             ) : (
-              sortedLocations.map((loc) => (
+              sortedLocations.map((loc, index) => (
                 <LocationCards
                   key={loc.id}
-                  loc={loc}
+                  loc={{
+                    ...loc,
+                    recommended: index === 0,
+                  }}
                   course={course}
                   bookedSchedules={bookedSchedules}
                   onPayPending={handlePayPending}

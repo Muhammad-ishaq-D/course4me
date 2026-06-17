@@ -9,46 +9,9 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-
-const Counter = ({ end, suffix }) => {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    let start = 0;
-
-    const duration = 2000;
-    const increment = end / (duration / 16);
-
-    const timer = setInterval(() => {
-      start += increment;
-
-      if (start >= end) {
-        setCount(end);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-
-    return () => clearInterval(timer);
-  }, [end]);
-
-  return (
-    <span>
-      {count}
-      {suffix}
-    </span>
-  );
-};
 
 const HiringTrainingSection = () => {
   const navigate = useNavigate();
-
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.3,
-  });
 
   const features = [
     "Direct referrals to 850+ hiring partners",
@@ -56,35 +19,8 @@ const HiringTrainingSection = () => {
     "95% of graduates hired within 2 weeks",
   ];
 
-  const stats = [
-    {
-      icon: <Users className="w-6 h-6 text-[#00A3FF]" />,
-      number: 850,
-      suffix: "+",
-      label: "Hiring Partners",
-      numberColor: "text-[#00A3FF]",
-      bg: "bg-[#00A3FF0D]",
-    },
-    {
-      icon: <Award className="w-6 h-6 text-[#00A3FF]" />,
-      number: 100,
-      suffix: "%",
-      label: "SIA Approved",
-      numberColor: "text-[#00A3FF]",
-      bg: "bg-[#00A3FF0D]",
-    },
-    {
-      icon: <Briefcase className="w-6 h-6 text-[#FF5421]" />,
-      number: 95,
-      suffix: "%",
-      label: "Placement Rate",
-      numberColor: "text-[#FF5421]",
-      bg: "bg-[#FF54210D]",
-    },
-  ];
-
   return (
-    <section ref={ref} className="relative py-14 overflow-hidden px-4 bg-white">
+    <section className="relative py-14 overflow-hidden px-4 bg-white">
       {/* BACKGROUND BLUR */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-[#00A3FF]/10 blur-3xl rounded-full" />
       <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#FF5421]/10 blur-3xl rounded-full" />
@@ -201,44 +137,6 @@ const HiringTrainingSection = () => {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* STATS CARDS */}
-            <div className="lg:grid grid-cols-3 hidden gap-2 md:gap-4 mt-2">
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.3 }}
-                  className="relative overflow-hidden bg-white rounded-[22px] border border-gray-100 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.04)] text-center"
-                >
-                  {/* ICON */}
-                  <div
-                    className={`w-12 h-12 mx-auto rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}
-                  >
-                    {stat.icon}
-                  </div>
-
-                  {/* COUNTER */}
-                  <div
-                    className={`text-3xl font-black tracking-tight mb-2 ${stat.numberColor}`}
-                  >
-                    {inView ? (
-                      <Counter end={stat.number} suffix={stat.suffix} />
-                    ) : (
-                      "0"
-                    )}
-                  </div>
-
-                  {/* LABEL */}
-                  <div className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-                    {stat.label}
-                  </div>
-
-                  {/* HOVER LINE */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#00A3FF] to-[#FF5421] scale-x-0 hover:scale-x-100 transition-transform duration-300 origin-center rounded-full" />
-                </motion.div>
-              ))}
             </div>
           </motion.div>
         </div>

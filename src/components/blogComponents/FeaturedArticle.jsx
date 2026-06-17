@@ -8,13 +8,14 @@ import {
   TrendingUp,
   BookOpen,
 } from "lucide-react";
-import Blog1 from "../../assets/home/blog1.png";
+import { blogsData } from "../../data/blogs";
 
 const FeaturedArticle = () => {
   const navigate = useNavigate();
+  const featuredBlog = blogsData[0];
 
   return (
-    <section className="relative px-4 sm:px-6 -mt-18 md:-mt-10 mb-20 z-20">
+    <section className=" px-4 sm:px-6  mb-20 ">
       <div className="max-w-7xl mx-auto">
         {/* ================= FEATURED CARD ================= */}
         <div className="group relative overflow-hidden rounded-4xl lg:rounded-[40px] bg-white border border-gray-100 shadow-[0_25px_80px_rgba(0,0,0,0.08)] hover:shadow-[0_35px_100px_rgba(0,0,0,0.12)] transition-all duration-500 ">
@@ -26,7 +27,7 @@ const FeaturedArticle = () => {
             <div className="relative overflow-hidden h-70 sm:h-90 lg:h-full">
               {/* IMAGE */}
               <img
-                src={Blog1}
+                src={featuredBlog?.image}
                 alt="Featured Article"
                 className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
               />
@@ -51,18 +52,19 @@ const FeaturedArticle = () => {
 
                   <div>
                     <p className="text-white text-sm font-semibold">
-                      Sarah Mitchell
+                      {featuredBlog?.author}
                     </p>
 
                     <span className="text-white/60 text-xs">
-                      Security Career Expert
+                      {featuredBlog?.role}
                     </span>
                   </div>
                 </div>
 
                 {/* READ TIME */}
                 <div className="hidden sm:flex items-center gap-2 bg-black/30 backdrop-blur-md border border-white/10 rounded-full px-4 py-2 text-white text-sm font-semibold">
-                  <Clock size={15} />8 min read
+                  <Clock size={15} />
+                  {featuredBlog?.readTime}
                 </div>
               </div>
             </div>
@@ -77,15 +79,12 @@ const FeaturedArticle = () => {
 
               {/* TITLE */}
               <h2 className="mt-7 text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.1] tracking-tight text-[#111827] group-hover:text-[#F15A24] transition duration-300">
-                How to Become a Door Supervisor in 2026
+                {featuredBlog?.title}
               </h2>
 
               {/* DESCRIPTION */}
               <p className="mt-6 text-[#6B7280] text-base sm:text-lg leading-relaxed max-w-2xl">
-                Everything you need to know about getting your SIA Door
-                Supervisor licence — including training requirements, career
-                opportunities, salary expectations, and how to start working
-                quickly in the UK security industry.
+                {featuredBlog?.excerpt}
               </p>
 
               {/* META INFO */}
@@ -93,26 +92,20 @@ const FeaturedArticle = () => {
                 {/* DATE */}
                 <div className="flex items-center gap-2 text-sm text-[#6B7280] font-semibold">
                   <Calendar size={16} className="text-[#F15A24]" />
-                  Feb 28, 2026
-                </div>
-
-                {/* AUTHOR */}
-                <div className="flex items-center gap-2 text-sm text-[#6B7280] font-semibold">
-                  <User size={16} className="text-[#F15A24]" />
-                  Sarah Mitchell
+                  {featuredBlog?.publishDate}
                 </div>
 
                 {/* READ */}
                 <div className="flex items-center gap-2 text-sm text-[#6B7280] font-semibold">
                   <BookOpen size={16} className="text-[#F15A24]" />
-                  Career Guide
+                  {featuredBlog?.category}
                 </div>
               </div>
 
               {/* BUTTON */}
               <div className="mt-10">
                 <button
-                  onClick={() => navigate("/blog/article")}
+                  onClick={() => navigate(`/blog/article/${featuredBlog.id}`)}
                   className="group/button inline-flex items-center gap-3 bg-[#F15A24] cursor-pointer text-white px-7 sm:px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-[0_10px_40px_rgba(0,0,0,0.12)]"
                 >
                   Read Full Article

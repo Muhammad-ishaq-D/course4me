@@ -3,7 +3,6 @@ import BlogHero from "../components/blogComponents/BlogHero";
 import FeaturedArticle from "../components/blogComponents/FeaturedArticle";
 import CategoryFilters from "../components/blogComponents/CategoryFilters";
 import ArticleGrid from "../components/blogComponents/ArticleGrid";
-import Pagination from "../components/blogComponents/Pagination";
 import NewsletterCTA from "../components/blogComponents/NewsletterCTA";
 
 const Blog = () => {
@@ -11,7 +10,7 @@ const Blog = () => {
     <div className="min-h-screen bg-white ">
       <BlogHero />
       <FeaturedArticle />
-      <CategoryFilters />
+      {/* <CategoryFilters /> */}
       <ArticleGrid />
       {/* <Pagination /> */}
       <NewsletterCTA />

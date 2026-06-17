@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import courseService from "../../api/services/courseService";
 import licenseService from "../../api/services/licenseService";
 import {
@@ -48,7 +48,7 @@ const Footer = () => {
               security jobs — trusted by 400,000+ people across the UK.
             </p>
 
-            <div className="flex gap-3">
+            {/* <div className="flex gap-3">
               {[Facebook, Twitter, Linkedin, Instagram, Youtube].map(
                 (Icon, i) => (
                   <div
@@ -59,7 +59,7 @@ const Footer = () => {
                   </div>
                 ),
               )}
-            </div>
+            </div> */}
           </div>
 
           {/* Column 2 - Popular Licences */}
@@ -167,15 +167,24 @@ const Footer = () => {
             </div>
 
             <div className="flex gap-8 text-[#666666] text-sm">
-              <span className="hover:text-white transition-colors cursor-pointer">
+              <NavLink
+                to="/privacy-policy"
+                className="hover:text-white transition-colors cursor-pointer"
+              >
                 Privacy Policy
-              </span>
-              <span className="hover:text-white transition-colors cursor-pointer">
+              </NavLink>
+              <NavLink
+                to="/terms-of-services"
+                className="hover:text-white transition-colors cursor-pointer"
+              >
                 Terms of Service
-              </span>
-              <span className="hover:text-white transition-colors cursor-pointer">
+              </NavLink>
+              <NavLink
+                to="/cookie-policy"
+                className="hover:text-white transition-colors cursor-pointer"
+              >
                 Cookie Policy
-              </span>
+              </NavLink>
             </div>
           </div>
 
@@ -184,9 +193,12 @@ const Footer = () => {
             We use cookies to enhance your experience on our website. By
             continuing to use our website, you consent to the use of cookies.
             For more information, please see our{" "}
-            <span className="underline cursor-pointer text-white">
+            <NavLink
+              to="/cookie-policy"
+              className="underline cursor-pointer text-white"
+            >
               Cookie Policy
-            </span>
+            </NavLink>
             .
           </div>
         </div>

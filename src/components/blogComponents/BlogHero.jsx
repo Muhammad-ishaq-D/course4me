@@ -1,9 +1,31 @@
 import React from "react";
 import { Search, TrendingUp, BookOpen, ShieldCheck } from "lucide-react";
+import { useMemo, useState } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
+import { blogsData } from "../../data/blogs";
 
 const BlogHero = () => {
+  const navigate = useNavigate();
+
+  const [searchInput, setSearchInput] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const blogSuggestions = useMemo(() => {
+    if (!searchInput.trim()) return [];
+
+    const term = searchInput.toLowerCase();
+
+    return blogsData
+      .filter(
+        (blog) =>
+          blog.title.toLowerCase().includes(term) ||
+          blog.category.toLowerCase().includes(term),
+      )
+      .slice(0, 6);
+  }, [searchInput]);
+
   return (
-    <section className="relative overflow-hidden bg-[#0B1120] text-white">
+    <section className="relative overflow-hidden h-screen bg-[#0B1120] text-white">
       {/* ================= BACKGROUND ================= */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#111827] via-[#0B1120] to-[#050816]" />
 
@@ -23,9 +45,12 @@ const BlogHero = () => {
           <div>
             {/* BREADCRUMB */}
             <nav className="flex items-center gap-2 text-sm font-medium mb-8">
-              <span className="text-gray-500 hover:text-white transition cursor-pointer">
+              <NavLink
+                to="/"
+                className="text-gray-500 hover:text-white transition cursor-pointer"
+              >
                 Home
-              </span>
+              </NavLink>
 
               <span className="text-gray-700">/</span>
 
@@ -52,21 +77,68 @@ const BlogHero = () => {
             </p>
 
             {/* ================= SEARCH SECTION ================= */}
-            <div className="max-w-2xl w-full mt-8 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[28px] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+            <div className="max-w-2xl w-full mt-8 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[28px] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* INPUT */}
-                <div className="flex items-center w-full h-14 rounded-2xl bg-[#111827]/60 border border-white/5 px-4 overflow-hidden">
-                  <Search size={18} className="text-[#F15A24] shrink-0" />
+                <div className="relative flex-1 z-999">
+                  <div className="flex items-center w-full py-4 rounded-2xl bg-[#111827]/60 border border-white/5 px-4 overflow-hidden">
+                    <Search size={18} className="text-[#F15A24] shrink-0" />
 
-                  <input
-                    type="text"
-                    placeholder="Search articles, guides, news..."
-                    className="ml-3 flex-1 min-w-0 bg-transparent outline-none text-white placeholder:text-gray-500 text-sm"
-                  />
+                    <input
+                      type="text"
+                      value={searchInput}
+                      onFocus={() => setShowSuggestions(true)}
+                      onBlur={() =>
+                        setTimeout(() => setShowSuggestions(false), 200)
+                      }
+                      onChange={(e) => {
+                        setSearchInput(e.target.value);
+                        setShowSuggestions(true);
+                      }}
+                      placeholder="Search articles, guides, news..."
+                      className="ml-3 flex-1  min-w-0 bg-transparent outline-none text-white placeholder:text-gray-500 text-md"
+                    />
+
+                    {showSuggestions && blogSuggestions.length > 0 && (
+                      <div className="absolute top-full left-0 right-0 mt-3 bg-[#111827] border border-white/10 rounded-2xl shadow-2xl z-[9999] max-h-[210px] overflow-y-auto custom-scrollbar">
+                        {blogSuggestions.map((blog) => (
+                          <button
+                            key={blog.id}
+                            onMouseDown={() =>
+                              navigate(`/blog/article/${blog.id}`)
+                            }
+                            className="w-full cursor-pointer text-left px-5 py-4 hover:bg-white/5 border-b border-white/5 last:border-b-0 transition"
+                          >
+                            <div className="flex flex-col">
+                              <span className="text-white font-semibold line-clamp-1">
+                                {blog.title}
+                              </span>
+
+                              <span className="text-gray-400 text-xs mt-1">
+                                {blog.category}
+                              </span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* BUTTON */}
-                <button className="w-full sm:w-auto sm:min-w-45 h-14 px-7 rounded-2xl bg-[#F15A24] hover:bg-[#df4c18] transition-all duration-300 text-white font-bold shadow-[0_10px_40px_rgba(241,90,36,0.35)] whitespace-nowrap">
+                <button
+                  onClick={() => {
+                    const match = blogsData.find(
+                      (blog) =>
+                        blog.title.toLowerCase() === searchInput.toLowerCase(),
+                    );
+
+                    if (match) {
+                      navigate(`/blog/article/${match.id}`);
+                    }
+                  }}
+                  className="w-full sm:w-auto sm:min-w-45 h-14 px-7 rounded-2xl bg-[#F15A24] hover:bg-[#df4c18] transition-all duration-300 text-white font-bold shadow-[0_10px_40px_rgba(241,90,36,0.35)] whitespace-nowrap"
+                >
                   Search Blog
                 </button>
               </div>

@@ -22,6 +22,9 @@ import CareerDetails from "../pages/CareerDetails";
 import ApplyJob from "../components/careerDetailsComponents/ApplyJob";
 import QuickSearch from "../pages/QuickSearch";
 import TrainerProfile from "../components/TrainerComponents/TrainerProfile";
+import PrivacyandPolicy from "../pages/PrivacyandPolicy";
+import TermsOfServices from "../pages/TermsOfServices";
+import CookiePolicy from "../pages/CookiePolicy";
 
 const AppRoutes = () => {
   return (
@@ -38,10 +41,13 @@ const AppRoutes = () => {
       <Route path="/licences" element={<Licenses />} />
       <Route path="/licences/licencesdetails" element={<LicenseDetails />} />
       <Route path="/blog" element={<Blog />} />
-      <Route path="/blog/article" element={<BlogArticle />} />
+      <Route path="/blog/article/:id" element={<BlogArticle />} />
       <Route path="/locations" element={<Locations />} />
       <Route path="/locations/locationdetails" element={<LocationDetails />} />
-      <Route path="/locations/locationdetails/:courseLocationId" element={<LocationDetails />} />
+      <Route
+        path="/locations/locationdetails/:courseLocationId"
+        element={<LocationDetails />}
+      />
       <Route path="/careers" element={<Careers />} />
       <Route path="/careers/careerdetails/:id" element={<CareerDetails />} />
       <Route path="/apply-job/:id" element={<ApplyJob />} />
@@ -49,6 +55,9 @@ const AppRoutes = () => {
       <Route path="/signin" element={<Signin />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/trainer-profile" element={<TrainerProfile />} />
+      <Route path="/privacy-policy" element={<PrivacyandPolicy />} />
+      <Route path="/terms-of-services" element={<TermsOfServices />} />
+      <Route path="/cookie-policy" element={<CookiePolicy />} />
       <Route
         path="/dashboard"
         element={

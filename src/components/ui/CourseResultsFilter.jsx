@@ -3,7 +3,7 @@ import { MapPin, Info } from "lucide-react";
 
 const CourseResultsFilter = ({ filter, setFilter, filterPrices = {} }) => {
   return (
-    <aside className="w-full lg:w-70 shrink-0">
+    <aside className="w-full lg:relative lg:top-22 lg:w-70 shrink-0">
       <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden p-2">
         {/* Header */}
         <div className="px-4 pt-4 pb-2">

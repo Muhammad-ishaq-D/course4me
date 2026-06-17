@@ -338,14 +338,14 @@ const TestimonialsSection = () => {
           </div>
 
           {/* BUTTON */}
-          <motion.button
+          {/* <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="bg-[#FF5421] cursor-pointer text-white px-6 py-3 rounded-xl flex items-center gap-2"
           >
             View all reviews
             <ExternalLink size={16} />
-          </motion.button>
+          </motion.button> */}
         </motion.div>
       </div>
     </section>

@@ -15,6 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import courseLocationService from "../../api/services/courseLocationService";
 import Loader from "../ui/Loader";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -30,12 +31,26 @@ const LocationSearch = () => {
   const [page, setPage] = useState(1);
   const [imgErrors, setImgErrors] = useState({});
 
+  const [zoom, setZoom] = useState(10);
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  });
+
+  const center = useMemo(() => {
+    return {
+      lat: 51.5072,
+      lng: -0.1276,
+    };
+  }, []);
+
   // Fetch all active course-location links for published courses
   useEffect(() => {
     courseLocationService
       .getAll()
       .then((res) => setAllLinks(res?.data?.data || []))
-      .catch(() => { })
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
@@ -46,7 +61,7 @@ const LocationSearch = () => {
     return allLinks.filter((link) => {
       const loc = link.locationId;
       if (!loc || typeof loc !== "object") return false;
-      if (loc.status !== 'Active') return false;
+      if (loc.status !== "Active") return false;
       return (
         loc.name?.toLowerCase().includes(term) ||
         loc.city?.toLowerCase().includes(term) ||
@@ -59,26 +74,43 @@ const LocationSearch = () => {
   // Dropdown suggestions while typing
   const locationSuggestions = useMemo(() => {
     if (!searchInput.trim()) return [];
+
     const term = searchInput.trim().toLowerCase();
     const seen = new Set();
     const results = [];
+
     allLinks.forEach((link) => {
       const loc = link.locationId;
+
       if (!loc || typeof loc !== "object") return;
+
+      // Only active locations
+      if (loc.status !== "Active") return;
+
       const matches =
         loc.name?.toLowerCase().includes(term) ||
         loc.city?.toLowerCase().includes(term) ||
         loc.postcode?.toLowerCase().includes(term) ||
         loc.addressLine1?.toLowerCase().includes(term);
+
       if (!matches) return;
+
       const label = [loc.name, loc.city, loc.postcode]
         .filter(Boolean)
         .join(", ");
+
       if (!label || seen.has(label)) return;
+
       seen.add(label);
+
       const filterKey = loc.postcode || loc.city || loc.name || label;
-      results.push({ label, filterKey, isInactive: loc.status !== 'Active' });
+
+      results.push({
+        label,
+        filterKey,
+      });
     });
+
     return results.slice(0, 8);
   }, [searchInput, allLinks]);
 
@@ -103,7 +135,7 @@ const LocationSearch = () => {
         <div className="relative mb-5">
           <div className="absolute inset-0 bg-linear-to-r from-orange-100/40 via-white to-orange-100/40 blur-3xl rounded-full pointer-events-none" />
 
-          <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] px-5 py-5 overflow-visible z-999">
+          <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] px-5 py-5 overflow-visible z-99">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
               {/* Left */}
               <div>
@@ -120,7 +152,7 @@ const LocationSearch = () => {
               <div className="sticky top-0 z-50 lg:static py-3">
                 <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
                   {/* Search Input */}
-                  <div className="relative flex-1 lg:w-[420px]">
+                  <div className="relative flex-1 lg:w-105">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-2xl bg-orange-50 flex items-center justify-center z-20">
                       <MapPin className="w-5 h-5 text-orange-500" />
                     </div>
@@ -143,7 +175,7 @@ const LocationSearch = () => {
 
                     {/* ===================== DROPDOWN ===================== */}
                     {showSuggestions && locationSuggestions.length > 0 && (
-                      <div className="absolute top-full mt-3 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
+                      <div className="absolute top-full mt-3 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.08)] overflow-hidden z-99">
                         <div className="px-4 py-3 border-b border-gray-100">
                           <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
                             Matching Locations
@@ -159,7 +191,7 @@ const LocationSearch = () => {
                                 setSearch(item.filterKey);
                                 setShowSuggestions(false);
                               }}
-                              className={`w-full flex items-center gap-3 px-4 py-4 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0 ${item.isInactive ? 'opacity-50 cursor-default hover:bg-gray-50' : 'hover:bg-orange-50'}`}
+                              className={`w-full flex items-center gap-3 px-4 py-4 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0 ${item.isInactive ? "opacity-50 cursor-default hover:bg-gray-50" : "hover:bg-orange-50"}`}
                             >
                               <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
                                 <MapPin
@@ -245,13 +277,13 @@ const LocationSearch = () => {
                     );
                   const nextDate = upcomingDates[0]?.startDate
                     ? new Date(upcomingDates[0].startDate).toLocaleDateString(
-                      "en-GB",
-                      {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      },
-                    )
+                        "en-GB",
+                        {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        },
+                      )
                     : null;
                   const price =
                     link.price ||
@@ -265,10 +297,11 @@ const LocationSearch = () => {
                       onMouseEnter={() => setActiveLinkId(link._id)}
                       onMouseLeave={() => setActiveLinkId(null)}
                       className={`group relative bg-white border rounded-[28px] p-3 transition-all duration-300  overflow-hidden
-                      ${activeLinkId === link._id
+                      ${
+                        activeLinkId === link._id
                           ? "border-orange-300 shadow-[0_20px_60px_rgba(249,115,22,0.15)]"
                           : "border-gray-200 hover:border-orange-200 hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]"
-                        }`}
+                      }`}
                     >
                       {/* Hover gradient */}
                       <div className="absolute inset-0 bg-linear-to-r from-orange-50/0 via-orange-50/40 to-orange-50/0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />
@@ -281,7 +314,12 @@ const LocationSearch = () => {
                               src={course.thumbnail}
                               alt={course.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              onError={() => setImgErrors(prev => ({ ...prev, [link._id]: true }))}
+                              onError={() =>
+                                setImgErrors((prev) => ({
+                                  ...prev,
+                                  [link._id]: true,
+                                }))
+                              }
                             />
                           ) : (
                             <BookOpen className="w-10 h-10 text-orange-300" />
@@ -425,10 +463,11 @@ const LocationSearch = () => {
                       <button
                         key={p}
                         onClick={() => setPage(p)}
-                        className={`w-11 h-11 rounded-2xl font-semibold transition ${p === page
+                        className={`w-11 h-11 rounded-2xl font-semibold transition ${
+                          p === page
                             ? "bg-orange-500 text-white"
                             : "border border-gray-200 hover:bg-gray-50"
-                          }`}
+                        }`}
                       >
                         {p}
                       </button>
@@ -452,26 +491,61 @@ const LocationSearch = () => {
           ========================================================= */}
           <div className="sticky top-0">
             <div className="relative h-[88vh] rounded-3xl overflow-hidden border border-gray-200 shadow-sm bg-white">
-              <iframe
-                title="Google Map"
-                src={import.meta.env.VITE_GOOGLE_MAPS_API_KEY 
-                  ? `https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(search || "United Kingdom")}`
-                  : `https://www.google.com/maps?q=${encodeURIComponent(search || "United Kingdom")}&output=embed`}
-                loading="lazy"
-                className="w-full h-full"
-              />
+              {!isLoaded ? (
+                <div className="h-full flex items-center justify-center">
+                  <p>Loading Map...</p>
+                </div>
+              ) : (
+                <GoogleMap
+                  mapContainerStyle={{
+                    width: "100%",
+                    height: "100%",
+                  }}
+                  center={center}
+                  zoom={zoom}
+                  options={{
+                    streetViewControl: false,
+                    fullscreenControl: false,
+                    mapTypeControl: false,
+                  }}
+                >
+                  <Marker position={center} />
+                </GoogleMap>
+              )}
 
-              <div className="absolute inset-0 bg-linear-to-t from-black/5 to-transparent pointer-events-none" />
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent pointer-events-none" />
 
               {/* Map Controls */}
               <div className="absolute bottom-6 right-6 flex flex-col gap-3 z-30">
-                <button className="w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-lg flex items-center justify-center hover:bg-gray-50 transition">
+                {/* Current Location */}
+                <button
+                  onClick={() => {
+                    navigator.geolocation.getCurrentPosition(
+                      (position) => {
+                        console.log(position.coords);
+                      },
+                      (err) => console.log(err),
+                    );
+                  }}
+                  className="w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-lg flex items-center justify-center hover:bg-gray-50 transition"
+                >
                   <LocateFixed className="w-5 h-5 text-gray-700" />
                 </button>
-                <button className="w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-lg flex items-center justify-center hover:bg-gray-50 transition">
+
+                {/* Zoom In */}
+                <button
+                  onClick={() => setZoom((prev) => Math.min(prev + 1, 20))}
+                  className="w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-lg flex items-center justify-center hover:bg-gray-50 transition"
+                >
                   <Plus className="w-5 h-5 text-gray-700" />
                 </button>
-                <button className="w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-lg flex items-center justify-center hover:bg-gray-50 transition">
+
+                {/* Zoom Out */}
+                <button
+                  onClick={() => setZoom((prev) => Math.max(prev - 1, 1))}
+                  className="w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-lg flex items-center justify-center hover:bg-gray-50 transition"
+                >
                   <Minus className="w-5 h-5 text-gray-700" />
                 </button>
               </div>

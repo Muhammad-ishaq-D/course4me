@@ -292,9 +292,9 @@ const RealStories = () => {
             </div>
           </div>
 
-          <button className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-2">
+          {/* <button className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-2">
             View all reviews <ExternalLink size={16} />
-          </button>
+          </button> */}
         </div>
       </div>
     </section>
