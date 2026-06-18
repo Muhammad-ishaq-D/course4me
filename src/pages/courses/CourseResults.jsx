@@ -47,6 +47,7 @@ const CourseResults = () => {
   const [amenitiesByLinkId, setAmenitiesByLinkId] = useState({});
   const [isCalculatingDistances, setIsCalculatingDistances] = useState(false);
   const [bookedSchedules, setBookedSchedules] = useState([]);
+  const [overallBookingStatus, setOverallBookingStatus] = useState(null);
 
   const [stripeModalOpen, setStripeModalOpen] = useState(false);
   const [clientSecret, setClientSecret] = useState(null);
@@ -76,8 +77,11 @@ const CourseResults = () => {
       bookingService
         .getMyBookingStatus(courseId)
         .then((res) => {
-          if (res.data && res.data.bookedSchedules) {
-            setBookedSchedules(res.data.bookedSchedules);
+          if (res.data) {
+            setOverallBookingStatus(res.data.status);
+            if (res.data.bookedSchedules) {
+              setBookedSchedules(res.data.bookedSchedules);
+            }
           }
         })
         .catch((err) => console.error("Error fetching booking status:", err));
@@ -230,9 +234,9 @@ const CourseResults = () => {
         price: link.price || course?.pricing?.basePrice || 139.99,
         nextDate: upcomingDates[0]?.startDate
           ? new Date(upcomingDates[0].startDate).toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "short",
-            })
+            day: "numeric",
+            month: "short",
+          })
           : "TBA",
         dates: upcomingDates.map((d) => ({
           id: d._id,
@@ -381,6 +385,7 @@ const CourseResults = () => {
                   }}
                   course={course}
                   bookedSchedules={bookedSchedules}
+                  overallBookingStatus={overallBookingStatus}
                   onPayPending={handlePayPending}
                 />
               ))

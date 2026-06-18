@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { courses as fallbackCourses } from "../../data/courseData";
 import courseService from "../../api/services/courseService";
+import courseLocationService from "../../api/services/courseLocationService";
 
 const CoursePackages = () => {
   const [searchParams] = useSearchParams();
@@ -25,27 +26,50 @@ const CoursePackages = () => {
   const scheduleId = searchParams.get("scheduleId");
 
   const [course, setCourse] = useState(null);
+  const [schedulePrice, setSchedulePrice] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchCourse = async () => {
+    const fetchData = async () => {
       try {
         if (!courseId) {
           setIsLoading(false);
           return;
         }
-        const response = await courseService.getCourseById(courseId);
-        setCourse(response.data.data);
+        
+        const [courseRes, locRes] = await Promise.all([
+          courseService.getCourseById(courseId),
+          courseLocationService
+            .getByCourse(courseId)
+            .catch(() => ({ data: { data: [] } })),
+        ]);
+        
+        setCourse(courseRes.data.data);
+
+        if (scheduleId) {
+          const links = locRes.data.data || [];
+          let foundPrice = null;
+          for (const link of links) {
+            const date = (link.dates || []).find(
+              (d) => d._id?.toString() === scheduleId.toString()
+            );
+            if (date && link.price) {
+              foundPrice = link.price;
+              break;
+            }
+          }
+          if (foundPrice) setSchedulePrice(foundPrice);
+        }
       } catch (err) {
-        console.error("Error fetching course:", err);
+        console.error("Error fetching course data:", err);
         setError("Course not found");
       } finally {
         setIsLoading(false);
       }
     };
-    fetchCourse();
+    fetchData();
     window.scrollTo(0, 0);
-  }, [courseId]);
+  }, [courseId, scheduleId]);
 
   const features = {
     saver: [
@@ -160,7 +184,7 @@ const CoursePackages = () => {
   }
 
   const baseTitle = course?.title || "Course";
-  const basePriceValue = course?.pricing?.basePrice || 139.99;
+  const basePriceValue = schedulePrice || course?.pricing?.basePrice || 139.99;
   const saverPrice = (basePriceValue - 40).toFixed(2);
   const flexiPrice = basePriceValue.toFixed(2);
   const premiumPrice = (basePriceValue + 120).toFixed(2);
