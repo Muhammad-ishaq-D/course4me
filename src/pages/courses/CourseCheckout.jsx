@@ -102,6 +102,47 @@ const CourseCheckout = () => {
   const [detailsErrors, setDetailsErrors] = useState({});
   const [billingErrors, setBillingErrors] = useState({});
 
+  const [loadingPendingBooking, setLoadingPendingBooking] = useState(true);
+
+  useEffect(() => {
+    const loadPendingBooking = async () => {
+      try {
+        setLoadingPendingBooking(true);
+
+        const res = await bookingService.getMyPendingBooking(courseId);
+
+        if (res.data?.success && res.data?.booking) {
+          const booking = res.data.booking;
+
+          setDetails({
+            firstName: booking.customerDetails.firstName || "",
+            lastName: booking.customerDetails.lastName || "",
+            email: booking.customerDetails.email || "",
+            mobile: booking.customerDetails.phone || "",
+            dob: booking.customerDetails.dob || "",
+            password: "",
+            confirmPassword: "",
+          });
+
+          setBilling({
+            postcode: booking.billingAddress?.postcode || "",
+            addr1: booking.billingAddress?.line1 || "",
+            addr2: booking.billingAddress?.line2 || "",
+            city: booking.billingAddress?.city || "",
+          });
+
+          setExistingBookingId(booking._id);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoadingPendingBooking(false);
+      }
+    };
+
+    loadPendingBooking();
+  }, [courseId]);
+
   // Clear individual detail error on change
   const updateDetail = (field, value) => {
     setDetails((d) => ({ ...d, [field]: value }));
@@ -422,14 +463,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                  (piRes.data?.message || ""),
+                    (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                "Could not load payment session. You may have already completed this payment.",
+                  "Could not load payment session. You may have already completed this payment.",
               );
             });
         })
@@ -447,14 +488,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                  (piRes.data?.message || ""),
+                    (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                "Could not load payment session. You may have already completed this payment.",
+                  "Could not load payment session. You may have already completed this payment.",
               );
             });
         });
@@ -548,7 +589,7 @@ const CourseCheckout = () => {
         } else {
           setError(
             "Failed to initialize payment for existing booking. " +
-            (piRes.data?.message || ""),
+              (piRes.data?.message || ""),
           );
         }
         setIsSubmitting(false);
@@ -611,7 +652,7 @@ const CourseCheckout = () => {
       } else {
         setError(
           err.response?.data?.message ||
-          "An error occurred during booking. Please try again.",
+            "An error occurred during booking. Please try again.",
         );
         if (
           err.response?.data?.existingBookingId &&
@@ -690,18 +731,18 @@ const CourseCheckout = () => {
     }
   };
   /* ── Skeleton ── */
-  if (isLoading) {
+  if (isLoading || loadingPendingBooking) {
     return <CheckoutSkeleton />;
   }
 
   if (isConfirmed) {
     const formattedDate = selectedSchedule?.startDate
       ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+          weekday: "long",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })
       : "Pending Date";
 
     return (
@@ -1146,9 +1187,6 @@ const CourseCheckout = () => {
                   <span className="text-lg font-black text-[#1C1C1C]">
                     Zero-Hassle Application Service - EasyApply™
                   </span>
-                  <span className="inline-block px-2 py-0.5 bg-[#F15A24] text-white text-xs font-black uppercase tracking-widest rounded">
-                    Recommended
-                  </span>
                 </div>
                 <div className="p-6 space-y-4">
                   <p className="text-base text-gray-500">
@@ -1251,7 +1289,6 @@ const CourseCheckout = () => {
               <CollapsedStep
                 stepNum={3}
                 title="Zero-Hassle Application Service - EasyApply™"
-                badge="Recommended"
               />
             )}
 
@@ -1438,14 +1475,14 @@ const CourseCheckout = () => {
             date={
               selectedSchedule?.startDate
                 ? new Date(selectedSchedule.startDate).toLocaleDateString(
-                  "en-GB",
-                  {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  },
-                )
+                    "en-GB",
+                    {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    },
+                  )
                 : null
             }
             courseId={courseId}
