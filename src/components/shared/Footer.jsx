@@ -166,7 +166,7 @@ const Footer = () => {
               © 2026 Courses4Me. All rights reserved.
             </div>
 
-            <div className="flex gap-8 text-[#666666] text-sm">
+            <div className="flex flex-col md:flex-row  gap-8 text-[#666666] text-sm">
               <NavLink
                 to="/privacy-policy"
                 className="hover:text-white transition-colors cursor-pointer"

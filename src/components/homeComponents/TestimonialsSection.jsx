@@ -7,12 +7,12 @@ const testimonials = [
   {
     name: "Paul Taylor",
     role: "Door Supervisor Training · January 2026",
-    text: "2 months ago I was working in a warehouse. Today, I am working as a security guard in Harrow earning a lot more than I was sorting boxes! I am glad I chose Courses4Me for my SIA training.",
+    text: "2 months ago I was working in a warehouse. Today, I am working as a security guard in Harrow earning a lot more.",
   },
   {
     name: "Sarah Johnson",
     role: "Door Supervisor Training · January 2026",
-    text: "I had the opportunity to take the course under excellent instruction. The trainer was patient, knowledgeable, and made learning enjoyable. Passed first time!",
+    text: "I had the opportunity to take the course under excellent instruction. The trainer was patient, knowledgeable.",
   },
   {
     name: "James Mitchell",
@@ -264,7 +264,7 @@ const TestimonialsSection = () => {
               className="relative bg-white rounded-[30px] p-6 pt-10 border border-[#F15A24]/10 shadow-[0_10px_30px_rgba(241,90,36,0.08)] overflow-hidden transition-all duration-300 hover:shadow-[0_16px_40px_rgba(241,90,36,0.15)]"
             >
               {/* TOP RIGHT LETTER */}
-              <div className="absolute top-5 right-5">
+              <div className="absolute hidden md:block top-5 right-5">
                 <div className="w-[72px] h-[72px] rounded-full border-[6px] border-[#F15A24] bg-[#FFE7DE] flex items-center justify-center shadow-md">
                   <span className="text-[28px] font-bold text-[#F15A24]">
                     {t.name.charAt(0)}
@@ -324,7 +324,7 @@ const TestimonialsSection = () => {
         >
           {/* LEFT */}
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-[#F65B15] text-white flex items-center justify-center font-bold text-lg">
+            <div className="px-2 py-2.5 rounded-full bg-[#F65B15] text-white flex items-center justify-center font-bold text-lg">
               95%
             </div>
 

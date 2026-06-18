@@ -46,12 +46,15 @@ const CourseCheckout = () => {
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeStep, setActiveStep] = useState(() => searchParams.get("bookingId") ? 4 : 1);
+  const [activeStep, setActiveStep] = useState(() =>
+    searchParams.get("bookingId") ? 4 : 1,
+  );
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [clientSecret, setClientSecret] = useState(null);
   const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
   // New state for tracking booking status (PAID, PENDING, etc.)
   const [bookingStatus, setBookingStatus] = React.useState(null);
+  const [pendingBookingLoading, setPendingBookingLoading] = useState(true);
   // Existing state for booking reference (used for success page)
   const [bookingRef, setBookingRef] = useState("");
   const [error, setError] = useState("");
@@ -63,8 +66,6 @@ const CourseCheckout = () => {
   const plan = (searchParams.get("plan") || "Flexi+").trim();
 
   const [timeLeft, setTimeLeft] = useState(15 * 60);
-
-
 
   const [courseData, setCourseData] = useState(null);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
@@ -280,7 +281,6 @@ const CourseCheckout = () => {
         };
         setDetails(updatedDetails);
 
-
         // If profile is incomplete, stay on step 1 to let them fill missing info
         if (!updatedDetails.mobile || !updatedDetails.dob) {
           setIsLoggingIn(false); // Switch back to details view but with fields populated
@@ -427,15 +427,21 @@ const CourseCheckout = () => {
 
                 // Populate billing address if available from status check
                 if (statusRes.data?.bookedSchedules) {
-                  const currentScheduleBooking = statusRes.data.bookedSchedules.find(b => b.bookingId === urlBookingId);
+                  const currentScheduleBooking =
+                    statusRes.data.bookedSchedules.find(
+                      (b) => b.bookingId === urlBookingId,
+                    );
                   if (currentScheduleBooking?.billingAddress) {
                     setBilling({
-                      postcode: currentScheduleBooking.billingAddress.postcode || "",
+                      postcode:
+                        currentScheduleBooking.billingAddress.postcode || "",
                       addr1: currentScheduleBooking.billingAddress.line1 || "",
                       addr2: currentScheduleBooking.billingAddress.line2 || "",
                       city: currentScheduleBooking.billingAddress.city || "",
                     });
-                    setSelectedPostcode(currentScheduleBooking.billingAddress.postcode || "");
+                    setSelectedPostcode(
+                      currentScheduleBooking.billingAddress.postcode || "",
+                    );
                   }
                 }
 
@@ -445,14 +451,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                  (piRes.data?.message || ""),
+                    (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                "Could not load payment session. You may have already completed this payment.",
+                  "Could not load payment session. You may have already completed this payment.",
               );
             });
         })
@@ -465,21 +471,20 @@ const CourseCheckout = () => {
                 setClientSecret(piRes.data.clientSecret);
                 setExistingBookingId(urlBookingId);
 
-
                 setBookingStatus("PENDING");
                 setActiveStep(4);
                 setIsSubmitting(false);
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                  (piRes.data?.message || ""),
+                    (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                "Could not load payment session. You may have already completed this payment.",
+                  "Could not load payment session. You may have already completed this payment.",
               );
             });
         });
@@ -497,6 +502,8 @@ const CourseCheckout = () => {
 
   // Load current booking status for this course
   React.useEffect(() => {
+    setPendingBookingLoading(true);
+
     if (user && courseData?._id) {
       bookingService
         .getMyBookingStatus(courseData._id)
@@ -507,18 +514,21 @@ const CourseCheckout = () => {
             // "Complete Pending Payment" button shows immediately on page load
             if (res.data.bookedSchedules) {
               const currentScheduleBooking = res.data.bookedSchedules.find(
-                (b) => b.scheduleId === scheduleId && b.status === "PENDING"
+                (b) => b.scheduleId === scheduleId && b.status === "PENDING",
               );
               if (currentScheduleBooking) {
                 setExistingBookingId(currentScheduleBooking.bookingId);
                 if (currentScheduleBooking.billingAddress) {
                   setBilling({
-                    postcode: currentScheduleBooking.billingAddress.postcode || "",
+                    postcode:
+                      currentScheduleBooking.billingAddress.postcode || "",
                     addr1: currentScheduleBooking.billingAddress.line1 || "",
                     addr2: currentScheduleBooking.billingAddress.line2 || "",
                     city: currentScheduleBooking.billingAddress.city || "",
                   });
-                  setSelectedPostcode(currentScheduleBooking.billingAddress.postcode || "");
+                  setSelectedPostcode(
+                    currentScheduleBooking.billingAddress.postcode || "",
+                  );
                 }
               }
             }
@@ -526,6 +536,9 @@ const CourseCheckout = () => {
         })
         .catch((err) => {
           console.error("Failed to fetch booking status", err);
+        })
+        .finally(() => {
+          setPendingBookingLoading(false);
         });
     }
   }, [user, courseData?._id, scheduleId]);
@@ -540,7 +553,6 @@ const CourseCheckout = () => {
         dob: user.dob || details.dob,
       };
       setDetails(updatedDetails);
-
 
       // If user has all required info, auto-advance to step 2 if we are on step 1
       if (
@@ -597,7 +609,7 @@ const CourseCheckout = () => {
         } else {
           setError(
             "Failed to initialize payment for existing booking. " +
-            (piRes.data?.message || ""),
+              (piRes.data?.message || ""),
           );
         }
         setIsSubmitting(false);
@@ -660,7 +672,7 @@ const CourseCheckout = () => {
       } else {
         setError(
           err.response?.data?.message ||
-          "An error occurred during booking. Please try again.",
+            "An error occurred during booking. Please try again.",
         );
         if (
           err.response?.data?.existingBookingId &&
@@ -746,11 +758,11 @@ const CourseCheckout = () => {
   if (isConfirmed) {
     const formattedDate = selectedSchedule?.startDate
       ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+          weekday: "long",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })
       : "Pending Date";
 
     return (
@@ -771,27 +783,53 @@ const CourseCheckout = () => {
   }
 
   /* ── Completed step header ── */
-  const CompletedStep = ({ stepNum, title, summary, onEdit }) => (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-start justify-between gap-4">
-      <div className="flex items-start gap-3">
-        <StepCheck />
-        <div>
-          <p className="text-lg font-bold  text-[#1C1C1C]">{title}</p>
-          {summary.map((l, i) => (
-            <p key={i} className="text-base text-gray-500">
-              {l}
-            </p>
-          ))}
+  const CompletedStep = ({ title, summary, onEdit, loading = false }) => {
+    if (loading) {
+      return (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 animate-pulse">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-3 flex-1">
+              <div className="w-6 h-6 rounded-full bg-gray-200" />
+
+              <div className="flex-1 space-y-2">
+                <div className="h-5 w-40 bg-gray-200 rounded" />
+                <div className="h-4 w-64 bg-gray-100 rounded" />
+                <div className="h-4 w-48 bg-gray-100 rounded" />
+              </div>
+            </div>
+
+            <div className="w-12 h-5 bg-gray-200 rounded" />
+          </div>
         </div>
+      );
+    }
+
+    return (
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <StepCheck />
+
+          <div>
+            <p className="text-lg font-bold text-[#1C1C1C]">{title}</p>
+
+            {summary?.map((l, i) => (
+              <p key={i} className="text-base text-gray-500">
+                {l}
+              </p>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={onEdit}
+          className="flex items-center gap-1.5 text-[#F15A24] text-base cursor-pointer font-bold hover:underline shrink-0"
+        >
+          <Edit2 size={16} />
+          Edit
+        </button>
       </div>
-      <button
-        onClick={onEdit}
-        className="flex items-center gap-1.5 text-[#F15A24] text-base cursor-pointer font-bold hover:underline shrink-0"
-      >
-        <Edit2 size={16} /> Edit
-      </button>
-    </div>
-  );
+    );
+  };
 
   /* ── Collapsed step header ── */
   const CollapsedStep = ({ stepNum, title, badge }) => (
@@ -838,6 +876,7 @@ const CourseCheckout = () => {
             {/* ── Step 1: Your Details ── */}
             {activeStep > 1 ? (
               <CompletedStep
+                loading={pendingBookingLoading}
                 stepNum={1}
                 title="Your Details"
                 onEdit={() => setActiveStep(1)}
@@ -1077,12 +1116,16 @@ const CourseCheckout = () => {
             {/* ── Step 2: Billing Address ── */}
             {activeStep > 2 ? (
               <CompletedStep
+                loading={pendingBookingLoading}
                 stepNum={2}
                 title="Billing Address"
                 onEdit={() => setActiveStep(2)}
-                summary={[billing.postcode, billing.addr1, billing.addr2, billing.city].filter(
-                  Boolean,
-                )}
+                summary={[
+                  billing.postcode,
+                  billing.addr1,
+                  billing.addr2,
+                  billing.city,
+                ].filter(Boolean)}
               />
             ) : activeStep === 2 ? (
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
@@ -1485,14 +1528,14 @@ const CourseCheckout = () => {
             date={
               selectedSchedule?.startDate
                 ? new Date(selectedSchedule.startDate).toLocaleDateString(
-                  "en-GB",
-                  {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  },
-                )
+                    "en-GB",
+                    {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    },
+                  )
                 : null
             }
             courseId={courseId}
