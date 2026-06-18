@@ -587,7 +587,7 @@ const CourseCheckout = () => {
       .padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
 
   const handlePayment = async () => {
-    if (!agree2) {
+    if (!existingBookingId && !agree2) {
       setError("Please agree to the Terms of Service before proceeding.");
       return;
     }
@@ -1427,50 +1427,52 @@ const CourseCheckout = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-3 pt-2">
-                    <label className="flex items-start gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={agree1}
-                        onChange={(e) => setAgree1(e.target.checked)}
-                        className="mt-0.5 w-4 h-4 accent-[#F15A24]"
-                      />
-                      <span className="text-sm text-gray-600">
-                        Send me the latest job opportunities, industry changes
-                        and course advice
-                      </span>
-                    </label>
-                    <label className="flex items-start gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={agree2}
-                        onChange={(e) => setAgree2(e.target.checked)}
-                        className="mt-0.5 w-4 h-4 accent-[#F15A24]"
-                      />
-                      <span className="text-sm text-gray-600">
-                        I agree to the Courses4Me{" "}
-                        <a
-                          href="/privacy-policy"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="text-[#F15A24] underline cursor-pointer"
-                        >
-                          Privacy Policy
-                        </a>{" "}
-                        and{" "}
-                        <a
-                          href="/terms-of-services"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="text-[#F15A24] underline cursor-pointer"
-                        >
-                          Terms of service
-                        </a>
-                      </span>
-                    </label>
-                  </div>
+                  {!existingBookingId && (
+                    <div className="space-y-3 pt-2">
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={agree1}
+                          onChange={(e) => setAgree1(e.target.checked)}
+                          className="mt-0.5 w-4 h-4 accent-[#F15A24]"
+                        />
+                        <span className="text-sm text-gray-600">
+                          Send me the latest job opportunities, industry changes
+                          and course advice
+                        </span>
+                      </label>
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={agree2}
+                          onChange={(e) => setAgree2(e.target.checked)}
+                          className="mt-0.5 w-4 h-4 accent-[#F15A24]"
+                        />
+                        <span className="text-sm text-gray-600">
+                          I agree to the Courses4Me{" "}
+                          <a
+                            href="/privacy-policy"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-[#F15A24] underline cursor-pointer"
+                          >
+                            Privacy Policy
+                          </a>{" "}
+                          and{" "}
+                          <a
+                            href="/terms-of-services"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-[#F15A24] underline cursor-pointer"
+                          >
+                            Terms of service
+                          </a>
+                        </span>
+                      </label>
+                    </div>
+                  )}
 
                   {error && (
                     <div className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3 text-red-600 text-sm">
@@ -1521,7 +1523,7 @@ const CourseCheckout = () => {
                           ? "Processing..."
                           : "Complete Pending Payment"
                       }
-                      disabled={isSubmitting || !agree1 || !agree2}
+                      disabled={isSubmitting}
                     />
                   )}
                 </div>
