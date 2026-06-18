@@ -577,7 +577,7 @@ const CourseCheckout = () => {
   }, [user]);
 
   useEffect(() => {
-    if (isLoading || isConfirmed || !existingBookingId) return;
+    if (isLoading || isConfirmed) return;
     const id = setInterval(() => {
       setTimeLeft((p) => {
         if (p <= 1) {
@@ -589,7 +589,7 @@ const CourseCheckout = () => {
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [isLoading, isConfirmed, existingBookingId, courseId, navigate]);
+  }, [isLoading, isConfirmed, courseId, navigate]);
 
   const fmt = (s) =>
     `${Math.floor(s / 60)
