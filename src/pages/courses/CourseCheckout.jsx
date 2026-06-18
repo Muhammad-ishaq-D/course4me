@@ -46,7 +46,7 @@ const CourseCheckout = () => {
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(() => searchParams.get("bookingId") ? 4 : 1);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [clientSecret, setClientSecret] = useState(null);
   const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
