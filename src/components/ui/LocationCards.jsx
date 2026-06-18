@@ -183,8 +183,8 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                   <Calendar size={14} /> Available Course Slots
                 </h4>
 
-                {(
-                  loc.dates || [
+                {(() => {
+                  const datesToRender = (loc.dates || [
                     {
                       range: "Mon 23rd Mar 2026 - Thu 26th Mar 2026",
                       price: loc.price,
@@ -200,8 +200,27 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                       price: (parseFloat(loc.price) + 10).toFixed(2),
                       id: 3,
                     },
-                  ]
-                ).map((date, idx) => (
+                  ]).filter(date => {
+                    if (bookedSchedules.length > 0) {
+                      return bookedSchedules.some(b => b.scheduleId === String(date.id));
+                    }
+                    return true;
+                  });
+
+                  if (datesToRender.length === 0) {
+                    return (
+                      <div className="bg-orange-50 border border-orange-100 rounded-xl p-6 text-center">
+                        <p className="text-orange-800 font-medium text-sm">
+                          You have a pending booking at another location or date.
+                        </p>
+                        <p className="text-orange-600/80 font-normal text-xs mt-1">
+                          Please complete or cancel your existing booking to view dates here.
+                        </p>
+                      </div>
+                    );
+                  }
+
+                  return datesToRender.map((date, idx) => (
                   <div
                     key={idx}
                     className="flex flex-col sm:row sm:flex-row lg:items-center justify-between gap-4 p-4 bg-white rounded-xl border border-[#F15A24] hover:shadow-md transition-all group/date"
@@ -254,18 +273,6 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                                   <span>Complete Payment</span>
                                 </Link>
                               )
-                            ) : bookedSchedules.length > 0 ? (
-                              <div className="relative group/tooltip">
-                                <button
-                                  disabled
-                                  className="px-6 py-2.5 rounded-lg text-sm font-bold bg-orange-50 text-orange-300 border border-orange-200 cursor-not-allowed transition-all"
-                                >
-                                  Book Now
-                                </button>
-                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-800 text-white text-xs text-center p-2 rounded opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all">
-                                  Cancel your pending booking to select this date.
-                                </div>
-                              </div>
                             ) : (
                               <Link
                                 to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
@@ -279,7 +286,8 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                       );
                     })()}
                   </div>
-                ))}
+                      ));
+                })()}
               </>
             )}
           </div>
