@@ -142,7 +142,7 @@ const TrainerProfile = () => {
                     key={index}
                     className=" rounded-[24px] border  border-white/10  bg-white/5 backdrop-blur-md p-5  hover:border-[#F15A24]/30 transition-all duration-300"
                   >
-                    <div className="flex items-start gap-3">
+                    <div className="flex flex-col md:flex-row items-start gap-3">
                       <div className="w-12 h-12 rounded-2xl bg-[#F15A24]/15 text-[#F15A24] flex items-center justify-center">
                         {item.icon}
                       </div>

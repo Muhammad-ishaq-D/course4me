@@ -40,7 +40,7 @@ const HeroSection = ({ license }) => {
       {/* ====================CONTAINER====================== */}
       <div className="relative max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-14 lg:py-20">
         {/* =======================BREADCRUMB================= */}
-        <div className="flex items-center gap-3 text-sm text-white/50 mb-4">
+        <div className="flex flex-wrap items-center gap-3 text-xs md:text-sm text-white/50 mb-4">
           <NavLink
             to="/"
             className="hover:text-[#F15A24] cursor-pointer transition-all duration-300"
@@ -70,19 +70,14 @@ const HeroSection = ({ license }) => {
           <div className="max-w-4xl pt-5  md:pt-10">
             {/* TOP BADGES */}
             <div className="flex flex-wrap items-center gap-2 mb-8">
-              {/* ICON */}
-              <div className="p-1 rounded-xl bg-white/10 border border-white/10 backdrop-blur-xl flex items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.25)]">
-                <Shield size={18} className="text-[#F15A24]" />
-              </div>
-
               {/* VERIFIED */}
-              <div className="inline-flex items-center gap-2 bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#4ADE80] py-1 px-2 rounded-full font-semibold text-sm backdrop-blur-xl">
+              <div className="inline-flex items-center gap-2 bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#4ADE80] py-1 px-2 rounded-full font-semibold text-xs md:text-sm backdrop-blur-xl">
                 <BadgeCheck size={18} />
                 Verified provider
               </div>
 
               {/* CATEGORY */}
-              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white px-3 py-1 rounded-full text-sm font-medium backdrop-blur-xl">
+              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white px-3 py-1 rounded-full text-xs md:text-sm font-medium backdrop-blur-xl">
                 {license?.category || "SIA Training"}
               </div>
             </div>
@@ -94,7 +89,7 @@ const HeroSection = ({ license }) => {
             </h1>
 
             {/* DESCRIPTION */}
-            <p className="mt-7 text-lg md:text-[19px] leading-8 text-white/70 max-w-3xl">
+            <p className="mt-7 text-base md:text-lg leading-8 text-white/70 max-w-3xl">
               {license?.shortDescription ||
                 "Professional security training and certification required for working in licensed venues, events, and security environments across the UK."}
             </p>
@@ -107,7 +102,7 @@ const HeroSection = ({ license }) => {
                   <Clock3 size={20} className="text-[#F15A24]" />
                 </div>
 
-                <div>
+                <div className="flex flex-col items-center">
                   <p className="text-white/50 text-sm uppercase tracking-wide">
                     Duration
                   </p>
@@ -119,12 +114,12 @@ const HeroSection = ({ license }) => {
               </div>
 
               {/* VALIDITY */}
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-4 rounded-2xl backdrop-blur-xl">
+              <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-3 md:px-5 py-2 md:py-4 rounded-2xl backdrop-blur-xl">
                 <div className="p-3 rounded-xl bg-white/10 flex items-center justify-center">
                   <Shield size={20} className="text-[#F15A24]" />
                 </div>
 
-                <div>
+                <div className="flex flex-col items-center">
                   <p className="text-white/50 text-sm uppercase tracking-wide">
                     Validity
                   </p>
@@ -198,7 +193,7 @@ const HeroSection = ({ license }) => {
               {/* PRIMARY BUTTON */}
               <button
                 onClick={scrollToTraining}
-                className="relative mt-8 w-full cursor-pointer bg-[#F15A24] hover:bg-[#db4c14] text-white py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-[0_15px_40px_rgba(241,90,36,0.35)] hover:scale-[1.02] flex items-center justify-center gap-2"
+                className="relative mt-8 w-full cursor-pointer bg-[#F15A24] hover:bg-[#db4c14] text-white py-4 rounded-2xl font-bold text-base md:text-lg transition-all duration-300 shadow-[0_15px_40px_rgba(241,90,36,0.35)] hover:scale-[1.02] flex items-center justify-center gap-2"
               >
                 <BookOpen size={20} />
                 View Required Courses

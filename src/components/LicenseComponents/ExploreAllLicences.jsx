@@ -178,7 +178,7 @@ const ExploreAllLicences = () => {
             HEADER
         ===================================================== */}
         <div className="mb-12">
-          <span className="inline-flex items-center gap-2 bg-[#F15A24]/10 text-[#F15A24] px-4 py-2 rounded-full text-sm font-semibold mb-5">
+          <span className="inline-flex items-center gap-2 bg-[#F15A24]/10 text-[#F15A24] px-4 py-2 rounded-full md:text-sm text-xs font-semibold mb-5">
             <Flame size={16} />
             Professional Security Licences
           </span>
@@ -187,7 +187,7 @@ const ExploreAllLicences = () => {
             Explore all licences
           </h2>
 
-          <p className="text-[#141414]/60 mt-4 max-w-2xl text-lg leading-relaxed">
+          <p className="text-[#141414]/60 mt-4 max-w-2xl text-base md:text-lg leading-relaxed">
             Browse professional SIA licences, first aid qualifications,
             workplace safety training and specialist certification courses.
           </p>

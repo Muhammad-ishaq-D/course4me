@@ -71,17 +71,17 @@ const BlogHero = () => {
             </h1>
 
             {/* DESCRIPTION */}
-            <p className="mt-7 text-lg sm:text-xl text-gray-400 leading-relaxed max-w-2xl">
+            <p className="mt-7 text-base md:text-xl text-gray-400 leading-relaxed max-w-2xl">
               Discover expert career advice, industry updates, training guides,
               licensing information, and professional insights from Courses4me.
             </p>
 
             {/* ================= SEARCH SECTION ================= */}
-            <div className="max-w-2xl w-full mt-8 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[28px] p-2 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+            <div className="max-w-2xl w-full mt-8 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-xl p-2 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* INPUT */}
                 <div className="relative flex-1 z-999">
-                  <div className="flex items-center w-full py-4 rounded-2xl bg-[#111827]/60 border border-white/5 px-4 overflow-hidden">
+                  <div className="flex items-center w-full py-4 rounded-xl bg-[#111827]/60 border border-white/5 px-4 overflow-hidden">
                     <Search size={18} className="text-[#F15A24] shrink-0" />
 
                     <input

@@ -121,7 +121,7 @@ const HowItWorksSection = () => {
                 </h3>
 
                 {/* Description */}
-                <p className="relative z-10 text-gray-500 mt-4 leading-relaxed text-lg">
+                <p className="relative z-10 text-gray-500 mt-4 leading-relaxed text-base md:text-lg">
                   {item.desc}
                 </p>
 

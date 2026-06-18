@@ -118,7 +118,7 @@ const HeroCareerDetails = ({ career }) => {
                   className="inline-flex cursor-pointer items-center gap-3 py-3 px-6 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] text-white text-base font-bold shadow-[0_15px_35px_rgba(248,81,12,0.30)] transition-all duration-300 hover:gap-4 active:scale-95"
                 >
                   Apply for This Career Jobs
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight size={20} />
                 </button>
               </div>
             </div>
@@ -180,27 +180,6 @@ const HeroCareerDetails = ({ career }) => {
                     <span className="font-semibold text-white">
                       {career.licence}
                     </span>
-                  </div>
-                </div>
-
-                {/* Bottom Card */}
-                <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2
-                      size={22}
-                      className=" text-[#00C853] mt-0.5"
-                    />
-
-                    <div>
-                      <h3 className="text-white text-base font-bold">
-                        Career Growth Opportunity
-                      </h3>
-
-                      <p className="text-sm text-white/60 mt-1 leading-relaxed">
-                        Strong long-term demand and career progression
-                        opportunities.
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>

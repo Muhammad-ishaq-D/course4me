@@ -70,7 +70,7 @@ const FAQSection = () => {
             return (
               <div
                 key={index}
-                className={`group relative overflow-hidden rounded-[30px] border transition-all duration-500 bg-white/80 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)]
+                className={`group relative overflow-hidden rounded-xl border transition-all duration-500 bg-white/80 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)]
               
               ${
                 isOpen
@@ -85,10 +85,10 @@ const FAQSection = () => {
                 {/* ================= QUESTION ================= */}
                 <button
                   onClick={() => toggle(index)}
-                  className="relative z-10 w-full flex items-center justify-between gap-5 px-6 sm:px-8 py-6 sm:py-7 text-left"
+                  className="relative z-10 w-full flex items-center justify-between gap-5 px-2 md:px-8 py-6 sm:py-7 text-left"
                 >
                   {/* Left Content */}
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-2 md:gap-4">
                     {/* Number */}
                     <div
                       className={`min-w-[42px] h-[42px] rounded-2xl flex items-center justify-center text-sm font-bold transition-all duration-300
@@ -106,7 +106,7 @@ const FAQSection = () => {
                     {/* Question */}
                     <div>
                       <h3
-                        className={`text-lg sm:text-xl font-bold leading-snug transition duration-300
+                        className={` text-base md:text-lg lg:text-xl md:font-bold leading-snug transition duration-300
                       
                       ${isOpen ? "text-[#F15A24]" : "text-[#243443]"}
                     `}
@@ -154,7 +154,7 @@ const FAQSection = () => {
                       <div className="h-[1px] bg-gradient-to-r from-[#F15A24]/20 via-[#F15A24]/5 to-transparent mb-6" />
 
                       {/* Answer Text */}
-                      <p className="text-gray-600 leading-relaxed text-[15px] sm:text-base">
+                      <p className="text-gray-600 leading-relaxed text-sm md:text-base">
                         {item.answer}
                       </p>
                     </div>

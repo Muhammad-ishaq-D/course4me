@@ -38,10 +38,10 @@ const FACILITY_LABELS = {
 const fmtDate = (d) =>
   d
     ? new Date(d).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
     : "—";
 
 const fmtTime = (t) => {
@@ -76,11 +76,12 @@ const CourseLocationView = ({ link }) => {
     .join(", ");
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-  let mapQuery = `${loc.postcode || ""} ${loc.city || ""} ${loc.country || "UK"}`.trim();
+  let mapQuery =
+    `${loc.postcode || ""} ${loc.city || ""} ${loc.country || "UK"}`.trim();
   if (loc.mapsUrl) {
     try {
       const url = new URL(loc.mapsUrl);
-      const queryParam = url.searchParams.get('query');
+      const queryParam = url.searchParams.get("query");
       if (queryParam) mapQuery = queryParam;
       else mapQuery = loc.mapsUrl;
     } catch {
@@ -130,19 +131,19 @@ const CourseLocationView = ({ link }) => {
               <div className="flex flex-wrap items-center gap-3 mb-5">
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
                   <div className="w-2 h-2 rounded-full bg-green-400" />
-                  <span className="text-green-300 text-sm font-medium">
+                  <span className="text-green-300 text-xs md:text-sm font-medium">
                     In-Person Training
                   </span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
                   <CheckCircle2 className="w-4 h-4 text-orange-400" />
-                  <span className="text-white/80 text-sm font-medium">
+                  <span className="text-white/80 text-xs md:text-sm font-medium">
                     Certified Centre
                   </span>
                 </div>
                 {link.status === "Active" && (
                   <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20">
-                    <span className="text-orange-300 text-sm font-medium">
+                    <span className="text-orange-300 text-xs md:text-sm font-medium">
                       Available Now
                     </span>
                   </div>
@@ -153,13 +154,6 @@ const CourseLocationView = ({ link }) => {
                 {loc.name || "Training Centre"}
               </h1>
 
-              {loc.city && (
-                <div className="flex items-center gap-2 mt-4">
-                  <MapPin size={18} className=" text-orange-400 shrink-0" />
-                  <p className="text-base text-white/60">{fullAddress}</p>
-                </div>
-              )}
-
               {course.title && (
                 <p className="text-base md:text-lg text-white/60 leading-relaxed mt-4 max-w-2xl">
                   Delivering{" "}
@@ -168,12 +162,19 @@ const CourseLocationView = ({ link }) => {
                 </p>
               )}
 
+              {loc.city && (
+                <div className="flex items-center gap-2 mt-4">
+                  <MapPin size={18} className=" text-orange-400 shrink-0" />
+                  <p className="text-base text-white/60">{fullAddress}</p>
+                </div>
+              )}
+
               {(loc.facilities || []).length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-6">
                   {loc.facilities.slice(0, 5).map((f) => (
                     <span
                       key={f}
-                      className="text-sm font-semibold px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-white/70"
+                      className="text-xs md:text-sm font-semibold px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-white/70"
                     >
                       {FACILITY_LABELS[f] || f}
                     </span>
@@ -248,10 +249,10 @@ const CourseLocationView = ({ link }) => {
                     <span className="text-white text-base font-semibold">
                       {upcomingDates[0]
                         ? Math.max(
-                          0,
-                          (upcomingDates[0].availableSeats || 0) -
-                          (upcomingDates[0].bookedSeats || 0),
-                        )
+                            0,
+                            (upcomingDates[0].availableSeats || 0) -
+                              (upcomingDates[0].bookedSeats || 0),
+                          )
                         : "—"}
                     </span>
                   </div>
@@ -375,24 +376,26 @@ const CourseLocationView = ({ link }) => {
                         {fmtTime(slot.startTime)} – {fmtTime(slot.endTime)}
                       </p>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1.5 text-md text-gray-500">
-                        <Users size={18} className=" text-gray-400" />
-                        <span>
-                          {remaining} seat{remaining !== 1 ? "s" : ""} left
+                    <div className="flex flex-col md:flex-row items-center gap-4">
+                      <div className="flex justify-between w-full gap-2">
+                        <div className="flex items-center gap-1.5 text-md text-gray-500">
+                          <Users size={18} className=" text-gray-400" />
+                          <span>
+                            {remaining} seat{remaining !== 1 ? "s" : ""} left
+                          </span>
+                        </div>
+                        <span
+                          className={`text-sm font-bold px-3 py-1.5 rounded-full border ${statusColor}`}
+                        >
+                          {statusLabel}
                         </span>
                       </div>
-                      <span
-                        className={`text-sm font-bold px-3 py-1.5 rounded-full border ${statusColor}`}
-                      >
-                        {statusLabel}
-                      </span>
                       {course._id && remaining > 0 && (
                         <button
                           onClick={() =>
                             navigate(`/booking/course?courseid=${course._id}`)
                           }
-                          className="py-3 px-6 rounded-xl cursor-pointer bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold transition-all shadow-md shadow-orange-200 whitespace-nowrap"
+                          className=" w-full md:w-fit cursor-pointer py-3 px-6 rounded-xl cursor-pointer bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold transition-all shadow-md shadow-orange-200 whitespace-nowrap"
                         >
                           Book
                         </button>
@@ -775,11 +778,11 @@ const LocationDetails = () => {
               const centerId = center._id || center.id;
               allCourses = centerId
                 ? data.data.filter(
-                  (c) =>
-                    !c.centerId ||
-                    String(c.centerId) === String(centerId) ||
-                    c.centerName === center.name,
-                )
+                    (c) =>
+                      !c.centerId ||
+                      String(c.centerId) === String(centerId) ||
+                      c.centerName === center.name,
+                  )
                 : data.data;
             }
           } else if (center?.name) {

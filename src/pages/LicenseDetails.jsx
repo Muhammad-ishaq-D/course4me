@@ -304,7 +304,7 @@ const LicenseDetails = () => {
 
                   {/* ==============ABOUT / DESCRIPTION=============== */}
                   {section.content && (
-                    <p className="text-[#667085] leading-7 text-base">
+                    <p className="text-[#667085] leading-7 text-sm md:text-base">
                       {section.content}
                     </p>
                   )}
@@ -341,17 +341,17 @@ const LicenseDetails = () => {
                             </div>
 
                             {i !== section.steps.length - 1 && (
-                              <div className="w-[2px] flex-1 bg-[#E4E7EC] mt-2" />
+                              <div className="w-0.5 flex-1 bg-[#E4E7EC] mt-2" />
                             )}
                           </div>
 
                           {/* CARD */}
                           <div className="flex-1 border border-[#E4E7EC] rounded-[24px] p-4 bg-[#FCFCFD]">
-                            <h3 className="text-lg font-bold text-[#1D2939]">
+                            <h3 className="md:text-lg text-base font-bold text-[#1D2939]">
                               {step.title}
                             </h3>
 
-                            <p className="mt-2 text-base text-[#667085] leading-6">
+                            <p className="mt-2 text-sm md:text-base text-[#667085] leading-6">
                               {step.desc}
                             </p>
                           </div>
@@ -440,14 +440,11 @@ const LicenseDetails = () => {
               >
                 {/* HEADER */}
                 <div className="flex items-center gap-3 mb-5">
-                  <div className="w-11 h-11 rounded-xl bg-[#F4F7FB] flex items-center justify-center">
-                    <GraduationCap size={20} className="text-[#F15A24]" />
-                  </div>
                   <div>
                     <h2 className="text-[24px] md:text-[28px] font-black tracking-tight text-[#101828]">
                       Required Training
                     </h2>
-                    <p className="text-[#667085] text-sm mt-0.5">
+                    <p className="text-[#667085] text-sm md:text-base mt-0.5">
                       Book one of the courses below to begin your journey
                       towards this licence
                     </p>
@@ -478,25 +475,25 @@ const LicenseDetails = () => {
                       className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[#E4E7EC] rounded-2xl px-5 py-4 bg-[#FCFCFD] hover:border-[#F15A24]/30 hover:shadow-md transition-all duration-300"
                     >
                       <div className="flex-1">
-                        <h4 className="font-bold text-[#101828] text-[15px] group-hover:text-[#F15A24] transition-colors duration-200">
+                        <h4 className="font-bold text-[#101828] text-sm md:text-base group-hover:text-[#F15A24] transition-colors duration-200">
                           {course.title}
                         </h4>
                         <div className="flex flex-wrap items-center gap-3 mt-2">
                           {course.duration && (
-                            <span className="flex items-center gap-1.5 text-xs text-[#667085]">
+                            <span className="flex items-center gap-1.5 text-sm md:text-base text-[#667085]">
                               <Clock3 size={13} />
                               {course.duration}
                             </span>
                           )}
                           {course.pricing?.basePrice && (
-                            <span className="flex items-center gap-1 text-xs font-semibold text-[#101828]">
+                            <span className="flex items-center gap-1 text-sm md:text-base font-semibold text-[#101828]">
                               From £
                               {course.pricing.salePrice ||
                                 course.pricing.basePrice}
                             </span>
                           )}
                           {course.location && (
-                            <span className="flex items-center gap-1.5 text-xs text-[#667085]">
+                            <span className="flex items-center gap-1.5 text-xs md:text-sm text-[#667085]">
                               <MapPin size={13} />
                               {course.location}
                             </span>
@@ -507,7 +504,7 @@ const LicenseDetails = () => {
                         onClick={() =>
                           navigate(`/booking/course?courseid=${course._id}`)
                         }
-                        className="shrink-0 flex items-center gap-2 bg-[#F15A24] hover:bg-[#db4c14] text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 shadow-md hover:shadow-lg"
+                        className="shrink-0 flex items-center cursor-pointer justify-center gap-2 bg-[#F15A24] hover:bg-[#db4c14] text-white px-5 py-3 rounded-xl text-sm md:text-md font-bold transition-all duration-300 shadow-md hover:shadow-lg"
                       >
                         Book Training
                         <ArrowRight size={14} />
@@ -532,7 +529,7 @@ const LicenseDetails = () => {
                     ].map((step, i, arr) => (
                       <React.Fragment key={i}>
                         <span
-                          className={`text-xs font-semibold px-3 py-1.5 rounded-full ${
+                          className={`text-xs md:text-sm font-semibold px-3 py-1.5 rounded-full ${
                             i === 0
                               ? "bg-[#F15A24] text-white"
                               : "bg-[#F4F7FB] text-[#667085]"

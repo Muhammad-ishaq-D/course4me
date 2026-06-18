@@ -128,8 +128,8 @@ const ContentCareerDetails = ({ career }) => {
           {/* ================= PERSONALITY TRAITS ================= */}
           <div className="bg-white rounded-[24px] md:rounded-[30px] border border-gray-200 p-5 sm:p-6 md:p-7 shadow-sm">
             <div className="flex items-center gap-3 sm:gap-4 mb-5 md:mb-6">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#FFF1EB] flex items-center justify-center">
-                <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-[#F8510C]" />
+              <div className="p-4 rounded-2xl bg-[#FFF1EB] flex items-center justify-center">
+                <Sparkles size={18} className=" text-[#F8510C]" />
               </div>
 
               <div>

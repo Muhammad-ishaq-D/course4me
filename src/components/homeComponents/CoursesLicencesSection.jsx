@@ -82,7 +82,6 @@ const ItemCard = ({ icon: Icon, title, description, onClick }) => (
             leading-snug
             group-hover:text-[#FF5421]
             transition-colors
-            line-clamp-1
           "
           >
             {title}

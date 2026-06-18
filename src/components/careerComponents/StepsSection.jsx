@@ -66,7 +66,7 @@ const StepsSection = () => {
             <span className="text-[#F8510C]">In 4 Simple Steps</span>
           </h2>
 
-          <p className="mt-6 text-[#6B7280] text-lg leading-relaxed">
+          <p className="mt-6 text-[#6B7280] text-base md:text-lg leading-relaxed">
             From discovering the right career path to getting qualified and
             hired — begin your professional journey with confidence.
           </p>

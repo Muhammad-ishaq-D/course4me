@@ -224,7 +224,7 @@ const CareerListing = () => {
                   </h1>
 
                   {/* Description */}
-                  <p className="mt-3 text-lg leading-relaxed text-[#667085] max-w-2xl">
+                  <p className="mt-3 text-base md:text-lg leading-relaxed text-[#667085] max-w-2xl">
                     Discover the right career path for you. Get trained, get
                     licensed and build your future in the security industry.
                   </p>
@@ -232,11 +232,11 @@ const CareerListing = () => {
                   {/* Stats */}
                   <div className="flex flex-wrap items-center gap-6 mt-7">
                     <div>
-                      <h3 className="text-2xl font-black text-[#111827]">
+                      <h3 className="text-xl md:text-2xl font-black text-[#111827]">
                         120+
                       </h3>
 
-                      <p className="text-base text-[#667085] mt-1">
+                      <p className="text-sm md:text-base text-[#667085] mt-1">
                         Career Opportunities
                       </p>
                     </div>
@@ -244,11 +244,11 @@ const CareerListing = () => {
                     <div className="w-px h-10 bg-[#E4E7EC]" />
 
                     <div>
-                      <h3 className="text-2xl font-black text-[#111827]">
+                      <h3 className="text-xl md:text-2xl font-black text-[#111827]">
                         45K+
                       </h3>
 
-                      <p className="text-base text-[#667085] mt-1">
+                      <p className="text-sm md:text-base text-[#667085] mt-1">
                         Students Trained
                       </p>
                     </div>
@@ -256,11 +256,11 @@ const CareerListing = () => {
                     <div className="w-px h-10 bg-[#E4E7EC]" />
 
                     <div>
-                      <h3 className="text-2xl font-black text-[#111827]">
+                      <h3 className="text-xl md:text-2xl font-black text-[#111827]">
                         98%
                       </h3>
 
-                      <p className="text-base text-[#667085] mt-1">
+                      <p className="text-sm md:text-base text-[#667085] mt-1">
                         Success Rate
                       </p>
                     </div>
@@ -268,8 +268,8 @@ const CareerListing = () => {
                 </div>
 
                 {/* Search Box */}
-                <div className="w-full xl:w-[390px]">
-                  <div className="bg-white rounded-[28px] border border-white shadow-[0_20px_50px_rgba(0,0,0,0.06)] p-5">
+                <div className="w-full xl:w-110">
+                  <div className="bg-white rounded-[28px] border border-white shadow-[0_20px_50px_rgba(0,0,0,0.06)] md:px-5 py-5 px-2 py-3 ">
                     <h2 className="text-3xl font-black text-[#111827]">
                       Quick Search
                     </h2>
@@ -408,7 +408,7 @@ const CareerListing = () => {
           <div ref={mainSectionRef} className="relative z-20 overflow-visible">
             {/* ==================HEADER=================== */}
             <div className="bg-white rounded-[24px] border border-gray-100 px-5 py-4 mb-5 shadow-sm sticky top-0 z-999 backdrop-blur-xl bg-white/95 overflow-visible">
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 md:gap-4">
                 {/* Left Content */}
                 <div className="flex items-center gap-4">
                   <div>
