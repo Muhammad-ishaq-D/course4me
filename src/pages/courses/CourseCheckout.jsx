@@ -532,9 +532,17 @@ const CourseCheckout = () => {
         .then((res) => {
           if (res.data?.success) {
             setBookingStatus(res.data.status);
-            // If there's already a pending booking, set its ID so the
+            // If there's already a pending booking for this specific schedule, set its ID so the
             // "Complete Pending Payment" button shows immediately on page load
-            if (res.data.status === "PENDING" && res.data.bookingId) {
+            if (res.data.bookedSchedules) {
+              const currentScheduleBooking = res.data.bookedSchedules.find(
+                (b) => b.scheduleId === scheduleId && b.status === "PENDING"
+              );
+              if (currentScheduleBooking) {
+                setExistingBookingId(currentScheduleBooking.bookingId);
+              }
+            } else if (res.data.status === "PENDING" && res.data.bookingId) {
+              // Fallback
               setExistingBookingId(res.data.bookingId);
             }
           }
@@ -543,7 +551,7 @@ const CourseCheckout = () => {
           console.error("Failed to fetch booking status", err);
         });
     }
-  }, [user, courseData?._id]);
+  }, [user, courseData?._id, scheduleId]);
   useEffect(() => {
     if (user) {
       const updatedDetails = {
