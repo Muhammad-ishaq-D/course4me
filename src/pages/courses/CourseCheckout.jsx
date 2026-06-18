@@ -42,7 +42,7 @@ import SaveBtn from "../../components/ui/checkoutUI/SaveBtn";
 /* ═══════════════════════════════════════════════════════ */
 const CourseCheckout = () => {
   const navigate = useNavigate();
-  const { login: authLogin, user } = useAuth();
+  const { login: authLogin, user, loading: isAuthLoading } = useAuth();
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -115,47 +115,8 @@ const CourseCheckout = () => {
   const [detailsErrors, setDetailsErrors] = useState({});
   const [billingErrors, setBillingErrors] = useState({});
 
-  const [loadingPendingBooking, setLoadingPendingBooking] = useState(true);
-
-  useEffect(() => {
-    const loadPendingBooking = async () => {
-      try {
-        setLoadingPendingBooking(true);
-
-        const res = await bookingService.getMyPendingBooking(courseId);
-
-        if (res.data?.success && res.data?.booking) {
-          const booking = res.data.booking;
-
-          setDetails({
-            firstName: booking.customerDetails.firstName || "",
-            lastName: booking.customerDetails.lastName || "",
-            email: booking.customerDetails.email || "",
-            mobile: booking.customerDetails.phone || "",
-            dob: booking.customerDetails.dob || "",
-            password: "",
-            confirmPassword: "",
-          });
-
-          setBilling({
-            postcode: booking.billingAddress?.postcode || "",
-            addr1: booking.billingAddress?.line1 || "",
-            addr2: booking.billingAddress?.line2 || "",
-            city: booking.billingAddress?.city || "",
-          });
-          setSelectedPostcode(booking.billingAddress?.postcode || "");
-
-          setExistingBookingId(booking._id);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoadingPendingBooking(false);
-      }
-    };
-
-    loadPendingBooking();
-  }, [courseId]);
+  // Removed broken loadPendingBooking since it called a non-existent API
+  // and we now populate data correctly using getMyBookingStatus instead.
 
   // Clear individual detail error on change
   const updateDetail = (field, value) => {
@@ -472,6 +433,21 @@ const CourseCheckout = () => {
               if (piRes.data.success && piRes.data.clientSecret) {
                 setClientSecret(piRes.data.clientSecret);
                 setExistingBookingId(urlBookingId);
+                
+                // Populate billing address if available from status check
+                if (statusRes.data?.bookedSchedules) {
+                  const currentScheduleBooking = statusRes.data.bookedSchedules.find(b => b.bookingId === urlBookingId);
+                  if (currentScheduleBooking?.billingAddress) {
+                    setBilling({
+                      postcode: currentScheduleBooking.billingAddress.postcode || "",
+                      addr1: currentScheduleBooking.billingAddress.line1 || "",
+                      addr2: currentScheduleBooking.billingAddress.line2 || "",
+                      city: currentScheduleBooking.billingAddress.city || "",
+                    });
+                    setSelectedPostcode(currentScheduleBooking.billingAddress.postcode || "");
+                  }
+                }
+
                 setBookingStatus("PENDING");
                 setActiveStep(4);
                 setIsSubmitting(false);
@@ -497,6 +473,8 @@ const CourseCheckout = () => {
               if (piRes.data.success && piRes.data.clientSecret) {
                 setClientSecret(piRes.data.clientSecret);
                 setExistingBookingId(urlBookingId);
+
+
                 setBookingStatus("PENDING");
                 setActiveStep(4);
                 setIsSubmitting(false);
@@ -542,6 +520,15 @@ const CourseCheckout = () => {
               );
               if (currentScheduleBooking) {
                 setExistingBookingId(currentScheduleBooking.bookingId);
+                if (currentScheduleBooking.billingAddress) {
+                  setBilling({
+                    postcode: currentScheduleBooking.billingAddress.postcode || "",
+                    addr1: currentScheduleBooking.billingAddress.line1 || "",
+                    addr2: currentScheduleBooking.billingAddress.line2 || "",
+                    city: currentScheduleBooking.billingAddress.city || "",
+                  });
+                  setSelectedPostcode(currentScheduleBooking.billingAddress.postcode || "");
+                }
               }
             }
           }
@@ -761,7 +748,7 @@ const CourseCheckout = () => {
     }
   };
   /* ── Skeleton ── */
-  if (isLoading || loadingPendingBooking) {
+  if (isLoading || isAuthLoading) {
     return <CheckoutSkeleton />;
   }
 
