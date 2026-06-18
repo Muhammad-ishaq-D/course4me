@@ -20,11 +20,6 @@ const bookingService = {
     getMyBookingStatus: async (courseId) => {
         return await axiosInstance.get(`/bookings/my-status/${courseId}`);
     },
-
-    // Get all active schedules for the current user
-    getMySchedules: async () => {
-        return await axiosInstance.get('/bookings/my-schedules');
-    },
 };
 
 export default bookingService;
