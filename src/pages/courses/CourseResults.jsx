@@ -47,6 +47,7 @@ const CourseResults = () => {
   const [amenitiesByLinkId, setAmenitiesByLinkId] = useState({});
   const [isCalculatingDistances, setIsCalculatingDistances] = useState(false);
   const [bookedSchedules, setBookedSchedules] = useState([]);
+  const [overallBookingStatus, setOverallBookingStatus] = useState(null);
 
   const [stripeModalOpen, setStripeModalOpen] = useState(false);
   const [clientSecret, setClientSecret] = useState(null);
@@ -76,8 +77,11 @@ const CourseResults = () => {
       bookingService
         .getMyBookingStatus(courseId)
         .then((res) => {
-          if (res.data && res.data.bookedSchedules) {
-            setBookedSchedules(res.data.bookedSchedules);
+          if (res.data) {
+            setOverallBookingStatus(res.data.status);
+            if (res.data.bookedSchedules) {
+              setBookedSchedules(res.data.bookedSchedules);
+            }
           }
         })
         .catch((err) => console.error("Error fetching booking status:", err));
@@ -362,6 +366,18 @@ const CourseResults = () => {
               </p>
             </div>
 
+            {overallBookingStatus === "PAID" && (
+              <div className="bg-[#00B67A]/10 border border-[#00B67A]/20 rounded-2xl p-6 flex items-center justify-between mb-2">
+                <div>
+                  <h3 className="text-lg font-bold text-[#00B67A] mb-1">🎉 You are already enrolled!</h3>
+                  <p className="text-gray-600 font-medium">You have successfully purchased this course. Check your dashboard for more details.</p>
+                </div>
+                <Link to="/profile?tab=bookings" className="hidden sm:inline-block px-5 py-2.5 bg-[#00B67A] text-white font-bold rounded-lg hover:bg-[#00a36c] transition-colors">
+                  View Booking
+                </Link>
+              </div>
+            )}
+
             {sortedLocations.length === 0 ? (
               <div className="bg-white rounded-3xl border border-gray-100 p-12 text-center shadow-sm">
                 <p className="text-gray-500 font-medium text-lg">
@@ -381,6 +397,7 @@ const CourseResults = () => {
                   }}
                   course={course}
                   bookedSchedules={bookedSchedules}
+                  overallBookingStatus={overallBookingStatus}
                   onPayPending={handlePayPending}
                 />
               ))

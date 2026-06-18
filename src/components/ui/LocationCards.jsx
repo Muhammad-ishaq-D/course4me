@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const LocationCards = ({ loc, course, bookedSchedules = [], onPayPending }) => {
+const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus, onPayPending }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -219,7 +219,14 @@ const LocationCards = ({ loc, course, bookedSchedules = [], onPayPending }) => {
                             £{date.price}
                           </p>
                         </div>
-                        {booking ? (
+                        {overallBookingStatus === 'PAID' ? (
+                          <button
+                            disabled
+                            className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
+                          >
+                            Already Enrolled
+                          </button>
+                        ) : booking ? (
                           booking.status === 'PAID' ? (
                             <button
                               disabled
@@ -236,6 +243,18 @@ const LocationCards = ({ loc, course, bookedSchedules = [], onPayPending }) => {
                               <span>Complete Payment</span>
                             </Link>
                           )
+                        ) : bookedSchedules.length > 0 ? (
+                          <div className="relative group/tooltip">
+                            <button
+                              disabled
+                              className="px-6 py-2.5 rounded-lg text-sm font-bold bg-orange-50 text-orange-300 border border-orange-200 cursor-not-allowed transition-all"
+                            >
+                              Book Now
+                            </button>
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-800 text-white text-xs text-center p-2 rounded opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all">
+                              Cancel your pending booking to select this date.
+                            </div>
+                          </div>
                         ) : (
                           <Link
                             to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
