@@ -165,12 +165,23 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
           </div>
         </div>
 
-        {/* Expanded Content (Same as before but styled to match) */}
         {isExpanded && (
           <div className="bg-slate-50 border-t rounded-3xl border-slate-100 p-6 md:p-8 space-y-3 animate-in fade-in slide-in-from-top-2">
-            <h4 className="text-[13px] text-slate-400 font-black uppercase tracking-widest flex items-center gap-2 mb-4">
-              <Calendar size={14} /> Available Course Slots
-            </h4>
+            {overallBookingStatus === 'PAID' ? (
+              <div className="bg-[#00B67A]/10 border border-[#00B67A]/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-bold text-[#00B67A] mb-1">🎉 You are already enrolled!</h3>
+                  <p className="text-gray-600 font-medium">You have successfully purchased this course. Check your dashboard for more details.</p>
+                </div>
+                <Link to="/dashboard?tab=bookings" className="shrink-0 px-5 py-2.5 bg-[#00B67A] text-white font-bold rounded-lg hover:bg-[#00a36c] transition-colors">
+                  View Booking
+                </Link>
+              </div>
+            ) : (
+              <>
+                <h4 className="text-[13px] text-slate-400 font-black uppercase tracking-widest flex items-center gap-2 mb-4">
+                  <Calendar size={14} /> Available Course Slots
+                </h4>
 
             {(
               loc.dates || [
@@ -269,6 +280,8 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                 })()}
               </div>
             ))}
+              </>
+            )}
           </div>
         )}
       </div>
