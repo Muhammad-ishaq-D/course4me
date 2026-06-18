@@ -577,10 +577,10 @@ const CourseCheckout = () => {
   }, [user]);
 
   useEffect(() => {
-    if (isLoading || isConfirmed) return;
+    if (isLoading || isConfirmed || !existingBookingId) return;
     const id = setInterval(() => setTimeLeft((p) => (p > 0 ? p - 1 : 0)), 1000);
     return () => clearInterval(id);
-  }, [isLoading, isConfirmed]);
+  }, [isLoading, isConfirmed, existingBookingId]);
 
   const fmt = (s) =>
     `${Math.floor(s / 60)
