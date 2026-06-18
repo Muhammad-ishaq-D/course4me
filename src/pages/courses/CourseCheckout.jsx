@@ -106,6 +106,7 @@ const CourseCheckout = () => {
   const [showPostcodeSuggestions, setShowPostcodeSuggestions] = useState(false);
   const [postcodeSuggestions, setPostcodeSuggestions] = useState([]);
   const [loadingPostcode, setLoadingPostcode] = useState(false);
+  const [selectedPostcode, setSelectedPostcode] = useState("");
   const postcodeRef = useRef(null);
 
   // Validation state
@@ -140,6 +141,7 @@ const CourseCheckout = () => {
             addr2: booking.billingAddress?.line2 || "",
             city: booking.billingAddress?.city || "",
           });
+          setSelectedPostcode(booking.billingAddress?.postcode || "");
 
           setExistingBookingId(booking._id);
         }
@@ -178,7 +180,7 @@ const CourseCheckout = () => {
     let cancelled = false;
     const term = billing.postcode.trim();
 
-    if (!term) {
+    if (!term || term === selectedPostcode) {
       setPostcodeSuggestions([]);
       setShowPostcodeSuggestions(false);
       setLoadingPostcode(false);
@@ -324,14 +326,6 @@ const CourseCheckout = () => {
         };
         setDetails(updatedDetails);
 
-        if (user.billingAddress) {
-          setBilling((prev) => ({
-            postcode: prev.postcode || user.billingAddress.postcode || "",
-            addr1: prev.addr1 || user.billingAddress.line1 || "",
-            addr2: prev.addr2 || user.billingAddress.line2 || "",
-            city: prev.city || user.billingAddress.city || "",
-          }));
-        }
 
         // If profile is incomplete, stay on step 1 to let them fill missing info
         if (!updatedDetails.mobile || !updatedDetails.dob) {
@@ -562,14 +556,6 @@ const CourseCheckout = () => {
       };
       setDetails(updatedDetails);
 
-      if (user.billingAddress) {
-        setBilling((prev) => ({
-          postcode: prev.postcode || user.billingAddress.postcode || "",
-          addr1: prev.addr1 || user.billingAddress.line1 || "",
-          addr2: prev.addr2 || user.billingAddress.line2 || "",
-          city: prev.city || user.billingAddress.city || "",
-        }));
-      }
 
       // If user has all required info, auto-advance to step 2 if we are on step 1
       if (
@@ -1124,6 +1110,7 @@ const CourseCheckout = () => {
                       onChange={(v) => updateBilling("postcode", v)}
                       onFocus={() =>
                         postcodeSuggestions.length > 0 &&
+                        billing.postcode !== selectedPostcode &&
                         setShowPostcodeSuggestions(true)
                       }
                       icon={MapPin}
@@ -1148,6 +1135,7 @@ const CourseCheckout = () => {
                                 updateBilling("postcode", item.postcode);
                                 updateBilling("addr1", item.address);
                                 updateBilling("city", item.city);
+                                setSelectedPostcode(item.postcode);
                                 setShowPostcodeSuggestions(false);
                               }}
                               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
