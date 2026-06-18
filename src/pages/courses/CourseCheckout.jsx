@@ -560,7 +560,7 @@ const CourseCheckout = () => {
       setTimeLeft((p) => {
         if (p <= 1) {
           clearInterval(id);
-          navigate(`/courses/${courseId}/booking`);
+          navigate(`/courses`);
           return 0;
         }
         return p - 1;

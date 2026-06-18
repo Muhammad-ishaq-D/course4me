@@ -173,7 +173,7 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                   <h3 className="text-lg font-bold text-[#00B67A] mb-1">🎉 You are already enrolled!</h3>
                   <p className="text-gray-600 font-medium">You have successfully purchased this course. Check your dashboard for more details.</p>
                 </div>
-                <Link to="/dashboard?tab=bookings" className="shrink-0 px-5 py-2.5 bg-[#00B67A] text-white font-bold rounded-lg hover:bg-[#00a36c] transition-colors">
+                <Link to="/dashboard?tab=overview" className="shrink-0 px-5 py-2.5 bg-[#00B67A] text-white font-bold rounded-lg hover:bg-[#00a36c] transition-colors">
                   View Booking
                 </Link>
               </div>
@@ -183,103 +183,103 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                   <Calendar size={14} /> Available Course Slots
                 </h4>
 
-            {(
-              loc.dates || [
-                {
-                  range: "Mon 23rd Mar 2026 - Thu 26th Mar 2026",
-                  price: loc.price,
-                  id: 1,
-                },
-                {
-                  range: "Mon 30th Mar 2026 - Thu 2nd Apr 2026",
-                  price: loc.price,
-                  id: 2,
-                },
-                {
-                  range: "Mon 6th Apr 2026 - Thu 9th Apr 2026",
-                  price: (parseFloat(loc.price) + 10).toFixed(2),
-                  id: 3,
-                },
-              ]
-            ).map((date, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col sm:row sm:flex-row lg:items-center justify-between gap-4 p-4 bg-white rounded-xl border border-[#F15A24] hover:shadow-md transition-all group/date"
-              >
-                {(() => {
-                  const booking = bookedSchedules.find(b => b.scheduleId === String(date.id));
-                  return (
-                    <>
-                      <div className="flex  items-center gap-4">
-                        <div className="w-10 h-10 rounded-lg flex items-center justify-center  bg-[#F15A24] text-white transition-colors">
-                          <Calendar size={20} />
-                        </div>
-                        <div>
-                          <p className="text-md font-bold text-slate-900">
-                            {date.range}
-                          </p>
-                          <p className="text-[14px] text-slate-500 font-semibold">
-                            9:00 AM - 5:00 PM Daily
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-6 w-full sm:w-auto justify-between">
-                        <div className="text-right">
-                          <p className="text-xl font-black text-slate-900">
-                            £{date.price}
-                          </p>
-                        </div>
-                        {overallBookingStatus === 'PAID' ? (
-                          <button
-                            disabled
-                            className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
-                          >
-                            Already Enrolled
-                          </button>
-                        ) : booking ? (
-                          booking.status === 'PAID' ? (
-                            <button
-                              disabled
-                              className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
-                            >
-                              Already Booked
-                            </button>
-                          ) : (
-                            <Link
-                              to={`/booking/checkout?courseId=${course._id}&scheduleId=${date.id}&bookingId=${booking.bookingId}`}
-                              className="group flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold bg-white text-[#F15A24] border-2 border-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all shadow-sm"
-                            >
-                              <CreditCard size={16} className="transition-colors" />
-                              <span>Complete Payment</span>
-                            </Link>
-                          )
-                        ) : bookedSchedules.length > 0 ? (
-                          <div className="relative group/tooltip">
-                            <button
-                              disabled
-                              className="px-6 py-2.5 rounded-lg text-sm font-bold bg-orange-50 text-orange-300 border border-orange-200 cursor-not-allowed transition-all"
-                            >
-                              Book Now
-                            </button>
-                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-800 text-white text-xs text-center p-2 rounded opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all">
-                              Cancel your pending booking to select this date.
+                {(
+                  loc.dates || [
+                    {
+                      range: "Mon 23rd Mar 2026 - Thu 26th Mar 2026",
+                      price: loc.price,
+                      id: 1,
+                    },
+                    {
+                      range: "Mon 30th Mar 2026 - Thu 2nd Apr 2026",
+                      price: loc.price,
+                      id: 2,
+                    },
+                    {
+                      range: "Mon 6th Apr 2026 - Thu 9th Apr 2026",
+                      price: (parseFloat(loc.price) + 10).toFixed(2),
+                      id: 3,
+                    },
+                  ]
+                ).map((date, idx) => (
+                  <div
+                    key={idx}
+                    className="flex flex-col sm:row sm:flex-row lg:items-center justify-between gap-4 p-4 bg-white rounded-xl border border-[#F15A24] hover:shadow-md transition-all group/date"
+                  >
+                    {(() => {
+                      const booking = bookedSchedules.find(b => b.scheduleId === String(date.id));
+                      return (
+                        <>
+                          <div className="flex  items-center gap-4">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center  bg-[#F15A24] text-white transition-colors">
+                              <Calendar size={20} />
+                            </div>
+                            <div>
+                              <p className="text-md font-bold text-slate-900">
+                                {date.range}
+                              </p>
+                              <p className="text-[14px] text-slate-500 font-semibold">
+                                9:00 AM - 5:00 PM Daily
+                              </p>
                             </div>
                           </div>
-                        ) : (
-                          <Link
-                            to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
-                            className="hover:bg-[#d84a1a] text-white px-6 py-2.5 rounded-lg text-sm font-bold bg-[#F15A24] transition-all shadow-sm"
-                          >
-                            Book Now
-                          </Link>
-                        )}
-                      </div>
-                    </>
-                  );
-                })()}
-              </div>
-            ))}
+
+                          <div className="flex items-center gap-6 w-full sm:w-auto justify-between">
+                            <div className="text-right">
+                              <p className="text-xl font-black text-slate-900">
+                                £{date.price}
+                              </p>
+                            </div>
+                            {overallBookingStatus === 'PAID' ? (
+                              <button
+                                disabled
+                                className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
+                              >
+                                Already Enrolled
+                              </button>
+                            ) : booking ? (
+                              booking.status === 'PAID' ? (
+                                <button
+                                  disabled
+                                  className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
+                                >
+                                  Already Booked
+                                </button>
+                              ) : (
+                                <Link
+                                  to={`/booking/checkout?courseId=${course._id}&scheduleId=${date.id}&bookingId=${booking.bookingId}`}
+                                  className="group flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold bg-white text-[#F15A24] border-2 border-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all shadow-sm"
+                                >
+                                  <CreditCard size={16} className="transition-colors" />
+                                  <span>Complete Payment</span>
+                                </Link>
+                              )
+                            ) : bookedSchedules.length > 0 ? (
+                              <div className="relative group/tooltip">
+                                <button
+                                  disabled
+                                  className="px-6 py-2.5 rounded-lg text-sm font-bold bg-orange-50 text-orange-300 border border-orange-200 cursor-not-allowed transition-all"
+                                >
+                                  Book Now
+                                </button>
+                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-800 text-white text-xs text-center p-2 rounded opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all">
+                                  Cancel your pending booking to select this date.
+                                </div>
+                              </div>
+                            ) : (
+                              <Link
+                                to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
+                                className="hover:bg-[#d84a1a] text-white px-6 py-2.5 rounded-lg text-sm font-bold bg-[#F15A24] transition-all shadow-sm"
+                              >
+                                Book Now
+                              </Link>
+                            )}
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                ))}
               </>
             )}
           </div>
