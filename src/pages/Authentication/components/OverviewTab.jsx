@@ -264,13 +264,12 @@ const OverviewTab = () => {
                           {course.title}
                         </h3>
                         <span
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                            course.lifecycleStatus === "Extended"
+                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${course.lifecycleStatus === "Extended"
                               ? "bg-purple-100 text-purple-700 animate-pulse"
                               : course.lifecycleStatus === "Postponed"
                                 ? "bg-yellow-100 text-yellow-700"
                                 : "bg-blue-100 text-blue-700"
-                          }`}
+                            }`}
                         >
                           {course.lifecycleStatus}
                         </span>
@@ -293,14 +292,6 @@ const OverviewTab = () => {
                           {course.progress}%
                         </p>
                       </div>
-                      <button
-                        onClick={() =>
-                          navigate(`/dashboard/course/${course.id}`)
-                        }
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2"
-                      >
-                        <PlayCircle size={16} /> Continue
-                      </button>
                     </div>
                   </div>
 
