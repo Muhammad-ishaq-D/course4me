@@ -63,14 +63,14 @@ const CourseCheckout = () => {
   const plan = (searchParams.get("plan") || "Flexi+").trim();
 
   const [timeLeft, setTimeLeft] = useState(() => {
-    const key = `checkoutTimeLeft_${courseId}_${scheduleId || 'default'}`;
+    const key = `checkoutTimer15m_${courseId}_${scheduleId || 'default'}`;
     const savedTime = sessionStorage.getItem(key);
     return savedTime ? parseInt(savedTime, 10) : 15 * 60;
   });
 
   useEffect(() => {
     if (courseId) {
-      const key = `checkoutTimeLeft_${courseId}_${scheduleId || 'default'}`;
+      const key = `checkoutTimer15m_${courseId}_${scheduleId || 'default'}`;
       sessionStorage.setItem(key, timeLeft);
     }
   }, [timeLeft, courseId, scheduleId]);
