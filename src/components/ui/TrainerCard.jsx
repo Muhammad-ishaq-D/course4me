@@ -51,14 +51,14 @@ function TrainerCard({ trainer, onClick }) {
       </div>
 
       {/* CONTENT */}
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         {/* TITLE */}
         <h4 className="text-2xl font-bold text-[#111111] leading-snug">
           {trainer.title}
         </h4>
 
         {/* STATS */}
-        <div className="flex items-center justify-between mt-6 gap-3">
+        <div className="flex flex-col lg:flex-row lg:items-center md:justify-between mt-6 gap-3">
           {/* EXPERIENCE */}
           <div className="flex items-center gap-3 bg-[#FFF7F4] border border-[#FFE1D5] rounded-2xl px-4 py-3 flex-1">
             <div className="w-10 h-10 rounded-xl bg-[#FF5421] flex items-center justify-center flex-shrink-0">
@@ -99,7 +99,7 @@ function TrainerCard({ trainer, onClick }) {
           {trainer.locations.slice(0, 3).map((city, i) => (
             <span
               key={i}
-              className=" bg-[#F9FAFB] border border-gray-100  text-gray-600 px-3 py-1.5 rounded-xl text-base  hover:bg-[#FF5421]  hover:text-white transition-all duration-300"
+              className=" bg-[#F9FAFB] border border-gray-100  text-gray-600 px-3 py-1.5 rounded-xl text-sm md:text-base  hover:bg-[#FF5421]  hover:text-white transition-all duration-300"
             >
               {city}
             </span>

@@ -46,18 +46,7 @@ const ItemCard = ({ icon: Icon, title, description, onClick }) => (
     whileHover={{ y: -4 }}
     transition={{ duration: 0.3 }}
     onClick={onClick}
-    className="
-      group
-      relative
-      overflow-hidden
-      rounded-[26px]
-      bg-white
-      border border-gray-100
-      p-5
-      shadow-[0_10px_35px_rgba(0,0,0,0.04)]
-      hover:shadow-[0_20px_50px_rgba(248,81,12,0.12)]
-      transition-all duration-300
-      cursor-pointer
+    className=" group relative overflow-hidden rounded-xl bg-white border border-gray-100 p-3  md:p-5 shadow-[0_10px_35px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(248,81,12,0.12)] transition-all duration-300 cursor-pointer
     "
   >
     {/* HOVER GLOW */}
@@ -69,13 +58,14 @@ const ItemCard = ({ icon: Icon, title, description, onClick }) => (
         {/* ICON */}
         <div
           className="
+          hidden 
           w-14 h-14
           rounded-2xl
-          bg-gradient-to-br
+          bg-linear-to-br
           from-[#00A3FF]/10
           to-[#FF5421]/10
           border border-[#00A3FF]/10
-          flex items-center justify-center
+          md:flex items-center justify-center
           flex-shrink-0
         "
         >
