@@ -56,12 +56,22 @@ const CourseCheckout = () => {
   const [bookingRef, setBookingRef] = useState("");
   const [error, setError] = useState("");
   const [existingBookingId, setExistingBookingId] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(60 * 60);
 
   // Dynamic Data
   const courseId = searchParams.get("courseId");
   const scheduleId = searchParams.get("scheduleId");
   const plan = (searchParams.get("plan") || "Flexi+").trim();
+
+  const [timeLeft, setTimeLeft] = useState(() => {
+    const savedTime = sessionStorage.getItem(`checkoutTimeLeft_${courseId}`);
+    return savedTime ? parseInt(savedTime, 10) : 60 * 60;
+  });
+
+  useEffect(() => {
+    if (courseId) {
+      sessionStorage.setItem(`checkoutTimeLeft_${courseId}`, timeLeft);
+    }
+  }, [timeLeft, courseId]);
 
   const [courseData, setCourseData] = useState(null);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
@@ -314,6 +324,15 @@ const CourseCheckout = () => {
         };
         setDetails(updatedDetails);
 
+        if (user.billingAddress) {
+          setBilling((prev) => ({
+            postcode: prev.postcode || user.billingAddress.postcode || "",
+            addr1: prev.addr1 || user.billingAddress.line1 || "",
+            addr2: prev.addr2 || user.billingAddress.line2 || "",
+            city: prev.city || user.billingAddress.city || "",
+          }));
+        }
+
         // If profile is incomplete, stay on step 1 to let them fill missing info
         if (!updatedDetails.mobile || !updatedDetails.dob) {
           setIsLoggingIn(false); // Switch back to details view but with fields populated
@@ -542,6 +561,15 @@ const CourseCheckout = () => {
         dob: user.dob || details.dob,
       };
       setDetails(updatedDetails);
+
+      if (user.billingAddress) {
+        setBilling((prev) => ({
+          postcode: prev.postcode || user.billingAddress.postcode || "",
+          addr1: prev.addr1 || user.billingAddress.line1 || "",
+          addr2: prev.addr2 || user.billingAddress.line2 || "",
+          city: prev.city || user.billingAddress.city || "",
+        }));
+      }
 
       // If user has all required info, auto-advance to step 2 if we are on step 1
       if (
@@ -1072,7 +1100,7 @@ const CourseCheckout = () => {
                 stepNum={2}
                 title="Billing Address"
                 onEdit={() => setActiveStep(2)}
-                summary={[billing.addr1, billing.addr2, billing.city].filter(
+                summary={[billing.postcode, billing.addr1, billing.addr2, billing.city].filter(
                   Boolean,
                 )}
               />
