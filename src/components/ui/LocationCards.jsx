@@ -214,79 +214,104 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                           You have a pending booking at another location or date.
                         </p>
                         <p className="text-orange-600/80 font-normal text-xs mt-1">
-                          Please complete or cancel your existing booking to view dates here.
+                          Please complete your existing booking.
                         </p>
                       </div>
                     );
                   }
 
                   return datesToRender.map((date, idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col sm:row sm:flex-row lg:items-center justify-between gap-4 p-4 bg-white rounded-xl border border-[#F15A24] hover:shadow-md transition-all group/date"
-                  >
-                    {(() => {
-                      const booking = bookedSchedules.find(b => b.scheduleId === String(date.id));
-                      return (
-                        <>
-                          <div className="flex  items-center gap-4">
-                            <div className="w-10 h-10 rounded-lg flex items-center justify-center  bg-[#F15A24] text-white transition-colors">
-                              <Calendar size={20} />
-                            </div>
-                            <div>
-                              <p className="text-md font-bold text-slate-900">
-                                {date.range}
-                              </p>
-                              <p className="text-[14px] text-slate-500 font-semibold">
-                                9:00 AM - 5:00 PM Daily
-                              </p>
-                            </div>
-                          </div>
+                    <div
+                      key={idx}
+                      className={`flex flex-col sm:row sm:flex-row lg:items-center justify-between gap-4 p-4 bg-white rounded-xl border transition-all group/date ${
+                        date.availableSeats === 0 
+                          ? "border-gray-200" 
+                          : "border-[#F15A24] hover:shadow-md"
+                      }`}
+                    >
+                      {(() => {
+                        const booking = bookedSchedules.find(b => b.scheduleId === String(date.id));
+                        const isSoldOut = date.availableSeats === 0;
 
-                          <div className="flex items-center gap-6 w-full sm:w-auto justify-between">
-                            <div className="text-right">
-                              <p className="text-xl font-black text-slate-900">
-                                £{date.price}
-                              </p>
+                        return (
+                          <>
+                            <div className="flex  items-center gap-4">
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-white transition-colors ${
+                                isSoldOut ? "bg-gray-300" : "bg-[#F15A24]"
+                              }`}>
+                                <Calendar size={20} />
+                              </div>
+                              <div>
+                                <p className={`text-md font-bold ${isSoldOut ? "text-gray-400 line-through" : "text-slate-900"}`}>
+                                  {date.range}
+                                </p>
+                                {!isSoldOut && date.availableSeats != null && date.availableSeats < 10 && (
+                                  <p className="text-[13px] font-bold text-[#D32F2F] mt-0.5">
+                                    Hurry! - only {date.availableSeats} seats left
+                                  </p>
+                                )}
+                                {!isSoldOut && (
+                                  <p className="text-[14px] text-slate-500 font-semibold mt-0.5">
+                                    9:00 AM - 5:00 PM Daily
+                                  </p>
+                                )}
+                              </div>
                             </div>
-                            {overallBookingStatus === 'PAID' ? (
-                              <button
-                                disabled
-                                className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
-                              >
-                                Already Enrolled
-                              </button>
-                            ) : booking ? (
-                              booking.status === 'PAID' ? (
+
+                            <div className="flex items-center gap-6 w-full sm:w-auto justify-between">
+                              {!isSoldOut && (
+                                <div className="text-right">
+                                  <p className="text-xl font-black text-slate-900">
+                                    £{date.price}
+                                  </p>
+                                </div>
+                              )}
+                              
+                              {isSoldOut ? (
+                                <button
+                                  disabled
+                                  className="px-6 py-2.5 rounded-lg text-sm font-bold bg-gray-300 text-gray-500 cursor-not-allowed shadow-sm"
+                                >
+                                  Sold Out
+                                </button>
+                              ) : overallBookingStatus === 'PAID' ? (
                                 <button
                                   disabled
                                   className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
                                 >
-                                  Already Booked
+                                  Already Enrolled
                                 </button>
+                              ) : booking ? (
+                                booking.status === 'PAID' ? (
+                                  <button
+                                    disabled
+                                    className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
+                                  >
+                                    Already Booked
+                                  </button>
+                                ) : (
+                                  <Link
+                                    to={`/booking/checkout?courseId=${course._id}&scheduleId=${date.id}&bookingId=${booking.bookingId}`}
+                                    className="group flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold bg-white text-[#F15A24] border-2 border-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all shadow-sm"
+                                  >
+                                    <CreditCard size={16} className="transition-colors" />
+                                    <span>Complete Payment</span>
+                                  </Link>
+                                )
                               ) : (
                                 <Link
-                                  to={`/booking/checkout?courseId=${course._id}&scheduleId=${date.id}&bookingId=${booking.bookingId}`}
-                                  className="group flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold bg-white text-[#F15A24] border-2 border-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all shadow-sm"
+                                  to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
+                                  className="hover:bg-[#d84a1a] text-white px-6 py-2.5 rounded-lg text-sm font-bold bg-[#F15A24] transition-all shadow-sm"
                                 >
-                                  <CreditCard size={16} className="transition-colors" />
-                                  <span>Complete Payment</span>
+                                  Book Now
                                 </Link>
-                              )
-                            ) : (
-                              <Link
-                                to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
-                                className="hover:bg-[#d84a1a] text-white px-6 py-2.5 rounded-lg text-sm font-bold bg-[#F15A24] transition-all shadow-sm"
-                              >
-                                Book Now
-                              </Link>
-                            )}
-                          </div>
-                        </>
-                      );
-                    })()}
-                  </div>
-                      ));
+                              )}
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </div>
+                  ));
                 })()}
               </>
             )}

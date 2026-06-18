@@ -89,8 +89,8 @@ const CourseCheckout = () => {
   });
   const [easyApply, setEasyApply] = useState("self"); // "get" | "self"
   const [payment, setPayment] = useState("card");
-  const [agree1, setAgree1] = useState(true);
-  const [agree2, setAgree2] = useState(true);
+  const [agree1, setAgree1] = useState(false);
+  const [agree2, setAgree2] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -1449,13 +1449,25 @@ const CourseCheckout = () => {
                       />
                       <span className="text-sm text-gray-600">
                         I agree to the Courses4Me{" "}
-                        <span className="text-[#F15A24] underline cursor-pointer">
+                        <a
+                          href="/privacy-policy"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[#F15A24] underline cursor-pointer"
+                        >
                           Privacy Policy
-                        </span>{" "}
+                        </a>{" "}
                         and{" "}
-                        <span className="text-[#F15A24] underline cursor-pointer">
+                        <a
+                          href="/terms-of-service"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[#F15A24] underline cursor-pointer"
+                        >
                           Terms of service
-                        </span>
+                        </a>
                       </span>
                     </label>
                   </div>
@@ -1494,7 +1506,7 @@ const CourseCheckout = () => {
                       onClick={createPendingBooking}
                       fullWidth
                       label={isSubmitting ? "Creating..." : "Create Booking"}
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || !agree1 || !agree2}
                     />
                   )}
 
@@ -1509,7 +1521,7 @@ const CourseCheckout = () => {
                           ? "Processing..."
                           : "Complete Pending Payment"
                       }
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || !agree1 || !agree2}
                     />
                   )}
                 </div>

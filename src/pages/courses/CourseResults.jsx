@@ -245,6 +245,7 @@ const CourseResults = () => {
           price: link.price || course?.pricing?.basePrice,
           bookingFee: d.availableSeats != null && d.availableSeats < 5,
           startDate: d.startDate,
+          availableSeats: d.availableSeats,
         })),
       };
     });
