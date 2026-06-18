@@ -42,11 +42,11 @@ import SaveBtn from "../../components/ui/checkoutUI/SaveBtn";
 /* ═══════════════════════════════════════════════════════ */
 const CourseCheckout = () => {
   const navigate = useNavigate();
-  const { login: authLogin, user } = useAuth();
+  const { login: authLogin, user, loading: isAuthLoading } = useAuth();
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(() => searchParams.get("bookingId") ? 4 : 1);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [clientSecret, setClientSecret] = useState(null);
   const [isPaymentModalOpen, setPaymentModalOpen] = useState(false);
@@ -56,12 +56,15 @@ const CourseCheckout = () => {
   const [bookingRef, setBookingRef] = useState("");
   const [error, setError] = useState("");
   const [existingBookingId, setExistingBookingId] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(60 * 60);
 
   // Dynamic Data
   const courseId = searchParams.get("courseId");
   const scheduleId = searchParams.get("scheduleId");
   const plan = (searchParams.get("plan") || "Flexi+").trim();
+
+  const [timeLeft, setTimeLeft] = useState(15 * 60);
+
+
 
   const [courseData, setCourseData] = useState(null);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
@@ -96,52 +99,15 @@ const CourseCheckout = () => {
   const [showPostcodeSuggestions, setShowPostcodeSuggestions] = useState(false);
   const [postcodeSuggestions, setPostcodeSuggestions] = useState([]);
   const [loadingPostcode, setLoadingPostcode] = useState(false);
+  const [selectedPostcode, setSelectedPostcode] = useState("");
   const postcodeRef = useRef(null);
 
   // Validation state
   const [detailsErrors, setDetailsErrors] = useState({});
   const [billingErrors, setBillingErrors] = useState({});
 
-  const [loadingPendingBooking, setLoadingPendingBooking] = useState(true);
-
-  useEffect(() => {
-    const loadPendingBooking = async () => {
-      try {
-        setLoadingPendingBooking(true);
-
-        const res = await bookingService.getMyPendingBooking(courseId);
-
-        if (res.data?.success && res.data?.booking) {
-          const booking = res.data.booking;
-
-          setDetails({
-            firstName: booking.customerDetails.firstName || "",
-            lastName: booking.customerDetails.lastName || "",
-            email: booking.customerDetails.email || "",
-            mobile: booking.customerDetails.phone || "",
-            dob: booking.customerDetails.dob || "",
-            password: "",
-            confirmPassword: "",
-          });
-
-          setBilling({
-            postcode: booking.billingAddress?.postcode || "",
-            addr1: booking.billingAddress?.line1 || "",
-            addr2: booking.billingAddress?.line2 || "",
-            city: booking.billingAddress?.city || "",
-          });
-
-          setExistingBookingId(booking._id);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoadingPendingBooking(false);
-      }
-    };
-
-    loadPendingBooking();
-  }, [courseId]);
+  // Removed broken loadPendingBooking since it called a non-existent API
+  // and we now populate data correctly using getMyBookingStatus instead.
 
   // Clear individual detail error on change
   const updateDetail = (field, value) => {
@@ -168,7 +134,7 @@ const CourseCheckout = () => {
     let cancelled = false;
     const term = billing.postcode.trim();
 
-    if (!term) {
+    if (!term || term === selectedPostcode) {
       setPostcodeSuggestions([]);
       setShowPostcodeSuggestions(false);
       setLoadingPostcode(false);
@@ -314,6 +280,7 @@ const CourseCheckout = () => {
         };
         setDetails(updatedDetails);
 
+
         // If profile is incomplete, stay on step 1 to let them fill missing info
         if (!updatedDetails.mobile || !updatedDetails.dob) {
           setIsLoggingIn(false); // Switch back to details view but with fields populated
@@ -457,20 +424,35 @@ const CourseCheckout = () => {
               if (piRes.data.success && piRes.data.clientSecret) {
                 setClientSecret(piRes.data.clientSecret);
                 setExistingBookingId(urlBookingId);
+
+                // Populate billing address if available from status check
+                if (statusRes.data?.bookedSchedules) {
+                  const currentScheduleBooking = statusRes.data.bookedSchedules.find(b => b.bookingId === urlBookingId);
+                  if (currentScheduleBooking?.billingAddress) {
+                    setBilling({
+                      postcode: currentScheduleBooking.billingAddress.postcode || "",
+                      addr1: currentScheduleBooking.billingAddress.line1 || "",
+                      addr2: currentScheduleBooking.billingAddress.line2 || "",
+                      city: currentScheduleBooking.billingAddress.city || "",
+                    });
+                    setSelectedPostcode(currentScheduleBooking.billingAddress.postcode || "");
+                  }
+                }
+
                 setBookingStatus("PENDING");
                 setActiveStep(4);
                 setIsSubmitting(false);
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                    (piRes.data?.message || ""),
+                  (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                  "Could not load payment session. You may have already completed this payment.",
+                "Could not load payment session. You may have already completed this payment.",
               );
             });
         })
@@ -482,20 +464,22 @@ const CourseCheckout = () => {
               if (piRes.data.success && piRes.data.clientSecret) {
                 setClientSecret(piRes.data.clientSecret);
                 setExistingBookingId(urlBookingId);
+
+
                 setBookingStatus("PENDING");
                 setActiveStep(4);
                 setIsSubmitting(false);
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                    (piRes.data?.message || ""),
+                  (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                  "Could not load payment session. You may have already completed this payment.",
+                "Could not load payment session. You may have already completed this payment.",
               );
             });
         });
@@ -519,10 +503,24 @@ const CourseCheckout = () => {
         .then((res) => {
           if (res.data?.success) {
             setBookingStatus(res.data.status);
-            // If there's already a pending booking, set its ID so the
+            // If there's already a pending booking for this specific schedule, set its ID so the
             // "Complete Pending Payment" button shows immediately on page load
-            if (res.data.status === "PENDING" && res.data.bookingId) {
-              setExistingBookingId(res.data.bookingId);
+            if (res.data.bookedSchedules) {
+              const currentScheduleBooking = res.data.bookedSchedules.find(
+                (b) => b.scheduleId === scheduleId && b.status === "PENDING"
+              );
+              if (currentScheduleBooking) {
+                setExistingBookingId(currentScheduleBooking.bookingId);
+                if (currentScheduleBooking.billingAddress) {
+                  setBilling({
+                    postcode: currentScheduleBooking.billingAddress.postcode || "",
+                    addr1: currentScheduleBooking.billingAddress.line1 || "",
+                    addr2: currentScheduleBooking.billingAddress.line2 || "",
+                    city: currentScheduleBooking.billingAddress.city || "",
+                  });
+                  setSelectedPostcode(currentScheduleBooking.billingAddress.postcode || "");
+                }
+              }
             }
           }
         })
@@ -530,7 +528,7 @@ const CourseCheckout = () => {
           console.error("Failed to fetch booking status", err);
         });
     }
-  }, [user, courseData?._id]);
+  }, [user, courseData?._id, scheduleId]);
   useEffect(() => {
     if (user) {
       const updatedDetails = {
@@ -542,6 +540,7 @@ const CourseCheckout = () => {
         dob: user.dob || details.dob,
       };
       setDetails(updatedDetails);
+
 
       // If user has all required info, auto-advance to step 2 if we are on step 1
       if (
@@ -557,9 +556,18 @@ const CourseCheckout = () => {
 
   useEffect(() => {
     if (isLoading || isConfirmed) return;
-    const id = setInterval(() => setTimeLeft((p) => (p > 0 ? p - 1 : 0)), 1000);
+    const id = setInterval(() => {
+      setTimeLeft((p) => {
+        if (p <= 1) {
+          clearInterval(id);
+          navigate(`/courses/${courseId}/booking`);
+          return 0;
+        }
+        return p - 1;
+      });
+    }, 1000);
     return () => clearInterval(id);
-  }, [isLoading, isConfirmed]);
+  }, [isLoading, isConfirmed, courseId, navigate]);
 
   const fmt = (s) =>
     `${Math.floor(s / 60)
@@ -589,7 +597,7 @@ const CourseCheckout = () => {
         } else {
           setError(
             "Failed to initialize payment for existing booking. " +
-              (piRes.data?.message || ""),
+            (piRes.data?.message || ""),
           );
         }
         setIsSubmitting(false);
@@ -652,7 +660,7 @@ const CourseCheckout = () => {
       } else {
         setError(
           err.response?.data?.message ||
-            "An error occurred during booking. Please try again.",
+          "An error occurred during booking. Please try again.",
         );
         if (
           err.response?.data?.existingBookingId &&
@@ -731,18 +739,18 @@ const CourseCheckout = () => {
     }
   };
   /* ── Skeleton ── */
-  if (isLoading || loadingPendingBooking) {
+  if (isLoading || isAuthLoading) {
     return <CheckoutSkeleton />;
   }
 
   if (isConfirmed) {
     const formattedDate = selectedSchedule?.startDate
       ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-          weekday: "long",
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        })
+        weekday: "long",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
       : "Pending Date";
 
     return (
@@ -1072,7 +1080,7 @@ const CourseCheckout = () => {
                 stepNum={2}
                 title="Billing Address"
                 onEdit={() => setActiveStep(2)}
-                summary={[billing.addr1, billing.addr2, billing.city].filter(
+                summary={[billing.postcode, billing.addr1, billing.addr2, billing.city].filter(
                   Boolean,
                 )}
               />
@@ -1096,6 +1104,7 @@ const CourseCheckout = () => {
                       onChange={(v) => updateBilling("postcode", v)}
                       onFocus={() =>
                         postcodeSuggestions.length > 0 &&
+                        billing.postcode !== selectedPostcode &&
                         setShowPostcodeSuggestions(true)
                       }
                       icon={MapPin}
@@ -1120,6 +1129,7 @@ const CourseCheckout = () => {
                                 updateBilling("postcode", item.postcode);
                                 updateBilling("addr1", item.address);
                                 updateBilling("city", item.city);
+                                setSelectedPostcode(item.postcode);
                                 setShowPostcodeSuggestions(false);
                               }}
                               className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
@@ -1475,14 +1485,14 @@ const CourseCheckout = () => {
             date={
               selectedSchedule?.startDate
                 ? new Date(selectedSchedule.startDate).toLocaleDateString(
-                    "en-GB",
-                    {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    },
-                  )
+                  "en-GB",
+                  {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  },
+                )
                 : null
             }
             courseId={courseId}
