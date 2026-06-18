@@ -65,7 +65,7 @@ const CourseCheckout = () => {
   const [timeLeft, setTimeLeft] = useState(() => {
     const key = `checkoutTimeLeft_${courseId}_${scheduleId || 'default'}`;
     const savedTime = sessionStorage.getItem(key);
-    return savedTime ? parseInt(savedTime, 10) : 60 * 60;
+    return savedTime ? parseInt(savedTime, 10) : 15 * 60;
   });
 
   useEffect(() => {
@@ -578,9 +578,18 @@ const CourseCheckout = () => {
 
   useEffect(() => {
     if (isLoading || isConfirmed || !existingBookingId) return;
-    const id = setInterval(() => setTimeLeft((p) => (p > 0 ? p - 1 : 0)), 1000);
+    const id = setInterval(() => {
+      setTimeLeft((p) => {
+        if (p <= 1) {
+          clearInterval(id);
+          navigate(`/courses/${courseId}/booking`);
+          return 0;
+        }
+        return p - 1;
+      });
+    }, 1000);
     return () => clearInterval(id);
-  }, [isLoading, isConfirmed, existingBookingId]);
+  }, [isLoading, isConfirmed, existingBookingId, courseId, navigate]);
 
   const fmt = (s) =>
     `${Math.floor(s / 60)
