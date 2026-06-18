@@ -68,7 +68,7 @@ const NewsletterCTA = () => {
                     }`}
                   >
                     <Mail
-                      size={16}
+                      size={18}
                       className={`shrink-0 ${
                         error ? "text-red-400" : "text-[#F15A24]"
                       }`}
@@ -85,14 +85,14 @@ const NewsletterCTA = () => {
 
                         if (success) setSuccess(false);
                       }}
-                      className="ml-3 w-full min-w-0 bg-transparent outline-none text-white placeholder:text-gray-500 text-sm"
+                      className="ml-3 py-1 w-full min-w-0 bg-transparent outline-none text-white placeholder:text-gray-500 text-md"
                     />
                   </div>
 
                   {/* BUTTON */}
                   <button
                     type="submit"
-                    className="w-full sm:w-auto sm:min-w-[190px] h-12 px-6 rounded-xl bg-[#F15A24] hover:bg-[#df4c18] transition-all duration-300 text-white text-sm font-bold shadow-[0_10px_30px_rgba(241,90,36,0.30)] whitespace-nowrap"
+                    className="w-full sm:w-auto cursor-pointer sm:min-w-[190px] py-3 px-6 rounded-xl bg-[#F15A24] hover:bg-[#df4c18] transition-all duration-300 text-white text-md font-bold shadow-[0_10px_30px_rgba(241,90,36,0.30)] whitespace-nowrap"
                   >
                     Get Free Updates
                   </button>
@@ -105,7 +105,7 @@ const NewsletterCTA = () => {
                 )}
 
                 {success && (
-                  <p className="text-green-400 text-xs font-semibold">
+                  <p className="text-orange-400 text-md font-semibold">
                     You're subscribed successfully 🎉
                   </p>
                 )}

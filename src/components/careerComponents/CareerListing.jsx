@@ -19,13 +19,12 @@ import CareerSidebar from "../ui/CareerSidebar";
 import CareerCards from "../ui/CareerCards";
 import EmptyState from "../ui/EmptyState";
 import Loader from "../ui/Loader";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const categories = [
   {
     id: 1,
     name: "All Careers",
-    count: 7,
     icon: LayoutGrid,
     color: "from-[#F8510C] to-[#FF7A45]",
   },
@@ -33,7 +32,6 @@ const categories = [
   {
     id: 2,
     name: "SIA Training",
-    count: 6,
     icon: Shield,
     color: "from-[#FF2D55] to-[#FF5B7F]",
   },
@@ -41,7 +39,6 @@ const categories = [
   {
     id: 3,
     name: "First Aid",
-    count: 0,
     icon: HeartPulse,
     color: "from-[#22C55E] to-[#4ADE80]",
   },
@@ -49,7 +46,6 @@ const categories = [
   {
     id: 4,
     name: "Health & Safety",
-    count: 0,
     icon: ShieldCheck,
     color: "from-[#0A84FF] to-[#4DA3FF]",
   },
@@ -57,13 +53,18 @@ const categories = [
   {
     id: 5,
     name: "Specialist",
-    count: 1,
     icon: BriefcaseBusiness,
     color: "from-[#5856D6] to-[#7B79FF]",
   },
 ];
 
 const CareerListing = () => {
+  const [careerSearch, setCareerSearch] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedCareer, setSelectedCareer] = useState(null);
+
+  const navigate = useNavigate();
+
   const [open, setOpen] = useState(false);
   const sortOptions = [
     { label: "Sort by: All", value: "all" },
@@ -158,13 +159,29 @@ const CareerListing = () => {
     }, 50);
   };
 
+  const careerSuggestions = useMemo(() => {
+    if (!careerSearch.trim()) return [];
+
+    return careersData
+      .filter((career) =>
+        career.title.toLowerCase().includes(careerSearch.toLowerCase()),
+      )
+      .slice(0, 6);
+  }, [careerSearch]);
+
+  const handleCareerSearch = () => {
+    if (!selectedCareer) return;
+
+    navigate(`/careers/careerdetails/${selectedCareer.id}`);
+  };
+
   return (
     <div className="bg-[#F7F8FA] max-w-8xl  min-h-screen">
       <div className="max-w-350 mx-auto px-4 md:px-6 py-6">
         {/* ======================================================
                     HERO SECTION
 ====================================================== */}
-        <div className="mb-5">
+        <div className="mb-5 relative z-40">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-base mb-5">
             <NavLink
@@ -180,7 +197,7 @@ const CareerListing = () => {
           </div>
 
           {/* Hero Box */}
-          <div className="relative overflow-hidden rounded-[32px] border border-[#FFE2D6] bg-gradient-to-br from-[#FFF7F3] via-white to-[#FFF1EB] p-5 md:p-7 shadow-sm">
+          <div className="relative overflow-visible rounded-[32px] border border-[#FFE2D6] bg-gradient-to-br from-[#FFF7F3] via-white to-[#FFF1EB] p-5 md:p-7 shadow-sm">
             {/* Glow */}
             <div className="absolute top-0 right-0 w-[250px] h-[250px] bg-[#F8510C]/10 blur-3xl rounded-full pointer-events-none" />
 
@@ -270,23 +287,63 @@ const CareerListing = () => {
                         <input
                           type="text"
                           placeholder="Career title or keyword"
-                          className="w-full h-13 rounded-2xl border border-[#EAECF0] bg-[#FAFAFA] pl-12 pr-4 outline-none focus:border-[#F8510C] focus:ring-4 focus:ring-[#F8510C]/10 transition-all"
+                          value={careerSearch}
+                          onChange={(e) => {
+                            setCareerSearch(e.target.value);
+                            setSelectedCareer(null);
+                            setShowSuggestions(true);
+                          }}
+                          onFocus={() => {
+                            if (careerSearch.trim()) {
+                              setShowSuggestions(true);
+                            }
+                          }}
+                          className="w-full h-13 rounded-2xl border border-[#EAECF0] bg-[#FAFAFA] pl-12 pr-12 outline-none focus:border-[#F8510C] focus:ring-4 focus:ring-[#F8510C]/10 transition-all"
                         />
-                      </div>
 
-                      {/* Location */}
-                      <div className="relative">
-                        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#F8510C]" />
+                        {careerSearch && (
+                          <button
+                            type="button"
+                            onClick={() => setCareerSearch("")}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                          >
+                            <X size={18} />
+                          </button>
+                        )}
+                        {showSuggestions && careerSuggestions.length > 0 && (
+                          <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-2xl shadow-xl z-[999] max-h-[280px] overflow-y-auto overflow-x-hidden custom-scrollbar">
+                            {careerSuggestions.map((career) => (
+                              <button
+                                key={career.id}
+                                type="button"
+                                onClick={() => {
+                                  setCareerSearch(career.title);
+                                  setSelectedCareer(career);
+                                  setShowSuggestions(false);
+                                }}
+                                className="w-full px-4 py-3 text-left hover:bg-[#FFF4EF] border-b border-gray-100 last:border-b-0"
+                              >
+                                <div>
+                                  <h4 className="font-semibold text-gray-800">
+                                    {career.title}
+                                  </h4>
 
-                        <input
-                          type="text"
-                          placeholder="Enter location"
-                          className="w-full h-13 rounded-2xl border border-[#EAECF0] bg-[#FAFAFA] pl-12 pr-4 outline-none focus:border-[#F8510C] focus:ring-4 focus:ring-[#F8510C]/10 transition-all"
-                        />
+                                  <p className="text-sm text-gray-500">
+                                    {career.category}
+                                  </p>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
                       {/* Button */}
-                      <button className="w-full px-3 py-4 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] transition-all text-white font-bold shadow-lg shadow-[#F8510C]/20">
+                      <button
+                        onClick={handleCareerSearch}
+                        disabled={!selectedCareer}
+                        className="w-full cursor-pointer px-3 py-4 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] transition-all text-white font-bold shadow-lg shadow-[#F8510C]/20"
+                      >
                         Search Careers
                       </button>
                     </div>
@@ -315,11 +372,11 @@ const CareerListing = () => {
               {/* Overlay */}
               <div
                 onClick={() => setShowFilters(false)}
-                className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 xl:hidden"
+                className="fixed inset-0  backdrop-blur-sm z-998 xl:hidden"
               />
 
               {/* Sidebar */}
-              <div className="fixed top-0 left-0 h-full w-77.5 bg-white z-50 shadow-2xl overflow-y-auto xl:hidden">
+              <div className="fixed top-0 left-0 h-full w-77.5 bg-white z-1000 shadow-2xl overflow-y-auto xl:hidden">
                 {/* Header */}
                 <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between">
                   <h2 className="text-lg font-black text-[#111827]">Filters</h2>
@@ -350,7 +407,7 @@ const CareerListing = () => {
 
           <div ref={mainSectionRef} className="relative z-20 overflow-visible">
             {/* ==================HEADER=================== */}
-            <div className="bg-white rounded-[24px] border border-gray-100 px-5 py-4 mb-5 shadow-sm sticky top-0 z-[99999] backdrop-blur-xl bg-white/95 overflow-visible">
+            <div className="bg-white rounded-[24px] border border-gray-100 px-5 py-4 mb-5 shadow-sm sticky top-0 z-999 backdrop-blur-xl bg-white/95 overflow-visible">
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 {/* Left Content */}
                 <div className="flex items-center gap-4">
@@ -447,10 +504,11 @@ const CareerListing = () => {
                   <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`w-10 h-10 rounded-xl cursor-pointer text-base font-semibold ${page === currentPage
+                    className={`w-10 h-10 rounded-xl cursor-pointer text-base font-semibold ${
+                      page === currentPage
                         ? "bg-[#F8510C] text-white"
                         : "bg-white border border-gray-200 text-gray-700"
-                      }`}
+                    }`}
                   >
                     {page}
                   </button>

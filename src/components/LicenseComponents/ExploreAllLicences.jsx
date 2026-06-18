@@ -360,7 +360,7 @@ const ExploreAllLicences = () => {
             ) : filteredLicences.length > 0 ? (
               <motion.div
                 layout
-                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"
+                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
               >
                 <AnimatePresence mode="popLayout">
                   {filteredLicences.map((item, index) => (

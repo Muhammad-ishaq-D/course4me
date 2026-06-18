@@ -11,6 +11,7 @@ import {
   ChevronRight,
   ArrowRight,
   BookOpen,
+  X,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import courseLocationService from "../../api/services/courseLocationService";
@@ -135,7 +136,7 @@ const LocationSearch = () => {
         <div className="relative mb-5">
           <div className="absolute inset-0 bg-linear-to-r from-orange-100/40 via-white to-orange-100/40 blur-3xl rounded-full pointer-events-none" />
 
-          <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] px-5 py-5 overflow-visible z-99">
+          <div className="relative bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] px-5 py-5 overflow-visible z-30">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
               {/* Left */}
               <div>
@@ -170,8 +171,22 @@ const LocationSearch = () => {
                         setShowSuggestions(true);
                       }}
                       onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                      className="w-full h-14 pl-16 pr-5 rounded-2xl border border-gray-200 bg-[#FAFBFD] focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-100 outline-none transition-all text-base font-medium text-gray-700 placeholder:text-gray-400"
+                      className="w-full h-14 pl-16 pr-10 rounded-2xl border border-gray-200 bg-[#FAFBFD] focus:bg-white focus:border-orange-400 focus:ring-4 focus:ring-orange-100 outline-none transition-all text-base font-medium text-gray-700 placeholder:text-gray-400"
                     />
+                    {searchInput && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSearchInput("");
+                          setSearch("");
+                          setShowSuggestions(false);
+                          setPage(1);
+                        }}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full hover:bg-gray-100 flex cursor-pointer items-center justify-center transition-colors"
+                      >
+                        <X className="w-4 h-4 text-gray-500" />
+                      </button>
+                    )}
 
                     {/* ===================== DROPDOWN ===================== */}
                     {showSuggestions && locationSuggestions.length > 0 && (

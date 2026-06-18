@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, TrendingUp, BookOpen, ShieldCheck } from "lucide-react";
+import { Search, TrendingUp, BookOpen, ShieldCheck, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { blogsData } from "../../data/blogs";
@@ -96,8 +96,21 @@ const BlogHero = () => {
                         setShowSuggestions(true);
                       }}
                       placeholder="Search articles, guides, news..."
-                      className="ml-3 flex-1  min-w-0 bg-transparent outline-none text-white placeholder:text-gray-500 text-md"
+                      className="ml-3 flex-1 min-w-0 pr-3 bg-transparent outline-none text-white placeholder:text-gray-500 text-md"
                     />
+
+                    {searchInput && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSearchInput("");
+                          setShowSuggestions(false);
+                        }}
+                        className="flex items-center justify-center ml-2 text-gray-400 hover:text-white transition-colors cursor-pointer"
+                      >
+                        <X size={18} />
+                      </button>
+                    )}
 
                     {showSuggestions && blogSuggestions.length > 0 && (
                       <div className="absolute top-full left-0 right-0 mt-3 bg-[#111827] border border-white/10 rounded-2xl shadow-2xl z-[9999] max-h-[210px] overflow-y-auto custom-scrollbar">

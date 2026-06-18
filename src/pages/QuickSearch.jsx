@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Search, MapPin, ArrowRight, Sparkles } from "lucide-react";
+import { Search, MapPin, ArrowRight, Sparkles, X } from "lucide-react";
 
 import CourseCard from "../components/ui/CourseCard";
 import LicenseCard from "../components/ui/LicenseCard";
@@ -379,8 +379,20 @@ const QuickSearch = () => {
                   }}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   placeholder="Search courses, licenses, careers..."
-                  className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none"
+                  className="w-full py-4 rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-10 outline-none"
                 />
+                {search && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearch("");
+                      setShowKeywordSuggestions(false);
+                    }}
+                    className="absolute right-4 top-15 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer z-20"
+                  >
+                    <X size={18} />
+                  </button>
+                )}
 
                 {showKeywordSuggestions && (
                   <div className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">
@@ -438,8 +450,20 @@ const QuickSearch = () => {
                   }
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   placeholder="Town, city or postcode..."
-                  className="w-full h-[60px] rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-4 outline-none"
+                  className="w-full py-4 rounded-2xl border border-gray-200 focus:border-[#F15A24] bg-[#FAFAFC] pl-14 pr-12 outline-none"
                 />
+                {location && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLocation("");
+                      setShowLocationSuggestions(false);
+                    }}
+                    className="absolute right-4 top-15 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer z-20"
+                  >
+                    <X size={18} />
+                  </button>
+                )}
 
                 {showLocationSuggestions && locationSuggestions.length > 0 && (
                   <div className="absolute top-[105%] left-0 w-full bg-white border border-gray-200 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50">

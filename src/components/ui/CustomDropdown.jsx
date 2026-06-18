@@ -33,7 +33,7 @@ const CustomDropdown = ({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className=" w-full h-[60px] rounded-2xl border  border-gray-200 bg-[#FAFAFC] px-5 flex items-center justify-between text-[#111827] transition-all hover:border-[#F15A24] focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10
+        className=" w-full py-4 rounded-2xl border  border-gray-200 bg-[#FAFAFC] px-5 flex items-center justify-between text-[#111827] transition-all hover:border-[#F15A24] focus:border-[#F15A24] focus:ring-4 focus:ring-[#F15A24]/10
         "
       >
         <span>{selectedOption?.label || placeholder}</span>

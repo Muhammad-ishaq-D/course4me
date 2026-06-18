@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   CalendarDays,
   PoundSterling,
+  X,
 } from "lucide-react";
 import courseService from "../../api/services/courseService";
 import courseLocationService from "../../api/services/courseLocationService";
@@ -217,7 +218,7 @@ const CourseBooking = () => {
                     ref={searchInputRef}
                     type="text"
                     placeholder="Enter postcode, city or address"
-                    className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#F15A24] transition-colors"
+                    className="w-full pl-12 pr-12 py-3.5 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#F15A24] transition-colors"
                     value={searchLocation}
                     onChange={(e) => {
                       const value = e.target.value;
@@ -247,6 +248,21 @@ const CourseBooking = () => {
                       }
                     }}
                   />
+                  {searchLocation && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchLocation("");
+                        setSelectedLocation(null);
+                        setShowSuggestions(false);
+
+                        searchInputRef.current?.focus();
+                      }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-800 transition-colors cursor-pointer z-10"
+                    >
+                      <X size={18} />
+                    </button>
+                  )}
                   {showSuggestions &&
                     searchLocation.trim() !== "" &&
                     filteredSuggestions.length > 0 && (

@@ -180,7 +180,7 @@ const CourseMainContent = ({ course }) => {
                     >
                       {getButtonContent()}
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => {
                         const element = document.getElementById("dates");
                         if (element)
@@ -189,7 +189,7 @@ const CourseMainContent = ({ course }) => {
                       className="w-full bg-[#1E293B] cursor-pointer text-white font-bold py-4 rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-2"
                     >
                       <Calendar className="w-5 h-5" /> View All Dates
-                    </button>
+                    </button> */}
                   </div>
 
                   <div className="space-y-5 border-t border-gray-50 pt-8">
