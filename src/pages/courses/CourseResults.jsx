@@ -47,6 +47,7 @@ const CourseResults = () => {
   const [amenitiesByLinkId, setAmenitiesByLinkId] = useState({});
   const [isCalculatingDistances, setIsCalculatingDistances] = useState(false);
   const [bookedSchedules, setBookedSchedules] = useState([]);
+  const [userSchedules, setUserSchedules] = useState([]);
 
   const [stripeModalOpen, setStripeModalOpen] = useState(false);
   const [clientSecret, setClientSecret] = useState(null);
@@ -81,6 +82,15 @@ const CourseResults = () => {
           }
         })
         .catch((err) => console.error("Error fetching booking status:", err));
+
+      bookingService
+        .getMySchedules()
+        .then((res) => {
+          if (res.data && res.data.data) {
+            setUserSchedules(res.data.data);
+          }
+        })
+        .catch((err) => console.error("Error fetching global user schedules:", err));
     }
   }, [courseId, user]);
 
@@ -381,6 +391,7 @@ const CourseResults = () => {
                   }}
                   course={course}
                   bookedSchedules={bookedSchedules}
+                  userSchedules={userSchedules}
                   onPayPending={handlePayPending}
                 />
               ))

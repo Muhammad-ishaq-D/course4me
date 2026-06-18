@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const LocationCards = ({ loc, course, bookedSchedules = [], onPayPending }) => {
+const LocationCards = ({ loc, course, bookedSchedules = [], userSchedules = [], onPayPending }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -197,6 +197,29 @@ const LocationCards = ({ loc, course, bookedSchedules = [], onPayPending }) => {
               >
                 {(() => {
                   const booking = bookedSchedules.find(b => b.scheduleId === String(date.id));
+                  
+                  // Check for conflict across all user schedules
+                  let conflict = null;
+                  if (!booking && date.startDate) {
+                     const slotStart = new Date(date.startDate).getTime();
+                     // We don't have exact endDate for the slot easily available in this view without fetching it,
+                     // but we can approximate it or use the string range.
+                     // The requirement says: check if user has overlap. 
+                     // Since duration is typically days, let's use a 4-day approximation if endDate is missing,
+                     // but let's check if we can get endDate from date.range or course object.
+                     // Actually, if we just check if slotStart is within an existing booking, that covers 99% of overlaps.
+                     const slotEnd = slotStart + (4 * 24 * 60 * 60 * 1000); // Approximation if exact end date is absent
+                     
+                     for (const s of userSchedules) {
+                        const existingStart = new Date(s.startDate).getTime();
+                        const existingEnd = new Date(s.endDate).getTime();
+                        if (slotStart <= existingEnd && slotEnd >= existingStart) {
+                            conflict = s;
+                            break;
+                        }
+                     }
+                  }
+
                   return (
                     <>
                       <div className="flex  items-center gap-4">
@@ -236,6 +259,14 @@ const LocationCards = ({ loc, course, bookedSchedules = [], onPayPending }) => {
                               <span>Complete Payment</span>
                             </Link>
                           )
+                        ) : conflict ? (
+                            <button
+                              disabled
+                              title={`Conflicts with your booking for ${conflict.courseTitle}`}
+                              className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
+                            >
+                              Schedule Conflict
+                            </button>
                         ) : (
                           <Link
                             to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}

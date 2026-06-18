@@ -61,6 +61,7 @@ const CourseCheckout = () => {
   const courseId = searchParams.get("courseId");
   const scheduleId = searchParams.get("scheduleId");
   const plan = (searchParams.get("plan") || "Flexi+").trim();
+  const replaceConflict = searchParams.get("replaceConflict") === "true";
 
   const [timeLeft, setTimeLeft] = useState(15 * 60);
 
@@ -631,6 +632,7 @@ const CourseCheckout = () => {
         },
         paymentMethod: payment,
         totalAmount: price + (easyApply === "get" ? 149.99 : 0),
+        replaceConflict: replaceConflict,
       };
 
       // Create booking first
@@ -708,6 +710,7 @@ const CourseCheckout = () => {
         },
         paymentMethod: payment,
         totalAmount: price + (easyApply === "get" ? 149.99 : 0),
+        replaceConflict: replaceConflict,
       };
       const response = await bookingService.createBooking(bookingPayload);
       if (response.data.success) {

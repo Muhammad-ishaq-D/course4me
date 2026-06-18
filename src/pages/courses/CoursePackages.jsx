@@ -13,6 +13,9 @@ import {
 import { courses as fallbackCourses } from "../../data/courseData";
 import courseService from "../../api/services/courseService";
 import courseLocationService from "../../api/services/courseLocationService";
+import bookingService from "../../api/services/bookingService";
+import { useAuth } from "../../context/AuthContext";
+import ConflictResolutionModal from "../../components/modals/ConflictResolutionModal";
 
 const CoursePackages = () => {
   const [searchParams] = useSearchParams();
@@ -27,7 +30,14 @@ const CoursePackages = () => {
 
   const [course, setCourse] = useState(null);
   const [schedulePrice, setSchedulePrice] = useState(null);
+  const [scheduleDates, setScheduleDates] = useState(null);
+  const [userSchedules, setUserSchedules] = useState([]);
   const [error, setError] = useState("");
+  const [conflictModalOpen, setConflictModalOpen] = useState(false);
+  const [conflictDetails, setConflictDetails] = useState(null);
+  const [pendingNavigation, setPendingNavigation] = useState(null);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,6 +65,7 @@ const CoursePackages = () => {
             );
             if (date && link.price) {
               foundPrice = link.price;
+              setScheduleDates({ startDate: date.startDate, endDate: date.endDate });
               break;
             }
           }
@@ -68,8 +79,17 @@ const CoursePackages = () => {
       }
     };
     fetchData();
+
+    if (user) {
+      bookingService.getMySchedules()
+        .then(res => {
+          if (res.data?.data) setUserSchedules(res.data.data);
+        })
+        .catch(err => console.error(err));
+    }
+
     window.scrollTo(0, 0);
-  }, [courseId, scheduleId]);
+  }, [courseId, scheduleId, user]);
 
   const features = {
     saver: [
@@ -188,6 +208,37 @@ const CoursePackages = () => {
   const saverPrice = (basePriceValue - 40).toFixed(2);
   const flexiPrice = basePriceValue.toFixed(2);
   const premiumPrice = (basePriceValue + 120).toFixed(2);
+
+  const handlePackageSelect = (planName) => {
+    const navUrl = `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=${planName}`;
+    
+    // Check for overlap
+    if (scheduleDates?.startDate) {
+      const slotStart = new Date(scheduleDates.startDate).getTime();
+      const slotEnd = scheduleDates.endDate 
+        ? new Date(scheduleDates.endDate).getTime() 
+        : slotStart + (4 * 24 * 60 * 60 * 1000);
+
+      let conflict = null;
+      for (const s of userSchedules) {
+        const existingStart = new Date(s.startDate).getTime();
+        const existingEnd = new Date(s.endDate).getTime();
+        if (slotStart <= existingEnd && slotEnd >= existingStart) {
+          conflict = s;
+          break;
+        }
+      }
+
+      if (conflict) {
+        setConflictDetails(conflict);
+        setPendingNavigation(navUrl + "&replaceConflict=true");
+        setConflictModalOpen(true);
+        return;
+      }
+    }
+
+    navigate(navUrl);
+  };
 
   return (
     <div className=" min-h-screen bg-[#F8FAFC]">
@@ -314,11 +365,7 @@ const CoursePackages = () => {
                 </div>
               </div>
               <button
-                onClick={() =>
-                  navigate(
-                    `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Saver`,
-                  )
-                }
+                onClick={() => handlePackageSelect("Saver")}
                 className="w-full py-4 cursor-pointer rounded-xl border-2 border-gray-200 text-[#1C1C1C] font-black text-md hover:border-[#F15A24] hover:text-[#F15A24] active:scale-95 transition-all"
               >
                 Select Saver
@@ -414,11 +461,7 @@ const CoursePackages = () => {
 
             <div className="p-4 lg:p-8 pt-0 mt-auto border-t border-gray-50/50">
               <button
-                onClick={() =>
-                  navigate(
-                    `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi+`,
-                  )
-                }
+                onClick={() => handlePackageSelect("Flexi+")}
                 className="w-full py-4 rounded-xl cursor-pointer bg-[#F15A24] text-white font-black text-md hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#F15A24]/20"
               >
                 Select Flexi+
@@ -487,11 +530,7 @@ const CoursePackages = () => {
 
             <div className="p-4 lg:p-8 pt-0 mt-auto border-t border-gray-50/50">
               <button
-                onClick={() =>
-                  navigate(
-                    `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Premium`,
-                  )
-                }
+                onClick={() => handlePackageSelect("Premium")}
                 className="w-full cursor-pointer py-4 rounded-xl bg-[#7344ff] text-white font-black text-md hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#7344ff]/20"
               >
                 Select Premium
@@ -766,11 +805,7 @@ const CoursePackages = () => {
 
                   <td className="p-6 text-center bg-slate-50">
                     <button
-                      onClick={() =>
-                        navigate(
-                          `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Saver`,
-                        )
-                      }
+                      onClick={() => handlePackageSelect("Saver")}
                       className="px-6 py-3 rounded-xl cursor-pointer border border-gray-300 font-bold text-sm hover:border-[#F15A24] hover:text-[#F15A24] transition-all"
                     >
                       Select Saver
@@ -779,11 +814,7 @@ const CoursePackages = () => {
 
                   <td className="p-6 text-center bg-[#FFF5F1]">
                     <button
-                      onClick={() =>
-                        navigate(
-                          `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi+`,
-                        )
-                      }
+                      onClick={() => handlePackageSelect("Flexi+")}
                       className="px-6 py-3 rounded-xl cursor-pointer bg-[#F15A24] text-white font-bold text-sm shadow-lg shadow-[#F15A24]/20 hover:scale-105 transition-all"
                     >
                       Select Flexi+
@@ -792,11 +823,7 @@ const CoursePackages = () => {
 
                   <td className="p-6 text-center bg-purple-50">
                     <button
-                      onClick={() =>
-                        navigate(
-                          `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Premium`,
-                        )
-                      }
+                      onClick={() => handlePackageSelect("Premium")}
                       className="px-6 py-3 rounded-xl cursor-pointer bg-[#7344ff] text-white font-bold text-sm shadow-lg shadow-[#7344ff]/20 hover:scale-105 transition-all"
                     >
                       Select Premium
@@ -808,6 +835,19 @@ const CoursePackages = () => {
           </div>
         </div>
       </div>
+
+      <ConflictResolutionModal
+        isOpen={conflictModalOpen}
+        onClose={() => {
+          setConflictModalOpen(false);
+          setPendingNavigation(null);
+        }}
+        conflictCourseTitle={conflictDetails?.courseTitle}
+        onReplace={() => {
+          setConflictModalOpen(false);
+          if (pendingNavigation) navigate(pendingNavigation);
+        }}
+      />
     </div>
   );
 };
