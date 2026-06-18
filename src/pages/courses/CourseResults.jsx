@@ -12,6 +12,7 @@ import {
   Loader2,
   Navigation,
   ArrowLeft,
+  CheckCircle2,
 } from "lucide-react";
 import courseService from "../../api/services/courseService";
 import courseLocationService from "../../api/services/courseLocationService";
@@ -366,7 +367,20 @@ const CourseResults = () => {
               </p>
             </div>
 
-            {sortedLocations.length === 0 ? (
+            {overallBookingStatus === "PAID" ? (
+              <div className="bg-[#00B67A]/10 border border-[#00B67A]/20 rounded-3xl p-12 text-center shadow-sm">
+                <div className="mx-auto w-16 h-16 bg-[#00B67A] text-white rounded-full flex items-center justify-center mb-6">
+                   <CheckCircle2 size={32} />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-bold text-[#00B67A] mb-3">🎉 You are already enrolled!</h3>
+                <p className="text-gray-600 font-medium text-lg mb-8 max-w-xl mx-auto">
+                  You have successfully purchased this course. You can view your training schedule, details, and receipt in your dashboard.
+                </p>
+                <Link to="/dashboard?tab=bookings" className="inline-block px-8 py-3 bg-[#00B67A] text-white font-bold rounded-xl hover:bg-[#00a36c] transition-colors">
+                  Go to Dashboard
+                </Link>
+              </div>
+            ) : sortedLocations.length === 0 ? (
               <div className="bg-white rounded-3xl border border-gray-100 p-12 text-center shadow-sm">
                 <p className="text-gray-500 font-medium text-lg">
                   No locations available for this course yet.
