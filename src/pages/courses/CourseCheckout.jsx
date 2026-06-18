@@ -451,14 +451,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                    (piRes.data?.message || ""),
+                  (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                  "Could not load payment session. You may have already completed this payment.",
+                "Could not load payment session. You may have already completed this payment.",
               );
             });
         })
@@ -477,14 +477,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                    (piRes.data?.message || ""),
+                  (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                  "Could not load payment session. You may have already completed this payment.",
+                "Could not load payment session. You may have already completed this payment.",
               );
             });
         });
@@ -609,7 +609,7 @@ const CourseCheckout = () => {
         } else {
           setError(
             "Failed to initialize payment for existing booking. " +
-              (piRes.data?.message || ""),
+            (piRes.data?.message || ""),
           );
         }
         setIsSubmitting(false);
@@ -672,7 +672,7 @@ const CourseCheckout = () => {
       } else {
         setError(
           err.response?.data?.message ||
-            "An error occurred during booking. Please try again.",
+          "An error occurred during booking. Please try again.",
         );
         if (
           err.response?.data?.existingBookingId &&
@@ -758,11 +758,11 @@ const CourseCheckout = () => {
   if (isConfirmed) {
     const formattedDate = selectedSchedule?.startDate
       ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-          weekday: "long",
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        })
+        weekday: "long",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
       : "Pending Date";
 
     return (
@@ -1460,7 +1460,7 @@ const CourseCheckout = () => {
                         </a>{" "}
                         and{" "}
                         <a
-                          href="/terms-of-service"
+                          href="/terms-of-services"
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
@@ -1540,14 +1540,14 @@ const CourseCheckout = () => {
             date={
               selectedSchedule?.startDate
                 ? new Date(selectedSchedule.startDate).toLocaleDateString(
-                    "en-GB",
-                    {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    },
-                  )
+                  "en-GB",
+                  {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  },
+                )
                 : null
             }
             courseId={courseId}
