@@ -236,7 +236,7 @@ const SettingsTab = () => {
             <button
               type="submit"
               disabled={loading.personal}
-              className="bg-[#F15A24] hover:bg-[#D94E1F] disabled:bg-orange-300 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-orange-100 transition-all flex items-center justify-center gap-2 active:scale-95"
+              className="bg-[#F15A24] hover:bg-[#D94E1F] cursor-pointer disabled:bg-orange-300 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-orange-100 transition-all flex items-center justify-center gap-2 active:scale-95"
             >
               {loading.personal ? (
                 <Loader2 className="animate-spin" size={20} />
@@ -253,7 +253,7 @@ const SettingsTab = () => {
       <div className="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-100/50 overflow-hidden">
         <div className="p-8 border-b border-gray-50 bg-gray-50/50">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-[#2D2D2D] rounded-xl text-white shadow-lg shadow-gray-200">
+            <div className="p-2.5 bg-[#F15A24] rounded-xl text-white shadow-lg shadow-gray-200">
               <Lock size={24} />
             </div>
             <div>
@@ -369,7 +369,7 @@ const SettingsTab = () => {
             <button
               type="submit"
               disabled={loading.password}
-              className="bg-[#2D2D2D] hover:bg-black disabled:bg-gray-400 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-gray-100 transition-all flex items-center justify-center gap-2 active:scale-95"
+              className="bg-[#F15A24] hover:bg-[#e36132] cursor-pointer disabled:bg-gray-400 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-gray-100 transition-all flex items-center justify-center gap-2 active:scale-95"
             >
               {loading.password ? (
                 <Loader2 className="animate-spin" size={20} />

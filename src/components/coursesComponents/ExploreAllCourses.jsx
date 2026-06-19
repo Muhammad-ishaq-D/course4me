@@ -193,7 +193,7 @@ const ExploreAllCourses = () => {
             HEADER
         ===================================================== */}
         <div className="mb-12">
-          <span className="inline-flex items-center gap-2 bg-[#F15A24]/10 text-[#F15A24] px-4 py-2 rounded-full text-sm font-semibold mb-5">
+          <span className="inline-flex items-center gap-2 bg-[#F15A24]/10 text-[#F15A24] px-4 py-2 rounded-full md:text-sm text-xs font-semibold mb-5">
             <Flame size={16} />
             Professional Training Courses
           </span>
@@ -202,7 +202,7 @@ const ExploreAllCourses = () => {
             Explore all courses
           </h2>
 
-          <p className="text-[#141414]/60 mt-2 max-w-2xl text-lg leading-relaxed">
+          <p className="text-[#141414]/60 mt-2 max-w-2xl text-base md:text-lg leading-relaxed">
             Browse our wide range of professional training courses and
             certifications designed to help you build your career and gain
             industry-recognized qualifications.

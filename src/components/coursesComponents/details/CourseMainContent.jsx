@@ -82,7 +82,7 @@ const CourseMainContent = ({ course }) => {
                 About This Course
               </h2>
               <div
-                className="text-[#64748B] text-lg leading-relaxed mb-6 prose prose-lg max-w-none"
+                className="text-[#64748B] text-base md:text-lg leading-relaxed mb-6 prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{ __html: course.fullDescription }}
               />
             </div>

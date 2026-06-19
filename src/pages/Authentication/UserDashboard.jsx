@@ -44,7 +44,7 @@ const UserDashboard = () => {
             <div className="flex flex-col sm:flex-row sm:items-center gap-6 lg:gap-8">
               {/* PROFILE IMAGE */}
               <div className="relative shrink-0 mx-auto sm:mx-0">
-                <div className="w-28 h-28 rounded-full overflow-hidden border-[5px] border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] bg-[#F15A24]">
+                <div className="w-32 h-32  md:w-28 md:h-28 rounded-full overflow-hidden border-[5px] border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] bg-[#F15A24]">
                   <img
                     src={user?.profileImage}
                     alt={user?.name}
@@ -78,14 +78,14 @@ const UserDashboard = () => {
 
                 {/* EXTRA INFO */}
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-5">
-                  <div className="flex items-center gap-2 text-base text-gray-300">
+                  <div className="flex items-center gap-2 text-sm md:text-base text-gray-300">
                     <div className="w-2 h-2 rounded-full bg-green-500" />
                     Active Account
                   </div>
 
                   <div className="hidden sm:block w-1 h-1 rounded-full bg-gray-600" />
 
-                  <div className="text-base text-gray-400">
+                  <div className="text-sm md:text-base text-gray-400">
                     Courses4me Member
                   </div>
                 </div>

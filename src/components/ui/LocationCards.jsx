@@ -13,7 +13,13 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus, onPayPending }) => {
+const LocationCards = ({
+  loc,
+  course,
+  bookedSchedules = [],
+  overallBookingStatus,
+  onPayPending,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -29,7 +35,7 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
       <div
         className={`bg-white rounded-3xl border transition-all duration-300 ${loc.recommended ? "border-[#F15A24]/30 shadow-xl" : "border-gray-100 shadow-sm"}`}
       >
-        <div className="p-6 md:p-6">
+        <div className="p-4 md:p-6">
           {/* Header Section: Title & Price in one line */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
             <div>
@@ -39,23 +45,25 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
               <h2 className="text-3xl md:text-4xl font-black text-[#1C1C1C] tracking-tight">
                 {loc.name}
               </h2>
-              <div className="flex items-center gap-1.5 mt-1 text-gray-500 font-medium text-sm flex-wrap">
-                <MapPin size={14} className="text-[#F15A24] shrink-0" />
-                {loc.mapsUrl ? (
-                  <a
-                    href={loc.mapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Open in Google Maps"
-                    className="text-gray-500 hover:text-[#F15A24] text-base hover:underline underline-offset-2 transition-colors"
-                  >
-                    {loc.address}
-                  </a>
-                ) : (
-                  <span className="text-gray-500">{loc.address}</span>
-                )}
+              <div className="flex flex-col  items-start gap-1.5 mt-5 text-gray-500 font-medium text-xs md:text-sm ">
+                <div className="flex gap-2 items-center">
+                  <MapPin size={14} className="text-[#F15A24] shrink-0" />
+                  {loc.mapsUrl ? (
+                    <a
+                      href={loc.mapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Open in Google Maps"
+                      className="text-gray-500 hover:text-[#F15A24] text-base hover:underline underline-offset-2 transition-colors"
+                    >
+                      {loc.address}
+                    </a>
+                  ) : (
+                    <span className="text-gray-500">{loc.address}</span>
+                  )}
+                </div>
                 {loc.distance && (
-                  <>
+                  <div className="flex items-center gap-2">
                     <span className="text-gray-300">•</span>
                     <span
                       className={
@@ -66,7 +74,7 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                     >
                       {loc.distance}
                     </span>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
@@ -102,7 +110,7 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
               <p className="text-sm sm:text-base font-bold text-gray-700 leading-snug">
                 {loc.parking?.main || "Available"}
                 {loc.parking?.sub && (
-                  <span className="text-gray-400 font-normal block text-sm mt-0.5">
+                  <span className="text-gray-400 font-normal block text-xs md:text-sm mt-0.5">
                     {loc.parking.sub}
                   </span>
                 )}
@@ -117,7 +125,7 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
               <p className="text-sm sm:text-base font-bold text-gray-700">
                 {loc.commute?.main || "Public transport"}
                 {loc.commute?.sub && (
-                  <span className="text-gray-400 font-normal block text-sm mt-0.5">
+                  <span className="text-gray-400 font-normal block text-xs md:text-sm mt-0.5">
                     {loc.commute.sub}
                   </span>
                 )}
@@ -141,7 +149,7 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
               </p>
               <p className="text-sm sm:text-base font-bold text-[#F15A24]">
                 {loc.booked}+
-                <span className="text-gray-400 font-normal text-sm ml-1">
+                <span className="text-gray-400 font-normal text-xs md:text-sm ml-1">
                   Booked
                 </span>
               </p>
@@ -152,7 +160,7 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
           <div className="mt-5 flex flex-col items-center">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className={`group min-w-70 flex items-center cursor-pointer justify-center gap-3 py-4 px-8 rounded-2xl font-black text-md transition-all duration-300 bg-[#F15A24] text-white hover:bg-[#d84a1a] shadow-xl shadow-[#F15A24]/25 hover:-translate-y-1
+              className={`group min-w-70 flex items-center cursor-pointer justify-center gap-3 py-4 px-8 rounded-2xl font-black text-sm md:text-md transition-all duration-300 bg-[#F15A24] text-white hover:bg-[#d84a1a] shadow-xl shadow-[#F15A24]/25 hover:-translate-y-1
               ${isExpanded ? "bg-[#d84a1a] hover:bg-[#c0392b]" : "bg-[#F15A24] hover:bg-[#d84a1a]"}`}
             >
               Select Training Date
@@ -166,14 +174,22 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
         </div>
 
         {isExpanded && (
-          <div className="bg-slate-50 border-t rounded-3xl border-slate-100 p-6 md:p-8 space-y-3 animate-in fade-in slide-in-from-top-2">
-            {overallBookingStatus === 'PAID' ? (
-              <div className="bg-[#00B67A]/10 border border-[#00B67A]/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-slate-50 border-t rounded-3xl border-slate-100 p-6 md:p-5 space-y-3 animate-in fade-in slide-in-from-top-2">
+            {overallBookingStatus === "PAID" ? (
+              <div className="bg-[#c0392b]/10 border border-[#c0392b]/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-bold text-[#00B67A] mb-1">🎉 You are already enrolled!</h3>
-                  <p className="text-gray-600 font-medium">You have successfully purchased this course. Check your dashboard for more details.</p>
+                  <h3 className="text-lg font-bold text-[#c0392b] mb-1">
+                    🎉 You are already enrolled!
+                  </h3>
+                  <p className="text-gray-600 font-medium">
+                    You have successfully purchased this course. Check your
+                    dashboard for more details.
+                  </p>
                 </div>
-                <Link to="/dashboard?tab=overview" className="shrink-0 px-5 py-2.5 bg-[#00B67A] text-white font-bold rounded-lg hover:bg-[#00a36c] transition-colors">
+                <Link
+                  to="/dashboard?tab=overview"
+                  className="shrink-0 px-5 py-2.5 bg-[#c0392b] text-white font-bold rounded-lg hover:bg-[#d34839] transition-colors"
+                >
                   View Booking
                 </Link>
               </div>
@@ -184,25 +200,29 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                 </h4>
 
                 {(() => {
-                  const datesToRender = (loc.dates || [
-                    {
-                      range: "Mon 23rd Mar 2026 - Thu 26th Mar 2026",
-                      price: loc.price,
-                      id: 1,
-                    },
-                    {
-                      range: "Mon 30th Mar 2026 - Thu 2nd Apr 2026",
-                      price: loc.price,
-                      id: 2,
-                    },
-                    {
-                      range: "Mon 6th Apr 2026 - Thu 9th Apr 2026",
-                      price: (parseFloat(loc.price) + 10).toFixed(2),
-                      id: 3,
-                    },
-                  ]).filter(date => {
+                  const datesToRender = (
+                    loc.dates || [
+                      {
+                        range: "Mon 23rd Mar 2026 - Thu 26th Mar 2026",
+                        price: loc.price,
+                        id: 1,
+                      },
+                      {
+                        range: "Mon 30th Mar 2026 - Thu 2nd Apr 2026",
+                        price: loc.price,
+                        id: 2,
+                      },
+                      {
+                        range: "Mon 6th Apr 2026 - Thu 9th Apr 2026",
+                        price: (parseFloat(loc.price) + 10).toFixed(2),
+                        id: 3,
+                      },
+                    ]
+                  ).filter((date) => {
                     if (bookedSchedules.length > 0) {
-                      return bookedSchedules.some(b => b.scheduleId === String(date.id));
+                      return bookedSchedules.some(
+                        (b) => b.scheduleId === String(date.id),
+                      );
                     }
                     return true;
                   });
@@ -211,7 +231,8 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                     return (
                       <div className="bg-orange-50 border border-orange-100 rounded-xl p-6 text-center">
                         <p className="text-orange-800 font-medium text-sm">
-                          You have a pending booking at another location or date.
+                          You have a pending booking at another location or
+                          date.
                         </p>
                         <p className="text-orange-600/80 font-normal text-xs mt-1">
                           Please complete your existing booking.
@@ -224,41 +245,51 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                     <div
                       key={idx}
                       className={`flex flex-col sm:row sm:flex-row lg:items-center justify-between gap-4 p-4 bg-white rounded-xl border transition-all group/date ${
-                        date.availableSeats === 0 
-                          ? "border-gray-200" 
+                        date.availableSeats === 0
+                          ? "border-gray-200"
                           : "border-[#F15A24] hover:shadow-md"
                       }`}
                     >
                       {(() => {
-                        const booking = bookedSchedules.find(b => b.scheduleId === String(date.id));
+                        const booking = bookedSchedules.find(
+                          (b) => b.scheduleId === String(date.id),
+                        );
                         const isSoldOut = date.availableSeats === 0;
 
                         return (
                           <>
                             <div className="flex  items-center gap-4">
-                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-white transition-colors ${
-                                isSoldOut ? "bg-gray-300" : "bg-[#F15A24]"
-                              }`}>
+                              <div
+                                className={`w-10 h-10 rounded-lg flex items-center justify-center text-white transition-colors ${
+                                  isSoldOut ? "bg-gray-300" : "bg-[#F15A24]"
+                                }`}
+                              >
                                 <Calendar size={20} />
                               </div>
                               <div>
-                                <p className={`text-md font-bold ${isSoldOut ? "text-gray-400 line-through" : "text-slate-900"}`}>
+                                <p
+                                  className={`text-md font-bold ${isSoldOut ? "text-gray-400 line-through" : "text-slate-900"}`}
+                                >
                                   {date.range}
                                 </p>
-                                {!isSoldOut && date.availableSeats != null && date.availableSeats < 10 && (
-                                  <p className="text-[13px] font-bold text-[#D32F2F] mt-0.5">
-                                    Hurry! - only {date.availableSeats} seats left
-                                  </p>
-                                )}
+
                                 {!isSoldOut && (
                                   <p className="text-[14px] text-slate-500 font-semibold mt-0.5">
                                     9:00 AM - 5:00 PM Daily
                                   </p>
                                 )}
+                                {!isSoldOut &&
+                                  date.availableSeats != null &&
+                                  date.availableSeats < 10 && (
+                                    <p className="text-[13px] font-bold text-[#D32F2F] mt-0.5">
+                                      Hurry! - only {date.availableSeats} seats
+                                      left
+                                    </p>
+                                  )}
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-6 w-full sm:w-auto justify-between">
+                            <div className="flex flex-row items-center gap-6 w-full sm:w-auto justify-between">
                               {!isSoldOut && (
                                 <div className="text-right">
                                   <p className="text-xl font-black text-slate-900">
@@ -266,7 +297,7 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                                   </p>
                                 </div>
                               )}
-                              
+
                               {isSoldOut ? (
                                 <button
                                   disabled
@@ -274,7 +305,7 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                                 >
                                   Sold Out
                                 </button>
-                              ) : overallBookingStatus === 'PAID' ? (
+                              ) : overallBookingStatus === "PAID" ? (
                                 <button
                                   disabled
                                   className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
@@ -282,7 +313,7 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                                   Already Enrolled
                                 </button>
                               ) : booking ? (
-                                booking.status === 'PAID' ? (
+                                booking.status === "PAID" ? (
                                   <button
                                     disabled
                                     className="px-6 py-2.5 rounded-lg text-sm font-bold bg-slate-200 text-slate-500 cursor-not-allowed shadow-sm"
@@ -292,16 +323,15 @@ const LocationCards = ({ loc, course, bookedSchedules = [], overallBookingStatus
                                 ) : (
                                   <Link
                                     to={`/booking/checkout?courseId=${course._id}&scheduleId=${date.id}&bookingId=${booking.bookingId}`}
-                                    className="group flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold bg-white text-[#F15A24] border-2 border-[#F15A24] hover:bg-[#F15A24] hover:text-white transition-all shadow-sm"
+                                    className="group flex items-center justify-center gap-2 px-7 text-center py-2.5 rounded-lg md:text-sm text-xs font-bold cursor-pointer text-white border-2 border-[#F15A24] bg-[#F15A24] hover:text-white transition-all shadow-sm"
                                   >
-                                    <CreditCard size={16} className="transition-colors" />
                                     <span>Complete Payment</span>
                                   </Link>
                                 )
                               ) : (
                                 <Link
                                   to={`/booking/packages?courseId=${course._id}&scheduleId=${date.id}`}
-                                  className="hover:bg-[#d84a1a] text-white px-6 py-2.5 rounded-lg text-sm font-bold bg-[#F15A24] transition-all shadow-sm"
+                                  className="hover:bg-[#d84a1a] text-white px-6 py-2.5 rounded-lg text-sm font-bold bg-[#F15A24] cursor-pointer transition-all shadow-sm"
                                 >
                                   Book Now
                                 </Link>

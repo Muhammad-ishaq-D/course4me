@@ -5,12 +5,12 @@ const testimonials = [
   {
     name: "Paul Taylor",
     role: "Door Supervisor Training · January 2026",
-    text: "2 months ago I was working in a warehouse. Today, I am working as a security guard in Harrow earning a lot more than I was sorting boxes! I am glad I chose Courses4Me for my SIA training.",
+    text: "2 months ago I was working in a warehouse. Today, I am working as a security guard in Harrow earning a lot more than I was sorting boxes.",
   },
   {
     name: "Sarah Johnson",
     role: "Door Supervisor Training · January 2026",
-    text: "I had the opportunity to take the course under excellent instruction. The trainer was patient, knowledgeable, and made learning enjoyable. Passed first time!",
+    text: "I had the opportunity to take the course under excellent instruction. The trainer was patient and knowledgeable",
   },
   {
     name: "James Mitchell",
@@ -20,17 +20,17 @@ const testimonials = [
   {
     name: "Marcus Thompson",
     role: "CCTV Training · December 2025",
-    text: "Completed the CCTV course with very professional trainers. Learnt so much about surveillance law and practical techniques. Highly recommended!",
+    text: "Completed the CCTV course with very professional trainers. Learn so much about surveillance and  techniques.",
   },
   {
     name: "Emma Wilson",
     role: "First Aid at Work · January 2026",
-    text: "Brilliant course! The hands-on practice and realistic scenarios really prepared me for real emergencies. Instructor was amazing.",
+    text: "Brilliant course! The hands-on practice and realistic scenarios really prepared me for real emergencies.",
   },
   {
     name: "David Chen",
     role: "Close Protection · November 2025",
-    text: "Intensive and worth every penny. The defensive driving and threat assessment modules were exceptional. Now working with high-profile clients.",
+    text: "Intensive and worth every penny. The defensive driving and threat assessment modules were exceptional.",
   },
 ];
 
@@ -115,7 +115,7 @@ const RealStories = () => {
                 </p>
               </div>
 
-              <div className="w-10 h-10 rounded-full bg-[#F15A24] text-white flex items-center justify-center text-sm font-bold shadow-lg">
+              <div className="px-3 py-2 rounded-full bg-[#F15A24] text-white flex items-center justify-center text-sm font-bold shadow-lg">
                 ✓
               </div>
             </div>
@@ -191,7 +191,7 @@ const RealStories = () => {
                 </p>
               </div>
 
-              <div className="w-10 h-10 rounded-full bg-[#F15A24] text-white flex items-center justify-center text-sm font-bold shadow-lg">
+              <div className="px-3 py-2 rounded-full bg-[#F15A24] text-white flex items-center justify-center text-sm font-bold shadow-lg">
                 ✓
               </div>
             </div>
@@ -228,7 +228,7 @@ const RealStories = () => {
               className="relative bg-white rounded-[30px] p-6 pt-10 border border-[#F15A24]/10 shadow-[0_10px_30px_rgba(241,90,36,0.08)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(241,90,36,0.15)]"
             >
               {/* TOP RIGHT LETTER */}
-              <div className="absolute top-5 right-5">
+              <div className="hidden lg:block absolute top-5 right-5">
                 <div className="w-[72px] h-[72px] rounded-full border-[6px] border-[#F15A24] bg-[#FFE7DE] flex items-center justify-center shadow-md">
                   <span className="text-[28px] font-bold text-[#F15A24]">
                     {t.name.charAt(0)}
@@ -248,7 +248,7 @@ const RealStories = () => {
               </div>
 
               {/* TEXT */}
-              <p className="text-md leading-6 text-[#666666] pr-3 min-h-30">
+              <p className=" text-sm md:text-base  leading-6 text-[#666666] pr-3 min-h-30">
                 {t.text}
               </p>
 
@@ -280,8 +280,8 @@ const RealStories = () => {
 
         {/* BOTTOM CTA */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-[#F65B15] text-white flex items-center justify-center font-bold text-lg">
+          <div className="flex items-center gap-2 md:gap-4">
+            <div className="px-1.5 py-3  rounded-full bg-[#F65B15] text-white flex items-center justify-center font-bold text-base  md:text-lg">
               95%
             </div>
             <div>

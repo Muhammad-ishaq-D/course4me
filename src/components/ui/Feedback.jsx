@@ -5,23 +5,23 @@ const Feedback = () => {
   return (
     <aside className="w-full lg:w-[300px] space-y-5">
       {/* 1. Guarantee Box */}
-      <div className="bg-white rounded-[28px] border border-slate-200 p-6 shadow-lg overflow-hidden relative">
+      <div className="bg-white rounded-[28px] border border-slate-200 p-6  overflow-hidden relative">
         {/* Badge */}
         <div className="absolute top-4 right-4 bg-[#FFF5F1] text-[#F15A24] text-[12px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
           Trusted
         </div>
 
         {/* Icon */}
-        <div className="w-14 h-14 rounded-2xl bg-[#F15A24]/10 flex items-center justify-center mb-5">
+        <div className="w-12 md:w-14 h-12 md:h-14 rounded-2xl bg-[#F15A24]/10 flex items-center justify-center mb-5">
           <ShieldCheck size={28} className="text-[#F15A24]" />
         </div>
 
         {/* Title */}
-        <h3 className="text-[24px] font-black text-slate-900 mb-2">
+        <h3 className=" text-[20px] md:text-2xl font-black text-slate-900 mb-2">
           Trusted By Thousands
         </h3>
 
-        <p className="text-slate-500 text-md leading-relaxed mb-6">
+        <p className="text-slate-500 text-sm md:text-base leading-relaxed mb-6">
           Join thousands of learners who have successfully completed their
           training through Courses4Me.
         </p>
@@ -29,18 +29,24 @@ const Feedback = () => {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-2">
           <div className="bg-slate-50 rounded-xl p-3 text-center">
-            <h4 className="text-lg font-black text-[#F15A24]">4.9★</h4>
-            <p className="text-sm text-slate-500">Rating</p>
+            <h4 className="text-sm md:text-base font-black text-[#F15A24]">
+              4.9★
+            </h4>
+            <p className=" text-xs md:text-sm text-slate-500">Rating</p>
           </div>
 
           <div className="bg-slate-50 rounded-xl p-3 text-center">
-            <h4 className="text-lg font-black text-[#F15A24]">10K+</h4>
-            <p className="text-sm text-slate-500">Students</p>
+            <h4 className="text-sm md:text-base font-black text-[#F15A24]">
+              10K+
+            </h4>
+            <p className=" text-xs md:text-sm text-slate-500">Students</p>
           </div>
 
-          <div className="bg-slate-50 rounded-xl px-2 py-3 text-center">
-            <h4 className="text-lg font-black text-[#F15A24]">95%</h4>
-            <p className="text-sm text-slate-500">Pass Rate</p>
+          <div className="bg-slate-50 rounded-xl px-1 py-3 text-center">
+            <h4 className="text-sm md:text-base font-black text-[#F15A24]">
+              95%
+            </h4>
+            <p className=" text-xs md:text-sm text-slate-500">Pass Rate</p>
           </div>
         </div>
       </div>
@@ -116,7 +122,7 @@ const Feedback = () => {
                 href="tel:+448006894621"
                 className="flex items-center gap-2 group"
               >
-                <span className="text-[20px] font-extrabold text-[#F15A24] group-hover:text-[#ff7241] transition-colors">
+                <span className="text-base md:text-[20px] font-extrabold text-[#F15A24] group-hover:text-[#ff7241] transition-colors">
                   0800 689 4621
                 </span>
               </a>
@@ -126,7 +132,7 @@ const Feedback = () => {
                 href="mailto:info@courses4me.co.uk?subject=Course Enquiry"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
               >
-                <span className="text-[15px] font-medium border-b border-transparent group-hover:border-white/20 pb-0.5">
+                <span className="text-base font-medium border-b border-transparent group-hover:border-white/20 pb-0.5">
                   info@courses4me.co.uk
                 </span>
               </a>

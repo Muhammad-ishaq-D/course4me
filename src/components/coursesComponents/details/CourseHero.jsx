@@ -33,7 +33,7 @@ const CourseHero = ({ course }) => {
       {/* 🔥 HERO */}
       <section className="relative text-white py-10 lg:py-12 overflow-hidden bg-[#141414]">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-4">
-          <div className="flex items-center flex-wrap gap-2 text-sm">
+          <div className="flex items-center flex-wrap gap-2 text-xs md:text-sm">
             {/* Home */}
             <NavLink
               to="/"
@@ -65,24 +65,24 @@ const CourseHero = ({ course }) => {
 
         {/* BACKGROUND */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,#1e3a8a40,transparent_40%),radial-gradient(circle_at_80%_20%,#F15A2430,transparent_40%)]" />
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="relative max-w-7xl mx-auto px-6 mt-2 lg:px-8">
           {/* GRID */}
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
             {/* ✅ LEFT (FORCED LEFT ALIGN) */}
             <div className="text-left">
               {/* TAGS */}
               <div className="flex gap-2 mb-5 flex-wrap">
-                <span className="bg-green-500/10 text-green-400 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                <span className="bg-green-500/10 text-green-400 px-3 py-1 rounded-full text-xs md:text-sm flex items-center gap-1">
                   <CheckCircle2 size={12} /> In-Person
                 </span>
 
                 {course.isPopular && (
-                  <span className="bg-orange-500/10 text-orange-400 px-3 py-1 rounded-full text-sm">
+                  <span className="bg-orange-500/10 text-orange-400 px-3 py-1 rounded-full text-xs md:text-sm">
                     Popular
                   </span>
                 )}
 
-                <span className="bg-white/10 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+                <span className="bg-white/10 px-3 py-1 rounded-full text-xs md:text-sm flex items-center gap-1">
                   <ShieldCheck size={12} /> SIA Approved
                 </span>
               </div>
@@ -93,15 +93,15 @@ const CourseHero = ({ course }) => {
               </h1>
 
               {/* SUBTITLE */}
-              <p className="text-white/60 text-lg mb-6">{course.subtitle}</p>
+              <p className="text-white/60 text-base md:text-lg mb-6">
+                {course.subtitle}
+              </p>
 
               {/* RATING */}
               <div className="flex flex-wrap items-center gap-5 mb-8 text-[15px]">
                 <div className="flex items-center gap-2">
                   <div className="flex text-yellow-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={14} fill="currentColor" />
-                    ))}
+                    <Star size={14} />
                   </div>
                   <span className="font-semibold">{displayRating}</span>
                   <span className="text-white/40">

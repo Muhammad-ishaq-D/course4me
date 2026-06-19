@@ -247,7 +247,7 @@ const BookingConfirmed = ({
                 </span>
               </div>
               <div className="p-5 space-y-4">
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col md:flex-row items-start justify-between gap-4">
                   <div className="min-w-0">
                     <p className="text-sm text-gray-400 font-bold uppercase tracking-wider">
                       Billed To
@@ -260,7 +260,7 @@ const BookingConfirmed = ({
                       <p className="text-base text-gray-600">{mobile}</p>
                     )}
                   </div>
-                  <div className="text-right shrink-0">
+                  <div className="text-left shrink-0">
                     <p className="text-sm text-gray-400 font-bold uppercase tracking-wider">
                       Total Paid
                     </p>
@@ -364,7 +364,7 @@ const BookingConfirmed = ({
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-base text-gray-500">
-                  <Mail size={18} className="text-gray-400" />{" "}
+                  <Mail size={18} className="text-gray-400 hidden md:block " />{" "}
                   <span>
                     Confirmation sent to:{" "}
                     <b className="text-[#F15A24]">{email}</b>
@@ -393,13 +393,13 @@ const BookingConfirmed = ({
                     badgeColor: "bg-gray-100 text-gray-600",
                     desc: "A confirmation email with your booking details, course materials access link, and venue information has been sent to your inbox.",
                   },
-                  {
-                    icon: Smartphone,
-                    label: "Download the GuardPass App",
-                    badge: "Available Now",
-                    badgeColor: "bg-[#F15A24] text-white",
-                    desc: "Access your eLearning materials, mock exams, and revision content immediately through our 5-star rated app.",
-                  },
+                  // {
+                  //   icon: Smartphone,
+                  //   label: "Download the GuardPass App",
+                  //   badge: "Available Now",
+                  //   badgeColor: "bg-[#F15A24] text-white",
+                  //   desc: "Access your eLearning materials, mock exams, and revision content immediately through our 5-star rated app.",
+                  // },
                   {
                     icon: BookOpen,
                     label: "Attend Your Course",
@@ -407,13 +407,13 @@ const BookingConfirmed = ({
                     badgeColor: "bg-[#FFF5F1] text-[#F15A24]",
                     desc: "Arrive at the venue on your course date with valid photo ID. Our instructor will guide you through everything.",
                   },
-                  {
-                    icon: Award,
-                    label: "Get Your Results & Licence",
-                    badge: "1 working day",
-                    badgeColor: "bg-gray-100 text-gray-600",
-                    desc: "Results available within 1 working day. Our team will handle your licence application.",
-                  },
+                  // {
+                  //   icon: Award,
+                  //   label: "Get Your Results & Licence",
+                  //   badge: "1 working day",
+                  //   badgeColor: "bg-gray-100 text-gray-600",
+                  //   desc: "Results available within 1 working day. Our team will handle your licence application.",
+                  // },
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
@@ -464,27 +464,6 @@ const BookingConfirmed = ({
 
           {/* Right col */}
           <div className="w-full lg:w-67.5 space-y-4 lg:sticky lg:top-16">
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-              <h3 className="text-lg font-black text-[#1C1C1C] mb-4">
-                Quick Links
-              </h3>
-              <div className="space-y-3">
-                {[
-                  { icon: User, label: "Student Portal" },
-                  { icon: CheckCircle, label: "FAQs" },
-                  { icon: Mail, label: "Contact Us" },
-                ].map((item, i) => (
-                  <button
-                    key={i}
-                    className="flex items-center gap-3 text-base text-[#F15A24] font-bold hover:underline w-full"
-                  >
-                    <item.icon size={18} className="text-[#F15A24]" />{" "}
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {/* Stars */}
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 text-center">
               <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-3">
@@ -543,7 +522,7 @@ const BookingConfirmed = ({
             </div>
             <div className="bg-[#1C1C1C] rounded-xl p-5">
               <p className="text-white font-black text-xl mb-1">Need Help?</p>
-              <p className="text-gray-400 text-base mb-4">
+              <p className="text-gray-400 text-sm md:text-base mb-4">
                 Our team is here to assist you with any questions about your
                 booking.
               </p>

@@ -451,14 +451,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                  (piRes.data?.message || ""),
+                    (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                "Could not load payment session. You may have already completed this payment.",
+                  "Could not load payment session. You may have already completed this payment.",
               );
             });
         })
@@ -477,14 +477,14 @@ const CourseCheckout = () => {
               } else {
                 setError(
                   "Failed to initialize payment for existing booking. " +
-                  (piRes.data?.message || ""),
+                    (piRes.data?.message || ""),
                 );
               }
             })
             .catch((err) => {
               setError(
                 err.response?.data?.message ||
-                "Could not load payment session. You may have already completed this payment.",
+                  "Could not load payment session. You may have already completed this payment.",
               );
             });
         });
@@ -609,7 +609,7 @@ const CourseCheckout = () => {
         } else {
           setError(
             "Failed to initialize payment for existing booking. " +
-            (piRes.data?.message || ""),
+              (piRes.data?.message || ""),
           );
         }
         setIsSubmitting(false);
@@ -672,7 +672,7 @@ const CourseCheckout = () => {
       } else {
         setError(
           err.response?.data?.message ||
-          "An error occurred during booking. Please try again.",
+            "An error occurred during booking. Please try again.",
         );
         if (
           err.response?.data?.existingBookingId &&
@@ -758,11 +758,11 @@ const CourseCheckout = () => {
   if (isConfirmed) {
     const formattedDate = selectedSchedule?.startDate
       ? new Date(selectedSchedule.startDate).toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+          weekday: "long",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })
       : "Pending Date";
 
     return (
@@ -805,7 +805,7 @@ const CourseCheckout = () => {
     }
 
     return (
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-start justify-between gap-4">
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-2 py-4 md:px-5 md:py-5 flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
           <StepCheck />
 
@@ -813,7 +813,7 @@ const CourseCheckout = () => {
             <p className="text-lg font-bold text-[#1C1C1C]">{title}</p>
 
             {summary?.map((l, i) => (
-              <p key={i} className="text-base text-gray-500">
+              <p key={i} className=" text-sm md:text-base text-gray-500">
                 {l}
               </p>
             ))}
@@ -835,7 +835,9 @@ const CourseCheckout = () => {
   const CollapsedStep = ({ stepNum, title, badge }) => (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm px-5 py-4 flex items-center gap-4">
       <StepNumber n={stepNum} active={false} />
-      <span className="text-lg font-bold text-gray-400">{title}</span>
+      <span className="text-base md:text-lg font-bold text-gray-400">
+        {title}
+      </span>
       {badge && (
         <span className="inline-block px-2 py-0.5 bg-[#F15A24] text-white text-[9px] font-black uppercase tracking-widest rounded">
           {badge}
@@ -861,7 +863,7 @@ const CourseCheckout = () => {
               </h1>
               <Lock size={22} className="text-gray-400" />
             </div>
-            <div className="flex items-center gap-2 text-md text-gray-500">
+            <div className="flex items-center gap-2 text-sm md:text-base text-gray-500">
               <span>Your seat is reserved. Complete your booking in</span>
               <span className="flex items-center gap-1.5 text-[#F15A24] font-black">
                 <Clock size={18} /> {fmt(timeLeft)}
@@ -1136,7 +1138,7 @@ const CourseCheckout = () => {
                   </span>
                 </div>
                 <div className="p-6 space-y-4">
-                  <p className="text-base text-gray-500">
+                  <p className="text-sm md:text-base text-gray-500">
                     Enter your postcode and select your address.
                   </p>
                   <div className="relative" ref={postcodeRef}>
@@ -1235,14 +1237,14 @@ const CourseCheckout = () => {
               />
             ) : activeStep === 3 ? (
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-                <div className="flex items-center flex-wrap gap-3 px-5 py-4 border-b border-gray-50">
+                <div className="flex items-center  gap-3 px-5 py-4 border-b border-gray-50">
                   <StepNumber n={3} active />
                   <span className="text-lg font-black text-[#1C1C1C]">
                     Zero-Hassle Application Service - EasyApply™
                   </span>
                 </div>
                 <div className="p-6 space-y-4">
-                  <p className="text-base text-gray-500">
+                  <p className="text-sm md:text-base text-gray-500">
                     The hassle-free way to get your licence. We'll prepare your
                     application and arrange all the requirements including your
                     DBS (criminality) check.
@@ -1355,16 +1357,16 @@ const CourseCheckout = () => {
                   </span>
                 </div>
                 <div className="p-6 space-y-4">
-                  <p className="text-base text-gray-500">
+                  <p className="text-sm md:text-base text-gray-500">
                     Select your payment method.
                   </p>
 
                   {/* Pay with card — only payment method */}
                   <div className="rounded-2xl border-2 border-[#F15A24] bg-gradient-to-br from-orange-50/60 to-white overflow-hidden">
                     {/* Header bar */}
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-orange-100">
+                    <div className="flex flex-col md:flex-row gap-4 lg:items-center justify-between px-5 py-4 border-b border-orange-100">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-sm shadow-orange-200">
+                        <div className="p-3 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-sm shadow-orange-200">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="18"
@@ -1485,10 +1487,10 @@ const CourseCheckout = () => {
                   {existingBookingId &&
                     bookingStatus === "PENDING" &&
                     !error && (
-                      <div className="p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3 text-green-700 text-sm">
+                      <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl flex items-start gap-3 text-orange-700 text-sm">
                         <Check
                           size={18}
-                          className="shrink-0 mt-0.5 text-green-600"
+                          className="shrink-0 mt-0.5 text-orange-600"
                         />
                         <p>
                           <span className="font-bold">Booking created!</span>{" "}
@@ -1542,14 +1544,14 @@ const CourseCheckout = () => {
             date={
               selectedSchedule?.startDate
                 ? new Date(selectedSchedule.startDate).toLocaleDateString(
-                  "en-GB",
-                  {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  },
-                )
+                    "en-GB",
+                    {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    },
+                  )
                 : null
             }
             courseId={courseId}

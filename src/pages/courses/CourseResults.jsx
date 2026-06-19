@@ -235,9 +235,9 @@ const CourseResults = () => {
         price: link.price || course?.pricing?.basePrice || 139.99,
         nextDate: upcomingDates[0]?.startDate
           ? new Date(upcomingDates[0].startDate).toLocaleDateString("en-GB", {
-            day: "numeric",
-            month: "short",
-          })
+              day: "numeric",
+              month: "short",
+            })
           : "TBA",
         dates: upcomingDates.map((d) => ({
           id: d._id,
@@ -356,7 +356,7 @@ const CourseResults = () => {
               <h1 className="text-3xl md:text-4xl font-extrabold text-[#1C1C1C] mb-1">
                 {course.title}
               </h1>
-              <p className="text-gray-500 font-medium">
+              <p className=" text-sm md:text-base mb-2 text-gray-500 font-medium">
                 We've found{" "}
                 <span className="text-[#1C1C1C] font-bold">
                   {totalSchedules} course date{totalSchedules === 1 ? "" : "s"}
@@ -369,17 +369,40 @@ const CourseResults = () => {
             </div>
 
             {overallBookingStatus === "PAID" ? (
-              <div className="bg-[#00B67A]/10 border border-[#00B67A]/20 rounded-3xl p-12 text-center shadow-sm">
-                <div className="mx-auto w-16 h-16 bg-[#00B67A] text-white rounded-full flex items-center justify-center mb-6">
-                  <CheckCircle2 size={32} />
+              <div className="relative overflow-hidden bg-white border border-[#F15A24]/15 rounded-[32px] p-10 md:p-12 text-center shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+                {/* Background Glow */}
+                <div className="absolute -top-20 -right-20 w-60 h-60 bg-[#F15A24]/10 blur-[100px] rounded-full" />
+                <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-[#F15A24]/5 blur-[100px] rounded-full" />
+
+                <div className="relative z-10">
+                  {/* Success Icon */}
+                  <div className="mx-auto w-20 h-20 bg-[#FFF4EE] border border-[#F15A24]/10 rounded-full flex items-center justify-center mb-6 shadow-sm">
+                    <CheckCircle2 size={42} className="text-[#F15A24]" />
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-3xl md:text-4xl font-black text-[#0F2B46] mb-4">
+                    🎉 You are already enrolled!
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-gray-600 text-lg leading-relaxed max-w-2xl mx-auto mb-8">
+                    You have successfully purchased this course. You can view
+                    your training schedule, details, and receipt in your
+                    profile.
+                  </p>
+
+                  {/* Divider */}
+                  <div className="w-24 h-1 bg-[#F15A24] rounded-full mx-auto mb-8" />
+
+                  {/* Button */}
+                  <Link
+                    to="/dashboard?tab=overview"
+                    className="inline-flex items-center justify-center px-12 py-4 bg-[#F15A24] text-white font-semibold rounded-2xl hover:bg-[#df4c18] transition-all duration-300 shadow-[0_12px_35px_rgba(241,90,36,0.30)] hover:scale-[1.02]"
+                  >
+                    View Booking
+                  </Link>
                 </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-[#00B67A] mb-3">🎉 You are already enrolled!</h3>
-                <p className="text-gray-600 font-medium text-lg mb-8 max-w-xl mx-auto">
-                  You have successfully purchased this course. You can view your training schedule, details, and receipt in your dashboard.
-                </p>
-                <Link to="/dashboard?tab=overview" className="inline-block px-8 py-3 bg-[#00B67A] text-white font-bold rounded-xl hover:bg-[#00a36c] transition-colors">
-                  Go to Dashboard
-                </Link>
               </div>
             ) : sortedLocations.length === 0 ? (
               <div className="bg-white rounded-3xl border border-gray-100 p-12 text-center shadow-sm">

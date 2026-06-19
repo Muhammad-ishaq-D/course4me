@@ -74,7 +74,6 @@ const OverviewTab = () => {
     return (
       <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-yellow-50 border-2 border-yellow-400 rounded-xl text-yellow-900 shadow-lg mb-4">
         <div className="flex items-center gap-3 mb-3 sm:mb-0">
-          <AlertTriangle size={24} className="text-yellow-600 animate-pulse" />
           <div>
             <p className="font-bold text-lg">
               ⚠️ You have a pending booking for {booking.title}.
@@ -203,9 +202,11 @@ const OverviewTab = () => {
                 <p className="font-medium">
                   Your {data.upcoming[0].title} course starts soon
                 </p>
-                <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+                <div className="hidden md:block w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
               </div>
-              <button className="text-blue-400 hover:text-blue-600">×</button>
+              <button className="text-blue-400 text-base hover:text-blue-600">
+                ×
+              </button>
             </div>
           )}
 
@@ -218,7 +219,7 @@ const OverviewTab = () => {
                 <p className="font-medium">
                   New certificate is ready to download
                 </p>
-                <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+                <div className=" hidden md:block w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
               </div>
               <button className="text-green-400 hover:text-green-600">×</button>
             </div>
@@ -264,12 +265,13 @@ const OverviewTab = () => {
                           {course.title}
                         </h3>
                         <span
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${course.lifecycleStatus === "Extended"
+                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                            course.lifecycleStatus === "Extended"
                               ? "bg-purple-100 text-purple-700 animate-pulse"
                               : course.lifecycleStatus === "Postponed"
                                 ? "bg-yellow-100 text-yellow-700"
                                 : "bg-blue-100 text-blue-700"
-                            }`}
+                          }`}
                         >
                           {course.lifecycleStatus}
                         </span>

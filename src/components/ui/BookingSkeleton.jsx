@@ -24,7 +24,7 @@ const BookingSkeleton = ({ currentStep }) => {
               />
             </div>
 
-            <div className="flex items-start gap-6">
+            <div className="flex flex-col md:flex-row items-start gap-6">
               <div className="relative">
                 <div className="w-16 h-10 bg-gray-100 rounded border border-gray-200 flex items-end justify-end p-1">
                   <div className="w-8 h-1 bg-gray-200 rounded-full mb-1 mr-1" />

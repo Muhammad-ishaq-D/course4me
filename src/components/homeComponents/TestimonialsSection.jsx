@@ -121,7 +121,7 @@ const TestimonialsSection = () => {
                 </p>
               </div>
 
-              <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold shadow-lg">
+              <div className="px-3 py-2 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold shadow-lg">
                 ✓
               </div>
             </div>
@@ -203,7 +203,7 @@ const TestimonialsSection = () => {
                 </p>
               </div>
 
-              <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold shadow-lg">
+              <div className="px-3 py-2 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold shadow-lg">
                 ✓
               </div>
             </div>
@@ -324,7 +324,7 @@ const TestimonialsSection = () => {
         >
           {/* LEFT */}
           <div className="flex items-center gap-4">
-            <div className="px-2 py-2.5 rounded-full bg-[#F65B15] text-white flex items-center justify-center font-bold text-lg">
+            <div className="px-1.5 py-3 rounded-full bg-[#F65B15] text-white flex items-center justify-center font-bold text-base  md:text-lg">
               95%
             </div>
 

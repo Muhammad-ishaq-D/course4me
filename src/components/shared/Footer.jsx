@@ -67,7 +67,7 @@ const Footer = () => {
             <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               POPULAR LICENCES
             </h4>
-            <ul className="space-y-5 text-[#A1A1A1] text-base font-medium">
+            <ul className="space-y-4 md:space-y-5 text-[#A1A1A1] text-sm md:text-base font-medium">
               {licenses.map((licence) => (
                 <li
                   key={licence._id}
@@ -89,7 +89,7 @@ const Footer = () => {
             <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               POPULAR COURSES
             </h4>
-            <ul className="space-y-5 text-[#A1A1A1] text-base font-medium">
+            <ul className="space-y-4 md:space-y-5 text-[#A1A1A1] text-sm md:text-base font-medium">
               {courses.map((course) => (
                 <li
                   key={course._id}
@@ -111,7 +111,7 @@ const Footer = () => {
             <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               TRAINING LOCATIONS
             </h4>
-            <ul className="space-y-5 text-[#A1A1A1] text-base font-medium">
+            <ul className="space-y-4 md:space-y-5 text-[#A1A1A1] text-sm md:text-base font-medium">
               {["Bradford", "Manchester", "Sheffield", "Leeds"].map(
                 (loc, i) => (
                   <li
@@ -138,7 +138,7 @@ const Footer = () => {
               <div className="space-y-4 mb-8 ">
                 <div className="flex items-center gap-3 group cursor-pointer">
                   <div className="w-5 h-5 flex items-center justify-center">
-                    <Phone className="text-[#FF5421]" size={18} />
+                    <Phone className="text-[#00A3FF]" size={18} />
                   </div>
                   <span className="text-white font-bold text-base">
                     Call Us 08006894621
@@ -166,22 +166,42 @@ const Footer = () => {
               © 2026 Courses4Me. All rights reserved.
             </div>
 
-            <div className="flex flex-col md:flex-row  gap-8 text-[#666666] text-sm">
+            <div className="flex flex-col md:flex-row gap-8 text-sm">
               <NavLink
                 to="/privacy-policy"
-                className="hover:text-white transition-colors cursor-pointer"
+                className={({ isActive }) =>
+                  `transition-colors cursor-pointer ${
+                    isActive
+                      ? "text-[#F15A24] font-semibold"
+                      : "text-[#666666] hover:text-white"
+                  }`
+                }
               >
                 Privacy Policy
               </NavLink>
+
               <NavLink
                 to="/terms-of-services"
-                className="hover:text-white transition-colors cursor-pointer"
+                className={({ isActive }) =>
+                  `transition-colors cursor-pointer ${
+                    isActive
+                      ? "text-[#F15A24] font-semibold"
+                      : "text-[#666666] hover:text-white"
+                  }`
+                }
               >
                 Terms of Service
               </NavLink>
+
               <NavLink
                 to="/cookie-policy"
-                className="hover:text-white transition-colors cursor-pointer"
+                className={({ isActive }) =>
+                  `transition-colors cursor-pointer ${
+                    isActive
+                      ? "text-[#F15A24] font-semibold"
+                      : "text-[#666666] hover:text-white"
+                  }`
+                }
               >
                 Cookie Policy
               </NavLink>

@@ -36,14 +36,14 @@ const CoursePackages = () => {
           setIsLoading(false);
           return;
         }
-        
+
         const [courseRes, locRes] = await Promise.all([
           courseService.getCourseById(courseId),
           courseLocationService
             .getByCourse(courseId)
             .catch(() => ({ data: { data: [] } })),
         ]);
-        
+
         setCourse(courseRes.data.data);
 
         if (scheduleId) {
@@ -51,7 +51,7 @@ const CoursePackages = () => {
           let foundPrice = null;
           for (const link of links) {
             const date = (link.dates || []).find(
-              (d) => d._id?.toString() === scheduleId.toString()
+              (d) => d._id?.toString() === scheduleId.toString(),
             );
             if (date && link.price) {
               foundPrice = link.price;
@@ -193,7 +193,7 @@ const CoursePackages = () => {
     <div className=" min-h-screen bg-[#F8FAFC]">
       {/* Dark Header */}
       <div className="bg-[#1C1C1C] pt-12 pb-40 relative px-4 md:px-0">
-        <div className="max-w-[1200px] mx-auto pt-6">
+        <div className="max-w-[1200px] mx-auto px-4 pt-6">
           <button
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 cursor-pointer text-gray-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest mb-6"
@@ -531,12 +531,12 @@ const CoursePackages = () => {
               {/* Question */}
               <button
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                className="w-full flex cursor-pointer  items-center justify-between px-4 md:px-8 py-5 text-left"
+                className="w-full flex cursor-pointer  items-center justify-between px-2 md:px-8 py-5 text-left"
               >
                 <div className="flex items-center gap-2 md:gap-4">
                   <div
                     className={`
-                w-9 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all
+                px-3.5 py-2 rounded-full flex items-center justify-center text-sm font-bold transition-all
                 ${
                   openFaq === idx
                     ? "bg-[#F15A24] text-white"
@@ -548,7 +548,7 @@ const CoursePackages = () => {
                   </div>
 
                   <h3
-                    className={`text-lg font-bold transition-colors
+                    className={` text-base md:text-lg md:font-semibold transition-colors
                 ${openFaq === idx ? "text-[#F15A24]" : "text-[#1C1C1C]"}
               `}
                   >
@@ -573,7 +573,7 @@ const CoursePackages = () => {
           `}
               >
                 <div className="px-6 md:px-8 pb-6">
-                  <div className="pl-12 border-l-2 border-[#F15A24]/20">
+                  <div className="pl-6 md:pl-12 border-l-2 border-[#F15A24]/20">
                     <p className="text-base text-gray-600 leading-7">
                       {faq.answer}
                     </p>
@@ -771,7 +771,7 @@ const CoursePackages = () => {
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Saver`,
                         )
                       }
-                      className="px-6 py-3 rounded-xl cursor-pointer border border-gray-300 font-bold text-sm hover:border-[#F15A24] hover:text-[#F15A24] transition-all"
+                      className="px-9 py-3 rounded-xl cursor-pointer border border-gray-300 font-bold text-sm hover:border-[#F15A24] hover:text-[#F15A24] transition-all"
                     >
                       Select Saver
                     </button>
@@ -784,7 +784,7 @@ const CoursePackages = () => {
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi+`,
                         )
                       }
-                      className="px-6 py-3 rounded-xl cursor-pointer bg-[#F15A24] text-white font-bold text-sm shadow-lg shadow-[#F15A24]/20 hover:scale-105 transition-all"
+                      className="px-9 py-3 rounded-xl cursor-pointer bg-[#F15A24] text-white font-bold text-sm shadow-lg shadow-[#F15A24]/20 hover:scale-105 transition-all"
                     >
                       Select Flexi+
                     </button>
@@ -797,7 +797,7 @@ const CoursePackages = () => {
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Premium`,
                         )
                       }
-                      className="px-6 py-3 rounded-xl cursor-pointer bg-[#7344ff] text-white font-bold text-sm shadow-lg shadow-[#7344ff]/20 hover:scale-105 transition-all"
+                      className="px-9 py-3 rounded-xl cursor-pointer bg-[#7344ff] text-white font-bold text-sm shadow-lg shadow-[#7344ff]/20 hover:scale-105 transition-all"
                     >
                       Select Premium
                     </button>

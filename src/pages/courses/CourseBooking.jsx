@@ -169,7 +169,7 @@ const CourseBooking = () => {
     <div className="bg-[#F8FAFC] min-h-screen mt-5">
       <main className="max-w-300 mx-auto px-4 md:px-6 py-8">
         {/* Breadcrumbs */}
-        <nav className="flex items-center gap-2 text-[15px] text-gray-400 mb-8 overflow-x-auto no-scrollbar">
+        <nav className="flex flex-wrap items-center gap-2 text-sm md:text-base text-gray-400 mb-8 overflow-x-auto no-scrollbar">
           <Link to="/" className="hover:text-gray-600">
             Home
           </Link>
@@ -189,7 +189,7 @@ const CourseBooking = () => {
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#1C1C1C] mb-2">
           {course.title}
         </h1>
-        <p className="text-[#64748B] mb-10 text-lg">
+        <p className="text-[#64748B] mb-10 text-base md:text-lg">
           Search for training centres near you and choose the date and location
           that best suits your schedule.
         </p>
@@ -198,12 +198,12 @@ const CourseBooking = () => {
           {/* Center Content */}
           <div className="flex-1 space-y-6">
             {/* Search Card */}
-            <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
+            <div className="bg-white rounded-3xl border border-gray-100 p-4 md:p-8 shadow-sm">
               <h3 className="font-bold text-[#1C1C1C] text-xl mb-3">
                 Your Location
               </h3>
               <div
-                className="flex gap-4"
+                className="flex flex-col md:flex-row gap-4"
                 onClick={() => setShowSuggestions(false)}
               >
                 <div
@@ -316,7 +316,7 @@ const CourseBooking = () => {
             </div>
 
             {/* Locations Card */}
-            <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
+            <div className="bg-white rounded-3xl border border-gray-100 p-4 md:p-8 shadow-sm">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-xl text-[#1C1C1C]">
                   Available Locations

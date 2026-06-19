@@ -52,24 +52,10 @@ const VideoPlayer = ({ src, label, className = "" }) => (
 const HeroSection = () => {
   return (
     <section className="bg-white min-h-screen px-2 pb-8 md:pb-6 relative overflow-hidden">
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-10 py-12 md:py-20">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8  items-start">
+      <div className="relative max-w-7xl mx-auto py-12 md:py-20">
+        <div className="grid grid-cols-1 xl:grid-cols-2 px-4 md:px-0 gap-8  items-start">
           {/* LEFT COLUMN */}
           <div>
-            {/* <div className="inline-flex items-center bg-[#F8510C33] text-[#F8510C] rounded-full px-4 py-2 text-sm font-bold shadow-sm mb-6">
-              <TrendingUp className="w-4 h-4 mr-2 text-[#F8510C]" />
-              The UK's #1 Security Training provider
-              <div className="flex gap-0.5 ml-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={14}
-                    className="fill-[#F8510C] text-[#F8510C]"
-                  />
-                ))}
-              </div>
-            </div> */}
-
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
               Get Trained. <br />
               <span className="text-[#FF5421]">Get Licenced.</span> <br />
@@ -160,7 +146,7 @@ const HeroSection = () => {
               <div className="relative w-full xl:w-auto">
                 <VideoPlayer
                   src={liveTrainingVideo}
-                  className="w-full h-[300px] sm:h-[400px] xl:w-[61vh] xl:h-[65vh]"
+                  className="w-full h-[300px] sm:h-[350px] xl:w-[55vh] xl:h-[65vh]"
                 />
                 <div className="absolute bottom-18 left-6">
                   <div className="flex items-center gap-2 bg-[#FF5421] text-white px-3 py-1 rounded-full text-sm font-semibold">
