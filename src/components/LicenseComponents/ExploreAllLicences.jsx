@@ -187,7 +187,7 @@ const ExploreAllLicences = () => {
             Explore all licences
           </h2>
 
-          <p className="text-[#141414]/60 mt-4 max-w-2xl text-base md:text-lg leading-relaxed">
+          <p className="text-[#141414]/60 mt-1 max-w-2xl text-base md:text-lg leading-relaxed">
             Browse professional SIA licences, first aid qualifications,
             workplace safety training and specialist certification courses.
           </p>
@@ -243,7 +243,7 @@ const ExploreAllLicences = () => {
               ref={coursesSectionRef}
               className="bg-white rounded-xl border border-[#ECECEC] shadow-[0_10px_40px_rgba(0,0,0,0.05)] px-6 py-4 lg:mb-2 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
             >
-              <div>
+              <div className="flex gap-2">
                 <h2 className="text-2xl font-bold text-[#141414]">
                   {activeTab === "popular"
                     ? `${categoryParam} Popular Licences`
@@ -360,7 +360,7 @@ const ExploreAllLicences = () => {
             ) : filteredLicences.length > 0 ? (
               <motion.div
                 layout
-                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
+                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-6 gap-4"
               >
                 <AnimatePresence mode="popLayout">
                   {filteredLicences.map((item, index) => (

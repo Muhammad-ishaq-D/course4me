@@ -28,14 +28,14 @@ function TrainerCard({ trainer, onClick }) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-black/20 to-transparent" />
         {/* BADGE */}
         <div className="absolute top-4 left-4">
-          <div className="flex items-center gap-2 bg-[#FF5421] text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
+          <div className="flex items-center gap-2 bg-[#FF5421] text-white px-3 py-1 rounded-full text-xs  shadow-lg">
             <ShieldCheck size={16} />
             {trainer.badge}
           </div>
         </div>
 
         {/* RATING */}
-        <div className="absolute top-4 right-4 bg-white px-3 py-1.5 rounded-full flex items-center gap-1 text-xs font-bold shadow-lg">
+        <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full flex items-center gap-1 text-xs  shadow-lg">
           <Star size={16} className="text-[#FF5421] fill-[#FF5421]" />
           {trainer.rating}
         </div>
@@ -53,12 +53,12 @@ function TrainerCard({ trainer, onClick }) {
       {/* CONTENT */}
       <div className="p-4 md:p-6">
         {/* TITLE */}
-        <h4 className="text-2xl font-bold text-[#111111] leading-snug">
+        <h4 className="text-2xl font-bold text-[#111111] leading-[1.05]">
           {trainer.title}
         </h4>
 
         {/* STATS */}
-        <div className="flex flex-col lg:flex-row lg:items-center md:justify-between mt-6 gap-3">
+        <div className="flex flex-col lg:flex-row lg:items-center md:justify-between mt-5 gap-3">
           {/* EXPERIENCE */}
           <div className="flex items-center gap-3 bg-[#FFF7F4] border border-[#FFE1D5] rounded-2xl px-4 py-3 flex-1">
             <div className="w-10 h-10 rounded-xl bg-[#FF5421] flex items-center justify-center flex-shrink-0">

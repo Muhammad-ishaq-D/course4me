@@ -238,7 +238,7 @@ const ExploreAllCourses = () => {
               ref={coursesSectionRef}
               className="bg-white rounded-xl border border-[#ECECEC] shadow-[0_10px_40px_rgba(0,0,0,0.05)] px-6 py-4 lg:mb-2 flex flex-col  md:flex-row md:items-center md:justify-between gap-4"
             >
-              <div>
+              <div className="flex gap-2 items-center">
                 <h2 className="text-2xl font-bold text-[#141414]">
                   {activeTab === "popular"
                     ? `${categoryParam} Popular Courses`
@@ -356,7 +356,7 @@ const ExploreAllCourses = () => {
             ) : filteredCourses.length > 0 ? (
               <motion.div
                 layout
-                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"
+                className="grid grid-cols-1 md:grid-cols-2 mt-6 xl:grid-cols-3 gap-5"
               >
                 <AnimatePresence mode="popLayout">
                   {filteredCourses.map((course) => (

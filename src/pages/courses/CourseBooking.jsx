@@ -166,7 +166,7 @@ const CourseBooking = () => {
   }
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen mt-5">
+    <div className="bg-[#F8FAFC] min-h-screen">
       <main className="max-w-300 mx-auto px-4 md:px-6 py-8">
         {/* Breadcrumbs */}
         <nav className="flex flex-wrap items-center gap-2 text-sm md:text-base text-gray-400 mb-8 overflow-x-auto no-scrollbar">

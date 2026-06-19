@@ -40,110 +40,125 @@ const CATEGORIES = [
   "Specialist",
 ];
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
-const ItemCard = ({ icon: Icon, title, description, onClick }) => (
-  <motion.div
-    whileHover={{ y: -4 }}
-    transition={{ duration: 0.3 }}
-    onClick={onClick}
-    className=" group relative overflow-hidden rounded-xl bg-white border border-gray-100 p-3  md:p-5 shadow-[0_10px_35px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(248,81,12,0.12)] transition-all duration-300 cursor-pointer
-    "
-  >
-    {/* HOVER GLOW */}
-    <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF5421]/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition duration-500" />
+const ItemCard = ({
+  icon: Icon,
+  title,
+  description,
+  onClick,
+  variant = "course", // course | license
+}) => {
+  const isLicense = variant === "license";
 
-    <div className="relative flex items-center justify-between gap-4">
-      {/* LEFT */}
-      <div className="flex items-center gap-4 min-w-0">
-        {/* ICON */}
-        <div
-          className="
-          hidden 
-          w-14 h-14
-          rounded-2xl
-          bg-linear-to-br
-          from-[#00A3FF]/10
-          to-[#FF5421]/10
-          border border-[#00A3FF]/10
-          md:flex items-center justify-center
-          flex-shrink-0
-        "
-        >
-          <Icon className="w-6 h-6 text-[#00A3FF]" />
+  return (
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.3 }}
+      onClick={onClick}
+      className={`
+        group relative overflow-hidden rounded-xl border p-3 md:p-5
+        cursor-pointer transition-all duration-300
+
+        ${
+          isLicense
+            ? "bg-blue-100 border-[#D8ECFF] hover:bg-white hover:border-[#00A3FF]/20"
+            : "bg-white border-gray-100 hover:border-[#00A3FF]/10"
+        }
+
+        hover:shadow-[0_20px_50px_rgba(0,163,255,0.10)]
+      `}
+    >
+      {/* HOVER GLOW */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-[#00A3FF]/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition duration-500" />
+
+      <div className="relative flex items-center justify-between gap-4">
+        {/* LEFT */}
+        <div className="flex items-center gap-4 min-w-0">
+          {/* ICON */}
+          <div
+            className={`
+              hidden md:flex items-center justify-center
+              w-14 h-14 rounded-2xl flex-shrink-0
+              transition-all duration-300
+
+              ${
+                isLicense
+                  ? "bg-[#00A3FF]/10 border border-[#00A3FF]/10"
+                  : "bg-[#F8FAFC] border border-gray-100"
+              }
+            `}
+          >
+            <Icon className="w-6 h-6 text-[#00A3FF]" />
+          </div>
+
+          {/* CONTENT */}
+          <div className="min-w-0">
+            <h4
+              className="
+                text-xl font-bold leading-snug text-[#111111]
+                transition-colors duration-300
+                group-hover:text-[#00A3FF]
+              "
+            >
+              {title}
+            </h4>
+
+            {description && (
+              <p
+                className="
+                  mt-1 text-base text-gray-500
+                  font-medium line-clamp-1
+                "
+              >
+                {description}
+              </p>
+            )}
+          </div>
         </div>
 
-        {/* CONTENT */}
-        <div className="min-w-0">
-          <h4
-            className="
-            font-bold
-            text-[#111111]
-            text-xl
-            leading-snug
-            group-hover:text-[#FF5421]
-            transition-colors
-          "
-          >
-            {title}
-          </h4>
+        {/* RIGHT ARROW */}
+        <div
+          className={`
+            w-11 h-11 rounded-xl
+            flex items-center justify-center
+            flex-shrink-0
+            transition-all duration-300
 
-          {description && (
-            <p
-              className="
-              text-base
-              text-gray-500
-              mt-1
-              font-medium
-              line-clamp-1
+            ${
+              isLicense
+                ? "bg-white border border-[#D8ECFF]"
+                : "bg-[#F9FAFB] border border-gray-100"
+            }
+
+            group-hover:bg-[#00A3FF]
+            group-hover:border-[#00A3FF]
+          `}
+        >
+          <ArrowRight
+            className="
+              w-5 h-5 text-gray-400
+              transition-all duration-300
+              group-hover:text-white
+              group-hover:translate-x-0.5
             "
-            >
-              {description}
-            </p>
-          )}
+          />
         </div>
       </div>
 
-      {/* RIGHT ARROW */}
+      {/* BOTTOM HOVER LINE */}
       <div
         className="
-        w-11 h-11
-        rounded-xl
-        bg-[#F9FAFB]
-        border border-gray-100
-        flex items-center justify-center
-        flex-shrink-0
-        group-hover:bg-[#FF5421]
-        transition-all duration-300
-      "
-      >
-        <ArrowRight
-          className="
-          w-5 h-5
-          text-gray-400
-          group-hover:text-white
-          group-hover:translate-x-0.5
-          transition-all duration-300
+          absolute bottom-0 left-0
+          w-full h-[3px]
+          bg-[#00A3FF]
+          scale-x-0
+          group-hover:scale-x-100
+          origin-left
+          transition-transform duration-300
         "
-        />
-      </div>
-    </div>
-
-    {/* BOTTOM LINE */}
-    <div
-      className="
-      absolute bottom-0 left-0
-      w-full h-1
-      bg-gradient-to-r
-      from-[#00A3FF]
-      to-[#FF5421]
-      scale-x-0
-      group-hover:scale-x-100
-      origin-left
-      transition-transform duration-300
-    "
-    />
-  </motion.div>
-);
+      />
+    </motion.div>
+  );
+};
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
@@ -225,10 +240,10 @@ const CoursesLicencesSection = () => {
           </div>
 
           {/* TITLE */}
-          <h2 className=" text-3xl sm:text-4xl lg:text-5xl font-black text-[#111111] leading-tight tracking-tight">
-            Pick Your Course.
+          <h2 className=" text-3xl sm:text-4xl lg:text-5xl font-black text-[#111111] leading-[1.05] tracking-tight">
+            Pick Your Course. Build
             <br />
-            <span className="text-[#FF5421]">Build Your Future.</span>
+            <span className="text-[#FF5421]"> Your Future.</span>
           </h2>
 
           {/* DESC */}
@@ -244,7 +259,7 @@ const CoursesLicencesSection = () => {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={` px-6 py-3 rounded-2xl text-[15px] font-bold transition-all duration-300
+              className={` px-9 py-3 rounded-2xl text-[15px] cursor-pointer font-semibold transition-all duration-300
 
             ${
               activeCategory === cat
@@ -294,24 +309,27 @@ const CoursesLicencesSection = () => {
                       title={course.title}
                       description={course.description}
                       onClick={() => navigate(`/course/${course.id}`)}
+                      variant="course"
                     />
                   ))}
             </div>
           </div>
 
           {/* RIGHT */}
-          <div className=" rounded-4xl bg-[#111111] p-4 md:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.12)] relative overflow-hidden">
+          <div className="rounded-4xl bg-blue-200 border border-[#D7EBFF] p-4 md:p-8">
             {/* GLOW */}
-            <div className="absolute top-0 right-0 w-52 h-52 bg-[#FF5421]/20 blur-3xl rounded-full" />
+            <div className="absolute top-0 right-0 w-56 h-56 bg-[#00A3FF]/15 blur-3xl rounded-full" />
+
+            <div className="absolute bottom-0 left-0 w-56 h-56 bg-[#FF5421]/10 blur-3xl rounded-full" />
 
             {/* HEADER */}
             <div className="flex items-center justify-between mb-8 relative z-10">
               <div>
-                <h3 className="text-2xl font-black text-white">
+                <h3 className="text-2xl font-black text-black">
                   Popular Licences
                 </h3>
 
-                <p className="text-base text-gray-400 mt-1">
+                <p className="text-base text-gray-700 mt-1">
                   Most requested licence training
                 </p>
               </div>
@@ -351,6 +369,7 @@ const CoursesLicencesSection = () => {
                             `/licences/licencesdetails?id=${licence.id || licence.title}`,
                           )
                         }
+                        variant="license"
                       />
                     ))}
             </div>

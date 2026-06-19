@@ -33,9 +33,10 @@ const TestimonialsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-10"
         >
-          <h2 className="text-[44px] md:text-[56px] font-bold text-[#1A1A1A] mb-5 leading-[1.05] tracking-tight">
-            People Just Like You <br className="hidden md:block" />
-            <span className="text-[#FF5421]">Changed Their Lives</span>
+          <h2 className="text-[44px] md:text-[56px] font-bold text-[#1A1A1A] mb-3 leading-[1.05] tracking-tight">
+            People Just Like You Changed
+            <br className="hidden md:block" />
+            <span className="text-[#FF5421]"> Their Lives</span>
           </h2>
 
           <p className="text-gray-500 text-base sm:text-lg font-medium">

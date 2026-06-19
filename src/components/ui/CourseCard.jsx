@@ -91,14 +91,14 @@ const CourseCard = ({
         <div className="flex gap-2 mt-auto">
           <button
             onClick={() => navigate(`/booking/course?courseid=${id}`)}
-            className="flex-1 h-11.5 rounded-xl cursor-pointer bg-[#F15A24] hover:bg-[#d94f1f] text-white text-sm md:text-[16px] font-bold transition-all duration-300"
+            className="flex-1 h-11.5 rounded-xl cursor-pointer bg-[#F15A24] hover:bg-[#d94f1f] text-white text-sm md:text-[16px] font-semibold transition-all duration-300"
           >
             Book Training
           </button>
 
           <button
             onClick={() => navigate(`/course/${id}`)}
-            className="flex-1 h-11.5 rounded-xl border cursor-pointer border-[#E5E5E5] hover:border-[#F15A24]/30 hover:bg-black/90 hover:text-white text-[#141414] text-sm  md:text-[16px] font-bold flex items-center justify-center gap-1.5 transition-all duration-300"
+            className="flex-1 h-11.5 rounded-xl border cursor-pointer border-[#E5E5E5] hover:border-[#F15A24]/30 hover:bg-black/90 hover:text-white text-[#141414] text-sm  md:text-[16px] font-semibold flex items-center justify-center gap-1.5 transition-all duration-300"
           >
             Details
             <ArrowRight size={14} />

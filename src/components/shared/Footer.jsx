@@ -39,97 +39,116 @@ const Footer = () => {
     <footer className="bg-[#0F0F0F] text-white  py-16 border-t border-white/5">
       <div className="max-w-325 mx-auto px-6">
         {/* TOP GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-8 pb-16">
-          {/* Column 1 - About & Contact */}
-          <div>
-            <img src={Logo} alt="logo" className="w-40  md:w-44 " />
-            <p className="text-[#A1A1A1] text-base mt-2 leading-relaxed mb-10">
-              Courses4Me helps you get SIA trained, licensed, and ready for real
-              security jobs — trusted by 400,000+ people across the UK.
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16">
+          {/* ABOUT */}
+          <div className="lg:pr-8 lg:border-r lg:border-white/10">
+            <img src={Logo} alt="logo" className="w-40 md:w-44" />
+
+            <p className="text-[#A1A1A1] text-base mt-4 leading-relaxed">
+              Courses4Me helps you discover, compare, and book accredited
+              courses across the UK, giving you the qualifications, licences,
+              and confidence to achieve your career ambitions.
             </p>
-
-            {/* <div className="flex gap-3">
-              {[Facebook, Twitter, Linkedin, Instagram, Youtube].map(
-                (Icon, i) => (
-                  <div
-                    key={i}
-                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-pointer text-[#A1A1A1] hover:text-white"
-                  >
-                    <Icon size={18} />
-                  </div>
-                ),
-              )}
-            </div> */}
           </div>
 
-          {/* Column 2 - Popular Licences */}
-          <div>
-            <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
-              POPULAR LICENCES
+          {/* POPULAR LICENCES */}
+          <div className="lg:pr-5 lg:border-r lg:border-white/10">
+            <h4 className="font-bold text-white text-lg mb-8 uppercase tracking-wide">
+              Popular Licences
             </h4>
-            <ul className="space-y-4 md:space-y-5 text-[#A1A1A1] text-sm md:text-base font-medium">
+
+            <ul className="space-y-4">
               {licenses.map((licence) => (
-                <li
-                  key={licence._id}
-                  className="hover:text-white transition-colors cursor-pointer line-clamp-1"
-                >
-                  <Link to="/licences">{licence.title}</Link>
-                </li>
-              ))}
-              {licenses.length === 0 && (
-                <li className="hover:text-white transition-colors cursor-pointer">
-                  No Popular Licences
-                </li>
-              )}
-            </ul>
-          </div>
-
-          {/* Column 3 - Popular Courses */}
-          <div>
-            <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
-              POPULAR COURSES
-            </h4>
-            <ul className="space-y-4 md:space-y-5 text-[#A1A1A1] text-sm md:text-base font-medium">
-              {courses.map((course) => (
-                <li
-                  key={course._id}
-                  className="hover:text-white transition-colors cursor-pointer line-clamp-1"
-                >
-                  <Link to={`/course/${course._id}`}>{course.title}</Link>
-                </li>
-              ))}
-              {courses.length === 0 && (
-                <li className="hover:text-white transition-colors cursor-pointer">
-                  No Popular Courses
-                </li>
-              )}
-            </ul>
-          </div>
-
-          {/* Column 4 - Training Locations */}
-          <div>
-            <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
-              TRAINING LOCATIONS
-            </h4>
-            <ul className="space-y-4 md:space-y-5 text-[#A1A1A1] text-sm md:text-base font-medium">
-              {["Bradford", "Manchester", "Sheffield", "Leeds"].map(
-                (loc, i) => (
-                  <li
-                    key={i}
-                    className="flex items-center gap-3 hover:text-white transition-colors cursor-pointer group"
+                <li key={licence._id}>
+                  <Link
+                    to="/licences"
+                    className="text-[#A1A1A1] hover:text-white transition-colors line-clamp-1"
                   >
-                    <MapPin
-                      className="text-[#00A3FF] opacity-60 group-hover:opacity-100 transition-opacity"
-                      size={16}
-                    />
-                    <span>{loc}</span>
-                  </li>
-                ),
-              )}
+                    {licence.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Column 5 - Contact Us */}
+          {/* POPULAR COURSES */}
+          <div className="lg:pr-5 lg:border-r lg:border-white/10">
+            <h4 className="font-bold text-white text-lg mb-8 uppercase tracking-wide">
+              Popular Courses
+            </h4>
+
+            <ul className="space-y-4">
+              {courses.map((course) => (
+                <li key={course._id}>
+                  <Link
+                    to={`/course/${course._id}`}
+                    className="text-[#A1A1A1] hover:text-white transition-colors line-clamp-1"
+                  >
+                    {course.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* TRAINING LOCATIONS + PAGES */}
+          <div className="lg:pr-5 lg:border-r lg:border-white/10">
+            <h4 className="font-bold  text-white text-lg mb-8 uppercase ">
+              Training Locations
+            </h4>
+
+            <ul className="space-y-4">
+              {["Bradford", "Manchester", "Sheffield", "Leeds"].map((loc) => (
+                <li
+                  key={loc}
+                  className="flex relative items-center gap-4 text-[#A1A1A1] hover:text-white transition-colors"
+                >
+                  <MapPin
+                    size={15}
+                    className="text-[#00A3FF] md:absolute md:-left-5 "
+                  />
+                  <span className="md:ml-3">{loc}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex mt-4 md:ml-3 flex-col gap-4">
+              <NavLink
+                to="/privacy-policy"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#F15A24] font-semibold"
+                    : "text-[#A1A1A1] hover:text-white transition"
+                }
+              >
+                Privacy Policy
+              </NavLink>
+
+              <NavLink
+                to="/terms-of-services"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#F15A24] font-semibold"
+                    : "text-[#A1A1A1] hover:text-white transition"
+                }
+              >
+                Terms of Service
+              </NavLink>
+
+              <NavLink
+                to="/cookie-policy"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#F15A24] font-semibold"
+                    : "text-[#A1A1A1] hover:text-white transition"
+                }
+              >
+                Cookie Policy
+              </NavLink>
+            </div>
+          </div>
+
+          {/* CONTACT */}
           <div>
             <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               CONTACT US
@@ -159,67 +178,11 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-white/5 pt-12">
+        <div className="border-t border-white/5 pt-10">
           {/* BOTTOM ROW */}
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-[#666666] text-sm">
-              © 2026 Courses4Me. All rights reserved.
-            </div>
 
-            <div className="flex flex-col md:flex-row gap-8 text-sm">
-              <NavLink
-                to="/privacy-policy"
-                className={({ isActive }) =>
-                  `transition-colors cursor-pointer ${
-                    isActive
-                      ? "text-[#F15A24] font-semibold"
-                      : "text-[#666666] hover:text-white"
-                  }`
-                }
-              >
-                Privacy Policy
-              </NavLink>
-
-              <NavLink
-                to="/terms-of-services"
-                className={({ isActive }) =>
-                  `transition-colors cursor-pointer ${
-                    isActive
-                      ? "text-[#F15A24] font-semibold"
-                      : "text-[#666666] hover:text-white"
-                  }`
-                }
-              >
-                Terms of Service
-              </NavLink>
-
-              <NavLink
-                to="/cookie-policy"
-                className={({ isActive }) =>
-                  `transition-colors cursor-pointer ${
-                    isActive
-                      ? "text-[#F15A24] font-semibold"
-                      : "text-[#666666] hover:text-white"
-                  }`
-                }
-              >
-                Cookie Policy
-              </NavLink>
-            </div>
-          </div>
-
-          {/* Cookie Notice */}
-          <div className="mt-10 text-center text-[#666666] text-sm max-w-2xl mx-auto leading-relaxed">
-            We use cookies to enhance your experience on our website. By
-            continuing to use our website, you consent to the use of cookies.
-            For more information, please see our{" "}
-            <NavLink
-              to="/cookie-policy"
-              className="underline cursor-pointer text-white"
-            >
-              Cookie Policy
-            </NavLink>
-            .
+          <div className="text-white text-center text-sm">
+            © 2026 Courses4Me. All rights reserved.
           </div>
         </div>
       </div>

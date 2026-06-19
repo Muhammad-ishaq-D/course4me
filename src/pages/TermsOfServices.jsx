@@ -163,65 +163,75 @@ const TermsOfServices = () => {
             </p>
           </div>
 
-          <div className="relative overflow-hidden bg-[#0F2B46] rounded-[32px] p-8 md:p-10 text-white">
-            {/* ORANGE GLOW */}
-            <div className="absolute top-0 right-0 w-60 h-60 bg-[#F15A24]/10 blur-[100px]" />
+          <div>
+            <h2 className="text-3xl font-bold text-[#111827] mb-6">
+              8. Limitation of Liability
+            </h2>
 
-            <div className="relative z-10">
-              {/* BADGE */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 text-[#F15A24] text-sm font-semibold mb-6">
-                ⚠️ Legal Notice
-              </div>
+            <p className="text-gray-600 leading-8 mb-8">
+              Courses4Me provides its platform on an "as is" and "as available"
+              basis. While we strive to maintain accurate information and
+              reliable services, we cannot guarantee uninterrupted access,
+              error-free operation, or suitability for every purpose.
+            </p>
 
-              {/* HEADING */}
-              <h2 className="text-3xl font-bold mb-4">
-                8. Limitation of Liability
-              </h2>
+            <ul className="space-y-5">
+              <li className="flex gap-4">
+                <span className="font-bold text-[#F15A24]">8.1</span>
 
-              {/* DESCRIPTION */}
-              <p className="text-gray-300 leading-7 mb-8">
-                Courses4Me provides its platform on an{" "}
-                <span className="text-white font-semibold">
-                  "as is" and "as available"
-                </span>{" "}
-                basis. While we strive to maintain accurate information,
-                reliable services, and uninterrupted access, we cannot guarantee
-                that the platform will always be error-free, uninterrupted, or
-                suitable for every purpose.
-              </p>
+                <span className="text-gray-600 leading-7">
+                  Courses4Me is not responsible for provider cancellations,
+                  rescheduling, venue changes, or course availability updates.
+                </span>
+              </li>
 
-              {/* LIABILITY LIST */}
-              <div className="space-y-5">
-                {[
-                  "Provider cancellations, rescheduling, or course availability changes.",
-                  "Technical interruptions, downtime, or temporary service outages.",
-                  "Errors, delays, or failures caused by third-party services.",
-                  "Indirect, incidental, or consequential damages arising from platform use.",
-                  "Losses resulting from inaccurate information provided by users.",
-                ].map((item, index) => (
-                  <div key={index} className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-[#F15A24]/15 border border-[#F15A24]/20 flex items-center justify-center shrink-0">
-                      <span className="text-[#F15A24] text-sm font-bold">
-                        {index + 1}
-                      </span>
-                    </div>
+              <li className="flex gap-4">
+                <span className="font-bold text-[#F15A24]">8.2</span>
 
-                    <p className="text-gray-300 leading-7">{item}</p>
-                  </div>
-                ))}
-              </div>
+                <span className="text-gray-600 leading-7">
+                  We are not liable for temporary technical interruptions,
+                  website downtime, maintenance periods, or service disruptions.
+                </span>
+              </li>
 
-              {/* FOOTER NOTE */}
-              <div className="mt-8 pt-6 border-t border-white/10">
-                <p className="text-sm text-gray-400 leading-6">
-                  To the maximum extent permitted by applicable law, Courses4Me
-                  shall not be liable for any indirect, incidental, special,
-                  consequential, or punitive damages arising from the use of our
-                  platform, courses, services, or third-party provider
-                  activities.
-                </p>
-              </div>
-            </div>
+              <li className="flex gap-4">
+                <span className="font-bold text-[#F15A24]">8.3</span>
+
+                <span className="text-gray-600 leading-7">
+                  Courses4Me shall not be responsible for errors, delays, or
+                  failures caused by third-party systems, payment providers, or
+                  external services.
+                </span>
+              </li>
+
+              <li className="flex gap-4">
+                <span className="font-bold text-[#F15A24]">8.4</span>
+
+                <span className="text-gray-600 leading-7">
+                  We shall not be liable for indirect, incidental,
+                  consequential, or special damages arising from the use of the
+                  platform.
+                </span>
+              </li>
+
+              <li className="flex gap-4">
+                <span className="font-bold text-[#F15A24]">8.5</span>
+
+                <span className="text-gray-600 leading-7">
+                  Users are responsible for ensuring the accuracy of information
+                  submitted through the platform. Courses4Me accepts no
+                  liability for losses resulting from inaccurate user-provided
+                  information.
+                </span>
+              </li>
+            </ul>
+
+            <p className="mt-8 text-gray-600 leading-8">
+              To the maximum extent permitted by applicable law, Courses4Me's
+              total liability arising from the use of the platform, courses,
+              bookings, or related services shall be limited as required under
+              applicable UK law.
+            </p>
           </div>
 
           <div>

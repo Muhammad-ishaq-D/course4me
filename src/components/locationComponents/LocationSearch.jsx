@@ -153,7 +153,7 @@ const LocationSearch = () => {
               <div className="sticky top-0 z-50 lg:static py-3">
                 <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
                   {/* Search Input */}
-                  <div className="relative flex-1 lg:w-105">
+                  <div className="relative flex-1 lg:w-110">
                     <div className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-orange-50 flex items-center justify-center z-20">
                       <MapPin size={18} className=" text-orange-500" />
                     </div>
@@ -225,13 +225,13 @@ const LocationSearch = () => {
                   </div>
 
                   {/* Search Button */}
-                  <button
+                  {/* <button
                     onClick={handleSearch}
                     className="py-4 px-7 rounded-2xl bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold shadow-lg shadow-orange-200 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap w-full md:w-auto"
                   >
                     <Search className="w-4 h-4" />
                     <span>Search</span>
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
@@ -248,7 +248,7 @@ const LocationSearch = () => {
           <div className="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <div>
+              <div className="flex gap-2">
                 <h2 className="text-2xl font-bold text-gray-900">
                   Available Courses
                 </h2>
@@ -318,12 +318,9 @@ const LocationSearch = () => {
                           : "border-gray-200 hover:border-orange-200 hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)]"
                       }`}
                     >
-                      {/* Hover gradient */}
-                      <div className="absolute inset-0 bg-linear-to-r from-orange-50/0 via-orange-50/40 to-orange-50/0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none" />
-
                       <div className="relative flex flex-col sm:flex-row gap-4">
                         {/* Thumbnail */}
-                        <div className="w-full sm:w-32 md:w-36 h-52 sm:h-32 md:h-28 rounded-3xl overflow-hidden shrink-0 bg-orange-50 flex items-center justify-center">
+                        <div className="w-full sm:w-32 md:w-36 h-60 sm:h-32 md:h-44 rounded-3xl overflow-hidden shrink-0 bg-orange-50 flex items-center justify-center">
                           {course.thumbnail && !imgErrors[link._id] ? (
                             <img
                               src={course.thumbnail}
@@ -397,7 +394,7 @@ const LocationSearch = () => {
                                     `/booking/course?courseid=${course._id}`,
                                   )
                                 }
-                                className="h-10 px-5 rounded-xl cursor-pointer bg-linear-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-orange-200 whitespace-nowrap"
+                                className="py-3 px-9 rounded-xl cursor-pointer bg-linear-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold "
                               >
                                 Book Now
                               </button>
@@ -407,7 +404,7 @@ const LocationSearch = () => {
                                     `/locations/locationdetails/${link._id}`,
                                   )
                                 }
-                                className="h-10 px-5 rounded-xl cursor-pointer border border-gray-200 hover:border-orange-200 hover:bg-orange-50 text-sm font-semibold flex items-center gap-1.5 transition-all duration-300 whitespace-nowrap"
+                                className="py-3 px-9 rounded-xl cursor-pointer border border-gray-200  text-sm font-semibold flex items-center gap-1.5 "
                               >
                                 Details
                                 <ArrowRight className="w-3.5 h-3.5" />

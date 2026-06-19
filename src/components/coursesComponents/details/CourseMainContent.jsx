@@ -71,7 +71,7 @@ const CourseMainContent = ({ course }) => {
   const displayRequirements = course.requirements || [];
 
   return (
-    <section className="py-16 md:py-24 bg-[#F8FAFC]">
+    <section className="py-16 md:py-20 bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Main Content Area */}
@@ -164,32 +164,15 @@ const CourseMainContent = ({ course }) => {
               {/* Price Card */}
               <div className="bg-white rounded-4xl border border-gray-100 shadow-xl overflow-hidden">
                 <div className="p-8">
-                  <div className="text-[#64748B] text-lg font-medium mb-2">
-                    From
-                  </div>
-                  <div className="flex items-baseline gap-2 mb-8">
-                    <span className="text-5xl font-extrabold text-[#1E293B]">
-                      {displayPrice}
-                    </span>
-                  </div>
-
-                  <div className="space-y-4 mb-8">
-                    <button
-                      onClick={handleActionClick}
-                      className="w-full bg-[#F15A24] cursor-pointer text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#F15A24]/20 hover:brightness-110 transition-all flex items-center justify-center gap-2 group"
-                    >
-                      {getButtonContent()}
-                    </button>
-                    {/* <button
-                      onClick={() => {
-                        const element = document.getElementById("dates");
-                        if (element)
-                          element.scrollIntoView({ behavior: "smooth" });
-                      }}
-                      className="w-full bg-[#1E293B] cursor-pointer text-white font-bold py-4 rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-2"
-                    >
-                      <Calendar className="w-5 h-5" /> View All Dates
-                    </button> */}
+                  <div className="flex gap-3 items-center justify-between mb-8">
+                    <div className="text-[#64748B] text-lg font-medium ">
+                      Price
+                    </div>
+                    <div className="flex items-baseline gap-2 ">
+                      <span className="text-5xl font-extrabold text-[#1E293B]">
+                        {displayPrice}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="space-y-5 border-t border-gray-50 pt-8">
@@ -221,26 +204,97 @@ const CourseMainContent = ({ course }) => {
                       </div>
                     ))}
                   </div>
+
+                  <div className="space-y-4 mt-8">
+                    <button
+                      onClick={handleActionClick}
+                      className="w-full bg-[#F15A24] cursor-pointer text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#F15A24]/20 hover:brightness-110 transition-all flex items-center justify-center gap-2 group"
+                    >
+                      {getButtonContent()}
+                    </button>
+                    {/* <button
+                      onClick={() => {
+                        const element = document.getElementById("dates");
+                        if (element)
+                          element.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="w-full bg-[#1E293B] cursor-pointer text-white font-bold py-4 rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-2"
+                    >
+                      <Calendar className="w-5 h-5" /> View All Dates
+                    </button> */}
+                  </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
 
-              {/* Need Help Card */}
-              <div className="bg-[#00A3F4]/10 border border-[#00A3F4]/20 p-8 rounded-4xl">
-                <h3 className="text-xl font-bold text-[#00A3F4] mb-3 flex items-center gap-2">
-                  <HelpCircle className="w-5 h-5" /> Need Help?
-                </h3>
-                <p className="text-[#475569] text-base font-medium mb-6">
-                  Our advisors are available Mon-Fri 9am-6pm to help you choose
-                  the right course.
+        {/* Need Help Card */}
+        <div className="bg-[#00A3F4]/10 border border-[#00A3F4]/20 rounded-[32px] p-6 md:p-8 mt-5 overflow-hidden">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            {/* LEFT */}
+            <div className="flex items-center gap-5">
+              <div className="w-20 h-20 rounded-full border-2 border-[#00A3F4] flex items-center justify-center bg-white">
+                <Phone className="w-9 h-9 text-[#00A3F4]" />
+              </div>
+
+              <div>
+                <p className="text-[#00A3F4] text-sm font-bold uppercase tracking-wide">
+                  Need Help?
                 </p>
+
                 <a
-                  href="tel:08001234567"
-                  className="text-2xl font-black text-[#00A3F4] hover:underline flex items-center gap-2"
+                  href="tel:08006894621"
+                  className="block text-2xl font-black text-[#0F172A] hover:text-[#00A3F4] transition"
                 >
-                  <Phone className="w-6 h-6" /> 08006894621
+                  08006894621
+                </a>
+
+                <a
+                  href="mailto:info@courses4me.co.uk"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#64748B] hover:text-[#00A3F4] transition font-medium"
+                >
+                  info@courses4me.co.uk
                 </a>
               </div>
             </div>
+
+            {/* DIVIDER */}
+            <div className="hidden lg:block w-px h-24 bg-[#00A3F4]/20" />
+
+            {/* CENTER TEXT */}
+            <div className="flex-1 text-center lg:text-left">
+              <h3 className="text-2xl font-bold text-[#0F172A] mb-2">
+                Speak with our Course Advisors
+              </h3>
+
+              <p className="text-[#64748B] text-base leading-relaxed">
+                Our team is available Monday to Friday to help you find the
+                right course, training provider, and qualification for your
+                career goals.
+              </p>
+            </div>
+
+            {/* BUTTON */}
+            <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=info@courses4me.co.uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+        px-8 py-4
+        rounded-2xl
+        bg-orange-600
+        text-white
+        font-bold
+        whitespace-nowrap
+        hover:bg-[#EF4444]/90
+        transition-all duration-300
+      "
+            >
+              Contact Us
+            </a>
           </div>
         </div>
       </div>

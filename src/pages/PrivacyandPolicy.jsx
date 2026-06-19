@@ -234,40 +234,32 @@ const PrivacyandPolicy = () => {
           </div>
 
           <div>
-            <h2 className="text-3xl font-bold text-[#111827] mb-4">
-              4. Secure Payments
+            <h2 className="text-3xl font-bold text-[#111827] mb-6">
+              4. Secure Payments & Data Protection
             </h2>
 
-            <p className="text-gray-600 leading-8">
-              All online payments are processed through secure payment
-              providers. Courses4Me does not store complete payment card
-              details.
+            <p className="text-gray-600 leading-8 mb-6">
+              Courses4Me takes the security of your personal information
+              seriously. All online payments are processed through trusted
+              third-party payment providers using secure encrypted connections.
+              We do not store full payment card details on our systems.
             </p>
-          </div>
 
-          {/* SECURITY BOX */}
-          <div className="bg-[#0F2B46] rounded-[32px] p-8 md:p-10 text-white">
-            <div className="flex items-center gap-3">
-              <Lock className="text-[#F15A24]" />
-
-              <h2 className="text-3xl font-bold">How We Protect Your Data</h2>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4 mt-8">
+            <ul className="space-y-4">
               {[
-                "SSL Encryption",
-                "Secure Payments",
-                "Fraud Monitoring",
-                "Access Controls",
-                "Secure Servers",
-                "Regular Security Reviews",
+                "SSL encryption to protect data transmitted through our website.",
+                "Secure payment processing through trusted payment providers.",
+                "Access controls to restrict unauthorised access to personal information.",
+                "Fraud monitoring and security procedures to help detect suspicious activity.",
+                "Secure servers and hosting environments.",
+                "Regular reviews of our security practices and systems.",
               ].map((item) => (
-                <div key={item} className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-[#F15A24]" />
-                  <span>{item}</span>
-                </div>
+                <li key={item} className="flex items-start gap-4">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#F15A24] mt-2 shrink-0" />
+                  <span className="text-gray-600 leading-7">{item}</span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           <div>

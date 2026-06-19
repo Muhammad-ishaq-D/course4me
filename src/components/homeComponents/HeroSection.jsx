@@ -51,36 +51,36 @@ const VideoPlayer = ({ src, label, className = "" }) => (
 /* ─── Hero Section ─── */
 const HeroSection = () => {
   return (
-    <section className="bg-white min-h-screen px-2 pb-8 md:pb-6 relative overflow-hidden">
-      <div className="relative max-w-7xl mx-auto py-12 md:py-20">
-        <div className="grid grid-cols-1 xl:grid-cols-2 px-4 md:px-0 gap-8  items-start">
+    <section className="bg-white  px-2 relative overflow-hidden">
+      <div className="relative max-w-7xl mx-auto  py-12 md:py-20">
+        <div className="grid grid-cols-1 xl:grid-cols-2 px-4 md:px-8 gap-8  items-center">
           {/* LEFT COLUMN */}
-          <div>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-              Get Trained. <br />
-              <span className="text-[#FF5421]">Get Licenced.</span> <br />
-              Build Your{" "}
-              <span className="relative inline-block text-[#00A3F4]">
-                Future.
-                <img
-                  src={underlineStroke}
-                  className="absolute bottom-1 md:bottom-2 left-2 w-[90%]"
-                />
+          <div className="">
+            <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold leading-tight">
+              Get Trained,
+              <span className="text-[#FF5421]"> Licenced,</span>
+              <span className="block -mt-2 md:-mt-3">
+                Build Your{" "}
+                <span className="relative inline-block text-[#00A3F4]">
+                  Future.
+                  <img
+                    src={underlineStroke}
+                    className="absolute bottom-1 md:bottom-2 left-2 w-[90%]"
+                  />
+                </span>
               </span>
             </h2>
 
-            <p className="text-base sm:text-lg text-gray-500 mt-4 max-w-lg">
-              No experience? No problem. Thousands of people just like you are
-              now earning great money in security.{" "}
-              <span className="font-bold text-black">
-                Professional courses & licences for your career growth.
-              </span>
+            <p className="text-base sm:text-lg text-gray-500 mt-3 max-w-lg">
+              Explore accredited courses from trusted UK training providers.
+              Gain recognised qualifications, professional licences, and the
+              skills needed to advance your career with confidence.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <NavLink
                 to="/courses"
-                className="bg-[#FF5421] cursor-pointer text-center hover:bg-[#E64A1A] text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300 transform hover:scale-105"
+                className="bg-[#FF5421] cursor-pointer text-center hover:bg-[#E64A1A] text-white font-semibold py-4 px-12 rounded-full shadow-md transition duration-300 transform hover:scale-105"
               >
                 Get Started
               </NavLink>
@@ -89,7 +89,7 @@ const HeroSection = () => {
                   const element = document.getElementById("hiringTraining");
                   if (element) element.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="border-2 cursor-pointer text-center flex justify-center border-[#28262633] hover:border-gray-400 font-semibold py-3 px-8 rounded-full  items-center gap-2 bg-[#FFFFFF1A] backdrop-blur-sm"
+                className="border-2 cursor-pointer text-center flex justify-center border-[#28262633] hover:border-gray-400 font-semibold py-4 px-12 rounded-full  items-center gap-2 bg-[#FFFFFF1A] backdrop-blur-sm"
               >
                 <Play className="w-4 h-5 text-[#00A3FF]" />
                 What We Do
@@ -141,7 +141,7 @@ const HeroSection = () => {
           </div>
 
           {/* RIGHT COLUMN */}
-          <div className="w-full">
+          <div className="w-full ">
             <div className="flex flex-col xl:flex-row gap-8 md:gap-4 mb-4">
               <div className="relative w-full xl:w-auto">
                 <VideoPlayer
@@ -159,9 +159,9 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-6 w-full xl:w-auto">
+              <div className="flex  flex-col gap-6 w-full xl:w-auto">
                 <div className="relative hidden lg:block w-full mt-6 md:mt-0 xl:w-46">
-                  <div className="w-full xl:w-46 h-[160px] sm:h-[180px] xl:h-42 bg-[#00A3FF] rounded-3xl flex flex-col items-center justify-center text-center font-semibold text-white">
+                  <div className="w-full xl:w-46 h-[160px] sm:h-[180px] xl:h-57 bg-[#00A3FF] rounded-3xl flex flex-col items-center justify-center text-center font-semibold text-white">
                     <Users className="w-8 h-8 mb-3 text-white" />
                     <div className="text-3xl font-bold text-white">400K+</div>
                     <div className="text-sm text-white">
@@ -192,7 +192,7 @@ const HeroSection = () => {
                 <div className="relative hidden lg:block w-full xl:w-46">
                   <VideoPlayer
                     src={cctvVideo}
-                    className="w-full h-[160px] sm:h-[200px] xl:h-47 xl:w-46"
+                    className="w-full h-40 sm:h-50 xl:h-57 xl:w-46"
                   />
                   <div className="absolute bottom-3 left-3 text-sm font-semibold text-white">
                     CCTV
@@ -200,58 +200,8 @@ const HeroSection = () => {
                 </div>
               </div>
             </div>
-
-            <div className="lg:grid grid-cols-1 hidden lg:block sm:grid-cols-2 xl:grid-cols-3 gap-8 xl:gap-2">
-              <div className="relative w-full xl:w-46">
-                <div className="w-full xl:w-43 h-[180px] xl:h-45 bg-[#E6F4FF] border border-[#00A3FF33] backdrop-blur-xl rounded-3xl flex flex-col items-center justify-center">
-                  <CheckCircle className="w-8 h-8 mb-3 text-[#00A3FF]" />
-                  <div className="text-3xl font-bold text-[#00A3FF]">95%</div>
-                </div>
-                <motion.div
-                  animate={{ y: [0, -142, 0] }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="absolute -bottom-6 left-1/2 -translate-x-1/2 xl:left-auto xl:translate-x-0 xl:right-0 w-[92%] sm:w-[85%] xl:w-49 bg-[#00A3FF] rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,163,255,0.3)] px-6 py-4 flex items-center gap-4 z-10"
-                >
-                  <div className="w-8 h-8 bg-black/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex flex-col leading-tight">
-                    <span className="font-bold text-white text-[13px]">
-                      85+ Locations
-                    </span>
-                    <span className="text-[11px] text-white opacity-90">
-                      Across the UK
-                    </span>
-                  </div>
-                </motion.div>
-              </div>
-
-              <div className="relative w-full xl:w-43">
-                <VideoPlayer
-                  src={doorSupervisorVideo}
-                  className="w-full h-[200px] xl:h-45 xl:w-42"
-                />
-                <div className="absolute bottom-3 left-3 text-sm font-semibold text-white">
-                  Security Guard
-                </div>
-              </div>
-
-              <div className="w-full xl:w-45 h-[200px] xl:h-45 bg-[#FF5421] rounded-3xl flex flex-col items-center justify-center text-white">
-                <img src={lightningIcon} className="w-8 h-8 mb-3" />
-                <div className="text-2xl font-bold">£14–£25</div>
-                <div className="text-sm">Hourly Rate</div>
-              </div>
-            </div>
           </div>
         </div>
-      </div>
-
-      <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2">
-        <img src={scrollIcon} className="w-6 h-10 opacity-80" />
       </div>
     </section>
   );

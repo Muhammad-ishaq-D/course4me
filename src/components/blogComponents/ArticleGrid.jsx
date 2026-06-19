@@ -145,7 +145,7 @@ const ArticleGrid = () => {
               onClick={() => setCurrentPage(index + 1)}
               className={`w-10 md:w-12 h-10 md:h-12 rounded-full font-bold transition-all duration-300 ${
                 currentPage === index + 1
-                  ? "bg-[#0F2B46] text-white shadow-[0_10px_30px_rgba(15,43,70,0.25)]"
+                  ? "bg-[#F15A24] text-white shadow-[0_10px_30px_rgba(15,43,70,0.25)]"
                   : "bg-white border border-gray-200 text-gray-500 hover:border-[#F15A24] hover:text-[#F15A24]"
               }`}
             >

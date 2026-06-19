@@ -28,12 +28,12 @@ const AppPromotionSection = () => {
           {/* RIGHT: Text Content */}
           <div className="flex-1 text-white">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-[#FF5421] text-white text-[10px] font-bold uppercase tracking-widest py-2 px-4 rounded-lg mb-8 shadow-lg">
+            <div className="inline-flex items-center gap-2 bg-[#FF5421] text-white text-[10px] font-bold uppercase tracking-widest py-2 px-4 rounded-lg mb-6 shadow-lg">
               <Smartphone size={14} />
               UK's #1 Security App
             </div>
             {/* Heading */}
-            <h2 className="text-[36px] md:text-[48px] lg:text-[44px] font-bold leading-[1.1] mb-6 tracking-tight">
+            <h2 className="text-[36px] md:text-[48px] lg:text-[44px] font-bold leading-[1.1] mb-4 tracking-tight">
               Start Your Security Career <br />
               <span className="text-[#00A3FF]">Right From Your Pocket</span>
             </h2>
@@ -48,7 +48,7 @@ const AppPromotionSection = () => {
               {/* APP STORE */}
               <a
                 href="#"
-                className=" group bg-white hover:bg-[#F9FAFB] px-6 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] transition-all duration-300 flex items-center gap-4"
+                className=" group bg-white hover:bg-[#F9FAFB] px-9 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] transition-all duration-300 flex items-center gap-4"
               >
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
@@ -70,7 +70,7 @@ const AppPromotionSection = () => {
               {/* GOOGLE PLAY */}
               <a
                 href="#"
-                className=" group bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 px-6 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] transition-all duration-300 flex items-center gap-4"
+                className=" group bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 px-9 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] transition-all duration-300 flex items-center gap-4"
               >
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg"

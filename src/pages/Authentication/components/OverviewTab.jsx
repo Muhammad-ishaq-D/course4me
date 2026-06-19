@@ -599,9 +599,9 @@ const OverviewTab = () => {
                 icon: <Calendar size={18} />,
                 action: () => navigate("/courses"),
               },
-              { label: "Check Results", icon: <Award size={18} /> },
-              { label: "FAQs", icon: <HelpCircle size={18} /> },
-              { label: "Contact Support", icon: <MessageSquare size={18} /> },
+              // { label: "Check Results", icon: <Award size={18} /> },
+              // { label: "FAQs", icon: <HelpCircle size={18} /> },
+              // { label: "Contact Support", icon: <MessageSquare size={18} /> },
             ].map((action, idx) => (
               <button
                 key={idx}

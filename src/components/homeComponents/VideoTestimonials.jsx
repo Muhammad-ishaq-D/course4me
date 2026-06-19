@@ -68,21 +68,21 @@ function VideoTestimonials() {
           </div>
 
           {/* HEADING */}
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.05] tracking-tight">
             Real Students.
             <br />
             <span className="text-[#FF5421]">Real Career Transformations.</span>
           </h2>
 
           {/* SUBTITLE */}
-          <p className="mt-5 text-gray-400 text-base sm:text-lg leading-relaxed">
+          <p className="mt-3 text-gray-400 text-base sm:text-lg leading-relaxed">
             Watch how our students went from beginners to working professionals
             in the UK security industry.
           </p>
         </motion.div>
 
         {/* TESTIMONIAL CARDS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-10">
           {testimonials.map((t, i) => (
             <motion.div
               key={i}
@@ -110,12 +110,12 @@ function VideoTestimonials() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
                   {/* ROLE */}
-                  <div className="absolute top-4 left-4 bg-[#00A3FF] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg">
+                  <div className="absolute top-4 left-4 bg-[#00A3FF] text-white text-[10px]  uppercase tracking-wider px-3 py-1 rounded-full shadow-lg">
                     {t.role}
                   </div>
 
                   {/* DURATION */}
-                  <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white text-sm font-semibold px-3 py-1 rounded-full border border-white/10">
+                  <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white text-xs  px-3 py-1 rounded-full border border-white/10">
                     {t.duration}
                   </div>
 
@@ -132,18 +132,6 @@ function VideoTestimonials() {
 
                   {/* BOTTOM INFO */}
                   <div className="absolute bottom-5 left-5 right-5">
-                    {/* STARS */}
-                    <div className="flex items-center gap-1 mb-3">
-                      {[...Array(5)].map((_, index) => (
-                        <Star
-                          key={index}
-                          size={16}
-                          fill="#FF5421"
-                          stroke="none"
-                        />
-                      ))}
-                    </div>
-
                     {/* NAME */}
                     <h4 className="text-xl font-bold text-white">{t.name}</h4>
 
@@ -154,7 +142,16 @@ function VideoTestimonials() {
 
                 {/* QUOTE */}
                 <div className="p-5">
-                  <Quote className="w-6 h-6 text-[#FF5421] mb-3 opacity-80" />
+                  <div className="flex justify-end mb-2 items-center">
+                    <div className="flex items-center  gap-1">
+                      <Star
+                        size={16}
+                        className="fill-[#FF5421] text-[#FF5421]"
+                      />
+
+                      <span className="text-sm font-bold text-white">4.9</span>
+                    </div>
+                  </div>
 
                   <p className="text-base text-gray-300 leading-relaxed">
                     "{t.quote}"
@@ -162,7 +159,7 @@ function VideoTestimonials() {
                 </div>
 
                 {/* HOVER LINE */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#00A3FF] to-[#FF5421] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-[#00A3FF] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </div>
             </motion.div>
           ))}

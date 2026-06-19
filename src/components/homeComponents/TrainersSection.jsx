@@ -65,11 +65,11 @@ export default function TrainersSection() {
         </div>
 
         {/* Heading */}
-        <h2 className="text-center text-[44px] md:text-[52px] font-bold mb-3 tracking-tight">
+        <h2 className="text-center text-[44px] md:text-[52px] font-bold mb-3 leading-[1.05] tracking-tight">
           Meet Our Trainers
         </h2>
 
-        <p className="text-center text-gray-600 max-w-2xl mx-auto mb-8 text-lg font-medium">
+        <p className="text-center text-gray-600 max-w-2xl mx-auto mb-10 text-lg font-medium">
           Industry veterans and certified professionals who are passionate about
           launching your career in security.
         </p>

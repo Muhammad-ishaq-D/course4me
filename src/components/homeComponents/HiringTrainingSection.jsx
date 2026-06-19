@@ -44,15 +44,13 @@ const HiringTrainingSection = () => {
 
             {/* HEADING */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.05] tracking-tight text-[#111111]">
-              We Don't Just
-              <br />
-              Train You.
+              We Don't Just Train You.
               <br />
               <span className="text-[#00A3F4]">We Get You Hired.</span>
             </h2>
 
             {/* DESCRIPTION */}
-            <p className="mt-5 text-lg text-gray-500 leading-relaxed max-w-xl">
+            <p className="mt-4 text-lg text-gray-500 leading-relaxed max-w-xl">
               We help learners move directly from training into real security
               careers with hiring support, interview preparation, and job
               opportunities across the UK.
@@ -78,7 +76,7 @@ const HiringTrainingSection = () => {
             {/* BUTTON */}
             <button
               onClick={() => navigate("/careers")}
-              className="group mt-7 bg-[#FF5421] hover:bg-[#ca5633] transition-all duration-300 text-white px-7 py-3 rounded-full font-bold flex items-center gap-3 shadow-[0_15px_30px_rgba(248,81,12,0.2)]"
+              className="group mt-7 bg-[#FF5421] hover:bg-[#ca5633] transition-all duration-300 text-white px-9 py-3 rounded-full font-bold flex items-center gap-3 shadow-[0_15px_30px_rgba(248,81,12,0.2)]"
             >
               View Career Support
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />

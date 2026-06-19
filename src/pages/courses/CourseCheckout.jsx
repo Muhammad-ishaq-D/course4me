@@ -1392,18 +1392,18 @@ const CourseCheckout = () => {
                         </div>
                       </div>
                       {/* Card brand logos */}
-                      <div className="flex items-center gap-1.5">
-                        <div className="h-7 px-2 bg-blue-700 text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">
+                      <div className="flex items-center gap-2">
+                        <div className="h-7.5 px-4 bg-blue-700 text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">
                           VISA
                         </div>
-                        <div className="h-7 px-1.5 bg-white border border-gray-200 rounded-md flex items-center justify-center gap-0.5">
+                        <div className="h-7.5 px-4 bg-white border border-gray-200 rounded-md flex items-center justify-center gap-0.5">
                           <div className="w-4 h-4 rounded-full bg-red-500 opacity-90" />
                           <div className="w-4 h-4 rounded-full bg-amber-400 opacity-90 -ml-2" />
                         </div>
-                        <div className="h-7 px-2 bg-[#FF6600] text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">
+                        <div className="h-7.5 px-4 bg-[#FF6600] text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">
                           DISC
                         </div>
-                        <div className="h-7 px-2 bg-[#1A1F71] text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">
+                        <div className="h-7.5 px-4 bg-[#1A1F71] text-white text-[9px] font-black rounded-md flex items-center justify-center tracking-wider">
                           AMEX
                         </div>
                       </div>

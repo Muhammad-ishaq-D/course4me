@@ -77,7 +77,8 @@ const StatsBar = () => {
 
   return (
     <section ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-      <div className="relative overflow-hidden rounded-[32px] bg-white border border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
+      <div className="h-[2px] w-full bg-[#00A3FF]/15 mb-6" />
+      <div className="relative overflow-hidden rounded-4xl bg-white border border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
         {/* BACKGROUND BLUR */}
         <div className="absolute top-0 left-0 w-40 h-40 bg-[#00A3FF]/10 blur-3xl rounded-full" />
         <div className="absolute bottom-0 right-0 w-40 h-40 bg-[#FF5421]/10 blur-3xl rounded-full" />
@@ -88,19 +89,18 @@ const StatsBar = () => {
               key={index}
               whileHover={{ y: -5 }}
               transition={{ duration: 0.3 }}
-              className={`
-                relative flex flex-col items-center justify-center
-                text-center px-6 py-10 sm:py-12
-                transition-all duration-300
-
-                ${
-                  index !== stats.length - 1
-                    ? "lg:border-r border-gray-100"
-                    : ""
-                }
-
-                ${index < 2 ? "border-b lg:border-b-0 border-gray-100" : ""}
-              `}
+              className={` relative flex flex-col items-center justify-center text-center px-6 py-10 sm:py-12 transition-all duration-300 hover:scale-[1.02]
+              ${index !== stats.length - 1 ? "lg:border-r border-gray-100" : ""}
+              ${index < 2 ? "border-b lg:border-b-0 border-gray-100" : ""}
+              ${
+                index === 0
+                  ? "bg-[#00A3FF]/[0.03]"
+                  : index === 1
+                    ? "bg-[#FF5421]/[0.03]"
+                    : index === 2
+                      ? "bg-[#00A3FF]/[0.02]"
+                      : "bg-[#FF5421]/[0.02]"
+              }`}
             >
               {/* ICON */}
               <div

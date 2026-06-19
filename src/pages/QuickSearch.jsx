@@ -309,14 +309,14 @@ const QuickSearch = () => {
               Smart Discovery Platform
             </span>
 
-            <h1 className="mt-6 text-4xl md:text-6xl font-black text-gray-900 leading-tight">
+            <h1 className="mt-6 text-4xl md:text-6xl font-black text-gray-900 leading-[1.05]">
               Find The Right
               <span className="text-[#F15A24]"> Course</span>,
               <br />
               Career & License Faster
             </h1>
 
-            <p className="mt-6 text-gray-500 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+            <p className="mt-3 text-gray-500 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
               Explore thousands of professional courses, certifications,
               licenses, careers and nearby learning opportunities.
             </p>

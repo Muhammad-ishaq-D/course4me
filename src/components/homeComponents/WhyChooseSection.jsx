@@ -46,7 +46,7 @@ const WhyChooseTrainingCentres = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true }}
-          className="text-center max-w-3xl mx-auto"
+          className="text-center max-w-4xl mx-auto"
         >
           {/* SMALL LABEL */}
           <div className="inline-flex items-center gap-2 bg-[#FF54210D] border border-[#FF54211A] text-[#FF5421] px-4 py-2 rounded-full text-sm font-bold tracking-wide mb-5">
@@ -54,14 +54,14 @@ const WhyChooseTrainingCentres = () => {
           </div>
 
           {/* HEADING */}
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#111111] leading-tight tracking-tight">
-            Premium Training Centres
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#111111] leading-[1.10] tracking-tight">
+            Premium Training Centres Built for
             <br />
-            Built for Your Success
+            Your Success
           </h2>
 
           {/* DESCRIPTION */}
-          <p className="mt-5 text-base sm:text-lg text-gray-500 leading-relaxed">
+          <p className="mt-3 text-base sm:text-lg text-gray-500 leading-relaxed">
             We provide industry-leading security training with modern
             facilities, expert instructors, and career-focused learning designed
             to help you succeed faster.
@@ -69,7 +69,7 @@ const WhyChooseTrainingCentres = () => {
         </motion.div>
 
         {/* CARDS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-8">
           {features.map((item, index) => {
             const Icon = item.icon;
 
@@ -98,8 +98,7 @@ const WhyChooseTrainingCentres = () => {
                 "
               >
                 {/* CARD GLOW */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#00A3FF]/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500" />
-
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-[#00A3FF] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 {/* ICON */}
                 <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00A3FF]/10 to-[#FF5421]/10 border border-[#00A3FF1A] flex items-center justify-center mb-6">
                   <Icon className="w-8 h-8 text-[#00A3FF]" />
@@ -116,7 +115,7 @@ const WhyChooseTrainingCentres = () => {
                 </p>
 
                 {/* HOVER LINE */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#00A3FF] to-[#FF5421] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-[#00A3FF] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </motion.div>
             );
           })}
@@ -140,7 +139,7 @@ const WhyChooseTrainingCentres = () => {
               bg-[#FF5421]
               hover:bg-[#ee4613]
               text-white
-              px-8
+              px-12
               py-4
               rounded-full
               font-bold
