@@ -93,14 +93,36 @@ const CourseBooking = () => {
   // Suggestions shown in the dropdown (filter by typed text)
   const filteredSuggestions = React.useMemo(() => {
     if (!searchLocation.trim()) return linkedLocations;
-    const q = searchLocation.toLowerCase();
-    return linkedLocations.filter(
-      (link) =>
-        link.locationId.name?.toLowerCase().includes(q) ||
-        link.locationId.city?.toLowerCase().includes(q) ||
-        link.locationId.postcode?.toLowerCase().includes(q) ||
-        link.locationId.addressLine1?.toLowerCase().includes(q),
-    );
+    const tokens = searchLocation.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+    if (tokens.length === 0) return linkedLocations;
+
+    // Sort so that active locations are processed first
+    const sortedLinks = [...linkedLocations].sort((a, b) => {
+      const aActive = a.locationId?.status === "Active";
+      const bActive = b.locationId?.status === "Active";
+      if (aActive === bActive) return 0;
+      return aActive ? -1 : 1;
+    });
+
+    return sortedLinks
+      .map((link) => {
+        const loc = link.locationId;
+        const fields = [
+          loc.name,
+          loc.city,
+          loc.postcode,
+          loc.addressLine1
+        ].map((f) => (f || "").toLowerCase());
+        const matches = tokens.every((token) =>
+          fields.some((field) => field.includes(token))
+        );
+        if (!matches) return null;
+        return {
+          ...link,
+          isInactive: loc.status !== "Active",
+        };
+      })
+      .filter(Boolean);
   }, [linkedLocations, searchLocation]);
 
   const sortMap = { Closest: "distance", Cheapest: "price", Earliest: "date" };
@@ -270,8 +292,16 @@ const CourseBooking = () => {
                         {filteredSuggestions.map((link) => (
                           <div
                             key={link._id}
-                            onMouseDown={() => selectLocation(link)}
-                            className="px-4 py-3 hover:bg-[#FFF5F1] cursor-pointer border-b border-gray-50 last:border-0 flex items-center gap-3"
+                            title={link.isInactive ? "This location is temporarily inactive for this course from administration" : undefined}
+                            onMouseDown={() => {
+                              if (link.isInactive) return;
+                              selectLocation(link);
+                            }}
+                            className={`px-4 py-3 border-b border-gray-50 last:border-0 flex items-center gap-3 transition-all ${
+                              link.isInactive
+                                ? "opacity-40 select-none cursor-not-allowed filter blur-[0.6px]"
+                                : "hover:bg-[#FFF5F1] cursor-pointer"
+                            }`}
                           >
                             <MapPin
                               size={14}
@@ -358,21 +388,39 @@ const CourseBooking = () => {
 
                   {linkedLocations.map((link) => {
                     const loc = link.locationId;
+                    const isInactive = loc.status !== "Active";
                     const upcomingDates = (link.dates || []).filter(
                       (d) => d.startDate && new Date(d.startDate) >= new Date(),
                     );
                     const nextDate = upcomingDates[0];
 
                     return (
-                      <button
-                        key={link._id}
-                        onClick={() => selectLocationAndSearch(link)}
-                        className=" cursor-pointer  bg-white border border-gray-100 hover:border-[#F15A24]/30 hover:bg-[#FFF5F1]/50 px-5 py-4 rounded-2xl text-left transition-all group shadow-sm"
-                      >
-                        <p className="text-base font-medium text-[#1C1C1C] group-hover:text-[#F15A24] transition-colors leading-tight">
-                          {loc.city}
-                        </p>
-                      </button>
+                      <div key={link._id} className="relative group w-full">
+                        <button
+                          disabled={isInactive}
+                          onClick={() => {
+                            if (isInactive) return;
+                            selectLocationAndSearch(link);
+                          }}
+                          className={`w-full bg-white border text-left transition-all group shadow-sm px-5 py-4 rounded-2xl ${
+                            isInactive
+                              ? "opacity-40 select-none cursor-not-allowed border-gray-100 filter blur-[0.6px]"
+                              : "cursor-pointer border-gray-100 hover:border-[#F15A24]/30 hover:bg-[#FFF5F1]/50"
+                          }`}
+                        >
+                          <p className={`text-base font-medium transition-colors leading-tight ${
+                            isInactive ? "text-gray-400" : "text-[#1C1C1C] group-hover:text-[#F15A24]"
+                          }`}>
+                            {loc.city}
+                          </p>
+                        </button>
+                        {isInactive && (
+                          <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-3 hidden group-hover:block w-64 p-3 bg-gray-900/95 backdrop-blur-xs text-white text-xs font-semibold rounded-xl shadow-xl text-center leading-normal z-50">
+                            This location is temporarily inactive for this course from administration
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
                 </div>

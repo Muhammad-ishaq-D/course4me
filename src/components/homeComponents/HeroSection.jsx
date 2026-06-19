@@ -95,49 +95,6 @@ const HeroSection = () => {
                 What We Do
               </button>
             </div>
-
-            {/* <div className="flex flex-wrap gap-4 mt-8 max-w-xl">
-              <div className="flex items-center gap-3 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-full px-4 py-2">
-                <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#00A3FF1A]">
-                  <CheckCircle2 size={16} className="text-[#00A3FF]" />
-                </div>
-                <div className="leading-tight">
-                  <div className="text-sm font-semibold text-gray-800">
-                    98% Pass Rate
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-full px-4 py-2">
-                <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#00A3FF1A]">
-                  <Users size={16} className="text-[#00A3FF]" />
-                </div>
-                <div className="leading-tight">
-                  <div className="text-sm font-semibold text-gray-800">
-                    400k+ People Trained
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-full px-4 py-2">
-                <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#00A3FF1A]">
-                  <MapPin size={16} className="text-[#00A3FF]" />
-                </div>
-                <div className="leading-tight">
-                  <div className="text-sm font-semibold text-gray-800">
-                    100+ UK Training Centers
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 bg-[#00A3FF0A] border border-[#00A3FF1A] rounded-full px-4 py-2">
-                <div className="w-7 h-7 flex items-center justify-center rounded-full bg-[#00A3FF1A]">
-                  <Zap size={16} className="text-[#00A3FF]" />
-                </div>
-                <div className="leading-tight">
-                  <div className="text-sm font-semibold text-gray-800">
-                    SIA Approved Center
-                  </div>
-                </div>
-              </div>
-            </div> */}
           </div>
 
           {/* RIGHT COLUMN */}
@@ -159,15 +116,15 @@ const HeroSection = () => {
                 </div>
               </div>
 
-              <div className="flex  flex-col gap-6 w-full xl:w-auto">
-                <div className="relative hidden lg:block w-full mt-6 md:mt-0 xl:w-46">
-                  <div className="w-full xl:w-46 h-[160px] sm:h-[180px] xl:h-57 bg-[#00A3FF] rounded-3xl flex flex-col items-center justify-center text-center font-semibold text-white">
-                    <Users className="w-8 h-8 mb-3 text-white" />
-                    <div className="text-3xl font-bold text-white">400K+</div>
-                    <div className="text-sm text-white">
-                      Professionals Trained
-                    </div>
+              <div className="flex flex-col gap-6 w-full xl:w-46 xl:h-[65vh]">
+                {/* Top Blue Card */}
+                <div className="relative hidden lg:block flex-[0.9]">
+                  <div className="h-full bg-[#00A3FF] rounded-3xl flex flex-col items-center justify-center text-center font-semibold text-white">
+                    <Users className="w-8 h-8 mb-3" />
+                    <div className="text-3xl font-bold">400K+</div>
+                    <div className="text-sm">Professionals Trained</div>
                   </div>
+
                   <motion.span
                     animate={{ y: [0, 146, 0] }}
                     transition={{
@@ -175,11 +132,12 @@ const HeroSection = () => {
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
-                    className="absolute -top-10 left-1/2 -translate-x-1/2 px-6 py-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl flex items-center gap-3 text-sm font-semibold whitespace-nowrap"
+                    className="absolute top-0 left-24 -translate-x-1/2 translate-y-[-50%] px-6 py-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl flex items-center gap-3 text-sm font-semibold whitespace-nowrap z-10"
                   >
                     <div className="w-8 h-8 bg-[#00A3FF1A] rounded-full flex items-center justify-center">
                       <CheckCircle className="w-4 h-4 text-[#00A3FF]" />
                     </div>
+
                     <div className="flex flex-col leading-tight">
                       <span>SIA Approved</span>
                       <span className="text-xs font-normal text-gray-500">
@@ -189,12 +147,11 @@ const HeroSection = () => {
                   </motion.span>
                 </div>
 
-                <div className="relative hidden lg:block w-full xl:w-46">
-                  <VideoPlayer
-                    src={cctvVideo}
-                    className="w-full h-40 sm:h-50 xl:h-57 xl:w-46"
-                  />
-                  <div className="absolute bottom-3 left-3 text-sm font-semibold text-white">
+                {/* CCTV Card */}
+                <div className="relative hidden lg:block flex-[1.1] overflow-hidden rounded-3xl">
+                  <VideoPlayer src={cctvVideo} className="w-full h-full" />
+
+                  <div className="absolute bottom-4 left-4 text-white font-semibold">
                     CCTV
                   </div>
                 </div>

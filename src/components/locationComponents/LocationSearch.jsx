@@ -58,16 +58,20 @@ const LocationSearch = () => {
   // Filter links client-side by location name/city/postcode/address (active locations only)
   const filteredLinks = useMemo(() => {
     if (!search.trim()) return [];
-    const term = search.trim().toLowerCase();
+    const tokens = search.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+    if (tokens.length === 0) return [];
     return allLinks.filter((link) => {
       const loc = link.locationId;
       if (!loc || typeof loc !== "object") return false;
       if (loc.status !== "Active") return false;
-      return (
-        loc.name?.toLowerCase().includes(term) ||
-        loc.city?.toLowerCase().includes(term) ||
-        loc.postcode?.toLowerCase().includes(term) ||
-        loc.addressLine1?.toLowerCase().includes(term)
+      const fields = [
+        loc.name,
+        loc.city,
+        loc.postcode,
+        loc.addressLine1
+      ].map((f) => (f || "").toLowerCase());
+      return tokens.every((token) =>
+        fields.some((field) => field.includes(token))
       );
     });
   }, [search, allLinks]);
@@ -76,23 +80,36 @@ const LocationSearch = () => {
   const locationSuggestions = useMemo(() => {
     if (!searchInput.trim()) return [];
 
-    const term = searchInput.trim().toLowerCase();
+    const tokens = searchInput.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+    if (tokens.length === 0) return [];
     const seen = new Set();
     const results = [];
 
-    allLinks.forEach((link) => {
+    // Sort so that active locations are processed first
+    const sortedLinks = [...allLinks].sort((a, b) => {
+      const aActive = a.locationId?.status === "Active";
+      const bActive = b.locationId?.status === "Active";
+      if (aActive === bActive) return 0;
+      return aActive ? -1 : 1;
+    });
+
+    sortedLinks.forEach((link) => {
       const loc = link.locationId;
 
       if (!loc || typeof loc !== "object") return;
 
-      // Only active locations
-      if (loc.status !== "Active") return;
+      const isInactive = loc.status !== "Active";
 
-      const matches =
-        loc.name?.toLowerCase().includes(term) ||
-        loc.city?.toLowerCase().includes(term) ||
-        loc.postcode?.toLowerCase().includes(term) ||
-        loc.addressLine1?.toLowerCase().includes(term);
+      const fields = [
+        loc.name,
+        loc.city,
+        loc.postcode,
+        loc.addressLine1
+      ].map((f) => (f || "").toLowerCase());
+
+      const matches = tokens.every((token) =>
+        fields.some((field) => field.includes(token))
+      );
 
       if (!matches) return;
 
@@ -109,6 +126,7 @@ const LocationSearch = () => {
       results.push({
         label,
         filterKey,
+        isInactive,
       });
     });
 
@@ -198,16 +216,26 @@ const LocationSearch = () => {
                         </div>
                         <div className="max-h-[280px] overflow-y-auto scrollbar-hide">
                           {locationSuggestions.map((item, i) => (
-                            <button
-                              key={i}
-                              onMouseDown={() => {
-                                setSearchInput(item.label);
-                                setPage(1);
-                                setSearch(item.filterKey);
-                                setShowSuggestions(false);
-                              }}
-                              className={`w-full flex items-center gap-3 px-4 py-4 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0 ${item.isInactive ? "opacity-50 cursor-default hover:bg-gray-50" : "hover:bg-orange-50"}`}
-                            >
+                             <button
+                               key={i}
+                               disabled={item.isInactive}
+                               title={item.isInactive ? "This location is temporarily inactive for this course from administration" : undefined}
+                               onMouseDown={(e) => {
+                                 if (item.isInactive) {
+                                   e.preventDefault();
+                                   return;
+                                 }
+                                 setSearchInput(item.label);
+                                 setPage(1);
+                                 setSearch(item.filterKey);
+                                 setShowSuggestions(false);
+                               }}
+                               className={`w-full flex items-center gap-3 px-4 py-4 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0 ${
+                                 item.isInactive
+                                   ? "opacity-40 select-none cursor-not-allowed filter blur-[0.6px]"
+                                   : "hover:bg-orange-50 cursor-pointer"
+                               }`}
+                             >
                               <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
                                 <MapPin
                                   size={18}

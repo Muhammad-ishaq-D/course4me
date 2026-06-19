@@ -24,6 +24,16 @@ const QuickSearch = () => {
   const [filteredResults, setFilteredResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Reset inputs and results when the search type is switched
+  useEffect(() => {
+    setSearch("");
+    setLocation("");
+    setHasSearched(false);
+    setFilteredResults([]);
+    setShowKeywordSuggestions(false);
+    setShowLocationSuggestions(false);
+  }, [type]);
+
   // All active course-location links — loaded once, used for location suggestions + filtering
   const [allCourseLinks, setAllCourseLinks] = useState([]);
 
@@ -56,17 +66,29 @@ const QuickSearch = () => {
   // =====================================================================
   const locationSuggestions = useMemo(() => {
     if (!location.trim()) return [];
-    const term = location.trim().toLowerCase();
+    const tokens = location.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+    if (tokens.length === 0) return [];
     const seen = new Set();
     const results = [];
-    allCourseLinks.forEach((link) => {
+    // Sort so that active locations are processed first
+    const sortedLinks = [...allCourseLinks].sort((a, b) => {
+      const aActive = a.locationId?.status === "Active";
+      const bActive = b.locationId?.status === "Active";
+      if (aActive === bActive) return 0;
+      return aActive ? -1 : 1;
+    });
+    sortedLinks.forEach((link) => {
       const loc = link.locationId;
       if (!loc || typeof loc !== "object") return;
-      const matches =
-        loc.name?.toLowerCase().includes(term) ||
-        loc.city?.toLowerCase().includes(term) ||
-        loc.postcode?.toLowerCase().includes(term) ||
-        loc.addressLine1?.toLowerCase().includes(term);
+      const fields = [
+        loc.name,
+        loc.city,
+        loc.postcode,
+        loc.addressLine1
+      ].map((f) => (f || "").toLowerCase());
+      const matches = tokens.every((token) =>
+        fields.some((field) => field.includes(token))
+      );
       if (!matches) return;
       const label = [loc.city, loc.postcode].filter(Boolean).join(", ");
       if (!label || seen.has(label)) return;
@@ -74,6 +96,7 @@ const QuickSearch = () => {
       results.push({
         label,
         value: [loc.city, loc.postcode].filter(Boolean).join(", "),
+        isInactive: loc.status !== "Active",
       });
     });
     return results.slice(0, 8);
@@ -259,17 +282,20 @@ const QuickSearch = () => {
 
       // Filter courses by location using course-location links (new model)
       if (location.trim() && fetchedCourses.length > 0) {
-        const term = location.trim().toLowerCase();
+        const tokens = location.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
         const matchingCourseIds = new Set(
           allCourseLinks
             .filter((link) => {
               const loc = link.locationId;
               if (!loc || typeof loc !== "object") return false;
-              return (
-                loc.name?.toLowerCase().includes(term) ||
-                loc.city?.toLowerCase().includes(term) ||
-                loc.postcode?.toLowerCase().includes(term) ||
-                loc.addressLine1?.toLowerCase().includes(term)
+              const fields = [
+                loc.name,
+                loc.city,
+                loc.postcode,
+                loc.addressLine1
+              ].map((f) => (f || "").toLowerCase());
+              return tokens.every((token) =>
+                fields.some((field) => field.includes(token))
               );
             })
             .map((link) => String(link.courseId?._id || link.courseId))
@@ -471,11 +497,18 @@ const QuickSearch = () => {
                       <button
                         key={i}
                         type="button"
+                        disabled={item.isInactive}
+                        title={item.isInactive ? "This location is temporarily inactive for this course from administration" : undefined}
                         onClick={() => {
+                          if (item.isInactive) return;
                           setShowLocationSuggestions(false);
                           setLocation(item.value);
                         }}
-                        className="w-full px-5 py-4 flex items-center gap-3 hover:bg-[#FFF4EF] transition-all text-left border-b last:border-b-0 border-gray-100"
+                        className={`w-full px-5 py-4 flex items-center gap-3 transition-all text-left border-b last:border-b-0 border-gray-100 ${
+                          item.isInactive
+                            ? "opacity-40 select-none cursor-not-allowed filter blur-[0.6px]"
+                            : "hover:bg-[#FFF4EF] cursor-pointer"
+                        }`}
                       >
                         <div className="p-3 rounded-full bg-[#FFF1EB] flex items-center justify-center shrink-0">
                           <MapPin size={16} className="text-[#F15A24]" />

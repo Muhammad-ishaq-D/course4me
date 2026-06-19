@@ -172,7 +172,12 @@ const SearchModal = ({ isOpen, onClose, initialCourse = "", initialLocation = ""
                 {isLocationDropdownOpen && (
                   <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl overflow-hidden z-20 border border-gray-100 max-h-[300px] overflow-y-auto">
                     {locations
-                      .filter(loc => loc.toLowerCase().includes(locationQuery.toLowerCase()))
+                      .filter(loc => {
+                        const tokens = locationQuery.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+                        if (tokens.length === 0) return true;
+                        const target = loc.toLowerCase();
+                        return tokens.every(token => target.includes(token));
+                      })
                       .map((loc, idx) => (
                         <div
                           key={idx}
