@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import courseService from "../../api/services/courseService";
 import licenseService from "../../api/services/licenseService";
+import locationService from "../../api/services/locationService";
 import {
   Phone,
   Mail,
@@ -17,17 +18,34 @@ import Logo from "../../assets/Logo.svg";
 const Footer = () => {
   const [courses, setCourses] = useState([]);
   const [licenses, setLicenses] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [coursesRes, licensesRes] = await Promise.all([
+        const [coursesRes, licensesRes, locationsRes] = await Promise.all([
           courseService.getAllCourses({ status: "Published" }),
           licenseService.getAllLicenses(),
+          locationService.getAllLocations(),
         ]);
 
         setCourses(coursesRes.data?.data?.slice(0, 5) || []);
         setLicenses(licensesRes.data?.data?.slice(0, 5) || []);
+
+        const activeLocations = (locationsRes.data || []).filter(
+          (loc) => loc.status === "Active"
+        );
+        const uniqueCities = [];
+        const seen = new Set();
+        activeLocations.forEach((loc) => {
+          if (loc.city && !seen.has(loc.city)) {
+            seen.add(loc.city);
+            uniqueCities.push(loc.city);
+          }
+        });
+
+        const fallback = ["Bradford", "Manchester", "Sheffield", "Leeds"];
+        setLocations(uniqueCities.length > 0 ? uniqueCities.slice(0, 4) : fallback);
       } catch (error) {
         console.error("Error fetching footer data:", error);
       }
@@ -98,7 +116,7 @@ const Footer = () => {
             </h4>
 
             <ul className="space-y-4">
-              {["Bradford", "Manchester", "Sheffield", "Leeds"].map((loc) => (
+              {locations.map((loc) => (
                 <li
                   key={loc}
                   className="flex relative items-center gap-4 text-[#A1A1A1] hover:text-white transition-colors"
