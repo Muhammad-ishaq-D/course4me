@@ -32,19 +32,34 @@ const Footer = () => {
         setCourses(coursesRes.data?.data?.slice(0, 5) || []);
         setLicenses(licensesRes.data?.data?.slice(0, 5) || []);
 
-        const activeLocations = (locationsRes.data || []).filter(
-          (loc) => loc.status === "Active"
-        );
+        const allLocs = locationsRes.data || [];
         const uniqueCities = [];
         const seen = new Set();
-        activeLocations.forEach((loc) => {
+        
+        // Sort so that active locations are processed first
+        const sortedLocs = [...allLocs].sort((a, b) => {
+          const aActive = a.status === "Active";
+          const bActive = b.status === "Active";
+          if (aActive === bActive) return 0;
+          return aActive ? -1 : 1;
+        });
+
+        sortedLocs.forEach((loc) => {
           if (loc.city && !seen.has(loc.city)) {
             seen.add(loc.city);
-            uniqueCities.push(loc.city);
+            uniqueCities.push({
+              city: loc.city,
+              isInactive: loc.status !== "Active"
+            });
           }
         });
 
-        const fallback = ["Bradford", "Manchester", "Sheffield", "Leeds"];
+        const fallback = [
+          { city: "Bradford", isInactive: false },
+          { city: "Manchester", isInactive: false },
+          { city: "Sheffield", isInactive: false },
+          { city: "Leeds", isInactive: false }
+        ];
         setLocations(uniqueCities.length > 0 ? uniqueCities.slice(0, 4) : fallback);
       } catch (error) {
         console.error("Error fetching footer data:", error);
@@ -118,14 +133,19 @@ const Footer = () => {
             <ul className="space-y-4">
               {locations.map((loc) => (
                 <li
-                  key={loc}
-                  className="flex relative items-center gap-4 text-[#A1A1A1] hover:text-white transition-colors"
+                  key={loc.city}
+                  title={loc.isInactive ? "This location is temporarily inactive for this course from administration" : undefined}
+                  className={`flex relative items-center gap-4 text-[#A1A1A1] transition-all duration-200 ${
+                    loc.isInactive
+                      ? "opacity-40 select-none cursor-not-allowed filter blur-[0.6px]"
+                      : "hover:text-white"
+                  }`}
                 >
                   <MapPin
                     size={15}
                     className="text-[#00A3FF] md:absolute md:-left-5 "
                   />
-                  <span className="md:ml-3">{loc}</span>
+                  <span className="md:ml-3">{loc.city}</span>
                 </li>
               ))}
             </ul>
