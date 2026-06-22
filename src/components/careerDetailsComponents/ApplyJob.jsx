@@ -362,7 +362,7 @@ const ApplyJob = () => {
         <div className="max-w-xl mx-auto px-4 mt-8">
           <div className="bg-white rounded-[32px] p-8 sm:p-10 text-center shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-gray-100">
             <div className="w-24 h-24 mx-auto rounded-full bg-[#DCFCE7] flex items-center justify-center">
-              <CheckCircle size={55} className="text-[#16A34A]" />
+              <CheckCircle size={55} className="text-[#F15A24]" />
             </div>
 
             <h2 className="mt-7 text-[32px] font-black text-[#111827]">
@@ -611,7 +611,7 @@ const ApplyJob = () => {
               {/* AUTH STATE HANDLING */}
               {user ? (
                 <div className="bg-orange-50/50 border border-orange-200/50 p-4 rounded-2xl mb-6 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#F15A24] text-white flex items-center justify-center font-black">
+                  <div className="w-10 h-10 hidden rounded-full bg-[#F15A24] text-white md:flex items-center justify-center font-black">
                     {user.name ? user.name[0].toUpperCase() : "S"}
                   </div>
                   <div>

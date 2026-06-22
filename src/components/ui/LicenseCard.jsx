@@ -49,7 +49,7 @@ const LicenseCard = ({ item, index }) => {
       {/* CONTENT */}
       <div className="p-4 flex flex-col flex-1">
         {/* TITLE */}
-        <h3 className="min-h-[72px] text-2xl font-bold text-[#243443] leading-snug group-hover:text-[#F15A24] transition duration-300 line-clamp-2">
+        <h3 className="min-h-[72px] text-2xl font-bold text-[#243443] leading-[1.05] group-hover:text-[#F15A24] transition duration-300 line-clamp-2">
           {item.title}
         </h3>
 
@@ -108,7 +108,7 @@ const LicenseCard = ({ item, index }) => {
 
           <NavLink
             to={`/licences/licencesdetails?id=${item._id || item.title}`}
-            className="h-12 px-5 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-md font-bold flex items-center gap-2 transition-all duration-300 shadow-lg shadow-[#F15A24]/20"
+            className="py-3 px-5 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-sm font-bold flex items-center gap-2 transition-all duration-300 shadow-lg shadow-[#F15A24]/20"
           >
             View Licence
             <ArrowRight size={16} />

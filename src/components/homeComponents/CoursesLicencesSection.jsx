@@ -12,6 +12,7 @@ import {
   ArrowRight,
   Lock,
   BookOpen,
+  ChevronDown,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import ItemCardSkeleton from "../ui/ItemCardSkeleton";
@@ -168,6 +169,7 @@ const CoursesLicencesSection = () => {
   const [courses, setCourses] = useState([]);
   const [licences, setLicences] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -254,23 +256,66 @@ const CoursesLicencesSection = () => {
         </div>
 
         {/* CATEGORY FILTER */}
-        <div className="flex flex-wrap gap-3 mt-10">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={` px-9 py-3 rounded-2xl text-[15px] cursor-pointer font-semibold transition-all duration-300
 
+        <div className="mt-10">
+          {/* Mobile Dropdown */}
+          <div className="relative md:hidden mt-10">
+            {/* Dropdown Button */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="w-full flex items-center justify-between rounded-2xl border border-orange-200 bg-white px-8 py-4 text-base font-semibold text-[#FF5421] shadow-sm transition-all hover:border-[#FF5421]"
+            >
+              <span>{activeCategory}</span>
+
+              <ChevronDown
+                size={18}
+                className={`transition-transform duration-300 ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {/* Dropdown Menu */}
+            {isOpen && (
+              <div className="absolute left-0 right-0 z-50 mt-2 overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-xl">
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      setActiveCategory(cat);
+                      setIsOpen(false);
+                    }}
+                    className={`block w-full px-5 py-3 text-left text-sm font-medium transition-all duration-200
             ${
               activeCategory === cat
-                ? "bg-[#FF5421] text-white shadow-[0_10px_30px_rgba(248,81,12,0.25)]"
-                : "bg-white text-gray-500 border border-gray-100 hover:border-[#FF5421]/20 hover:text-[#FF5421]"
-            }
-          `}
-            >
-              {cat}
-            </button>
-          ))}
+                ? "bg-[#FF5421] text-white"
+                : "text-gray-600 hover:bg-orange-50 hover:text-[#FF5421]"
+            }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Desktop Buttons */}
+          <div className="hidden md:flex flex-wrap gap-3">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-9 py-3 rounded-2xl text-[15px] cursor-pointer font-semibold transition-all duration-300
+          ${
+            activeCategory === cat
+              ? "bg-[#FF5421] text-white shadow-[0_10px_30px_rgba(248,81,12,0.25)]"
+              : "bg-white text-gray-500 border border-gray-100 hover:border-[#FF5421]/20 hover:text-[#FF5421]"
+          }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* CONTENT GRID */}

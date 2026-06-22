@@ -89,7 +89,7 @@ const LocationCards = ({
                   From
                 </span>
 
-                <span className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1C1C1C] leading-none">
+                <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1C1C1C] leading-none">
                   £{Math.floor(loc.price)}
                 </span>
               </div>

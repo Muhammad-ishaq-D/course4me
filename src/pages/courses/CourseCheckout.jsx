@@ -1020,7 +1020,7 @@ const CourseCheckout = () => {
                       ) : (
                         /* ── Registration Fields ── */
                         <>
-                          <div className="flex gap-4">
+                          <div className="flex flex-col md:flex-row gap-4">
                             <FieldInput
                               label="First name"
                               placeholder="First name"
@@ -1364,7 +1364,7 @@ const CourseCheckout = () => {
                   {/* Pay with card — only payment method */}
                   <div className="rounded-2xl border-2 border-[#F15A24] bg-gradient-to-br from-orange-50/60 to-white overflow-hidden">
                     {/* Header bar */}
-                    <div className="flex flex-col md:flex-row gap-4 lg:items-center justify-between px-5 py-4 border-b border-orange-100">
+                    <div className="flex flex-col md:flex-row gap-4 lg:items-center justify-between px-2 md:px-5 py-4 border-b border-orange-100">
                       <div className="flex items-center gap-3">
                         <div className="p-3 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-sm shadow-orange-200">
                           <svg
@@ -1451,7 +1451,7 @@ const CourseCheckout = () => {
                           className="mt-0.5 w-4 h-4 accent-[#F15A24]"
                         />
                         <span className="text-sm text-gray-600">
-                          I agree to the Courses4Me{" "}
+                          I agree to the courses4me{" "}
                           <a
                             href="/privacy-policy"
                             target="_blank"
@@ -1563,7 +1563,7 @@ const CourseCheckout = () => {
       {/* Bottom strip */}
       <div className="bg-[#F0F0F0] py-3 mt-8">
         <p className="text-center text-sm text-gray-500 px-4">
-          Courses4Me is a registered trademark of Courses4Me Limited. Courses4Me
+          courses4me is a registered trademark of courses4me Limited. courses4me
           is a training &amp; staffing platform — we help people book training
           courses with approved providers and help them find work.
         </p>

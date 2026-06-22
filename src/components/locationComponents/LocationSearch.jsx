@@ -58,20 +58,21 @@ const LocationSearch = () => {
   // Filter links client-side by location name/city/postcode/address (active locations only)
   const filteredLinks = useMemo(() => {
     if (!search.trim()) return [];
-    const tokens = search.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+    const tokens = search
+      .trim()
+      .toLowerCase()
+      .split(/[\s,]+/)
+      .filter(Boolean);
     if (tokens.length === 0) return [];
     return allLinks.filter((link) => {
       const loc = link.locationId;
       if (!loc || typeof loc !== "object") return false;
       if (loc.status !== "Active") return false;
-      const fields = [
-        loc.name,
-        loc.city,
-        loc.postcode,
-        loc.addressLine1
-      ].map((f) => (f || "").toLowerCase());
+      const fields = [loc.name, loc.city, loc.postcode, loc.addressLine1].map(
+        (f) => (f || "").toLowerCase(),
+      );
       return tokens.every((token) =>
-        fields.some((field) => field.includes(token))
+        fields.some((field) => field.includes(token)),
       );
     });
   }, [search, allLinks]);
@@ -80,7 +81,11 @@ const LocationSearch = () => {
   const locationSuggestions = useMemo(() => {
     if (!searchInput.trim()) return [];
 
-    const tokens = searchInput.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+    const tokens = searchInput
+      .trim()
+      .toLowerCase()
+      .split(/[\s,]+/)
+      .filter(Boolean);
     if (tokens.length === 0) return [];
     const seen = new Set();
     const results = [];
@@ -100,15 +105,12 @@ const LocationSearch = () => {
 
       const isInactive = loc.status !== "Active";
 
-      const fields = [
-        loc.name,
-        loc.city,
-        loc.postcode,
-        loc.addressLine1
-      ].map((f) => (f || "").toLowerCase());
+      const fields = [loc.name, loc.city, loc.postcode, loc.addressLine1].map(
+        (f) => (f || "").toLowerCase(),
+      );
 
       const matches = tokens.every((token) =>
-        fields.some((field) => field.includes(token))
+        fields.some((field) => field.includes(token)),
       );
 
       if (!matches) return;
@@ -216,26 +218,30 @@ const LocationSearch = () => {
                         </div>
                         <div className="max-h-[280px] overflow-y-auto scrollbar-hide">
                           {locationSuggestions.map((item, i) => (
-                             <button
-                               key={i}
-                               disabled={item.isInactive}
-                               title={item.isInactive ? "This location is temporarily inactive for this course from administration" : undefined}
-                               onMouseDown={(e) => {
-                                 if (item.isInactive) {
-                                   e.preventDefault();
-                                   return;
-                                 }
-                                 setSearchInput(item.label);
-                                 setPage(1);
-                                 setSearch(item.filterKey);
-                                 setShowSuggestions(false);
-                               }}
-                               className={`w-full flex items-center gap-3 px-4 py-4 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0 ${
-                                 item.isInactive
-                                   ? "opacity-40 select-none cursor-not-allowed filter blur-[0.6px]"
-                                   : "hover:bg-orange-50 cursor-pointer"
-                               }`}
-                             >
+                            <button
+                              key={i}
+                              disabled={item.isInactive}
+                              title={
+                                item.isInactive
+                                  ? "This location is temporarily inactive for this course from administration"
+                                  : undefined
+                              }
+                              onMouseDown={(e) => {
+                                if (item.isInactive) {
+                                  e.preventDefault();
+                                  return;
+                                }
+                                setSearchInput(item.label);
+                                setPage(1);
+                                setSearch(item.filterKey);
+                                setShowSuggestions(false);
+                              }}
+                              className={`w-full flex items-center gap-3 px-4 py-4 transition-all duration-200 text-left border-b border-gray-100 last:border-b-0 ${
+                                item.isInactive
+                                  ? "opacity-40 select-none cursor-not-allowed filter blur-[0.6px]"
+                                  : "hover:bg-orange-50 cursor-pointer"
+                              }`}
+                            >
                               <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
                                 <MapPin
                                   size={18}
@@ -422,7 +428,7 @@ const LocationSearch = () => {
                                     `/booking/course?courseid=${course._id}`,
                                   )
                                 }
-                                className="py-3 px-9 rounded-xl cursor-pointer bg-linear-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold "
+                                className="py-3 md:px-9 px-6  rounded-xl cursor-pointer bg-linear-to-r from-orange-500 to-orange-600 text-white text-sm font-semibold "
                               >
                                 Book Now
                               </button>
@@ -432,7 +438,7 @@ const LocationSearch = () => {
                                     `/locations/locationdetails/${link._id}`,
                                   )
                                 }
-                                className="py-3 px-9 rounded-xl cursor-pointer border border-gray-200  text-sm font-semibold flex items-center gap-1.5 "
+                                className="py-3 md:px-9 px-6 rounded-xl cursor-pointer border border-gray-200  text-sm font-semibold flex items-center gap-1.5 "
                               >
                                 Details
                                 <ArrowRight className="w-3.5 h-3.5" />

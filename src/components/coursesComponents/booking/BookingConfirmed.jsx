@@ -536,8 +536,8 @@ const BookingConfirmed = ({
 
       {/* Footer */}
       <div className="bg-[#1C1C1C] py-4 mt-8">
-        <p className="text-center text-md text-gray-500">
-          Courses4Me is a registered trademark of Courses4Me Limited. Courses4Me
+        <p className="text-center text-sm px-4 md:text-md text-gray-500">
+          courses4me is a registered trademark of courses4me Limited. courses4me
           is a training &amp; staffing platform — we help people book training
           courses with approved providers and help them find work.
         </p>

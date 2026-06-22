@@ -95,7 +95,7 @@ const HeroSection = ({ license }) => {
             </p>
 
             {/* TAGS */}
-            <div className="flex flex-wrap gap-4 mt-10">
+            <div className="flex gap-2 md:gap-4 mt-10">
               {/* DURATION */}
               <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-4 rounded-2xl backdrop-blur-xl">
                 <div className="p-3 rounded-xl bg-white/10 flex items-center justify-center">

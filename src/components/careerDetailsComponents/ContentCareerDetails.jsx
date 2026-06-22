@@ -114,7 +114,7 @@ const ContentCareerDetails = ({ career }) => {
 
                     {/* NEW BUTTON */}
                     {step.button && (
-                      <button className="mt-5 w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-5 rounded-2xl bg-[#F8510C] hover:bg-[#E04809] text-white text-sm font-bold transition-all duration-300 hover:gap-3 shadow-lg shadow-[#F8510C]/20">
+                      <button className="mt-5 w-full sm:w-auto inline-flex items-center justify-center gap-2 md:py-4  md:px-9 py-3 px-5 rounded-xl cursor-pointer bg-[#F8510C] hover:bg-[#E04809] text-white text-sm md:font-bold transition-all duration-300 hover:gap-3 shadow-lg shadow-[#F8510C]/20">
                         Find Your Course Now
                         <Rocket className="w-4 h-4" />
                       </button>

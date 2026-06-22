@@ -58,7 +58,7 @@ const NewsletterCTA = () => {
                 <div className="flex flex-col sm:flex-row gap-2.5">
                   {/* Input */}
                   <div
-                    className={`flex items-center w-full h-12 rounded-xl px-4 border transition-all duration-300 ${
+                    className={`flex items-center w-full py-3 rounded-xl px-4 border transition-all duration-300 ${
                       error
                         ? "bg-red-50 border-red-200"
                         : "bg-white border-gray-200"

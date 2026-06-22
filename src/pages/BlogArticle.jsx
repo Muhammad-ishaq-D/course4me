@@ -135,7 +135,7 @@ const BlogArticle = () => {
         </div>
 
         {/* Content Container */}
-        <div className="bg-white rounded-b-[32px] sm:rounded-[32px] sm:-mt-10 p-8 sm:p-12 md:p-16 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-gray-100 relative mb-16">
+        <div className="bg-white rounded-b-[32px] sm:rounded-[32px] sm:-mt-10 p-6  md:p-16 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-gray-100 relative mb-16">
           {/* ================= TOP ACTION BAR ================= */}
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 pb-8 border-b border-gray-100 mb-12">
             {/* BACK BUTTON */}
@@ -164,16 +164,13 @@ const BlogArticle = () => {
             </button>
 
             {/* SHARE SECTION */}
-            <div className="flex items-center gap-4">
-              {/* LABEL */}
+            {/* <div className="flex items-center gap-4">
               <div className="hidden sm:flex items-center gap-2 text-orange-600 text-xs font-bold uppercase tracking-[0.18em]">
                 <Share2 size={15} />
                 Share Article
               </div>
 
-              {/* SOCIAL BUTTONS */}
               <div className="flex items-center gap-3">
-                {/* FACEBOOK */}
                 <button className="group/social cursor-pointer w-11 h-11 rounded-2xl border border-gray-200 bg-white flex items-center justify-center hover:bg-[#1877F2] hover:border-[#1877F2] transition-all duration-300 shadow-sm">
                   <Facebook
                     size={16}
@@ -181,7 +178,6 @@ const BlogArticle = () => {
                   />
                 </button>
 
-                {/* TWITTER */}
                 <button className="group/social cursor-pointer w-11 h-11 rounded-2xl border border-gray-200 bg-white flex items-center justify-center hover:bg-[#1DA1F2] hover:border-[#1DA1F2] transition-all duration-300 shadow-sm">
                   <Twitter
                     size={16}
@@ -189,7 +185,6 @@ const BlogArticle = () => {
                   />
                 </button>
 
-                {/* LINKEDIN */}
                 <button className="group/social cursor-pointer w-11 h-11 rounded-2xl border border-gray-200 bg-white flex items-center justify-center hover:bg-[#0A66C2] hover:border-[#0A66C2] transition-all duration-300 shadow-sm">
                   <Linkedin
                     size={16}
@@ -197,7 +192,7 @@ const BlogArticle = () => {
                   />
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Article Typography */}
@@ -294,7 +289,7 @@ const BlogArticle = () => {
 
             <NavLink
               to="/courses"
-              className="inline-flex items-center gap-3 bg-[#F15A24] hover:bg-[#df4c18] text-white font-bold px-6 py-4 rounded-full transition-all duration-300 shadow-[0_12px_35px_rgba(241,90,36,0.30)]"
+              className="inline-flex items-center gap-3 bg-[#F15A24] hover:bg-[#df4c18] text-sm text-white font-bold px-9 py-4 rounded-full transition-all duration-300 shadow-[0_12px_35px_rgba(241,90,36,0.30)]"
             >
               Find a Course Near You
               <ArrowRight size={18} />

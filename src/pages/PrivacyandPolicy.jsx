@@ -5,8 +5,8 @@ const PrivacyandPolicy = () => {
   return (
     <div className="bg-white min-h-screen">
       {/* CONTENT */}
-      <section className="max-w-4xl mx-auto px-6 py-16">
-        <p className="text-sm text-gray-500 mb-12">Last Updated: June 2026</p>
+      <section className="max-w-4xl mx-auto px-6 py-14">
+        <p className="text-sm text-gray-500 mb-6">Last Updated: June 2026</p>
 
         <div className="space-y-12">
           <div>
@@ -15,13 +15,13 @@ const PrivacyandPolicy = () => {
             </h2>
 
             <p className="text-gray-600 leading-8">
-              Courses4Me is committed to protecting your personal information
-              and respecting your privacy. This Privacy Policy explains how we
+              course4me is committed to protecting your personal information and
+              respecting your privacy. This Privacy Policy explains how we
               collect, use, share, and safeguard your information when you use
               our website and services.
             </p>
             <p className="text-gray-600 leading-8">
-              By using Courses4Me, creating an account, booking a course, or
+              By using course4me, creating an account, booking a course, or
               making a payment through our platform, you agree to the practices
               described in this Privacy Policy.
             </p>
@@ -33,10 +33,10 @@ const PrivacyandPolicy = () => {
             </h2>
 
             <p className="text-gray-600 leading-7 mb-8">
-              To provide our services effectively, Courses4Me may collect
-              certain personal, booking, and technical information when you
-              browse courses, create an account, make bookings, or interact with
-              our platform.
+              To provide our services effectively, course4me may collect certain
+              personal, booking, and technical information when you browse
+              courses, create an account, make bookings, or interact with our
+              platform.
             </p>
 
             <ul className="space-y-6">
@@ -81,11 +81,11 @@ const PrivacyandPolicy = () => {
                   </h4>
 
                   <p className="text-gray-600 mt-1 leading-7">
-                    When making payments through Courses4Me, transaction
+                    When making payments through course4me, transaction
                     references, payment status, and billing details may be
                     collected. Full payment card information is processed
                     securely by trusted payment providers and is not stored by
-                    Courses4Me.
+                    course4me.
                   </p>
                 </div>
               </li>
@@ -132,10 +132,10 @@ const PrivacyandPolicy = () => {
             </h2>
 
             <p className="text-gray-600 leading-7 mb-8">
-              Courses4Me uses the information we collect to provide, improve,
-              and maintain our services. Your information helps us deliver a
-              secure and personalized experience when searching, booking, and
-              managing courses.
+              course4me uses the information we collect to provide, improve, and
+              maintain our services. Your information helps us deliver a secure
+              and personalized experience when searching, booking, and managing
+              courses.
             </p>
 
             <ul className="space-y-6">
@@ -239,7 +239,7 @@ const PrivacyandPolicy = () => {
             </h2>
 
             <p className="text-gray-600 leading-8 mb-6">
-              Courses4Me takes the security of your personal information
+              course4me takes the security of your personal information
               seriously. All online payments are processed through trusted
               third-party payment providers using secure encrypted connections.
               We do not store full payment card details on our systems.
@@ -269,7 +269,7 @@ const PrivacyandPolicy = () => {
 
             <p className="text-gray-600 leading-7 mb-8">
               To successfully process course bookings and deliver training
-              services, Courses4Me may share relevant information with the
+              services, course4me may share relevant information with the
               training provider selected by you. We only share information that
               is necessary for course administration, attendance, certification,
               and support purposes.
@@ -333,7 +333,7 @@ const PrivacyandPolicy = () => {
                   </h4>
 
                   <p className="text-gray-600 mt-1 leading-7">
-                    Courses4Me only shares information that is reasonably
+                    course4me only shares information that is reasonably
                     required to deliver the booked course and related services.
                     We do not sell your personal information to training
                     providers or other third parties.
@@ -400,7 +400,7 @@ const PrivacyandPolicy = () => {
             </h2>
 
             <p className="text-gray-600 leading-7">
-              Courses4Me may update this Privacy Policy from time to time to
+              courses4me may update this Privacy Policy from time to time to
               reflect changes in our services, legal requirements, security
               practices, or operational processes.
             </p>
@@ -414,7 +414,7 @@ const PrivacyandPolicy = () => {
             </div>
 
             <p className="mt-6 text-gray-600 leading-7">
-              Continued use of Courses4Me after any changes become effective
+              Continued use of course4me after any changes become effective
               constitutes your acceptance of the updated Privacy Policy.
             </p>
           </div>

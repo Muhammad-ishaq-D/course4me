@@ -116,7 +116,7 @@ const JobsCard = ({ job }) => {
       </div>
 
       {/* ================= FOOTER ================= */}
-      <div className="mt-6 flex items-center justify-between gap-4">
+      <div className="mt-6 flex items-center justify-between gap-2 md:gap-4">
         {/* STATUS */}
         <div>
           <p className="text-[12px] uppercase tracking-wide text-gray-400 font-semibold">
@@ -138,14 +138,16 @@ const JobsCard = ({ job }) => {
         {job.status === "Closed" || job.status === "Paused" ? (
           <button
             disabled
-            className="px-5 py-3 rounded-full bg-gray-100 text-gray-400 text-[15px] font-semibold flex items-center justify-center cursor-not-allowed"
+            className="px-5 py-3 rounded-full bg-gray-100 text-gray-400 text-sm font-semibold flex items-center justify-center cursor-not-allowed"
           >
-            {job.status === "Closed" ? "Applications Closed" : "Currently Paused"}
+            {job.status === "Closed"
+              ? "Applications Closed"
+              : "Currently Paused"}
           </button>
         ) : (
           <NavLink
             to={`/apply-job/${jobId}`}
-            className="group/button px-5 py-3 rounded-full bg-[#111111] hover:bg-[#F15A24] text-white text-[15px] font-semibold flex items-center justify-center gap-2 transition-all duration-300"
+            className="group/button px-5 py-3 rounded-full bg-[#111111] hover:bg-[#F15A24] text-white text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300"
           >
             Apply Now
             <ArrowRight

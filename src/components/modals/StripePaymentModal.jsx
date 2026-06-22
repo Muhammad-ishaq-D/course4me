@@ -61,7 +61,10 @@ function CheckoutForm({ bookingRef, onClose, onSuccess }) {
       <div
         className={`transition-opacity duration-300 ${isReady ? "opacity-100" : "opacity-0 pointer-events-none"}`}
       >
-        <PaymentElement options={{ layout: "tabs" }} onReady={() => setIsReady(true)} />
+        <PaymentElement
+          options={{ layout: "tabs" }}
+          onReady={() => setIsReady(true)}
+        />
       </div>
 
       {/* Skeleton placeholder while element loads */}
@@ -154,7 +157,7 @@ export default function StripePaymentModal({
 
         {/* Security badge */}
         <p className="text-center text-sm text-gray-400 mt-5 flex items-center justify-center gap-1">
-          <Lock size={10} /> Payments are secured and encrypted by Stripe
+          <Lock size={14} /> Payments are secured and encrypted by Stripe
         </p>
       </div>
     </div>

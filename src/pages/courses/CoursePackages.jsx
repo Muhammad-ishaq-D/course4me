@@ -764,40 +764,40 @@ const CoursePackages = () => {
                 <tr>
                   <td className="p-6 bg-slate-50"></td>
 
-                  <td className="p-6 text-center bg-slate-50">
+                  <td className="p-3 md:p-6 text-cente">
                     <button
                       onClick={() =>
                         navigate(
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Saver`,
                         )
                       }
-                      className="px-9 py-3 rounded-xl cursor-pointer border border-gray-300 font-bold text-sm hover:border-[#F15A24] hover:text-[#F15A24] transition-all"
+                      className="px-9  py-3 rounded-xl cursor-pointer border border-gray-300 md:font-bold text-sm hover:border-[#F15A24] hover:text-[#F15A24] transition-all"
                     >
                       Select Saver
                     </button>
                   </td>
 
-                  <td className="p-6 text-center bg-[#FFF5F1]">
+                  <td className="p-3 md:p-6 text-center bg-[#FFF5F1]">
                     <button
                       onClick={() =>
                         navigate(
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi+`,
                         )
                       }
-                      className="px-9 py-3 rounded-xl cursor-pointer bg-[#F15A24] text-white font-bold text-sm shadow-lg shadow-[#F15A24]/20 hover:scale-105 transition-all"
+                      className="px-9  py-3 rounded-xl cursor-pointer bg-[#F15A24] text-white md:font-bold text-sm shadow-lg shadow-[#F15A24]/20 hover:scale-105 transition-all"
                     >
                       Select Flexi+
                     </button>
                   </td>
 
-                  <td className="p-6 text-center bg-purple-50">
+                  <td className="p-3 md:p-6  bg-purple-50">
                     <button
                       onClick={() =>
                         navigate(
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Premium`,
                         )
                       }
-                      className="px-9 py-3 rounded-xl cursor-pointer bg-[#7344ff] text-white font-bold text-sm shadow-lg shadow-[#7344ff]/20 hover:scale-105 transition-all"
+                      className="px-9 py-3 rounded-xl cursor-pointer bg-[#7344ff] text-white md:font-bold text-sm shadow-lg shadow-[#7344ff]/20 hover:scale-105 transition-all"
                     >
                       Select Premium
                     </button>

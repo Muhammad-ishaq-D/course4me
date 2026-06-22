@@ -35,7 +35,7 @@ const Footer = () => {
         const allLocs = locationsRes.data || [];
         const uniqueCities = [];
         const seen = new Set();
-        
+
         // Sort so that active locations are processed first
         const sortedLocs = [...allLocs].sort((a, b) => {
           const aActive = a.status === "Active";
@@ -49,7 +49,7 @@ const Footer = () => {
             seen.add(loc.city);
             uniqueCities.push({
               city: loc.city,
-              isInactive: loc.status !== "Active"
+              isInactive: loc.status !== "Active",
             });
           }
         });
@@ -58,9 +58,11 @@ const Footer = () => {
           { city: "Bradford", isInactive: false },
           { city: "Manchester", isInactive: false },
           { city: "Sheffield", isInactive: false },
-          { city: "Leeds", isInactive: false }
+          { city: "Leeds", isInactive: false },
         ];
-        setLocations(uniqueCities.length > 0 ? uniqueCities.slice(0, 4) : fallback);
+        setLocations(
+          uniqueCities.length > 0 ? uniqueCities.slice(0, 4) : fallback,
+        );
       } catch (error) {
         console.error("Error fetching footer data:", error);
       }
@@ -74,11 +76,11 @@ const Footer = () => {
         {/* TOP GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16">
           {/* ABOUT */}
-          <div className="lg:pr-8 lg:border-r lg:border-white/10">
+          <div className="lg:pr-5 lg:border-r lg:border-white/10">
             <img src={Logo} alt="logo" className="w-40 md:w-44" />
 
             <p className="text-[#A1A1A1] text-base mt-4 leading-relaxed">
-              Courses4Me helps you discover, compare, and book accredited
+              courses4me helps you discover, compare, and book accredited
               courses across the UK, giving you the qualifications, licences,
               and confidence to achieve your career ambitions.
             </p>
@@ -134,7 +136,11 @@ const Footer = () => {
               {locations.map((loc) => (
                 <li
                   key={loc.city}
-                  title={loc.isInactive ? "This location is temporarily inactive for this course from administration" : undefined}
+                  title={
+                    loc.isInactive
+                      ? "This location is temporarily inactive for this course from administration"
+                      : undefined
+                  }
                   className={`flex relative items-center gap-4 text-[#A1A1A1] transition-all duration-200 ${
                     loc.isInactive
                       ? "opacity-40 select-none cursor-not-allowed filter blur-[0.6px]"
@@ -150,7 +156,7 @@ const Footer = () => {
               ))}
             </ul>
 
-            <div className="flex mt-4 md:ml-3 flex-col gap-4">
+            <div className="flex mt-4 md:ml-3 ml-8 flex-col gap-4">
               <NavLink
                 to="/privacy-policy"
                 className={({ isActive }) =>
@@ -220,7 +226,7 @@ const Footer = () => {
           {/* BOTTOM ROW */}
 
           <div className="text-white text-center text-sm">
-            © 2026 Courses4Me. All rights reserved.
+            © 2026 courses4me, All rights reserved.
           </div>
         </div>
       </div>

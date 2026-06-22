@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 
 function TrainerCard({ trainer, onClick }) {
-  console.log(trainer);
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}

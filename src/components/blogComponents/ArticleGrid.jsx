@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 
 import ArticleCard from "./ArticleCard";
 import { blogsData } from "../../data/blogs";
@@ -36,6 +36,20 @@ const ArticleGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeCategory, setActiveCategory] = useState("All");
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const filteredBlogs =
     activeCategory === "All"
       ? blogsData
@@ -56,7 +70,77 @@ const ArticleGrid = () => {
       <header className="relative ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* FILTER WRAPPER */}
-          <div className="flex flex-wrap items-center gap-2">
+          {/* FILTER WRAPPER */}
+
+          {/* Mobile Dropdown */}
+          <div ref={dropdownRef} className="relative md:hidden">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full flex items-center justify-between rounded-2xl border border-[#F15A24]/20 bg-white px-8 py-4 shadow-sm transition-all hover:border-[#F15A24]"
+            >
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-[#F15A24]">
+                  {activeCategory}
+                </span>
+
+                {categories.find((c) => c.name === activeCategory)?.count !==
+                  null && (
+                  <span className="rounded-full bg-[#FFF4EE] px-2 py-0.5 text-xs font-bold text-[#F15A24]">
+                    {categories.find((c) => c.name === activeCategory)?.count}
+                  </span>
+                )}
+              </div>
+
+              <ChevronDown
+                size={18}
+                className={`transition-transform duration-300 ${
+                  isDropdownOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {isDropdownOpen && (
+              <div className="absolute left-0 right-0 z-50 mt-2 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
+                {categories.map((cat, idx) => {
+                  const isActive = activeCategory === cat.name;
+
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        setActiveCategory(cat.name);
+                        setCurrentPage(1);
+                        setIsDropdownOpen(false);
+                      }}
+                      className={`flex w-full items-center justify-between px-5 py-3 text-left transition-all duration-200
+              ${
+                isActive
+                  ? "bg-[#F15A24] text-white"
+                  : "text-gray-700 hover:bg-[#FFF4EE] hover:text-[#F15A24]"
+              }`}
+                    >
+                      <span className="font-semibold text-sm">{cat.name}</span>
+
+                      {cat.count !== null && (
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs font-bold ${
+                            isActive
+                              ? "bg-white/20 text-white"
+                              : "bg-gray-100 text-gray-500"
+                          }`}
+                        >
+                          {cat.count}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Desktop Buttons */}
+          <div className="hidden md:flex flex-wrap items-center gap-2">
             {categories.map((cat, idx) => {
               const isActive = activeCategory === cat.name;
 
@@ -68,20 +152,16 @@ const ArticleGrid = () => {
                     setCurrentPage(1);
                   }}
                   className={`group relative overflow-hidden px-5 sm:px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 border whitespace-nowrap
-                  
-                  ${
-                    isActive
-                      ? "bg-[#F15A24] text-white border-[#F15A24] shadow-[0_10px_30px_rgba(241,90,36,0.35)]"
-                      : "bg-white text-[#374151] border-gray-200 hover:border-[#F15A24]/30 hover:text-[#F15A24] hover:shadow-md"
-                  }
-                `}
+          ${
+            isActive
+              ? "bg-[#F15A24] text-white border-[#F15A24] shadow-[0_10px_30px_rgba(241,90,36,0.35)]"
+              : "bg-white text-[#374151] border-gray-200 hover:border-[#F15A24]/30 hover:text-[#F15A24] hover:shadow-md"
+          }`}
                 >
-                  {/* ACTIVE GLOW */}
                   {isActive && (
                     <div className="absolute inset-0 bg-gradient-to-r from-[#F15A24] to-[#ff6b35] opacity-90" />
                   )}
 
-                  {/* CONTENT */}
                   <span className="relative z-10 flex items-center gap-2">
                     {cat.name}
 

@@ -8,8 +8,8 @@ const TermsOfServices = () => {
   return (
     <div className="bg-white min-h-screen">
       {/* CONTENT */}
-      <section className="max-w-4xl mx-auto px-6 py-16">
-        <p className="text-sm text-gray-500 mb-12">Last Updated: June 2026</p>
+      <section className="max-w-4xl mx-auto px-6 py-14">
+        <p className="text-sm text-gray-500 mb-6">Last Updated: June 2026</p>
 
         <div className="space-y-12">
           <div>
@@ -18,7 +18,7 @@ const TermsOfServices = () => {
             </h2>
 
             <p className="text-gray-600 leading-8">
-              By accessing, browsing, or using Courses4Me, you agree to comply
+              By accessing, browsing, or using course4me, you agree to comply
               with and be bound by these Terms & Conditions. If you do not agree
               with any part of these terms, you should discontinue use of the
               platform immediately.
@@ -39,7 +39,7 @@ const TermsOfServices = () => {
                   </h4>
                   <p className="text-gray-600 mt-1 leading-7">
                     You must be at least 18 years old or have permission from a
-                    parent or guardian to use Courses4Me.
+                    parent or guardian to use course4me.
                   </p>
                 </div>
               </li>
@@ -65,7 +65,7 @@ const TermsOfServices = () => {
             </h2>
 
             <p className="text-gray-600 leading-7 mb-6">
-              Courses4Me acts as a marketplace connecting learners with approved
+              courses4me acts as a marketplace connecting learners with approved
               training providers.
             </p>
 
@@ -144,7 +144,7 @@ const TermsOfServices = () => {
 
             <p className="text-gray-600 leading-7">
               Training providers are responsible for course delivery, schedules,
-              assessments, certification, and training quality. Courses4Me does
+              assessments, certification, and training quality. course4me does
               not guarantee employment, certification success, or course
               outcomes.
             </p>
@@ -157,7 +157,7 @@ const TermsOfServices = () => {
 
             <p className="text-gray-600 leading-7">
               All content, trademarks, logos, graphics, software, designs, and
-              materials available on Courses4Me are owned by Courses4Me or its
+              materials available on course4me are owned by course4me or its
               licensors and are protected by applicable intellectual property
               laws.
             </p>
@@ -169,7 +169,7 @@ const TermsOfServices = () => {
             </h2>
 
             <p className="text-gray-600 leading-8 mb-8">
-              Courses4Me provides its platform on an "as is" and "as available"
+              course4me provides its platform on an "as is" and "as available"
               basis. While we strive to maintain accurate information and
               reliable services, we cannot guarantee uninterrupted access,
               error-free operation, or suitability for every purpose.
@@ -180,7 +180,7 @@ const TermsOfServices = () => {
                 <span className="font-bold text-[#F15A24]">8.1</span>
 
                 <span className="text-gray-600 leading-7">
-                  Courses4Me is not responsible for provider cancellations,
+                  course4me is not responsible for provider cancellations,
                   rescheduling, venue changes, or course availability updates.
                 </span>
               </li>
@@ -198,7 +198,7 @@ const TermsOfServices = () => {
                 <span className="font-bold text-[#F15A24]">8.3</span>
 
                 <span className="text-gray-600 leading-7">
-                  Courses4Me shall not be responsible for errors, delays, or
+                  course4me shall not be responsible for errors, delays, or
                   failures caused by third-party systems, payment providers, or
                   external services.
                 </span>
@@ -219,15 +219,15 @@ const TermsOfServices = () => {
 
                 <span className="text-gray-600 leading-7">
                   Users are responsible for ensuring the accuracy of information
-                  submitted through the platform. Courses4Me accepts no
-                  liability for losses resulting from inaccurate user-provided
+                  submitted through the platform. course4me accepts no liability
+                  for losses resulting from inaccurate user-provided
                   information.
                 </span>
               </li>
             </ul>
 
             <p className="mt-8 text-gray-600 leading-8">
-              To the maximum extent permitted by applicable law, Courses4Me's
+              To the maximum extent permitted by applicable law, course4me's
               total liability arising from the use of the platform, courses,
               bookings, or related services shall be limited as required under
               applicable UK law.
@@ -240,7 +240,7 @@ const TermsOfServices = () => {
             </h2>
 
             <p className="text-gray-600 leading-7">
-              Your use of Courses4Me is also governed by our Privacy Policy,
+              Your use of course4me is also governed by our Privacy Policy,
               which explains how we collect, use, and protect your personal
               information.
             </p>
@@ -259,9 +259,9 @@ const TermsOfServices = () => {
             </h2>
 
             <p className="text-gray-600 leading-7">
-              Courses4Me reserves the right to suspend or terminate accounts
-              that violate these Terms & Conditions or engage in fraudulent,
-              abusive, or unlawful activities.
+              course4me reserves the right to suspend or terminate accounts that
+              violate these Terms & Conditions or engage in fraudulent, abusive,
+              or unlawful activities.
             </p>
           </div>
 
@@ -272,8 +272,8 @@ const TermsOfServices = () => {
 
             <div className="pl-5 border-l-4 border-[#F15A24]">
               <p className="text-gray-600 leading-7">
-                Courses4Me may update these Terms & Conditions from time to
-                time. Updated versions will be published on this page.
+                course4me may update these Terms & Conditions from time to time.
+                Updated versions will be published on this page.
               </p>
             </div>
 

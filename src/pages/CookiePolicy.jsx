@@ -5,8 +5,8 @@ const CookiePolicy = () => {
   return (
     <div className="bg-white min-h-screen">
       {/* CONTENT */}
-      <section className="max-w-4xl mx-auto px-6 py-16">
-        <p className="text-sm text-gray-500 mb-12">Last Updated: June 2026</p>
+      <section className="max-w-4xl mx-auto px-6 py-14">
+        <p className="text-sm text-gray-500 mb-6">Last Updated: June 2026</p>
 
         <div className="space-y-14">
           {/* SECTION 1 */}
@@ -123,11 +123,11 @@ const CookiePolicy = () => {
           </div>
 
           {/* HIGHLIGHT BOX */}
-          <div className="bg-[#0F2B46] rounded-[32px] p-8 md:p-10 text-white">
+          <div>
             <h2 className="text-3xl font-bold mb-6">4. Third-Party Cookies</h2>
 
-            <p className="text-gray-300 leading-7 mb-8">
-              Courses4Me may use trusted third-party services that place cookies
+            <p className="text-gray-600 leading-7 mb-5">
+              courses4me may use trusted third-party services that place cookies
               on your device to support analytics, mapping, payment processing,
               and website functionality.
             </p>
@@ -142,7 +142,7 @@ const CookiePolicy = () => {
               ].map((item, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#F15A24] mt-2.5 shrink-0" />
-                  <span className="text-gray-300">{item}</span>
+                  <span className="text-gray-600">{item}</span>
                 </div>
               ))}
             </div>

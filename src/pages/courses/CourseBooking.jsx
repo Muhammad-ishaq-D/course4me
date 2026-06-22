@@ -93,7 +93,11 @@ const CourseBooking = () => {
   // Suggestions shown in the dropdown (filter by typed text)
   const filteredSuggestions = React.useMemo(() => {
     if (!searchLocation.trim()) return linkedLocations;
-    const tokens = searchLocation.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+    const tokens = searchLocation
+      .trim()
+      .toLowerCase()
+      .split(/[\s,]+/)
+      .filter(Boolean);
     if (tokens.length === 0) return linkedLocations;
 
     // Sort so that active locations are processed first
@@ -107,14 +111,11 @@ const CourseBooking = () => {
     return sortedLinks
       .map((link) => {
         const loc = link.locationId;
-        const fields = [
-          loc.name,
-          loc.city,
-          loc.postcode,
-          loc.addressLine1
-        ].map((f) => (f || "").toLowerCase());
+        const fields = [loc.name, loc.city, loc.postcode, loc.addressLine1].map(
+          (f) => (f || "").toLowerCase(),
+        );
         const matches = tokens.every((token) =>
-          fields.some((field) => field.includes(token))
+          fields.some((field) => field.includes(token)),
         );
         if (!matches) return null;
         return {
@@ -130,9 +131,21 @@ const CourseBooking = () => {
   const handleSearch = (locationText) => {
     const loc = locationText || searchLocation;
     if (!loc) return;
+
+    const scrollContainer = document.getElementById("main-scroll-container");
+
+    if (scrollContainer) {
+      scrollContainer.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+
     setLoadingStep(1);
+
     setTimeout(() => setLoadingStep(2), 1200);
     setTimeout(() => setLoadingStep(3), 2400);
+
     setTimeout(() => {
       navigate(
         `/booking/results?courseid=${course._id}&postcode=${encodeURIComponent(loc)}&sortby=${sortMap[filter] ?? "distance"}&view=all`,
@@ -169,18 +182,21 @@ const CourseBooking = () => {
   if (loadingStep > 0) {
     const steps = [
       {
-        title: `Searching across thousands of courses near ${searchLocation || "you"}`,
-        subtitle: "We're checking all available venues and dates",
+        title: `Searching accredited courses near ${searchLocation || "your location"}`,
+        subtitle:
+          "Reviewing available providers, venues, and upcoming start dates.",
         progress: 33,
       },
       {
-        title: "Preparing the best results...",
-        subtitle: "Checking available seats and best prices",
+        title: "Evaluating your course options",
+        subtitle:
+          "Comparing availability, entry requirements, and funding opportunities.",
         progress: 66,
       },
       {
-        title: "Nearly done...",
-        subtitle: "Listing the best choices first",
+        title: "Finalising your recommendations",
+        subtitle:
+          "Preparing the most suitable courses based on your preferences.",
         progress: 100,
       },
     ];
@@ -292,7 +308,11 @@ const CourseBooking = () => {
                         {filteredSuggestions.map((link) => (
                           <div
                             key={link._id}
-                            title={link.isInactive ? "This location is temporarily inactive for this course from administration" : undefined}
+                            title={
+                              link.isInactive
+                                ? "This location is temporarily inactive for this course from administration"
+                                : undefined
+                            }
                             onMouseDown={() => {
                               if (link.isInactive) return;
                               selectLocation(link);
@@ -408,15 +428,20 @@ const CourseBooking = () => {
                               : "cursor-pointer border-gray-100 hover:border-[#F15A24]/30 hover:bg-[#FFF5F1]/50"
                           }`}
                         >
-                          <p className={`text-base font-medium transition-colors leading-tight ${
-                            isInactive ? "text-gray-400" : "text-[#1C1C1C] group-hover:text-[#F15A24]"
-                          }`}>
+                          <p
+                            className={`text-base font-medium transition-colors leading-tight ${
+                              isInactive
+                                ? "text-gray-400"
+                                : "text-[#1C1C1C] group-hover:text-[#F15A24]"
+                            }`}
+                          >
                             {loc.city}
                           </p>
                         </button>
                         {isInactive && (
                           <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-3 hidden group-hover:block w-64 p-3 bg-gray-900/95 backdrop-blur-xs text-white text-xs font-semibold rounded-xl shadow-xl text-center leading-normal z-50">
-                            This location is temporarily inactive for this course from administration
+                            This location is temporarily inactive for this
+                            course from administration
                             <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
                           </div>
                         )}

@@ -1,18 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Search } from "lucide-react";
 
 const BookingSkeleton = ({ currentStep }) => {
-  return (
-    <div className="bg-[#F1F3F5] min-h-screen pt-30 font-sans p-4">
-      <div className="w-full max-w-200 mx-auto flex gap-6 items-start">
-        {/* Skeleton Sidebar - fixed small width as per image */}
-        <div className="w-45 bg-white rounded-lg p-5 space-y-4 hidden md:block opacity-40">
-          <div className="h-4 bg-gray-200 rounded w-2/3 mb-2" />
-          <div className="h-8 bg-gray-100 rounded w-full" />
-          <div className="h-8 bg-gray-100 rounded w-full" />
-          <div className="h-8 bg-gray-100 rounded w-full" />
-        </div>
+  useEffect(() => {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 50);
+  }, []);
 
+  return (
+    <div className="bg-[#F1F3F5]  min-h-screen md:pt-30 pt-8  p-4">
+      <div className="w-full max-w-200 mx-auto flex gap-6 items-start">
         <div className="flex-1 space-y-6">
           {/* Progress Card */}
           <div className="bg-white rounded-lg p-8 shadow-[0_2px_10px_rgba(0,0,0,0.05)] border border-gray-100">
@@ -25,7 +23,7 @@ const BookingSkeleton = ({ currentStep }) => {
             </div>
 
             <div className="flex flex-col md:flex-row items-start gap-6">
-              <div className="relative">
+              <div className="relative ">
                 <div className="w-16 h-10 bg-gray-100 rounded border border-gray-200 flex items-end justify-end p-1">
                   <div className="w-8 h-1 bg-gray-200 rounded-full mb-1 mr-1" />
                 </div>
@@ -36,7 +34,7 @@ const BookingSkeleton = ({ currentStep }) => {
                 />
               </div>
               <div>
-                <h2 className="text-[22px] font-bold text-[#1a1a1a] mb-1">
+                <h2 className="text-lg md:text-[22px] font-bold text-[#1a1a1a] mb-1">
                   {currentStep.title}
                 </h2>
                 <p className="text-gray-500 text-[15px]">
