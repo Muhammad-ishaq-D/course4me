@@ -32,7 +32,7 @@ const HeroCareerDetails = ({ career }) => {
             {/* ================= LEFT CONTENT ================= */}
             <div>
               {/* Breadcrumb */}
-              <div className="flex items-center gap-2 text-[13px] mb-4">
+              <div className="hidden md:flex items-center gap-2 text-[13px] mb-4">
                 <NavLink
                   to="/"
                   className="text-white/60 hover:text-white transition-colors"

@@ -563,7 +563,7 @@ const CareerListing = () => {
             </div>
 
             {/* Help Card */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
+            {/* <div className="bg-white rounded-2xl border border-gray-200 p-6">
               <h2 className="text-xl font-bold text-gray-900">
                 Need Help Choosing?
               </h2>
@@ -575,7 +575,7 @@ const CareerListing = () => {
               <button className="mt-5 h-11 px-5 rounded-xl bg-[#F8510C] hover:bg-[#c04b19] transition-all text-white font-semibold">
                 Talk to an Advisor
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

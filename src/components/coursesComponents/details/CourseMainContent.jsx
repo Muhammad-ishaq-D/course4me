@@ -234,8 +234,8 @@ const CourseMainContent = ({ course }) => {
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
             {/* LEFT */}
             <div className="flex items-center gap-5">
-              <div className="w-20 h-20 rounded-full border-2 border-[#00A3F4] flex items-center justify-center bg-white">
-                <Phone className="w-9 h-9 text-[#00A3F4]" />
+              <div className="w-14 h-14  md:w-18 md:h-18 rounded-full border-2 border-[#00A3F4] flex items-center justify-center bg-white">
+                <Phone size={22} className=" text-[#00A3F4]" />
               </div>
 
               <div>

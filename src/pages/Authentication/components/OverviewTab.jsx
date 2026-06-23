@@ -43,7 +43,7 @@ const OverviewTab = () => {
       { label: "Upcoming", value: "0", color: "text-orange-500" },
       { label: "Ongoing", value: "0", color: "text-blue-500" },
       { label: "Completed", value: "0", color: "text-green-500" },
-      { label: "Certificates", value: "0", color: "text-purple-500" },
+      { label: "Certificates", value: "0", color: "text-blue-500" },
     ],
   });
 
@@ -72,13 +72,13 @@ const OverviewTab = () => {
     const seconds = timeLeft % 60;
 
     return (
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-yellow-50 border-2 border-yellow-400 rounded-xl text-yellow-900 shadow-lg mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-yellow-200 border-2 border-yellow-400 rounded-xl text-black shadow-lg mb-4">
         <div className="flex items-center gap-3 mb-3 sm:mb-0">
           <div>
             <p className="font-bold text-lg">
               ⚠️ You have a pending booking for {booking.title}.
             </p>
-            <p className="text-sm font-medium">
+            <p className="text-sm font-normal mt-1 md:font-medium">
               Your spot is held for another{" "}
               <span className="text-red-600 font-black">
                 {minutes}:{seconds < 10 ? "0" + seconds : seconds}
@@ -194,7 +194,7 @@ const OverviewTab = () => {
         {/* Alerts */}
         <div className="space-y-3">
           {data.upcoming.length > 0 && (
-            <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-100 rounded-xl text-blue-800 shadow-sm transition-all hover:shadow-md group">
+            <div className="flex items-center justify-between p-4 bg-blue-100 border border-blue-100 rounded-xl text-blue-800 shadow-sm transition-all hover:shadow-md group">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-blue-100 rounded-lg group-hover:scale-110 transition-transform">
                   <Bell size={18} className="text-blue-600" />
@@ -211,17 +211,17 @@ const OverviewTab = () => {
           )}
 
           {data.completed.length > 0 && (
-            <div className="flex items-center justify-between p-4 bg-green-50 border border-green-100 rounded-xl text-green-800 shadow-sm transition-all hover:shadow-md group">
+            <div className="flex items-center justify-between p-4 bg-blue-100 border border-green-100 rounded-xl text-blue-800 shadow-sm transition-all hover:shadow-md group">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-lg group-hover:scale-110 transition-transform">
-                  <Award size={18} className="text-green-600" />
+                <div className="p-2 bg-blue-100 rounded-lg group-hover:scale-110 transition-transform">
+                  <Award size={18} className="text-blue-600" />
                 </div>
-                <p className="font-medium">
+                <p className="  font-medium">
                   New certificate is ready to download
                 </p>
                 <div className=" hidden md:block w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
               </div>
-              <button className="text-green-400 hover:text-green-600">×</button>
+              <button className="text-blue-400 hover:text-blue-600">×</button>
             </div>
           )}
         </div>

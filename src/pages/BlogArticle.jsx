@@ -62,7 +62,7 @@ const BlogArticle = () => {
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-10 md:pt-14 lg:pt-32 pb-48">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-gray-400 mb-8">
+          <div className="hidden md:flex items-center gap-2 text-sm text-gray-400 mb-8">
             <NavLink to="/">Home</NavLink>
 
             <span>/</span>
@@ -71,12 +71,12 @@ const BlogArticle = () => {
 
             <span>/</span>
 
-            <span className="text-[#F15A24]">Career Guide</span>
+            <span className="text-[#F15A24]">{blog?.category}</span>
           </div>
 
           {/* TAGS */}
           <div className="flex flex-wrap gap-3 mb-8">
-            <span className="bg-[#F15A24] text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-[0.18em]">
+            <span className="bg-[#F15A24] text-white px-5 py-2 rounded-full text-xs md:font-bold uppercase tracking-[0.18em]">
               {blog?.category}
             </span>
           </div>

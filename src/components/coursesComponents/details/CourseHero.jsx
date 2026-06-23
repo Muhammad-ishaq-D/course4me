@@ -32,7 +32,7 @@ const CourseHero = ({ course }) => {
 
       {/* 🔥 HERO */}
       <section className="relative text-white py-10 lg:py-12 overflow-hidden bg-[#141414]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-4">
+        <div className="hidden md:block max-w-7xl mx-auto px-4 lg:px-10 py-4">
           <div className="flex items-center flex-wrap gap-2 text-xs md:text-sm">
             {/* Home */}
             <NavLink

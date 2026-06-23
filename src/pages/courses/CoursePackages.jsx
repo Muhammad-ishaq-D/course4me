@@ -29,6 +29,9 @@ const CoursePackages = () => {
   const [schedulePrice, setSchedulePrice] = useState(null);
   const [error, setError] = useState("");
 
+  const [showAllFlexiFeatures, setShowAllFlexiFeatures] = useState(false);
+  const [showSaverWarning, setShowSaverWarning] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -196,7 +199,7 @@ const CoursePackages = () => {
         <div className="max-w-[1200px] mx-auto px-4 pt-6">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 cursor-pointer text-gray-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest mb-6"
+            className="hidden md:flex items-center gap-2 cursor-pointer text-gray-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest mb-6"
           >
             <ArrowLeft size={16} /> Back
           </button>
@@ -292,9 +295,13 @@ const CoursePackages = () => {
             </div>
 
             <div className="p-4 lg:p-8 pt-0 mt-auto border-t border-gray-50/50">
-              <div className="bg-red-50 text-red-600 rounded-xl p-4 text-[12px] leading-relaxed mb-6 border border-red-100 font-medium space-y-2">
+              <div
+                className={`${
+                  showSaverWarning ? "block" : "hidden"
+                } md:block bg-red-50 text-red-600 rounded-xl p-4 text-[12px] leading-relaxed mb-6 border border-red-100 font-medium space-y-2`}
+              >
                 <div className="flex gap-2 items-start">
-                  <XIcon size={16} className="shrink-0 mt-0.5" />{" "}
+                  <XIcon size={16} className="shrink-0 mt-0.5" />
                   <p className="text-[15px]">
                     You will have to{" "}
                     <b className="font-bold border-b border-red-600">
@@ -303,8 +310,9 @@ const CoursePackages = () => {
                     for unlimited resits if you fail the exam
                   </p>
                 </div>
+
                 <div className="flex gap-2 items-start">
-                  <XIcon size={16} className="shrink-0 mt-0.5" />{" "}
+                  <XIcon size={16} className="shrink-0 mt-0.5" />
                   <p className="text-[15px]">
                     You are missing out on the{" "}
                     <b className="font-bold border-b border-red-600">
@@ -313,6 +321,12 @@ const CoursePackages = () => {
                   </p>
                 </div>
               </div>
+              <button
+                onClick={() => setShowSaverWarning(!showSaverWarning)}
+                className="md:hidden mb-4 text-[#F15A24] font-bold text-sm"
+              >
+                {showSaverWarning ? "See Less" : "See More"}
+              </button>
               <button
                 onClick={() =>
                   navigate(
@@ -369,12 +383,18 @@ const CoursePackages = () => {
               </p>
               <ul className="space-y-3">
                 {features.flexi.map((feature, idx) => {
-                  // Highlighting specific words for exact match
                   const isZeroRisk = feature.includes("Zero Risk Guarantee");
                   const isRetakes = feature.includes("Unlimited Free Retakes");
 
                   return (
-                    <li key={idx} className="flex items-start gap-3">
+                    <li
+                      key={idx}
+                      className={`flex items-start gap-3 ${
+                        !showAllFlexiFeatures && idx >= 2
+                          ? "hidden md:flex"
+                          : ""
+                      }`}
+                    >
                       <Check
                         className="text-[#F15A24] shrink-0 mt-0.5"
                         size={18}
@@ -386,8 +406,9 @@ const CoursePackages = () => {
                               Zero Risk Guarantee
                             </b>{" "}
                             - If you fail, fail, pass... we will refund you 100%
-                            of the course fee -{" "}
+                            of the course fee -
                             <span className="italic text-gray-400">
+                              {" "}
                               worth £25
                             </span>
                           </>
@@ -397,8 +418,8 @@ const CoursePackages = () => {
                             <span className="italic text-gray-400">
                               (worth £49 per retake)
                             </span>{" "}
-                            -{" "}
-                            <span className="bg-[#FFF5F1] text-[#F15A24] text-[12px] font-black uppercase px-1.5 py-0.5 rounded">
+                            -
+                            <span className="bg-[#FFF5F1] text-[#F15A24] text-[12px] font-black uppercase px-1.5 py-0.5 rounded ml-1">
                               Popular
                             </span>
                           </>
@@ -410,6 +431,13 @@ const CoursePackages = () => {
                   );
                 })}
               </ul>
+
+              <button
+                onClick={() => setShowAllFlexiFeatures(!showAllFlexiFeatures)}
+                className="md:hidden mt-4 text-[#F15A24] font-bold text-sm hover:underline"
+              >
+                {showAllFlexiFeatures ? "See Less" : "See More"}
+              </button>
             </div>
 
             <div className="p-4 lg:p-8 pt-0 mt-auto border-t border-gray-50/50">

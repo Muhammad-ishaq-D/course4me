@@ -111,7 +111,7 @@ const CourseLocationView = ({ link }) => {
 
         <div className="relative max-w-7xl mx-auto px-4 w-full pt-6 pb-8">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-3 text-sm text-white/50 mb-3">
+          <div className="hidden md:flex items-center gap-3 text-xs md:text-sm text-white/50 mb-3">
             <NavLink to="/" className="hover:text-white transition">
               Home
             </NavLink>

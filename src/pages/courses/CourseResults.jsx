@@ -340,7 +340,7 @@ const CourseResults = () => {
       <main className="max-w-300 mx-auto px-4 py-6 md:py-20">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-400 cursor-pointer hover:text-[#d84a1a] transition-colors text-xs font-bold uppercase tracking-widest mb-6"
+          className="hidden md:flex items-center gap-2 text-gray-400 cursor-pointer hover:text-[#d84a1a] transition-colors text-xs font-bold uppercase tracking-widest mb-6"
         >
           <ArrowLeft size={16} /> Back
         </button>

@@ -202,10 +202,10 @@ const BookingConfirmed = ({
         <div className="w-16 h-16 rounded-full bg-[#F15A24] flex items-center justify-center mx-auto mb-5">
           <Check className="text-white" size={32} strokeWidth={3} />
         </div>
-        <h1 className="text-4xl font-black text-white mb-2">
+        <h1 className="md:text-4xl text-2xl font-black text-white mb-2">
           Booking Confirmed!
         </h1>
-        <p className="text-gray-400 text-base mb-6">
+        <p className="text-gray-400 text-sm md:text-base mb-6">
           Thank you, <span className="text-white font-bold">{name}</span>. Your
           place has been secured.
         </p>

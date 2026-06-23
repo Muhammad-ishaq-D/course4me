@@ -155,41 +155,6 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-
-            <div className="flex mt-4 md:ml-3 ml-8 flex-col gap-4">
-              <NavLink
-                to="/privacy-policy"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-[#F15A24] font-semibold"
-                    : "text-[#A1A1A1] hover:text-white transition"
-                }
-              >
-                Privacy Policy
-              </NavLink>
-
-              <NavLink
-                to="/terms-of-services"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-[#F15A24] font-semibold"
-                    : "text-[#A1A1A1] hover:text-white transition"
-                }
-              >
-                Terms of Service
-              </NavLink>
-
-              <NavLink
-                to="/cookie-policy"
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-[#F15A24] font-semibold"
-                    : "text-[#A1A1A1] hover:text-white transition"
-                }
-              >
-                Cookie Policy
-              </NavLink>
-            </div>
           </div>
 
           {/* CONTACT */}
@@ -221,12 +186,47 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-white/5 pt-10">
-          {/* BOTTOM ROW */}
+        {/* Footer Bottom */}
+        <div className="border-t border-white/10 pt-8 mt-8">
+          <div className="flex flex-wrap items-center justify-center gap-5 md:gap-10 text-base text-center">
+            <span className="text-white">
+              © 2026 courses4me, All rights reserved.
+            </span>
 
-          <div className="text-white text-center text-sm">
-            © 2026 courses4me, All rights reserved.
+            <div className="flex gap-2 md:ml-4 md:gap-6">
+              <NavLink
+                to="/privacy-policy"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#F15A24]"
+                    : "text-white hover:text-white transition-colors"
+                }
+              >
+                Privacy Policy
+              </NavLink>
+
+              <NavLink
+                to="/terms-of-services"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#F15A24]"
+                    : "text-white hover:text-white transition-colors"
+                }
+              >
+                Terms of Service
+              </NavLink>
+
+              <NavLink
+                to="/cookie-policy"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-[#F15A24]"
+                    : "text-white hover:text-white transition-colors"
+                }
+              >
+                Cookie Policy
+              </NavLink>
+            </div>
           </div>
         </div>
       </div>

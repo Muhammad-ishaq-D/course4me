@@ -38,9 +38,9 @@ const HeroSection = ({ license }) => {
       <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-size-[60px_60px]" />
 
       {/* ====================CONTAINER====================== */}
-      <div className="relative max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-14 lg:py-20">
+      <div className="relative max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-6 lg:py-20">
         {/* =======================BREADCRUMB================= */}
-        <div className="flex flex-wrap items-center gap-3 text-xs md:text-sm text-white/50 mb-4">
+        <div className="hidden md:flex flex-wrap items-center gap-3 text-xs md:text-sm text-white/50 mb-4">
           <NavLink
             to="/"
             className="hover:text-[#F15A24] cursor-pointer transition-all duration-300"

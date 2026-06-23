@@ -185,8 +185,13 @@ const CoursesLicencesSection = () => {
           licenseService.getAllLicenses(params),
         ]);
 
-        const coursesData = coursesRes.data?.data || [];
-        const licencesData = licencesRes.data?.data || [];
+        const coursesData = (coursesRes.data?.data || []).filter(
+          (course) => course.isPopular === true,
+        );
+
+        const licencesData = (licencesRes.data?.data || []).filter(
+          (licence) => licence.isPopular === true,
+        );
 
         const mappedCourses = coursesData.map((course) => ({
           id: course._id,

@@ -114,7 +114,7 @@ const NewsletterCTA = () => {
                 )}
 
                 {success && (
-                  <p className="text-orange-600 text-sm font-semibold">
+                  <p className="text-orange-600 text-sm md:text-base font-semibold">
                     You're subscribed successfully 🎉
                   </p>
                 )}
