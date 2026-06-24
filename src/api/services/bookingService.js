@@ -20,6 +20,11 @@ const bookingService = {
     getMyBookingStatus: async (courseId) => {
         return await axiosInstance.get(`/bookings/my-status/${courseId}`);
     },
+
+    // Request a refund for a booking
+    requestRefund: async (bookingId, data) => {
+        return await axiosInstance.post(`/bookings/${bookingId}/refund/request`, data);
+    },
 };
 
 export default bookingService;

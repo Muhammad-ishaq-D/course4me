@@ -22,6 +22,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import courseService from "../../../api/services/courseService";
 import careerService from "../../../api/services/careerService";
+import bookingService from "../../../api/services/bookingService";
 import Loader from "../../../components/ui/Loader";
 import { useAuth } from "../../../context/AuthContext";
 import { downloadCertificate } from "../../../utils/certificateGenerator";
@@ -31,6 +32,68 @@ const OverviewTab = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(null); // ID of course being downloaded
+  
+  // Refund Request State
+  const [selectedCourseForRefund, setSelectedCourseForRefund] = useState(null);
+  const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
+  const [refundReason, setRefundReason] = useState("");
+  const [submittingRefund, setSubmittingRefund] = useState(false);
+  const [refundError, setRefundError] = useState("");
+  const [refundSuccess, setRefundSuccess] = useState(false);
+
+  const handleOpenRefundModal = (course) => {
+    setSelectedCourseForRefund(course);
+    setRefundReason("");
+    setRefundError("");
+    setRefundSuccess(false);
+    setIsRefundModalOpen(true);
+  };
+
+  const handleCloseRefundModal = () => {
+    setIsRefundModalOpen(false);
+    setSelectedCourseForRefund(null);
+  };
+
+  const handleSubmitRefund = async (e) => {
+    e.preventDefault();
+    if (!refundReason.trim()) {
+      setRefundError("Please enter a reason for the refund request.");
+      return;
+    }
+    setSubmittingRefund(true);
+    setRefundError("");
+    try {
+      await bookingService.requestRefund(selectedCourseForRefund.id, { reason: refundReason });
+      setRefundSuccess(true);
+      // Reload user courses
+      const result = await courseService.getUserCourses();
+      if (result) {
+        setData(prev => ({
+          ...prev,
+          upcoming: result.upcoming || [],
+          ongoing: result.ongoing || [],
+          completed: result.completed || [],
+          postponed: result.postponed || [],
+          cancelled: result.cancelled || [],
+          pendingBookings: result.pendingBookings || [],
+          stats: [
+            { label: "Upcoming", value: result.stats?.upcomingCount || "0", color: "text-orange-500" },
+            { label: "Ongoing", value: result.stats?.ongoingCount || "0", color: "text-blue-500" },
+            { label: "Completed", value: result.stats?.completedCount || "0", color: "text-green-500" },
+            { label: "Certificates", value: result.stats?.certificateCount || "0", color: "text-purple-500" },
+          ]
+        }));
+      }
+      setTimeout(() => {
+        handleCloseRefundModal();
+      }, 1500);
+    } catch (err) {
+      console.error(err);
+      setRefundError(err.response?.data?.message || "Failed to submit refund request. Please try again.");
+    } finally {
+      setSubmittingRefund(false);
+    }
+  };
   const [data, setData] = useState({
     upcoming: [],
     ongoing: [],
@@ -356,15 +419,37 @@ const OverviewTab = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-wrap justify-end">
                     <span
-                      className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide ${course.bookingStatus === "Confirmed" ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"}`}
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide ${
+                        course.bookingStatus === "PAID" || course.bookingStatus === "Confirmed"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-orange-100 text-orange-700"
+                      }`}
                     >
                       {course.bookingStatus}
                     </span>
                     <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide bg-gray-100 text-gray-600">
                       Upcoming
                     </span>
+                    {course.refundRequest?.status === "Requested" ? (
+                      <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide bg-amber-100 text-amber-700 border border-amber-200">
+                        Refund Requested
+                      </span>
+                    ) : course.refundRequest?.status === "Rejected" ? (
+                      <span className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide bg-red-100 text-red-700 border border-red-200">
+                        Refund Rejected
+                      </span>
+                    ) : (
+                      course.bookingStatus === "PAID" && (
+                        <button
+                          onClick={() => handleOpenRefundModal(course)}
+                          className="px-4 py-1.5 rounded-xl text-xs font-bold text-red-600 border border-red-200 hover:bg-red-50 transition-colors shadow-sm cursor-pointer"
+                        >
+                          Request Refund
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
               ))
@@ -637,6 +722,93 @@ const OverviewTab = () => {
           </button>
         </div>
       </div>
+
+      {/* Refund Request Modal */}
+      {isRefundModalOpen && selectedCourseForRefund && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-gray-100 dark:border-slate-800 space-y-6 relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Request Course Refund</h3>
+                <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">{selectedCourseForRefund.title}</p>
+              </div>
+              <button 
+                onClick={handleCloseRefundModal}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-white text-xl p-1 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+
+            {refundSuccess ? (
+              <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900/50 p-6 rounded-2xl text-center space-y-3">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto text-green-600 dark:text-green-400">
+                  <CheckCircle size={24} />
+                </div>
+                <h4 className="font-bold text-green-800 dark:text-green-400 text-lg">Request Submitted!</h4>
+                <p className="text-sm text-green-700 dark:text-green-500/80">Your refund request has been successfully submitted. We will notify you via email shortly.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmitRefund} className="space-y-4">
+                <div className="bg-orange-50 dark:bg-orange-950/20 border border-orange-100 dark:border-orange-900/30 p-4 rounded-2xl">
+                  <h4 className="text-xs font-bold text-orange-800 dark:text-orange-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                    <AlertTriangle size={14} /> Refund Policy Summary
+                  </h4>
+                  <ul className="text-xs text-orange-700 dark:text-orange-500/80 space-y-1.5 list-disc pl-4 leading-relaxed">
+                    <li>Refunds are only eligible for upcoming courses (starting in the future).</li>
+                    <li>Refund requests are reviewed and approved by administrators.</li>
+                    <li>Upon approval, funds will be returned via Stripe to your original payment method within 5–10 business days.</li>
+                  </ul>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-bold text-gray-700 dark:text-slate-300">
+                    Reason for Refund Request
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={refundReason}
+                    onChange={(e) => setRefundReason(e.target.value)}
+                    placeholder="Please explain why you are requesting a refund..."
+                    className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-4 text-sm outline-none focus:ring-2 focus:ring-orange-500/20 focus:bg-white dark:focus:bg-slate-900 transition-all dark:text-white resize-none"
+                  />
+                </div>
+
+                {refundError && (
+                  <p className="text-xs font-bold text-red-500 flex items-center gap-1">
+                    <AlertTriangle size={12} /> {refundError}
+                  </p>
+                )}
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={handleCloseRefundModal}
+                    className="flex-1 bg-gray-50 hover:bg-gray-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-bold py-3 px-4 rounded-xl text-sm transition-all cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submittingRefund}
+                    className="flex-1 bg-[#F15A24] hover:bg-[#D94E1F] disabled:opacity-50 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    {submittingRefund ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      "Submit Request"
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
