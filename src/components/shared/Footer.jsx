@@ -188,7 +188,7 @@ const Footer = () => {
 
         {/* Footer Bottom */}
         <div className="border-t border-white/10 pt-8 mt-8">
-          <div className="flex flex-wrap items-center justify-center gap-5 md:gap-10 text-base text-center">
+          <div className="flex flex-wrap items-center justify-center gap-5 md:gap-10 lg:gap-28 text-base text-center">
             <span className="text-white">
               © 2026 courses4me, All rights reserved.
             </span>

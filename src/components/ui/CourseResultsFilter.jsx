@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MapPin, Info, ChevronDown } from "lucide-react";
+import { MapPin, Info, ArrowUpDown, X, ChevronDown } from "lucide-react";
 
 const CourseResultsFilter = ({ filter, setFilter, filterPrices = {} }) => {
   const [showSortModal, setShowSortModal] = useState(false);
@@ -18,42 +18,28 @@ const CourseResultsFilter = ({ filter, setFilter, filterPrices = {} }) => {
 
   return (
     <>
-      <div className="relative lg:hidden">
+      <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 lg:hidden">
+        {/* Sort Button */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             setShowSortModal(!showSortModal);
           }}
-          className=" w-full bg-white rounded-2xl border border-gray-200 px-5 py-4 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(241,90,36,0.12)] hover:border-[#F15A24]/20 transition-all duration-300
-  "
+          className={`w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 ${
+            showSortModal
+              ? "bg-[#F15A24] text-white"
+              : "bg-white text-[#F15A24] border border-gray-200"
+          }`}
         >
-          <div className="text-left">
-            <p className="text-[12px] uppercase tracking-[0.15em] text-gray-400 font-extrabold">
-              Sorted By
-            </p>
-
-            <p className="mt-1 text-base font-semibold text-[#F15A24] leading-none">
-              {filter === "Closest"
-                ? "Closest to you"
-                : filter === "Cheapest"
-                  ? "Lowest Price"
-                  : "Soonest Date"}
-            </p>
-          </div>
-
-          <div
-            className={`w-10 h-10rounded-xlbg-[#FFF5F1]flex items-center justify-centertransition-all duration-300${showSortModal ? "rotate-180" : ""}
-    `}
-          >
-            <ChevronDown size={18} className="text-[#F15A24]" />
-          </div>
+          {showSortModal ? <X size={22} /> : <ArrowUpDown size={22} />}
         </button>
+
+        {/* Dropdown */}
         {showSortModal && (
-          <div className="absolute left-0 top-full mt-1 w-full bg-white rounded-2xl border border-gray-200 shadow-2xl z-999 overflow-hidden">
+          <div className="absolute top-full right-0 mt-1 w-72 bg-white rounded-2xl border border-gray-200 shadow-2xl overflow-hidden">
             <div className="p-4 border-b border-gray-100">
               <h3 className="font-bold text-gray-900">Sort Results</h3>
             </div>
-
             {[
               { id: "Closest", label: "Closest to you" },
               { id: "Cheapest", label: "Lowest Price" },
@@ -63,25 +49,35 @@ const CourseResultsFilter = ({ filter, setFilter, filterPrices = {} }) => {
                 key={option.id}
                 onClick={() => {
                   setFilter(option.id);
+
+                  const scrollContainer = document.getElementById(
+                    "main-scroll-container",
+                  );
+
+                  if (scrollContainer) {
+                    scrollContainer.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
+                  }
+
                   setShowSortModal(false);
                 }}
-                className={`w-full text-sm px-4 py-4 flex items-center justify-between text-left transition ${
+                className={`w-full px-4 py-4 flex items-center justify-between text-left transition ${
                   filter === option.id ? "bg-[#FFF5F1]" : "hover:bg-gray-50"
                 }`}
               >
-                <div>
-                  <p
-                    className={`font-semibold ${
-                      filter === option.id ? "text-[#F15A24]" : "text-gray-800"
-                    }`}
-                  >
-                    {option.label}
-                  </p>
-                </div>
+                <span
+                  className={`font-semibold ${
+                    filter === option.id ? "text-[#F15A24]" : "text-gray-800"
+                  }`}
+                >
+                  {option.label}
+                </span>
 
                 {filterPrices[option.id] && (
                   <span
-                    className={`font-black ${
+                    className={`font-bold ${
                       filter === option.id ? "text-[#F15A24]" : "text-gray-900"
                     }`}
                   >
@@ -94,7 +90,7 @@ const CourseResultsFilter = ({ filter, setFilter, filterPrices = {} }) => {
         )}
       </div>
 
-      <aside className="hidden lg:block lg:relative lg:top-22 lg:w-70 shrink-0">
+      <aside className="hidden lg:block lg:relative lg:top-22 lg:w-60 shrink-0">
         <div className="bg-white border border-gray-100 rounded-3xl shadow-sm overflow-hidden p-2">
           {/* Header */}
           <div className="px-4 pt-4 pb-2">
@@ -115,13 +111,13 @@ const CourseResultsFilter = ({ filter, setFilter, filterPrices = {} }) => {
                 <div
                   key={option.id}
                   onClick={() => setFilter(option.id)}
-                  className={`flex items-center justify-between px-4 py-4 cursor-pointer transition-all duration-300 rounded-[18px] group ${
+                  className={`flex items-center justify-between px-3 py-4 cursor-pointer transition-all duration-300 rounded-[18px] group ${
                     isActive
                       ? "bg-[#F15A24] shadow-lg shadow-[#F15A24]/20"
                       : "hover:bg-gray-50"
                   }`}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     {/* Premium Radio Style */}
                     <div
                       className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${

@@ -86,7 +86,7 @@ const CoursePackages = () => {
       "Free Name Change (Up to 72 hours before the start of the course)",
       "Full refund up to 72 Hrs before Course",
       "14 days access to highly rated mock exam App (completed online prior to attending course) - worth £14.99",
-      "Zero Risk Guarantee - If you fail, fail, fail the exam, we will refund you 100% of the course fee - worth £25",
+      "If you fail, fail, fail the exam, we will refund you 100% of the course fee - worth £25",
     ],
     premium: [
       "Everything included in Flexi Plus Package",

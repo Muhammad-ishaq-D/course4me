@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import { motion } from "framer-motion";
 
 const BookingConfirmed = ({
   name,
@@ -198,7 +199,7 @@ const BookingConfirmed = ({
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* Dark hero */}
-      <div className="bg-[#1C1C1C] pt-12 pb-16 text-center px-4">
+      {/* <div className="bg-[#1C1C1C] pt-12 pb-16 text-center px-4">
         <div className="w-16 h-16 rounded-full bg-[#F15A24] flex items-center justify-center mx-auto mb-5">
           <Check className="text-white" size={32} strokeWidth={3} />
         </div>
@@ -228,6 +229,141 @@ const BookingConfirmed = ({
               />
             )}
           </button>
+        </div>
+      </div> */}
+
+      <div className="relative overflow-hidden bg-linear-to-b from-[#FFF7F3] via-white to-[#FFFDFB] py-12 md:py-16">
+        {/* Celebration Confetti */}
+
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {/* Left Top */}
+          <div className="absolute top-12 left-[5%] w-4 h-2 bg-[#F15A24] rotate-45 rounded-full"></div>
+          <div className="absolute top-20 left-[10%] w-2 h-2 bg-yellow-400 rounded-full"></div>
+          <div className="absolute top-10 left-[18%] w-3 h-3 bg-purple-400 rotate-45"></div>
+
+          {/* Right Top */}
+          <div className="absolute top-12 right-[6%] w-4 h-2 bg-[#F15A24] rotate-45 rounded-full"></div>
+          <div className="absolute top-20 right-[12%] w-2 h-2 bg-yellow-400 rounded-full"></div>
+          <div className="absolute top-10 right-[18%] w-3 h-3 bg-purple-400 rotate-45"></div>
+
+          {/* Small Sparkles */}
+          <div className="absolute top-10 left-[30%] text-yellow-400">✦</div>
+          <div className="absolute top-16 right-[30%] text-pink-400">✦</div>
+
+          {/* Desktop Only Particles */}
+          <div className="hidden md:block">
+            {/* Left Side */}
+            <div className="absolute top-28 left-[24%] w-2 h-2 bg-pink-400 rounded-full"></div>
+            <div className="absolute top-36 left-[12%] w-3 h-1 bg-green-400 rotate-45"></div>
+            <div className="absolute top-16 left-[28%] w-2 h-2 bg-orange-400 rotate-45"></div>
+
+            {/* Right Side */}
+            <div className="absolute top-28 right-[24%] w-2 h-2 bg-pink-400 rounded-full"></div>
+            <div className="absolute top-36 right-[14%] w-3 h-1 bg-green-400 rotate-45"></div>
+            <div className="absolute top-16 right-[30%] w-2 h-2 bg-orange-400 rotate-45"></div>
+
+            {/* Bottom Particles */}
+            <div className="absolute bottom-20 left-[8%] w-3 h-3 bg-pink-300 rotate-45"></div>
+            <div className="absolute bottom-28 left-[18%] w-2 h-2 bg-yellow-300 rounded-full"></div>
+            <div className="absolute bottom-16 left-[26%] w-4 h-2 bg-[#F15A24] rotate-12 rounded-full"></div>
+
+            <div className="absolute bottom-20 right-[10%] w-3 h-3 bg-pink-300 rotate-45"></div>
+            <div className="absolute bottom-28 right-[20%] w-2 h-2 bg-yellow-300 rounded-full"></div>
+            <div className="absolute bottom-16 right-[28%] w-4 h-2 bg-[#F15A24] rotate-12 rounded-full"></div>
+
+            {/* Center Particles */}
+            <div className="absolute top-20 left-[35%] w-2 h-2 bg-red-400 rounded-full"></div>
+            <div className="absolute top-12 left-[40%] w-2 h-2 bg-yellow-400 rotate-45"></div>
+            <div className="absolute top-24 left-[45%] w-3 h-3 bg-green-400 rounded-full"></div>
+            <div className="absolute top-14 left-[55%] w-2 h-2 bg-purple-400 rotate-45"></div>
+            <div className="absolute top-22 left-[60%] w-2 h-2 bg-pink-400 rounded-full"></div>
+            <div className="absolute top-16 left-[65%] w-3 h-1 bg-[#F15A24] rotate-45"></div>
+
+            {/* Ribbons */}
+            <div className="absolute top-16 left-[8%] text-4xl text-orange-400 rotate-12">
+              〰
+            </div>
+
+            <div className="absolute top-24 right-[10%] text-4xl text-purple-400 -rotate-12">
+              〰
+            </div>
+
+            <div className="absolute top-36 left-[20%] text-3xl text-pink-400 rotate-45">
+              〰
+            </div>
+
+            <div className="absolute top-32 right-[22%] text-3xl text-green-400 -rotate-45">
+              〰
+            </div>
+          </div>
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
+          {/* Success Icon */}
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: [0, 1.2, 1] }}
+            transition={{
+              duration: 0.8,
+              ease: "easeOut",
+            }}
+            className="mb-5"
+          >
+            <div className="relative mx-auto w-fit">
+              {/* Glow */}
+              <div className="absolute inset-0 bg-orange-500 rounded-full blur-xl opacity-30 scale-125"></div>
+
+              <motion.div
+                animate={{
+                  y: [0, -4, 0],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                }}
+                className="relative w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#F15A24] flex items-center justify-center shadow-[0_8px_25px_rgba(241,90,36,0.35)]"
+              >
+                <Check className="text-white" size={30} strokeWidth={3.5} />
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Heading */}
+          <h1 className="text-2xl md:text-3xl lg:text-5xl leading-none font-black ">
+            <span className="text-[#0B2340]">Booking </span>
+            <span className="text-[#F15A24]">Confirmed!</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="mt-3 text-base md:text-lg text-slate-600">
+            Thank you <span className="font-bold text-[#F15A24]">{name}, </span>
+            Your place has been secured.
+          </p>
+
+          {/* Booking Reference */}
+          <div className="mt-5 flex justify-center">
+            <button
+              onClick={handleCopy}
+              className="group flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 shadow-sm hover:shadow-md transition-all"
+            >
+              <span className="text-slate-500 text-sm font-medium">
+                Booking Reference:
+              </span>
+
+              <span className="font-bold text-[#F15A24] text-sm md:text-base">
+                {ref}
+              </span>
+
+              {copied ? (
+                <Check size={16} className="text-orange-500" />
+              ) : (
+                <Copy
+                  size={16}
+                  className="text-slate-400 group-hover:text-[#F15A24]"
+                />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
