@@ -441,14 +441,23 @@ const OverviewTab = () => {
                         Refund Rejected
                       </span>
                     ) : (
-                      course.bookingStatus === "PAID" && (
-                        <button
-                          onClick={() => handleOpenRefundModal(course)}
-                          className="px-4 py-1.5 rounded-xl text-xs font-bold text-red-600 border border-red-200 hover:bg-red-50 transition-colors shadow-sm cursor-pointer"
-                        >
-                          Request Refund
-                        </button>
-                      )
+                      course.bookingStatus === "PAID" && (() => {
+                        const bookingDate = course.createdAt ? new Date(course.createdAt) : null;
+                        const isWithin7Days = bookingDate ? (new Date() - bookingDate) / (1000 * 60 * 60 * 24) <= 7 : true;
+                        
+                        return isWithin7Days ? (
+                          <button
+                            onClick={() => handleOpenRefundModal(course)}
+                            className="px-4 py-1.5 rounded-xl text-xs font-bold text-red-600 border border-red-200 hover:bg-red-50 transition-colors shadow-sm cursor-pointer"
+                          >
+                            Request Refund
+                          </button>
+                        ) : (
+                          <span className="text-xs font-semibold text-gray-400 italic bg-gray-50 border border-gray-100 px-3 py-1 rounded-lg">
+                            Non-refundable (7+ days)
+                          </span>
+                        );
+                      })()
                     )}
                   </div>
                 </div>
@@ -756,6 +765,7 @@ const OverviewTab = () => {
                   </h4>
                   <ul className="text-xs text-orange-700 dark:text-orange-500/80 space-y-1.5 list-disc pl-4 leading-relaxed">
                     <li>Refunds are only eligible for upcoming courses (starting in the future).</li>
+                    <li>Refund requests must be submitted within 7 days of the booking date. No refunds are allowed after 7 days.</li>
                     <li>Refund requests are reviewed and approved by administrators.</li>
                     <li>Upon approval, funds will be returned via Stripe to your original payment method within 5–10 business days.</li>
                   </ul>
