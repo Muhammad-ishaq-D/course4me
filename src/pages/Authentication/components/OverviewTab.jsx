@@ -32,7 +32,7 @@ const OverviewTab = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(null); // ID of course being downloaded
-  
+
   // Refund Request State
   const [selectedCourseForRefund, setSelectedCourseForRefund] = useState(null);
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
@@ -303,13 +303,12 @@ const OverviewTab = () => {
                           {course.title}
                         </h3>
                         <span
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                            course.lifecycleStatus === "Extended"
+                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${course.lifecycleStatus === "Extended"
                               ? "bg-purple-100 text-purple-700 animate-pulse"
                               : course.lifecycleStatus === "Postponed"
                                 ? "bg-yellow-100 text-yellow-700"
                                 : "bg-blue-100 text-blue-700"
-                          }`}
+                            }`}
                         >
                           {course.lifecycleStatus}
                         </span>
@@ -396,11 +395,10 @@ const OverviewTab = () => {
                   </div>
                   <div className="flex items-center gap-3 flex-wrap justify-end">
                     <span
-                      className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide ${
-                        course.bookingStatus === "PAID" || course.bookingStatus === "Confirmed"
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide ${course.bookingStatus === "PAID" || course.bookingStatus === "Confirmed"
                           ? "bg-green-100 text-green-700"
                           : "bg-orange-100 text-orange-700"
-                      }`}
+                        }`}
                     >
                       {course.bookingStatus}
                     </span>
@@ -419,7 +417,7 @@ const OverviewTab = () => {
                       course.bookingStatus === "PAID" && (() => {
                         const bookingDate = course.createdAt ? new Date(course.createdAt) : null;
                         const isWithin7Days = bookingDate ? (new Date() - bookingDate) / (1000 * 60 * 60 * 24) <= 7 : true;
-                        
+
                         return isWithin7Days ? (
                           <button
                             onClick={() => handleOpenRefundModal(course)}
@@ -658,7 +656,7 @@ const OverviewTab = () => {
           <div className="flex items-center gap-2 mb-6">
             <BookOpen className="text-[#F15A24]" size={20} />
             <h2 className="text-lg font-bold text-gray-900 uppercase tracking-wide">
-              Quick Actions
+              Quick Action
             </h2>
           </div>
           <div className="space-y-2">
@@ -716,7 +714,7 @@ const OverviewTab = () => {
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">Request Course Refund</h3>
                 <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">{selectedCourseForRefund.title}</p>
               </div>
-              <button 
+              <button
                 onClick={handleCloseRefundModal}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-white text-xl p-1 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
