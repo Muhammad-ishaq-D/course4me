@@ -112,27 +112,6 @@ const OverviewTab = () => {
 
   const PendingBanner = ({ booking }) => {
     const navigate = useNavigate();
-    const [timeLeft, setTimeLeft] = useState(0);
-
-    useEffect(() => {
-      const expirationTime =
-        new Date(booking.createdAt).getTime() + 60 * 60 * 1000;
-
-      const updateTimer = () => {
-        const now = new Date().getTime();
-        const diff = expirationTime - now;
-        setTimeLeft(Math.max(0, Math.floor(diff / 1000)));
-      };
-
-      updateTimer();
-      const id = setInterval(updateTimer, 1000);
-      return () => clearInterval(id);
-    }, [booking.createdAt]);
-
-    if (timeLeft <= 0) return null;
-
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
 
     return (
       <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-yellow-200 border-2 border-yellow-400 rounded-xl text-black shadow-lg mb-4">
@@ -142,11 +121,7 @@ const OverviewTab = () => {
               ⚠️ You have a pending booking for {booking.title}.
             </p>
             <p className="text-sm font-normal mt-1 md:font-medium">
-              Your spot is held for another{" "}
-              <span className="text-red-600 font-black">
-                {minutes}:{seconds < 10 ? "0" + seconds : seconds}
-              </span>{" "}
-              minutes.
+              Please complete your payment to secure your seat.
             </p>
           </div>
         </div>
