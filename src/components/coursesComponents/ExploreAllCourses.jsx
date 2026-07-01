@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Grid3X3,
@@ -9,6 +9,9 @@ import {
   Activity,
   ShieldCheck,
   BriefcaseBusiness,
+  Search,
+  BookOpen,
+  X,
 } from "lucide-react";
 
 import CourseCard from "../ui/CourseCard";
@@ -64,6 +67,11 @@ const ExploreAllCourses = () => {
 
   //courses section refrence
   const coursesSectionRef = useRef(null);
+
+
+  const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   // =====================================================
   // FETCH COURSES
@@ -148,6 +156,24 @@ const ExploreAllCourses = () => {
     return categoryCourses;
   }, [categoryCourses, activeTab]);
 
+
+
+  // search course suggestion 
+  const courseSuggestions = useMemo(() => {
+    if (!searchInput.trim()) return [];
+
+    const keyword = searchInput.toLowerCase().trim();
+
+    return allCourses
+      .filter((course) => {
+        return (
+          course.title?.toLowerCase().includes(keyword) ||
+          course.category?.toLowerCase().includes(keyword)
+        );
+      })
+      .slice(0, 8);
+  }, [searchInput, allCourses]);
+
   // =====================================================
   // CATEGORY COUNTS
   // =====================================================
@@ -190,24 +216,98 @@ const ExploreAllCourses = () => {
     <section className="py-10 md:py-14 px-4 md:px-8 lg:px-16 min-h-screen bg-[#F5F7FA]">
       <div className="max-w-7xl mx-auto">
         {/* =====================================================
-            HEADER
-        ===================================================== */}
+    HEADER
+===================================================== */}
         <div className="mb-12">
-          <span className="inline-flex items-center gap-2 bg-[#F15A24]/10 text-[#F15A24] px-4 py-2 rounded-full md:text-sm text-xs font-semibold mb-5">
-            <Flame size={16} />
-            Professional Training Courses
-          </span>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+            {/* LEFT CONTENT */}
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-2 bg-[#F15A24]/10 text-[#F15A24] px-4 py-2 rounded-full md:text-sm text-xs font-semibold mb-5">
+                <Flame size={16} />
+                Professional Training Courses
+              </span>
 
-          <h2 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
-            Explore all courses
-          </h2>
+              <h2 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
+                Explore all courses
+              </h2>
 
-          <p className="text-[#141414]/60 mt-2 max-w-2xl text-base md:text-lg leading-relaxed">
-            Browse our wide range of professional training courses and
-            certifications designed to help you build your career and gain
-            industry-recognized qualifications.
-          </p>
-          {/* <Searchbar /> */}
+              <p className="text-[#141414]/60 mt-2 text-base md:text-lg leading-relaxed">
+                Browse our wide range of professional training courses and
+                certifications designed to help you build your career and gain
+                industry-recognized qualifications.
+              </p>
+            </div>
+
+            {/* RIGHT SEARCH */}
+            <div className="relative w-full lg:w-105 xl:w-115 shrink-0">
+              {/* Search Icon */}
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
+                <Search className="w-5 h-5 text-[#F15A24]" />
+              </div>
+
+              <input
+                type="text"
+                placeholder="Search course by name, category..."
+                value={searchInput}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                onChange={(e) => {
+                  setSearchInput(e.target.value);
+                  setShowSuggestions(true);
+                }}
+                className="w-full h-14 rounded-2xl border border-gray-200 bg-white pl-12 pr-12 text-base outline-none focus:border-[#F15A24] focus:ring-4 focus:ring-orange-100 transition"
+              />
+
+              {searchInput && (
+                <button
+                  onClick={() => {
+                    setSearchInput("");
+                    setShowSuggestions(false);
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"
+                >
+                  <X className="w-4 h-4 text-gray-500" />
+                </button>
+              )}
+
+              {/* Suggestions */}
+              {showSuggestions && courseSuggestions.length > 0 && (
+                <div className="absolute left-0 right-0 top-full mt-3 bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden z-50">
+                  <div className="max-h-80 overflow-y-auto">
+                    {courseSuggestions.map((course) => (
+                      <button
+                        key={course.id}
+                        onMouseDown={() => navigate(`/course/${course.id}`)}
+                        className="w-full flex items-center gap-4 px-5 py-4 hover:bg-orange-50 border-b border-gray-100 last:border-none text-left transition"
+                      >
+                        <div className="w-12 h-12 rounded-xl overflow-hidden bg-orange-50 flex items-center justify-center shrink-0">
+                          {course.image ? (
+                            <img
+                              src={course.image}
+                              alt={course.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <BookOpen className="w-5 h-5 text-[#F15A24]" />
+                          )}
+                        </div>
+
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-gray-900 line-clamp-1">
+                            {course.title}
+                          </h4>
+
+                          <p className="text-sm text-gray-500">
+                            {course.category}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* =====================================================

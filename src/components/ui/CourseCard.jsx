@@ -55,54 +55,58 @@ const CourseCard = ({
       </div>
 
       {/* CONTENT */}
-      <div className="p-4 flex flex-col flex-1">
-        {/* TITLE */}
-        <h3 className="text-[#141414] text-2xl font-bold leading-snug mb-2 line-clamp-2 group-hover:text-[#F15A24] transition-colors duration-300">
-          {title}
-        </h3>
+      <div className="p-4 flex flex-col justify-between flex-1">
+        <div>
+          {/* TITLE */}
+          <h3 className="text-[#141414] text-2xl font-bold leading-snug mb-2 line-clamp-2 group-hover:text-[#F15A24] transition-colors duration-300">
+            {title}
+          </h3>
 
-        {/* DESCRIPTION */}
-        <p className="text-[#666666] text-base leading-[1.6] line-clamp-2 mb-4">
-          {description}
-        </p>
-
-        {/* PRICE + DATE */}
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <p className="text-[14px] text-gray-400 font-medium">
-              Starting From
-            </p>
-
-            <h4 className="text-[#141414] text-2xl font-black">£{price}</h4>
-          </div>
-
-          {date && (
-            <div className="text-right">
-              <p className="text-[14px] text-gray-400 font-medium">
-                Next Batch
-              </p>
-
-              <p className="text-[#F15A24] text-[16px] font-bold">{date}</p>
-            </div>
-          )}
+          {/* DESCRIPTION */}
+          <p className="text-[#666666] text-base leading-[1.6] line-clamp-2 mb-4">
+            {description}
+          </p>
         </div>
 
-        {/* BUTTONS */}
-        <div className="flex gap-2 mt-auto">
-          <button
-            onClick={() => navigate(`/booking/course?courseid=${id}`)}
-            className="flex-1 h-11.5 rounded-xl cursor-pointer bg-[#F15A24] hover:bg-[#d94f1f] text-white text-sm md:text-[16px] font-semibold transition-all duration-300"
-          >
-            Book Training
-          </button>
+        <div>
+          {/* PRICE + DATE */}
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <p className="text-[14px] text-gray-400 font-medium">
+                Starting From
+              </p>
 
-          <button
-            onClick={() => navigate(`/course/${id}`)}
-            className="flex-1 h-11.5 rounded-xl border cursor-pointer border-[#E5E5E5] hover:border-[#F15A24]/30 hover:bg-black/90 hover:text-white text-[#141414] text-sm  md:text-[16px] font-semibold flex items-center justify-center gap-1.5 transition-all duration-300"
-          >
-            Details
-            <ArrowRight size={14} />
-          </button>
+              <h4 className="text-[#141414] text-2xl font-black">£{price}</h4>
+            </div>
+
+            {date && (
+              <div className="text-right">
+                <p className="text-[14px] text-gray-400 font-medium">
+                  Next Batch
+                </p>
+
+                <p className="text-[#F15A24] text-[16px] font-bold">{date}</p>
+              </div>
+            )}
+          </div>
+
+          {/* BUTTONS */}
+          <div className="flex gap-2 mt-auto">
+            <button
+              onClick={() => navigate(`/booking/course?courseid=${id}`)}
+              className="flex-1 h-11.5 rounded-xl cursor-pointer bg-[#F15A24] hover:bg-[#d94f1f] text-white text-sm md:text-[16px] font-semibold transition-all duration-300"
+            >
+              Book Training
+            </button>
+
+            <button
+              onClick={() => navigate(`/course/${id}`)}
+              className="flex-1 h-11.5 rounded-xl border cursor-pointer border-[#E5E5E5] hover:border-[#F15A24]/30 hover:bg-black/90 hover:text-white text-[#141414] text-sm  md:text-[16px] font-semibold flex items-center justify-center gap-1.5 transition-all duration-300"
+            >
+              Details
+              <ArrowRight size={14} />
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>

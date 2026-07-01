@@ -314,16 +314,11 @@ const LocationSearch = () => {
                 paginated.map((link) => {
                   const loc = link.locationId || {};
                   const course = link.courseId || {};
+                  
                   const address = [loc.name, loc.city, loc.postcode]
                     .filter(Boolean)
                     .join(", ");
                   const upcomingDates = (link.dates || [])
-                    .filter(
-                      (d) => d.startDate && new Date(d.startDate) >= new Date(),
-                    )
-                    .sort(
-                      (a, b) => new Date(a.startDate) - new Date(b.startDate),
-                    );
                   const nextDate = upcomingDates[0]?.startDate
                     ? new Date(upcomingDates[0].startDate).toLocaleDateString(
                         "en-GB",
@@ -354,7 +349,7 @@ const LocationSearch = () => {
                     >
                       <div className="relative flex flex-col sm:flex-row gap-4">
                         {/* Thumbnail */}
-                        <div className="w-full sm:w-32 md:w-36 h-60 sm:h-32 md:h-44 rounded-3xl overflow-hidden shrink-0 bg-orange-50 flex items-center justify-center">
+                        <div className="w-full sm:w-32 md:w-36 h-60 sm:h-32 md:h-46 rounded-3xl overflow-hidden shrink-0 bg-orange-50 flex items-center justify-center">
                           {course.thumbnail && !imgErrors[link._id] ? (
                             <img
                               src={course.thumbnail}
@@ -376,38 +371,43 @@ const LocationSearch = () => {
                         <div className="flex-1 min-w-0 flex flex-col">
                           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                             {/* Left info */}
-                            <div className="flex-1 min-w-0">
-                              {/* Category badge */}
-                              {course.category && (
-                                <span className="inline-block text-sm font-semibold px-3 py-1 rounded-full bg-orange-50 text-orange-600 mb-2">
-                                  {course.category}
-                                </span>
-                              )}
+                            <div className="flex flex-col justify-between  min-w-0">
+                              <div>
+                                {/* Category badge */}
+                                {course.category && (
+                                  <span className="inline-block text-sm font-semibold px-3 py-1 rounded-full bg-orange-50 text-orange-600 mb-2">
+                                    {course.category}
+                                  </span>
+                                )}
 
-                              {/* Title */}
-                              <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight wrap-break-word line-clamp-2">
-                                {course.title}
-                              </h3>
+                                {/* Title */}
+                                <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight wrap-break-word line-clamp-2">
+                                  {course.title}
+                                </h3>
 
-                              {/* Location address */}
-                              {address && (
-                                <div className="flex items-center gap-2 mt-2">
-                                  <div className="w-7 h-7 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                                    <MapPin
-                                      size={16}
-                                      className=" text-orange-500"
-                                    />
+                                {/* Location address */}
+                                {address && (
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <div className="w-7 h-7 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
+                                      <MapPin
+                                        size={16}
+                                        className=" text-orange-500"
+                                      />
+                                    </div>
+                                    <p className="text-sm text-gray-500 leading-relaxed ">
+                                      {address}
+                                    </p>
                                   </div>
-                                  <p className="text-sm text-gray-500 leading-relaxed ">
-                                    {address}
-                                  </p>
-                                </div>
-                              )}
+                                )}
+                              </div>
 
                               {/* Price & next date */}
-                              <div className="flex flex-wrap items-center gap-3 mt-3">
-                                <span className="text-xl font-black text-gray-900">
-                                  £{price}
+                              <div className="flex flex-row items-center justify-between gap-3 mt-3">
+                                <span className="text-sm flex flex-col text-orange-500 font-semibold">
+                                  Price:{" "}
+                                  <span className="text-xl font-black text-gray-900">
+                                    £{price}
+                                  </span>
                                 </span>
                                 {nextDate && (
                                   <span className="text-sm text-orange-500 font-semibold">

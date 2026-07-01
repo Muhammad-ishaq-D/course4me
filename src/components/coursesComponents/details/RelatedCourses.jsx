@@ -15,6 +15,7 @@ const RelatedCourses = () => {
         setLoading(true);
 
         const response = await courseService.getAllCourses({
+          status: "Published",
           limit: 4,
         });
 

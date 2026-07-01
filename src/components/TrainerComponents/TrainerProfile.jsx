@@ -16,6 +16,14 @@ const TrainerProfile = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const handleBack = () => {
+    navigate("/", {
+      state: {
+        scrollTo: location.state?.fromSection,
+      },
+    });
+  };
+
   const trainer = location.state?.trainer;
 
   if (!trainer) {
@@ -37,7 +45,7 @@ const TrainerProfile = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-14">
           {/* BACK BUTTON */}
           <button
-            onClick={() => navigate(-1)}
+            onClick={handleBack}
             className=" group inline-flex items-center gap-2  text-white cursor-pointer transition-all duration-300 mb-8"
           >
             <div className="w-9 h-9 rounded-full border border-white/10 bg-[#F15A24]  flex items-center justify-center">

@@ -55,7 +55,7 @@ export default function TrainersSection() {
 
   return (
     <section className="bg-white text-[#1A1A1A] py-24 px-6">
-      <div className="max-w-7xl mx-auto">
+      <div id="team" className="max-w-7xl mx-auto">
         {/* Badge */}
         <div className="flex justify-center mb-6">
           <span className="flex items-center gap-2 bg-[#1A1A1A] text-white px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase shadow-md">
@@ -83,7 +83,12 @@ export default function TrainersSection() {
                   key={i}
                   trainer={trainer}
                   onClick={() =>
-                    navigate("/trainer-profile", { state: { trainer } })
+                    navigate("/trainer-profile", {
+                      state: {
+                        trainer,
+                        fromSection: "team",
+                      },
+                    })
                   }
                 />
               ))}

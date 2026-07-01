@@ -175,43 +175,51 @@ const ExploreAllLicences = () => {
     <section className="py-10 md:py-14 px-4 md:px-8 lg:px-16 min-h-screen bg-[#F5F7FA]">
       <div className="max-w-7xl mx-auto">
         {/* =====================================================
-            HEADER
-        ===================================================== */}
+                  HEADER
+            ===================================================== */}
         <div className="mb-12">
-          <span className="inline-flex items-center gap-2 bg-[#F15A24]/10 text-[#F15A24] px-4 py-2 rounded-full md:text-sm text-xs font-semibold mb-5">
-            <Flame size={16} />
-            Professional Security Licences
-          </span>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+            {/* LEFT CONTENT */}
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-2 bg-[#F15A24]/10 text-[#F15A24] px-4 py-2 rounded-full md:text-sm text-xs font-semibold mb-5">
+                <Flame size={16} />
+                Professional Security Licences
+              </span>
 
-          <h2 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
-            Explore all licences
-          </h2>
+              <h2 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
+                Explore all licences
+              </h2>
 
-          <p className="text-[#141414]/60 mt-1 max-w-2xl text-base md:text-lg leading-relaxed">
-            Browse professional SIA licences, first aid qualifications,
-            workplace safety training and specialist certification courses.
-          </p>
-
-          {/* SEARCH BAR */}
-          <div className="mt-6 relative max-w-xl">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#98A2B3]">
-              <Search size={18} />
+              <p className="text-[#141414]/60 mt-2 text-base md:text-lg leading-relaxed">
+                Browse professional SIA licences, first aid qualifications,
+                workplace safety training and specialist certification courses.
+              </p>
             </div>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search licences by name, category..."
-              className="w-full pl-11 pr-10 py-3.5 bg-white border border-[#E4E7EC] rounded-2xl text-base text-[#101828] placeholder-[#98A2B3] focus:outline-none focus:border-[#F15A24]/40 focus:shadow-[0_0_0_3px_rgba(241,90,36,0.08)] transition-all duration-300"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-[#F5F5F5] hover:bg-[#ECECEC] flex items-center justify-center transition-all duration-200"
-              >
-                <X size={14} className="text-[#667085]" />
-              </button>
-            )}
+
+            {/* RIGHT SEARCH */}
+            <div className="relative w-full lg:w-[420px] xl:w-[460px] shrink-0">
+              {/* Search Icon */}
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#98A2B3] z-10">
+                <Search size={18} />
+              </div>
+
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search licences by name, category..."
+                className="w-full h-14 pl-11 pr-11 bg-white border border-[#E4E7EC] rounded-2xl text-base text-[#101828] placeholder-[#98A2B3] focus:outline-none focus:border-[#F15A24]/40 focus:shadow-[0_0_0_3px_rgba(241,90,36,0.08)] transition-all duration-300"
+              />
+
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-all duration-200"
+                >
+                  <X size={16} className="text-[#667085]" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

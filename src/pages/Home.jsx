@@ -1,4 +1,5 @@
-import React from "react";
+import React,{useEffect} from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import HeroSection from "../components/homeComponents/HeroSection";
 import HiringTrainingSection from "../components/homeComponents/HiringTrainingSection";
 import CoursesLicencesSection from "../components/homeComponents/CoursesLicencesSection";
@@ -14,6 +15,28 @@ import AppPromotionSection from "../components/homeComponents/AppPromotionSectio
 import StatsBar from "../components/homeComponents/StatsBar";
 
 export default function Home() {
+   const location = useLocation();
+   const navigate = useNavigate();
+
+   useEffect(() => {
+     if (location.state?.scrollTo) {
+       const section = document.getElementById(location.state.scrollTo);
+
+       if (section) {
+         section.scrollIntoView({
+           behavior: "smooth",
+           block: "start",
+         });
+       }
+
+       // Clear the state so it doesn't scroll again on refresh
+       navigate(location.pathname, {
+         replace: true,
+         state: {},
+       });
+     }
+   }, [location, navigate]);
+   
   return (
     <div className="">
       <HeroSection />
