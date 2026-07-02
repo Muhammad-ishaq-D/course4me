@@ -18,11 +18,13 @@ import {
   AlertTriangle,
   XCircle,
   Briefcase,
+  Star,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import courseService from "../../../api/services/courseService";
 import careerService from "../../../api/services/careerService";
 import bookingService from "../../../api/services/bookingService";
+import reviewService from "../../../api/services/reviewService";
 import Loader from "../../../components/ui/Loader";
 import { useAuth } from "../../../context/AuthContext";
 import { downloadCertificate } from "../../../utils/certificateGenerator";
@@ -52,6 +54,63 @@ const OverviewTab = () => {
   const handleCloseRefundModal = () => {
     setIsRefundModalOpen(false);
     setSelectedCourseForRefund(null);
+  };
+
+  // Review State
+  const [myReviews, setMyReviews] = useState({}); // keyed by bookingId
+  const [selectedCourseForReview, setSelectedCourseForReview] = useState(null);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewHoverRating, setReviewHoverRating] = useState(0);
+  const [reviewComment, setReviewComment] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewError, setReviewError] = useState("");
+  const [reviewSuccess, setReviewSuccess] = useState(false);
+
+  const handleOpenReviewModal = (course) => {
+    const existing = myReviews[course.id];
+    setSelectedCourseForReview(course);
+    setReviewRating(existing?.rating || 0);
+    setReviewHoverRating(0);
+    setReviewComment(existing?.comment || "");
+    setReviewError("");
+    setReviewSuccess(false);
+    setIsReviewModalOpen(true);
+  };
+
+  const handleCloseReviewModal = () => {
+    setIsReviewModalOpen(false);
+    setSelectedCourseForReview(null);
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (!reviewRating) {
+      setReviewError("Please select a star rating.");
+      return;
+    }
+    setSubmittingReview(true);
+    setReviewError("");
+    try {
+      const response = await reviewService.submitReview({
+        bookingId: selectedCourseForReview.id,
+        rating: reviewRating,
+        comment: reviewComment,
+      });
+      setMyReviews((prev) => ({
+        ...prev,
+        [selectedCourseForReview.id]: response.data.data,
+      }));
+      setReviewSuccess(true);
+      setTimeout(() => {
+        handleCloseReviewModal();
+      }, 1500);
+    } catch (err) {
+      console.error(err);
+      setReviewError(err.response?.data?.message || "Failed to submit review. Please try again.");
+    } finally {
+      setSubmittingReview(false);
+    }
   };
 
   const handleSubmitRefund = async (e) => {
@@ -152,6 +211,19 @@ const OverviewTab = () => {
           }
         } catch (appErr) {
           console.error("Failed to fetch job applications:", appErr);
+        }
+
+        try {
+          const reviewsResult = await reviewService.getMyReviews();
+          if (reviewsResult && reviewsResult.success) {
+            const reviewsByBooking = {};
+            (reviewsResult.data || []).forEach((review) => {
+              reviewsByBooking[review.booking] = review;
+            });
+            setMyReviews(reviewsByBooking);
+          }
+        } catch (reviewErr) {
+          console.error("Failed to fetch reviews:", reviewErr);
         }
 
         if (result) {
@@ -304,10 +376,10 @@ const OverviewTab = () => {
                         </h3>
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${course.lifecycleStatus === "Extended"
-                              ? "bg-purple-100 text-purple-700 animate-pulse"
-                              : course.lifecycleStatus === "Postponed"
-                                ? "bg-yellow-100 text-yellow-700"
-                                : "bg-blue-100 text-blue-700"
+                            ? "bg-purple-100 text-purple-700 animate-pulse"
+                            : course.lifecycleStatus === "Postponed"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-blue-100 text-blue-700"
                             }`}
                         >
                           {course.lifecycleStatus}
@@ -396,8 +468,8 @@ const OverviewTab = () => {
                   <div className="flex items-center gap-3 flex-wrap justify-end">
                     <span
                       className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide ${course.bookingStatus === "PAID" || course.bookingStatus === "Confirmed"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-orange-100 text-orange-700"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-orange-100 text-orange-700"
                         }`}
                     >
                       {course.bookingStatus}
@@ -622,20 +694,34 @@ const OverviewTab = () => {
                         <MapPin size={14} /> {course.location}
                       </span>
                     </div>
-                    <button
-                      onClick={() => handleDownloadCertificate(course)}
-                      disabled={downloading === course.id}
-                      className="mt-3 flex items-center gap-2 text-[#F15A24] font-semibold text-sm hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {downloading === course.id ? (
-                        <Loader2 size={14} className="animate-spin" />
-                      ) : (
-                        <Download size={14} />
-                      )}
-                      {downloading === course.id
-                        ? "Generating..."
-                        : "Download Certificate"}
-                    </button>
+                    <div className="flex items-center gap-4 flex-wrap mt-3">
+                      <button
+                        onClick={() => handleDownloadCertificate(course)}
+                        disabled={downloading === course.id}
+                        className="flex items-center gap-2 text-[#F15A24] font-semibold text-sm hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {downloading === course.id ? (
+                          <Loader2 size={14} className="animate-spin" />
+                        ) : (
+                          <Download size={14} />
+                        )}
+                        {downloading === course.id
+                          ? "Generating..."
+                          : "Download Certificate"}
+                      </button>
+                      <button
+                        onClick={() => handleOpenReviewModal(course)}
+                        className="flex items-center gap-1.5 text-gray-600 font-semibold text-sm hover:underline"
+                      >
+                        <Star
+                          size={14}
+                          className={myReviews[course.id] ? "fill-[#F15A24] text-[#F15A24]" : ""}
+                        />
+                        {myReviews[course.id]
+                          ? `Your Review (${myReviews[course.id].rating}★)`
+                          : "Leave a Review"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))
@@ -784,6 +870,112 @@ const OverviewTab = () => {
                       </>
                     ) : (
                       "Submit Request"
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Review Modal */}
+      {isReviewModalOpen && selectedCourseForReview && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-8 shadow-2xl border border-gray-100 dark:border-slate-800 space-y-6 relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  {myReviews[selectedCourseForReview.id] ? "Edit Your Review" : "Leave a Review"}
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">{selectedCourseForReview.title}</p>
+              </div>
+              <button
+                onClick={handleCloseReviewModal}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-white text-xl p-1 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+
+            {reviewSuccess ? (
+              <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900/50 p-6 rounded-2xl text-center space-y-3">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto text-green-600 dark:text-green-400">
+                  <CheckCircle size={24} />
+                </div>
+                <h4 className="font-bold text-green-800 dark:text-green-400 text-lg">Thank You!</h4>
+                <p className="text-sm text-green-700 dark:text-green-500/80">Your review has been submitted.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmitReview} className="space-y-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-bold text-gray-700 dark:text-slate-300">
+                    Your Rating
+                  </label>
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setReviewRating(star)}
+                        onMouseEnter={() => setReviewHoverRating(star)}
+                        onMouseLeave={() => setReviewHoverRating(0)}
+                        className="cursor-pointer p-0.5"
+                        aria-label={`${star} star${star === 1 ? "" : "s"}`}
+                      >
+                        <Star
+                          size={28}
+                          className={
+                            star <= (reviewHoverRating || reviewRating)
+                              ? "fill-[#F15A24] text-[#F15A24]"
+                              : "text-gray-300 dark:text-slate-600"
+                          }
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-bold text-gray-700 dark:text-slate-300">
+                    Comment (optional)
+                  </label>
+                  <textarea
+                    rows={4}
+                    maxLength={1000}
+                    value={reviewComment}
+                    onChange={(e) => setReviewComment(e.target.value)}
+                    placeholder="Share your experience with this course..."
+                    className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-4 text-sm outline-none focus:ring-2 focus:ring-orange-500/20 focus:bg-white dark:focus:bg-slate-900 transition-all dark:text-white resize-none"
+                  />
+                </div>
+
+                {reviewError && (
+                  <p className="text-xs font-bold text-red-500 flex items-center gap-1">
+                    <AlertTriangle size={12} /> {reviewError}
+                  </p>
+                )}
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={handleCloseReviewModal}
+                    className="flex-1 bg-gray-50 hover:bg-gray-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-300 font-bold py-3 px-4 rounded-xl text-sm transition-all cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submittingReview}
+                    className="flex-1 bg-[#F15A24] hover:bg-[#D94E1F] disabled:opacity-50 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    {submittingReview ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      "Submit Review"
                     )}
                   </button>
                 </div>
