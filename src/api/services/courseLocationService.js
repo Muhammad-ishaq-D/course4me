@@ -8,7 +8,7 @@ const courseLocationService = {
         axiosInstance.get(`/course-locations/${courseLocationId}`),
 
     getByCourse: (courseId) =>
-        axiosInstance.get(`/course-locations/course/${courseId}`),
+        axiosInstance.get(`/course-locations/course/${courseId}?activeOnly=true`),
 };
 
 export default courseLocationService;
