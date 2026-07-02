@@ -11,10 +11,11 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const checkAuth = async () => {
-            // Check for token in URL (from social auth redirect on the signin page only —
-            // other pages, like /reset-password, use their own unrelated `token` param)
+            // Check for token in URL (from social auth redirect, which can land on any page —
+            // /dashboard by default, or wherever the user started). /reset-password is the only
+            // page that uses `token` for something else (its own reset code), so exclude just that.
             const urlParams = new URLSearchParams(window.location.search);
-            const tokenFromUrl = window.location.pathname === '/signin' ? urlParams.get('token') : null;
+            const tokenFromUrl = window.location.pathname !== '/reset-password' ? urlParams.get('token') : null;
             let shouldRedirect = false;
 
             if (tokenFromUrl) {
