@@ -12,9 +12,9 @@ const locationService = {
         return response.data;
     },
 
-    // Get all locations (portal only shows active ones — disabled locations are hidden)
+    // Get all locations (includes disabled ones — the UI shows them greyed out / non-selectable)
     getAllLocations: async () => {
-        const response = await axiosInstance.get('/locations', { params: { status: 'Active' } });
+        const response = await axiosInstance.get('/locations');
         return response.data;
     },
 
