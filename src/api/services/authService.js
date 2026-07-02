@@ -14,11 +14,11 @@ const authService = {
         return response.data;
     },
     forgotPassword: async (email) => {
-        const response = await axiosInstance.post('/auth/forgot-password', { email });
+        const response = await axiosInstance.post('/portal/auth/forgot-password', { email });
         return response.data;
     },
     resetPassword: async (data) => {
-        const response = await axiosInstance.post('/auth/reset-password', data);
+        const response = await axiosInstance.post('/portal/auth/reset-password', data);
         return response.data;
     },
     getProfile: async () => {
