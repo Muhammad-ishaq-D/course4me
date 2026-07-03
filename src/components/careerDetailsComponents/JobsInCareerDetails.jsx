@@ -15,13 +15,22 @@ const JobsInCareerDetails = ({ career }) => {
         const response = await careerService.getActiveJobs();
         const allJobs = response.data?.listings || response.data?.data?.listings || [];
         
-        // Strictly filter jobs matching the specific career title or career category
-        const filtered = allJobs.filter(job => 
-          (job.category === career.title || 
-           job.category?.toLowerCase() === career.title?.toLowerCase() ||
-           career.title?.toLowerCase().includes(job.category?.toLowerCase()) ||
-           job.category?.toLowerCase().includes(career.title?.toLowerCase()))
-        );
+        const careerTitle = career.title?.toLowerCase().trim();
+
+        // Filter jobs to this specific career.
+        const filtered = allJobs.filter(job => {
+          // Primary: job explicitly linked to this career via the `career` field.
+          const jobCareer = job.career?.toLowerCase().trim();
+          if (jobCareer) return jobCareer === careerTitle;
+
+          // Legacy fallback: older jobs stored the career title in `category`.
+          const jobCategory = job.category?.toLowerCase().trim();
+          return (
+            jobCategory === careerTitle ||
+            (careerTitle && jobCategory &&
+              (careerTitle.includes(jobCategory) || jobCategory.includes(careerTitle)))
+          );
+        });
         
         setJobsList(filtered);
       } catch (error) {
