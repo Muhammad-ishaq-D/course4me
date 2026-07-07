@@ -165,6 +165,7 @@ const ApplyJob = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setCvBase64(reader.result);
+        setErrors((prev) => ({ ...prev, cvFile: undefined }));
       };
       reader.readAsDataURL(file);
     }
@@ -254,7 +255,14 @@ const ApplyJob = () => {
     e.preventDefault();
 
     const isValid = await validateForm();
-    if (!isValid) {
+    let isCvValid = true;
+
+    if (!cvBase64) {
+      setErrors((prev) => ({ ...prev, cvFile: "CV / Resume is required" }));
+      isCvValid = false;
+    }
+
+    if (!isValid || !isCvValid) {
       return;
     }
 
@@ -262,7 +270,7 @@ const ApplyJob = () => {
       setSubmitting(true);
       const payload = {
         ...form,
-        cvFile: cvBase64 || "cv_resume.pdf",
+        cvFile: cvBase64,
       };
 
       // Submit application
@@ -1019,7 +1027,7 @@ const ApplyJob = () => {
                   {/* ================= UPLOAD ================= */}
                   <div>
                     <label className="block mb-3 text-base font-semibold text-[#111827]">
-                      Upload CV / Resume
+                      Upload CV / Resume *
                     </label>
 
                     <input
@@ -1032,22 +1040,27 @@ const ApplyJob = () => {
 
                     <div
                       onClick={() => fileInputRef.current.click()}
-                      className="border-2 border-dashed border-gray-300 rounded-2xl p-7 text-center hover:border-[#F15A24] transition-all cursor-pointer bg-[#FAFBFC] hover:bg-orange-50/10"
+                      className={`border-2 border-dashed ${errors.cvFile ? "border-red-400 bg-red-50/40" : "border-gray-300 bg-[#FAFBFC] hover:border-[#F15A24] hover:bg-orange-50/10"} rounded-2xl p-7 text-center transition-all cursor-pointer`}
                     >
-                      <Upload size={24} className="mx-auto text-gray-400" />
+                      <Upload size={24} className={`mx-auto ${errors.cvFile ? "text-red-400" : "text-gray-400"}`} />
 
-                      <p className="mt-3 text-sm font-bold text-gray-700">
+                      <p className={`mt-3 text-sm font-bold ${errors.cvFile ? "text-red-500" : "text-gray-700"}`}>
                         {cvName
                           ? `Selected File: ${cvName}`
                           : "Click to select and upload your CV"}
                       </p>
 
-                      <p className="mt-1 text-xs text-gray-400">
+                      <p className={`mt-1 text-xs ${errors.cvFile ? "text-red-400" : "text-gray-400"}`}>
                         {cvName
                           ? "Ready for submission"
                           : "PDF, DOC, DOCX up to 5MB"}
                       </p>
                     </div>
+                    {errors.cvFile && (
+                      <p className="mt-2 text-[12px] font-medium text-red-500">
+                        {errors.cvFile}
+                      </p>
+                    )}
                   </div>
 
                   {/* ================= SUBMIT ================= */}
