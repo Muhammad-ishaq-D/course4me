@@ -199,6 +199,12 @@ const ApplyJob = () => {
 
   // ================= VALIDATION & SUBMISSION =================
   const validateForm = async () => {
+
+    // if(!cvBased64 && !cvName){
+    //   toast.error("Please upload your CV/Resume before submitting the Application.");
+    //   document.querySelector('input[type="file"]').scrollIntoView({ behavior: "smooth", block: "center" });
+    //   return false;
+    // }
     const schema = yup.object().shape({
       firstName: yup.string().required("First name is required"),
       lastName: yup.string().required("Last name is required"),

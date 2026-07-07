@@ -94,10 +94,10 @@ function VideoTestimonials() {
               }}
               viewport={{ once: true }}
               whileHover={{ y: -8 }}
-              className="group"
+              className="group h-full"
             >
               {/* CARD */}
-              <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+              <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] h-full flex flex-col">
                 {/* IMAGE */}
                 <div className="relative overflow-hidden">
                   <img
@@ -141,7 +141,7 @@ function VideoTestimonials() {
                 </div>
 
                 {/* QUOTE */}
-                <div className="p-5">
+                <div className="p-5 flex flex-col flex-1">
                   <div className="flex justify-end mb-2 items-center">
                     <div className="flex items-center  gap-1">
                       <Star

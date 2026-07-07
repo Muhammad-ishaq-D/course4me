@@ -447,16 +447,16 @@ const CareerListing = () => {
                     {/* Button */}
                     <button
                       onClick={() => setOpen(!open)}
-                      className=" w-[140px] md:w-[170px] h-11 px-2 md:px-4 rounded-2xl border-2 border-[#e46612] bg-white flex items-center justify-between text-[#111827]  text-sm font-bold shadow-sm hover:shadow-md transition-all "
+                      className=" w-[110px] sm:w-[140px] md:w-[170px] h-9 sm:h-11 px-2 md:px-4 rounded-2xl border-2 border-[#e46612] bg-white flex items-center justify-between text-[#111827]  text-[10px] sm:text-sm whitespace-nowrap  font-bold shadow-sm hover:shadow-md transition-all"
                     >
                       {sortOptions.find((item) => item.value === sortBy)?.label}
                       <ChevronDown
-                        className={`w-5 h-5 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+                        className={`w-3.5 sm:w-5 h-3.5 sm:h-5 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
                       />
                     </button>
                     {/* Dropdown */}
                     {open && (
-                      <div className=" absolute top-13 right-0 w-[150px] md:w-[170px] rounded-2xl bg-white border border-gray-200 shadow-[0_20px_45px_rgba(0,0,0,0.12)] overflow-hidden z-[999999] ">
+                      <div className=" absolute top-11 sm:top-13 right-0 min-w-[120px] sm:min-w-[150px] md:w-[170px] rounded-2xl bg-white border border-gray-200 shadow-[0_20px_45px_rgba(0,0,0,0.12)] overflow-hidden z-[999999] ">
                         {sortOptions.map((item) => (
                           <button
                             key={item.value}
@@ -464,7 +464,7 @@ const CareerListing = () => {
                               setSortBy(item.value);
                               setOpen(false);
                             }}
-                            className={` w-full px-5 py-3 flex items-center justify-between text-[15px] font-semibold transition-all ${sortBy === item.value ? "bg-[#F8510C] text-white" : "text-[#111827] hover:bg-[#FFF1EB]"} `}
+                            className={` w-full px-5 sm:px-5 py-2.5 sm:py-3  flex items-center justify-between text-[11px] sm:text-[15px] font-semibold whitespace-nowrap transition-all ${sortBy === item.value ? "bg-[#F8510C] text-white" : "text-[#111827] hover:bg-[#FFF1EB]"} `}
                           >
                             {item.label}
                           </button>
