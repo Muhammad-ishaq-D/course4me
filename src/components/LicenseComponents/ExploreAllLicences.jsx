@@ -177,7 +177,7 @@ const ExploreAllLicences = () => {
         {/* =====================================================
                   HEADER
             ===================================================== */}
-        <div className="mb-12">
+        <div className="mb-6 md:mb-14">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
             {/* LEFT CONTENT */}
             <div className="max-w-2xl">
@@ -249,7 +249,7 @@ const ExploreAllLicences = () => {
             {/* TOP BAR */}
             <div
               ref={coursesSectionRef}
-              className="bg-white rounded-xl border border-[#ECECEC] shadow-[0_10px_40px_rgba(0,0,0,0.05)] px-6 py-4 lg:mb-2 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+              className="bg-white rounded-xl border border-[#ECECEC] shadow-[0_10px_40px_rgba(0,0,0,0.05)] px-6 py-4 mb-4 lg:mb-2 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
             >
               <div className="flex gap-2">
                 <h2 className="text-2xl font-bold text-[#141414]">

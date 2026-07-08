@@ -304,11 +304,13 @@ const LicenseDetails = () => {
 
                   {/* ==============ABOUT / DESCRIPTION=============== */}
                   {section.content && (
-                    <p className="text-[#667085] leading-7 text-sm md:text-base">
-                      {section.content}
+                    <p className="text-[#667085] leading-7 text-sm md:text-base" 
+                    dangerouslySetInnerHTML={{ __html: section.content }}
+                    >
+                      
                     </p>
                   )}
-
+                  
                   {/* ==============ELIGIBILITY=========== */}
                   {section.items && (
                     <div className="grid md:grid-cols-2 gap-3">

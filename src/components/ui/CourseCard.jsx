@@ -94,7 +94,7 @@ const CourseCard = ({
           <div className="flex gap-2 mt-auto">
             <button
               onClick={() => navigate(`/booking/course?courseid=${id}`)}
-              className="flex-1 h-11.5 rounded-xl cursor-pointer bg-[#F15A24] hover:bg-[#d94f1f] text-white text-sm md:text-[16px] font-semibold transition-all duration-300"
+              className="whitespace-nowrap flex-1 h-11.5 rounded-xl cursor-pointer bg-[#F15A24] hover:bg-[#d94f1f] text-white text-sm md:text-[14px] font-semibold transition-all duration-300"
             >
               Book Training
             </button>

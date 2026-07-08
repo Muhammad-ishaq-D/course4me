@@ -108,7 +108,7 @@ const LicenseCard = ({ item, index }) => {
 
           <NavLink
             to={`/licences/licencesdetails?id=${item._id || item.title}`}
-            className="py-3 px-5 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-sm font-bold flex items-center gap-2 transition-all duration-300 shadow-lg shadow-[#F15A24]/20"
+            className="whitespace-nowrap py-3 px-3 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-sm font-bold flex items-center gap-2 transition-all duration-300 shadow-lg shadow-[#F15A24]/20 mt-6"
           >
             View Licence
             <ArrowRight size={16} />
