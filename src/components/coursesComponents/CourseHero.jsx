@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Search, Download, CheckCircle, Star, Shield } from "lucide-react";
-
+import {useSearchParams} from "react-router-dom";
 import securityImg from "../../assets/courses/hero/security.png";
 import hospitalityImg from "../../assets/courses/hero/hospitality.png";
 import firstAidImg from "../../assets/courses/hero/first_aid.png";
