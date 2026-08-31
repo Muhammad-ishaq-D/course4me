@@ -200,26 +200,11 @@ const LocationCards = ({
                 </h4>
 
                 {(() => {
-                  const datesToRender = (
-                    loc.dates || [
-                      {
-                        range: "Mon 23rd Mar 2026 - Thu 26th Mar 2026",
-                        price: loc.price,
-                        id: 1,
-                      },
-                      {
-                        range: "Mon 30th Mar 2026 - Thu 2nd Apr 2026",
-                        price: loc.price,
-                        id: 2,
-                      },
-                      {
-                        range: "Mon 6th Apr 2026 - Thu 9th Apr 2026",
-                        price: (parseFloat(loc.price) + 10).toFixed(2),
-                        id: 3,
-                      },
-                    ]
-                  ).filter((date) => {
-                    if (bookedSchedules.length > 0) {
+                  const baseDates = loc.dates && loc.dates.length > 0 ? loc.dates : [];
+                  const hasBooked = bookedSchedules && bookedSchedules.length > 0;
+
+                  const datesToRender = baseDates.filter((date) => {
+                    if (hasBooked) {
                       return bookedSchedules.some(
                         (b) => b.scheduleId === String(date.id),
                       );
@@ -228,17 +213,26 @@ const LocationCards = ({
                   });
 
                   if (datesToRender.length === 0) {
-                    return (
-                      <div className="bg-orange-50 border border-orange-100 rounded-xl p-6 text-center">
-                        <p className="text-orange-800 font-medium text-sm">
-                          You have a pending booking at another location or
-                          date.
-                        </p>
-                        <p className="text-orange-600/80 font-normal text-xs mt-1">
-                          Please complete your existing booking.
-                        </p>
-                      </div>
-                    );
+                    if (hasBooked) {
+                      return (
+                        <div className="bg-orange-50 border border-orange-100 rounded-xl p-6 text-center">
+                          <p className="text-orange-800 font-medium text-sm">
+                            You have a pending booking at another location or date.
+                          </p>
+                          <p className="text-orange-600/80 font-normal text-xs mt-1">
+                            Please complete your existing booking.
+                          </p>
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div className="bg-gray-50 border border-gray-100 rounded-xl p-6 text-center">
+                          <p className="text-gray-500 font-medium text-sm">
+                            No upcoming dates available for this location.
+                          </p>
+                        </div>
+                      );
+                    }
                   }
 
                   return datesToRender.map((date, idx) => (
