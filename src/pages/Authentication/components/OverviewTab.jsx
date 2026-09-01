@@ -39,6 +39,7 @@ const OverviewTab = () => {
   const [selectedCourseForRefund, setSelectedCourseForRefund] = useState(null);
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
   const [refundReason, setRefundReason] = useState("");
+  const [refundProof, setRefundProof] = useState(null);
   const [submittingRefund, setSubmittingRefund] = useState(false);
   const [refundError, setRefundError] = useState("");
   const [refundSuccess, setRefundSuccess] = useState(false);
@@ -46,6 +47,7 @@ const OverviewTab = () => {
   const handleOpenRefundModal = (course) => {
     setSelectedCourseForRefund(course);
     setRefundReason("");
+    setRefundProof(null);
     setRefundError("");
     setRefundSuccess(false);
     setIsRefundModalOpen(true);
@@ -122,7 +124,13 @@ const OverviewTab = () => {
     setSubmittingRefund(true);
     setRefundError("");
     try {
-      await bookingService.requestRefund(selectedCourseForRefund.id, { reason: refundReason });
+      const formData = new FormData();
+      formData.append('reason', refundReason);
+      if (refundProof) {
+        formData.append('proof', refundProof);
+      }
+      
+      await bookingService.requestRefund(selectedCourseForRefund.id, formData);
       setRefundSuccess(true);
       // Reload user courses
       const result = await courseService.getUserCourses();
@@ -752,9 +760,6 @@ const OverviewTab = () => {
                 icon: <Calendar size={18} />,
                 action: () => navigate("/courses"),
               },
-              // { label: "Check Results", icon: <Award size={18} /> },
-              // { label: "FAQs", icon: <HelpCircle size={18} /> },
-              // { label: "Contact Support", icon: <MessageSquare size={18} /> },
             ].map((action, idx) => (
               <button
                 key={idx}
@@ -841,6 +846,18 @@ const OverviewTab = () => {
                     onChange={(e) => setRefundReason(e.target.value)}
                     placeholder="Please explain why you are requesting a refund..."
                     className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl p-4 text-sm outline-none focus:ring-2 focus:ring-orange-500/20 focus:bg-white dark:focus:bg-slate-900 transition-all dark:text-white resize-none"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-bold text-gray-700 dark:text-slate-300">
+                    Attach Proof (Optional)
+                  </label>
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.webp,.pdf"
+                    onChange={(e) => setRefundProof(e.target.files[0])}
+                    className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 dark:file:bg-slate-800 dark:file:text-slate-300"
                   />
                 </div>
 
