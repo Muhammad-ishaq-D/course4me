@@ -87,14 +87,54 @@ const TermsOfServices = () => {
 
           <div>
             <h2 className="text-3xl font-bold text-[#111827] mb-6">
-              4. Payments & Refunds
+              4. Cancellation & Refund Policy
             </h2>
 
-            <p className="text-gray-600 leading-7">
-              Payments are processed securely through approved payment
-              providers. Refund eligibility and cancellation policies may vary
-              depending on the selected training provider.
-            </p>
+            <div className="space-y-6 text-gray-600 leading-7">
+              <p>
+                Courses4Me aims to provide a clear and transparent service to all customers. This policy sets out the terms and conditions that apply to the cancellation, amendment, rescheduling, and refund of course bookings.
+              </p>
+              
+              <h3 className="text-xl font-bold text-[#111827] mt-4">4.1 Cancellation or Amendment of a Booking</h3>
+              <p>
+                Once a course booking has been confirmed, any request to cancel or amend the booking may be subject to cancellation or administration charges. Customers should contact Courses4Me as soon as possible if they need to make any changes to their booking.
+              </p>
+
+              <h3 className="text-xl font-bold text-[#111827] mt-4">4.2 Rescheduling a Course</h3>
+              <p>
+                If you are unable to attend the course on the date originally booked, you must notify Courses4Me before the scheduled course start date. Subject to availability, we may agree to transfer your booking to an alternative course date within <strong>six months</strong> of the original course date.
+              </p>
+              <ul className="list-disc pl-6 space-y-2 mt-2">
+                <li>A <strong>£70 rescheduling fee</strong> will apply to each approved rescheduling request.</li>
+                <li>Requests to reschedule must be made at least <strong>48 hours</strong> before the scheduled course start time.</li>
+                <li>A maximum of <strong>two rescheduling requests</strong> will be permitted per booking.</li>
+              </ul>
+
+              <h3 className="text-xl font-bold text-[#111827] mt-4">4.3 Identification Requirements & Late Arrivals</h3>
+              <p>
+                Customers are responsible for ensuring that they bring the required and valid identification documents to the course (e.g., Current Passport or Driving License and two proof of addresses). Customers are also expected to arrive promptly. If you are unable to attend or complete the course due to insufficient ID, or if you arrive substantially late, you may be required to reschedule. A <strong>£70 rescheduling fee</strong> will apply in both cases.
+              </p>
+
+              <h3 className="text-xl font-bold text-[#111827] mt-4">4.4 Cancellation by the Customer</h3>
+              <p>
+                If you decide to cancel your course booking, <strong>you will not normally be entitled to a refund</strong>. Where a customer has paid a deposit and subsequently fails to provide notice of their non-attendance, the deposit is non-refundable and any outstanding balance remains payable.
+              </p>
+
+              <h3 className="text-xl font-bold text-[#111827] mt-4">4.5 Cancellation for Medical Reasons</h3>
+              <p>
+                Where a customer is unable to attend a course due to a medical condition, Courses4Me may consider a request for cancellation and/or refund on a case-by-case basis. Appropriate supporting evidence (e.g., a doctor's letter) is required. Where a refund is approved on medical grounds, a <strong>£70 handling and administration charge</strong> will be deducted.
+              </p>
+
+              <h3 className="text-xl font-bold text-[#111827] mt-4">4.6 Cancellation by the Training Provider</h3>
+              <p>
+                In the event that a Training Provider cancels a course, the customer will be entitled to a full refund of the amount paid, or an alternative course date will be offered.
+              </p>
+
+              <h3 className="text-xl font-bold text-[#111827] mt-4">4.7 Discounted, Promotional & Corporate Courses</h3>
+              <p>
+                Courses offered at a discounted, promotional or special rate are subject to a strict <strong>no-cancellation and no-refund policy</strong>. Corporate and in-house bookings are also non-refundable where the customer cancels or fails to pay the full amount due.
+              </p>
+            </div>
           </div>
 
           <div>
