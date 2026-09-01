@@ -372,9 +372,32 @@ const CourseLocationView = ({ link }) => {
                           slot.endDate !== slot.startDate &&
                           ` – ${fmtDate(slot.endDate)}`}
                       </p>
-                      <p className="text-base text-gray-500 mt-0.5">
-                        {fmtTime(slot.startTime)} – {fmtTime(slot.endTime)}
-                      </p>
+                      {slot.timingsType === 'flexible' && slot.weeklyTimings ? (
+                        <details className="mt-1 cursor-pointer group">
+                          <summary className="text-sm font-semibold text-orange-600 hover:text-orange-700 list-none flex items-center gap-1 outline-none">
+                            Varies by day (Click to view)
+                            <ChevronDown size={14} className="group-open:rotate-180 transition-transform" />
+                          </summary>
+                          <div className="mt-2 pl-2 border-l-2 border-orange-200 text-sm space-y-1">
+                            {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
+                              const config = slot.weeklyTimings[day];
+                              if (!config) return null;
+                              return (
+                                <div key={day} className="flex justify-between w-48">
+                                  <span className="capitalize text-gray-500">{day}</span>
+                                  <span className="font-medium text-gray-800">
+                                    {config.isOff ? 'Off' : `${fmtTime(config.startTime)} - ${fmtTime(config.endTime)}`}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </details>
+                      ) : (
+                        <p className="text-base text-gray-500 mt-0.5">
+                          {fmtTime(slot.startTime)} – {fmtTime(slot.endTime)}
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-col md:flex-row items-center gap-4">
                       <div className="flex justify-between w-full gap-2">
