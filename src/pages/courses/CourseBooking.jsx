@@ -410,7 +410,7 @@ const CourseBooking = () => {
                     const loc = link.locationId;
                     const isInactive = loc.status !== "Active";
                     const upcomingDates = (link.dates || []).filter(
-                      (d) => d.startDate && new Date(d.startDate) >= new Date(),
+                      (d) => d.startDate && new Date(new Date(d.startDate).setHours(0,0,0,0)) >= new Date(new Date().setHours(0,0,0,0)),
                     );
                     const nextDate = upcomingDates[0];
 

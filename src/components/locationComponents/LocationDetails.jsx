@@ -60,7 +60,7 @@ const CourseLocationView = ({ link }) => {
     (a, b) => new Date(a.startDate) - new Date(b.startDate),
   );
   const upcomingDates = dates.filter(
-    (d) => d.startDate && new Date(d.startDate) >= new Date(),
+    (d) => d.startDate && new Date(new Date(d.startDate).setHours(0,0,0,0)) >= new Date(new Date().setHours(0,0,0,0)),
   );
   const [showAllDates, setShowAllDates] = useState(false);
   const visibleDates = showAllDates ? upcomingDates : upcomingDates.slice(0, 4);

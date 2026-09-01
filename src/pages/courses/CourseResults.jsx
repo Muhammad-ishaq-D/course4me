@@ -208,7 +208,7 @@ const CourseResults = () => {
         amenitiesByLinkId[String(link._id)] || deriveLocationAmenities(loc);
 
       const upcomingDates = (link.dates || [])
-        .filter((d) => d.startDate && new Date(d.startDate) >= new Date())
+        .filter((d) => d.startDate && new Date(new Date(d.startDate).setHours(0,0,0,0)) >= new Date(new Date().setHours(0,0,0,0)))
         .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
 
       return {
