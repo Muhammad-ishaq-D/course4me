@@ -730,7 +730,7 @@ const LegacyCenterView = ({ center, courses }) => (
               title={course.title}
               description={course.shortDescription || course.description}
               badge={course.badge || "Popular"}
-              price={course.pricing?.basePrice || course.price}
+              price={(course.pricing?.salePrice || course.pricing?.basePrice) || course.price}
               date={course.date || "Multiple Dates"}
               category={course.category}
               duration={course.duration}

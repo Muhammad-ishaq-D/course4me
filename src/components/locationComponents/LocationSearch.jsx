@@ -332,7 +332,7 @@ const LocationSearch = () => {
                   const price =
                     link.price ||
                     course.pricing?.salePrice ||
-                    course.pricing?.basePrice ||
+                    (course.pricing?.salePrice || course.pricing?.basePrice) ||
                     0;
 
                   return (

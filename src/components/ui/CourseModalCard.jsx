@@ -39,7 +39,7 @@ const CourseModalCard = ({ course, Icon, iconBg, handleCourseClick }) => {
           <div className="flex items-center text-[#FF5421]">
             <span className="text-gray-400 font-normal mr-1">from</span>
             <span className="font-extrabold text-[15px]">
-              £{course.pricing?.basePrice}
+              £{(course.pricing?.salePrice || course.pricing?.basePrice)}
             </span>
           </div>
         </div>

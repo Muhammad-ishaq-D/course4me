@@ -69,7 +69,7 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
             title: course.title,
             rating: course.rating || "4.9",
             duration: course.duration || "4 days",
-            price: `£${course.pricing?.basePrice}`,
+            price: `£${(course.pricing?.salePrice || course.pricing?.basePrice)}`,
             image: course.thumbnail || doorImg,
             reviews: course.reviewsCount,
             booked: course.bookedCount,

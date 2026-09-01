@@ -64,7 +64,7 @@ const RelatedCourses = () => {
               image={course.thumbnail || "/assets/courses/door.png"}
               title={course.title}
               description={course.subtitle}
-              price={course.pricing?.basePrice}
+              price={(course.pricing?.salePrice || course.pricing?.basePrice)}
               duration={course.duration}
               category={course.category}
               isPopular={course.isPopular}

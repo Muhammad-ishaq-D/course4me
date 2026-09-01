@@ -95,7 +95,7 @@ const ExploreAllCourses = () => {
           category: course.category,
           description: course.shortDescription,
           image: course.thumbnail,
-          price: course.pricing?.basePrice,
+          price: (course.pricing?.salePrice || course.pricing?.basePrice),
           badge: course.level,
           duration: course.duration,
           reviews: course.reviewsCount,
