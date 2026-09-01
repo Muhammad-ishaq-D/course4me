@@ -387,7 +387,7 @@ const CourseCheckout = () => {
 
         // Calculate Price
         let basePrice =
-          foundSchedule?.price || course.pricing?.basePrice || 139.99;
+          foundSchedule?.price || course.pricing?.salePrice || course.pricing?.basePrice || 139.99;
         if (plan === "Saver") basePrice -= 40;
         if (plan === "Premium") basePrice += 120;
         setPrice(basePrice);

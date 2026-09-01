@@ -187,7 +187,7 @@ const CoursePackages = () => {
   }
 
   const baseTitle = course?.title || "Course";
-  const basePriceValue = schedulePrice || course?.pricing?.basePrice || 139.99;
+  const basePriceValue = schedulePrice || course?.pricing?.salePrice || course?.pricing?.basePrice || 139.99;
   const saverPrice = (basePriceValue - 40).toFixed(2);
   const flexiPrice = basePriceValue.toFixed(2);
   const premiumPrice = (basePriceValue + 120).toFixed(2);

@@ -100,7 +100,7 @@ const LicenseDetails = () => {
     const breakdown = license?.pricingBreakdown?.length
       ? license.pricingBreakdown
       : license?.pricing?.basePrice
-        ? [{ label: "Training course", price: `£${license.pricing.basePrice}` }]
+        ? [{ label: "Training course", price: `£${license.pricing.salePrice || license.pricing.basePrice}` }]
         : [];
     if (breakdown.length > 0) {
       list.push({

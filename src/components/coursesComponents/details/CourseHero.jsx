@@ -16,7 +16,9 @@ const CourseHero = ({ course }) => {
   if (!course) return null;
 
   // Formatting backend data
-  const displayPrice = course.pricing?.basePrice
+  const displayPrice = course.pricing?.salePrice
+    ? `£${course.pricing.salePrice}`
+    : course.pricing?.basePrice
     ? `£${course.pricing.basePrice}`
     : "N/A";
   const displayRating = "4.9"; // Fallback as backend doesn't have it yet

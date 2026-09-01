@@ -62,10 +62,11 @@ const CourseMainContent = ({ course }) => {
   };
 
   if (!course) return null;
-  // Formatting backend data
-  const displayPrice = course.pricing?.basePrice
+  const displayPrice = course?.pricing?.salePrice
+    ? `£${course.pricing.salePrice}`
+    : course?.pricing?.basePrice
     ? `£${course.pricing.basePrice}`
-    : "N/A";
+    : "£139.99";
   const displayLearn = course.learningPoints || [];
   const displayWhoFor = course.targetAudience || [];
   const displayRequirements = course.requirements || [];

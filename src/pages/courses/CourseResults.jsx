@@ -232,7 +232,7 @@ const CourseResults = () => {
         commute: amenities.commute,
         duration: course?.duration,
         booked: "500+",
-        price: link.price || course?.pricing?.basePrice || 139.99,
+        price: link.price || course?.pricing?.salePrice || course?.pricing?.basePrice || 139.99,
         nextDate: upcomingDates[0]?.startDate
           ? new Date(upcomingDates[0].startDate).toLocaleDateString("en-GB", {
               day: "numeric",
@@ -242,7 +242,7 @@ const CourseResults = () => {
         dates: upcomingDates.map((d) => ({
           id: d._id,
           range: `${new Date(d.startDate).toLocaleDateString("en-GB", { day: "numeric", month: "short" })} – ${new Date(d.endDate).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
-          price: link.price || course?.pricing?.basePrice,
+          price: link.price || course?.pricing?.salePrice || course?.pricing?.basePrice,
           bookingFee: d.availableSeats != null && d.availableSeats < 5,
           startDate: d.startDate,
           availableSeats: d.availableSeats,
@@ -432,7 +432,7 @@ const CourseResults = () => {
             <TrustBadges />
           </div>
 
-          <Feedback price={course.pricing?.basePrice} date={course.date} />
+          <Feedback price={course.pricing?.salePrice || course.pricing?.basePrice} date={course.date} />
         </div>
       </main>
 

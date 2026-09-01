@@ -593,7 +593,7 @@ const QuickSearch = () => {
                           title={item.title}
                           description={item.fullDescription}
                           badge={item.badge}
-                          price={item.pricing.basePrice}
+                          price={item.pricing?.salePrice || item.pricing?.basePrice}
                           date={item.date}
                           category={item.category}
                           duration={item.duration}
