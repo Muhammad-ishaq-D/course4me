@@ -246,6 +246,10 @@ const CourseResults = () => {
           bookingFee: d.availableSeats != null && d.availableSeats < 5,
           startDate: d.startDate,
           availableSeats: d.availableSeats,
+          timingsType: d.timingsType,
+          startTime: d.startTime,
+          endTime: d.endTime,
+          weeklyTimings: d.weeklyTimings,
         })),
       };
     });

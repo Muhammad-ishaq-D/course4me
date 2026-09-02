@@ -13,6 +13,15 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
+const fmtTime = (timeStr) => {
+  if (!timeStr) return "";
+  const [h, m] = timeStr.split(":");
+  let hour = parseInt(h, 10);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+  return `${hour}:${m} ${ampm}`;
+};
+
 const LocationCards = ({
   loc,
   course,
@@ -268,9 +277,34 @@ const LocationCards = ({
                                 </p>
 
                                 {!isSoldOut && (
-                                  <p className="text-[14px] text-slate-500 font-semibold mt-0.5">
-                                    9:00 AM - 5:00 PM Daily
-                                  </p>
+                                  <>
+                                    {date.timingsType === 'flexible' && date.weeklyTimings ? (
+                                      <details className="mt-1 cursor-pointer group">
+                                        <summary className="text-sm font-semibold text-orange-600 hover:text-orange-700 list-none flex items-center gap-1 outline-none">
+                                          Varies by day (Click to view)
+                                          <ChevronDown size={14} className="group-open:rotate-180 transition-transform" />
+                                        </summary>
+                                        <div className="mt-2 pl-2 border-l-2 border-orange-200 text-[13px] space-y-1">
+                                          {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
+                                            const config = date.weeklyTimings[day];
+                                            if (!config) return null;
+                                            return (
+                                              <div key={day} className="flex justify-between w-48">
+                                                <span className="capitalize text-gray-500">{day}</span>
+                                                <span className="font-medium text-gray-800">
+                                                  {config.isOff ? 'Off' : `${fmtTime(config.startTime)} - ${fmtTime(config.endTime)}`}
+                                                </span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      </details>
+                                    ) : (
+                                      <p className="text-[14px] text-slate-500 font-semibold mt-0.5">
+                                        {fmtTime(date.startTime || "09:00")} - {fmtTime(date.endTime || "17:00")} Daily
+                                      </p>
+                                    )}
+                                  </>
                                 )}
                                 {!isSoldOut &&
                                   date.availableSeats != null &&
