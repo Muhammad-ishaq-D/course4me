@@ -287,12 +287,12 @@ const LocationCards = ({
                                         <div className="mt-2 pl-2 border-l-2 border-orange-200 text-[13px] space-y-1">
                                           {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
                                             const config = date.weeklyTimings[day];
-                                            if (!config) return null;
+                                            const isOff = !config || config.isOff;
                                             return (
                                               <div key={day} className="flex justify-between w-48">
                                                 <span className="capitalize text-gray-500">{day}</span>
                                                 <span className="font-medium text-gray-800">
-                                                  {config.isOff ? 'Off' : `${fmtTime(config.startTime)} - ${fmtTime(config.endTime)}`}
+                                                  {isOff ? 'Off' : `${fmtTime(config.startTime)} - ${fmtTime(config.endTime)}`}
                                                 </span>
                                               </div>
                                             );
