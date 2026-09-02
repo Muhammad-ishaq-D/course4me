@@ -279,19 +279,19 @@ const LocationCards = ({
                                 {!isSoldOut && (
                                   <>
                                     {date.timingsType === 'flexible' && date.weeklyTimings ? (
-                                      <details className="mt-1 cursor-pointer group">
+                                      <details className="mt-1 cursor-pointer group relative">
                                         <summary className="text-sm font-semibold text-orange-600 hover:text-orange-700 list-none flex items-center gap-1 outline-none">
                                           Varies by day (Click to view)
                                           <ChevronDown size={14} className="group-open:rotate-180 transition-transform" />
                                         </summary>
-                                        <div className="mt-2 pl-2 border-l-2 border-orange-200 text-[13px] space-y-1">
+                                        <div className="absolute top-full left-0 mt-2 z-50 bg-white shadow-xl border border-gray-100 rounded-xl p-4 text-[13px] space-y-2 min-w-[240px]">
                                           {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
                                             const config = date.weeklyTimings[day];
                                             const isOff = !config || config.isOff;
                                             return (
-                                              <div key={day} className="flex justify-between w-48">
-                                                <span className="capitalize text-gray-500">{day}</span>
-                                                <span className="font-medium text-gray-800">
+                                              <div key={day} className="flex justify-between items-center gap-4 border-b border-gray-50 pb-1.5 last:border-0 last:pb-0">
+                                                <span className="capitalize text-gray-500 font-medium">{day}</span>
+                                                <span className={`font-bold ${isOff ? 'text-gray-400' : 'text-gray-800'}`}>
                                                   {isOff ? 'Off' : `${fmtTime(config.startTime)} - ${fmtTime(config.endTime)}`}
                                                 </span>
                                               </div>
