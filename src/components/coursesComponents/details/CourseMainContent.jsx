@@ -65,8 +65,8 @@ const CourseMainContent = ({ course }) => {
   const displayPrice = course?.pricing?.salePrice
     ? `£${course.pricing.salePrice}`
     : course?.pricing?.basePrice
-    ? `£${course.pricing.basePrice}`
-    : "£139.99";
+      ? `£${course.pricing.basePrice}`
+      : "£139.99";
   const displayLearn = course.learningPoints || [];
   const displayWhoFor = course.targetAudience || [];
   const displayRequirements = course.requirements || [];
@@ -183,7 +183,7 @@ const CourseMainContent = ({ course }) => {
                         text: "Immediate results",
                       },
                       {
-                        icon: <RotateCcw className="text-[#3B82F6]" />,
+                        icon: <RotateCcw className="text-[#F15A24]" />,
                         text: "Free exam retakes",
                       },
                       {

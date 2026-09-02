@@ -12,9 +12,9 @@ const getCategoryStyles = (category) => {
       };
     case "Industry News":
       return {
-        bg: "bg-[#3B82F60A]",
-        text: "text-[#3B82F6]",
-        border: "border-[#3B82F620]",
+        bg: "bg-[#F15A240A]",
+        text: "text-[#F15A24]",
+        border: "border-[#F15A2420]",
       };
     case "Study Tips":
       return {
