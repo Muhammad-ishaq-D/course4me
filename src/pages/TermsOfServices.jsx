@@ -75,6 +75,7 @@ const TermsOfServices = () => {
                 "Users are responsible for providing accurate booking information.",
                 "Booking confirmations will be sent after successful registration.",
                 "Training providers may contact learners regarding course details.",
+                "Bookings are strictly prohibited once a course has commenced. No enrollments will be accepted after the scheduled start date and time."
               ].map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#F15A24] mt-2.5 shrink-0"></span>
