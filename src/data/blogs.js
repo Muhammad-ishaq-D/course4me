@@ -56,10 +56,10 @@ export const blogsData = [
       {
         type: "list",
         items: [
-          "Conflict Management — Learn de-escalation techniques and how to handle difficult situations professionally.",
-          "Physical Intervention — Understand approved methods of physical intervention when necessary.",
-          "Legal Knowledge — Study the laws relating to security, licensing, and your responsibilities.",
-          "First Aid — Complete Emergency First Aid training.",
+          "Application Of Conflict Management In The Private Security Industry.",
+          "Application Of Physical Intervention Skills In The Private Security Industry.",
+          "Principles Of Working As A Door Supervisor In The Private Security Industry.",
+          "Principles Of Working In The Private Security Industry.",
         ],
       },
 
@@ -70,7 +70,7 @@ export const blogsData = [
 
       {
         type: "paragraph",
-        text: "Most door supervisor courses run for 4–6 days, with exams taken on the final day. At Get Licensed, we offer same-day results so you can start applying for your licence immediately.",
+        text: "Most door supervisor courses run for 6–7 days, with exams taken on the final day. At Get Licensed, we offer same-day results so you can start applying for your licence immediately.",
       },
 
       {
@@ -81,10 +81,10 @@ export const blogsData = [
       {
         type: "list",
         items: [
-          "Entry level: £10–£12 per hour",
-          "Experienced: £12–£16 per hour",
-          "Senior/Head Door Supervisor: £16–£22 per hour",
-          "Event security (festivals, concerts): £14–£20 per hour",
+          "Entry level: £12.71–£14.50 per hour",
+          "Experienced: £14.50–£18.00 per hour",
+          "Senior/Head Door Supervisor: £18–£25 per hour",
+          "Event security (festivals, concerts): £16.50–£23.00 per hour",
         ],
       },
 

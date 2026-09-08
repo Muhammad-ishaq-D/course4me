@@ -18,7 +18,7 @@ const features = [
   },
   {
     icon: Target,
-    title: "95% Pass Rate",
+    title: "98% Pass Rate",
     description:
       "Industry-leading student success rate with full learning support included.",
   },

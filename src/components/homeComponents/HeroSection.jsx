@@ -82,7 +82,7 @@ const HeroSection = () => {
                 to="/courses"
                 className="bg-[#FF5421] cursor-pointer text-center hover:bg-[#E64A1A] text-white font-semibold py-4 px-12 rounded-full shadow-md transition duration-300 transform hover:scale-105"
               >
-                Get Started
+                Book Your Course
               </NavLink>
               <button
                 onClick={() => {

@@ -14,9 +14,9 @@ const HiringTrainingSection = () => {
   const navigate = useNavigate();
 
   const features = [
-    "Direct referrals to 850+ hiring partners",
-    "CV building & interview coaching",
-    "95% of graduates hired within 2 weeks",
+    "100% Career & Placement Assistance",
+    "Professional Resume & Interview Prep",
+    "Fast-Track Career Outcomes: 98% hired within 2 weeks",
   ];
 
   return (

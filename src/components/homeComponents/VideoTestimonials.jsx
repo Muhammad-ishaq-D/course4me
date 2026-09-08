@@ -69,14 +69,14 @@ function VideoTestimonials() {
 
           {/* HEADING */}
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.05] tracking-tight">
-            Real Students.
+            Real Learners.
             <br />
             <span className="text-[#FF5421]">Real Career Transformations.</span>
           </h2>
 
           {/* SUBTITLE */}
           <p className="mt-3 text-gray-400 text-base sm:text-lg leading-relaxed">
-            Watch how our students went from beginners to working professionals
+            Watch how our learners went from beginners to working professionals
             in the UK security industry.
           </p>
         </motion.div>
@@ -120,7 +120,7 @@ function VideoTestimonials() {
                   </div>
 
                   {/* PLAY BUTTON */}
-                  <div className="absolute inset-0 flex items-center justify-center">
+                  {/* <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-16 h-16 rounded-full bg-[#FF5421] flex items-center justify-center shadow-[0_20px_40px_rgba(248,81,12,0.35)] group-hover:scale-110 transition duration-300">
                       <Play
                         size={24}
@@ -128,7 +128,7 @@ function VideoTestimonials() {
                         className="text-white ml-1"
                       />
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* BOTTOM INFO */}
                   <div className="absolute bottom-5 left-5 right-5">

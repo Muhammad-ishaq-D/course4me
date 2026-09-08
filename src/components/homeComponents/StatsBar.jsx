@@ -51,7 +51,7 @@ const StatsBar = () => {
     },
     {
       icon: <ShieldCheck className="w-7 h-7 text-[#FF5421]" />,
-      number: 95,
+      number: 98,
       suffix: "%",
       label: "First-Time Pass Rate",
       numberColor: "text-[#FF5421]",

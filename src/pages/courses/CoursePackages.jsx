@@ -9,6 +9,8 @@ import {
   Check,
   X as XIcon,
   Users,
+  Briefcase,
+  Zap,
 } from "lucide-react";
 import { courses as fallbackCourses } from "../../data/courseData";
 import courseService from "../../api/services/courseService";
@@ -76,58 +78,254 @@ const CoursePackages = () => {
 
   const features = {
     saver: [
-      "Online self-study top-up training",
-      "Action Counter Terrorism (ACT) online course e-Learning",
+      "Full classroom-based training by experienced instructors",
+      "Comprehensive e-notes and study material",
+      "Guidance & support throughout the training",
+      "E-certificate upon passing",
     ],
     flexi: [
       "Everything included in Saver",
-      "Unlimited Free Retakes (worth £49 per retake) - Popular",
-      "Free Rescheduling (up to 3 times)",
-      "Free Name Change (Up to 72 hours before the start of the course)",
-      "Full refund up to 72 Hrs before Course",
-      "14 days access to highly rated mock exam App (completed online prior to attending course) - worth £14.99",
-      "If you fail, fail, fail the exam, we will refund you 100% of the course fee - worth £25",
+      "3 Free Retakes",
+      "Free rescheduling (up to 3 times)",
+      "Full refund if you cancel up to 72 hrs before course start",
+      "Free name change before issuing certificate",
     ],
     premium: [
-      "Everything included in Flexi Plus Package",
-      "Same day results - We will fast track your Results (Instead of waiting for up to 14 days, you will receive your Results the same day) - worth £49",
+      "Everything included in Flexi",
+      "Fast track results (receive results faster instead of waiting 14 days)",
+      "Help with SIA application",
+      "Job advice",
     ],
   };
 
   const faqs = [
     {
-      question: "What is the best package for me?",
-      answer:
-        "This depends on your learning needs. Flexi+ offers peace of mind with free retakes and guarantees.",
+      question: "Is SIA course right for me?",
+      answer: (
+        <div>
+          <p>
+            This course is for those who wish to become a Door Supervisor or
+            Security Officer and want to work as a frontline security officer on
+            the following sites:
+          </p>
+          <ul className="mt-2 list-disc pl-5 space-y-1">
+            <li>Corporate Sites</li>
+            <li>Retail Sites</li>
+            <li>Construction Sites</li>
+            <li>Reception Sites</li>
+            <li>Gate houses</li>
+            <li>Clubs and pubs</li>
+            <li>Warehouses</li>
+            <li>Events</li>
+          </ul>
+        </div>
+      ),
     },
     {
-      question: "Can I pay for the course in instalments?",
+      question: "Can I work without a licence?",
       answer:
-        "Yes, we offer flexible payment plans allowing you to split the cost without hidden charges.",
+        "No, working without a licence is a criminal offence. You can get a fine up to £5,000 and imprisonment for six months.",
     },
     {
-      question: "Can I upgrade my course package after I book?",
+      question: "How to get SIA licence?",
       answer:
-        "Yes, you can upgrade your package by contacting our customer support team.",
+        "Register for a course on our website, make payment, get qualified, and apply for your SIA licence.",
     },
     {
-      question: "Can I buy the workbook standalone later?",
-      answer: "Yes, the workbook is available for separate purchase.",
+      question: "What IDs or paperwork are needed for course registration?",
+      answer:
+        "You need one photo ID (such as a Passport or Driving Licence) and two proofs of address (e.g., bank statement, council tax, or utility bills in your name).",
     },
     {
-      question: "Will the mock exams ensure I definitely pass my exams?",
+      question: "When will I receive my certificate?",
       answer:
-        "While no resource guarantees a pass, our mock exams heavily boost the likelihood of passing the first time.",
+        "After your examination date, it usually takes one and a half weeks to receive your certificate. In rare cases where results are delayed, you will be notified. Once your certificate is ready, we will notify you via phone call or text message.",
     },
     {
-      question: "What happens after I book my course?",
+      question: "How to make payment for the course?",
       answer:
-        "You will receive an immediate confirmation email containing instructions and access links to your materials.",
+        "You can make payment directly via our website using our secure payment system.",
     },
     {
-      question: "Can I fail if I buy the Zero Risk Guarantee?",
+      question: "Is the Licence fee included in the course fee?",
       answer:
-        "You can fail, but the guarantee minimizes your financial risk by giving you peace of mind and refunds per terms.",
+        "No, you have to pay the £204 licence fee separately to the SIA (at the post office).",
+    },
+    {
+      question: "Do I need a certificate to apply for an SIA licence?",
+      answer:
+        "No, as soon as you pass, your details will be uploaded directly to the SIA website.",
+    },
+    {
+      question: "What if my course is cancelled by the training provider?",
+      answer:
+        "If a course is cancelled by the training provider, you will have the choice to attend the next available dates or receive a full refund of your paid fee.",
+    },
+    {
+      question:
+        "Do I have to attend the course again upon SIA license renewal?",
+      answer:
+        "Yes, you have to take a refresher course for Door Supervision and Security Guarding.",
+    },
+    {
+      question: "How to find a Security job?",
+      answer:
+        "You can find security jobs on major job platforms such as Indeed (indeed.co.uk), Totaljobs, and other online job portals.",
+    },
+    {
+      question:
+        "What is the minimum age required for the Door Supervisor Course?",
+      answer: "The minimum age requirement is 18 years old.",
+    },
+    {
+      question: "13. How to apply for SIA license",
+      answer: (
+        <div className="space-y-2 whitespace-pre-line">
+          <p>A. Open link below</p>
+          <p>
+            <a
+              href="https://services.sia.homeoffice.gov.uk/login/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#F15A24] underline hover:opacity-80"
+            >
+              https://services.sia.homeoffice.gov.uk/login/
+            </a>
+          </p>
+          <p>
+            Click on register for personal account. Create user name and
+            password by filling small form. After submitting form check your
+            email inbox, junk and spam mail and click on link.
+          </p>
+          <p>Go back to link & login by entering your user name and password</p>
+          <p>
+            <a
+              href="https://services.sia.homeoffice.gov.uk/login/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#F15A24] underline hover:opacity-80"
+            >
+              https://services.sia.homeoffice.gov.uk/login/
+            </a>
+          </p>
+          <p>
+            After login to portal click on start new application and click I
+            want to pay for myself (if you applying for yourself not by
+            business)
+          </p>
+          <p>Fill full application form</p>
+          <p>And in qualification choose your qualification</p>
+          <p>
+            After filling full application click on submit. You will receive few
+            messages in SIA portal, carefully go via messages and follow
+            instructions.
+          </p>
+        </div>
+      ),
+    },
+  ];
+
+
+  const featureRows = [
+    {
+      name: "Full classroom-based training",
+      saver: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      flexi: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      prem: <Check className="text-[#00B67A] mx-auto" size={20} />,
+    },
+    {
+      name: "Experienced instructors",
+      saver: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      flexi: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      prem: <Check className="text-[#00B67A] mx-auto" size={20} />,
+    },
+    {
+      name: "E-notes & study materials",
+      saver: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      flexi: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      prem: <Check className="text-[#00B67A] mx-auto" size={20} />,
+    },
+    {
+      name: "Guidance & support",
+      saver: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      flexi: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      prem: <Check className="text-[#00B67A] mx-auto" size={20} />,
+    },
+    {
+      name: "E-certificate upon passing",
+      saver: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      flexi: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      prem: <Check className="text-[#00B67A] mx-auto" size={20} />,
+    },
+    {
+      name: "Free exam retakes",
+      saver: <XIcon className="text-red-400 mx-auto" size={16} />,
+      flexi: <span className="font-bold text-[#1C1C1C]">3 Free Retakes</span>,
+      prem: <span className="font-bold text-[#1C1C1C]">3 Free Retakes</span>,
+    },
+    {
+      name: "Exam resit cost",
+      saver: <span className="font-bold text-[#1C1C1C]">£100 per resit</span>,
+      flexi: <span className="font-medium text-gray-700">Included</span>,
+      prem: <span className="font-medium text-gray-700">Included</span>,
+    },
+    {
+      name: "Free course rescheduling",
+      saver: <XIcon className="text-red-400 mx-auto" size={16} />,
+      flexi: <span className="font-bold text-[#1C1C1C]">Up to 3 times</span>,
+      prem: <span className="font-bold text-[#1C1C1C]">Up to 3 times</span>,
+    },
+    {
+      name: "Course date change fee",
+      saver: <span className="font-bold text-[#1C1C1C]">£150</span>,
+      flexi: <span className="font-medium text-gray-700">Free</span>,
+      prem: <span className="font-medium text-gray-700">Free</span>,
+    },
+    {
+      name: "Refund for cancellation",
+      saver: <XIcon className="text-red-400 mx-auto" size={16} />,
+      flexi: (
+        <span className="font-bold text-[#1C1C1C]">
+          Full refund up to 72 hours before the course
+        </span>
+      ),
+      prem: (
+        <span className="font-bold text-[#1C1C1C]">
+          Full refund up to 72 hours before the course
+        </span>
+      ),
+    },
+    {
+      name: "Free name change before certificate",
+      saver: <XIcon className="text-red-400 mx-auto" size={16} />,
+      flexi: <Check className="text-[#00B67A] mx-auto" size={20} />,
+      prem: <Check className="text-[#00B67A] mx-auto" size={20} />,
+    },
+    {
+      name: "Fast-track results",
+      saver: <XIcon className="text-red-400 mx-auto" size={16} />,
+      flexi: <XIcon className="text-red-400 mx-auto" size={16} />,
+      prem: (
+        <span className="inline-flex items-center gap-1 font-bold text-[#7344ff]">
+          <Zap size={16} className="fill-[#7344ff]" /> Yes
+        </span>
+      ),
+    },
+    {
+      name: "Help with SIA application",
+      saver: <XIcon className="text-red-400 mx-auto" size={16} />,
+      flexi: <XIcon className="text-red-400 mx-auto" size={16} />,
+      prem: <Check className="text-[#00B67A] mx-auto" size={20} />,
+    },
+    {
+      name: "Job advice",
+      saver: <XIcon className="text-red-400 mx-auto" size={16} />,
+      flexi: <XIcon className="text-red-400 mx-auto" size={16} />,
+      prem: (
+        <span className="inline-flex items-center gap-1.5 font-bold text-[#1C1C1C]">
+          <Briefcase size={16} className="text-[#7344ff]" /> Included
+        </span>
+      ),
     },
   ];
 
@@ -244,8 +442,8 @@ const CoursePackages = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-6 -mt-[120px] relative z-10 mb-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Saver Card */}
-          <div className=" relative bg-white rounded-3xl border-2 border-transparent shadow-lg shadow-black/5 flex flex-col overflow-hidden transition-all duration-500 hover:border-[#F15A24] hover:-translate-y-3 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#F15A24]/15 group">
-            <div className=" p-4 lg:p-8 pb-6 flex-1">
+          <div className="relative bg-white rounded-3xl border-2 border-transparent shadow-lg shadow-black/5 flex flex-col overflow-hidden transition-all duration-500 hover:border-[#F15A24] hover:-translate-y-3 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#F15A24]/15 group">
+            <div className="p-4 lg:p-8 pb-6 flex-1">
               <span className="inline-block px-3 py-1 bg-gray-100 text-gray-500 text-[12px] font-black uppercase tracking-widest rounded mb-4">
                 Standard
               </span>
@@ -253,27 +451,16 @@ const CoursePackages = () => {
                 Saver
               </h2>
               <p className="text-sm text-gray-400 font-medium mb-6">
-                If you strictly need to complete the course
+                Basic training package for direct certification
               </p>
 
-              <div className="mb-3">
+              <div className="mb-6">
                 <span className="text-3xl font-black text-[#1C1C1C]">
                   £{saverPrice}
                 </span>
                 <span className="text-sm text-gray-400 font-medium ml-1">
                   / Inc VAT
                 </span>
-              </div>
-
-              <div className="bg-[#F8FAFC] border border-gray-100 rounded-xl p-2 flex gap-3 items-start mb-6 text-[14px] text-gray-600">
-                <CheckCircle2
-                  className="text-gray-400 shrink-0 mt-0.5"
-                  size={16}
-                />
-                <p>
-                  Only permit changing booking dates to{" "}
-                  <b>within 2 weeks' notice before the course start date.</b>
-                </p>
               </div>
 
               <p className="text-[13px] text-gray-400 font-bold uppercase tracking-widest mb-4">
@@ -298,35 +485,42 @@ const CoursePackages = () => {
               <div
                 className={`${
                   showSaverWarning ? "block" : "hidden"
-                } md:block bg-red-50 text-red-600 rounded-xl p-4 text-[12px] leading-relaxed mb-6 border border-red-100 font-medium space-y-2`}
+                } md:block bg-red-50 text-red-600 rounded-xl p-4 text-[12px] leading-relaxed mb-6 border border-red-100 font-medium space-y-2.5`}
               >
                 <div className="flex gap-2 items-start">
-                  <XIcon size={16} className="shrink-0 mt-0.5" />
-                  <p className="text-[15px]">
-                    You will have to{" "}
+                  <XIcon size={16} className="shrink-0 mt-0.5 text-red-500" />
+                  <p className="text-[14px]">
+                    No free resits in exam —{" "}
                     <b className="font-bold border-b border-red-600">
-                      pay up to £49
-                    </b>{" "}
-                    for unlimited resits if you fail the exam
+                      resits will cost £100
+                    </b>
                   </p>
                 </div>
-
                 <div className="flex gap-2 items-start">
-                  <XIcon size={16} className="shrink-0 mt-0.5" />
-                  <p className="text-[15px]">
-                    You are missing out on the{" "}
+                  <XIcon size={16} className="shrink-0 mt-0.5 text-red-500" />
+                  <p className="text-[14px]">
+                    <b className="font-bold">No refund</b> if you fail the
+                    course
+                  </p>
+                </div>
+                <div className="flex gap-2 items-start">
+                  <XIcon size={16} className="shrink-0 mt-0.5 text-red-500" />
+                  <p className="text-[14px]">
+                    Changing or rearranging course date will{" "}
                     <b className="font-bold border-b border-red-600">
-                      Free Name Change Guarantee and Zero Risk Refund Guarantee
+                      cost £150
                     </b>
                   </p>
                 </div>
               </div>
+
               <button
                 onClick={() => setShowSaverWarning(!showSaverWarning)}
                 className="md:hidden mb-4 text-[#F15A24] font-bold text-sm"
               >
                 {showSaverWarning ? "See Less" : "See More"}
               </button>
+
               <button
                 onClick={() =>
                   navigate(
@@ -340,8 +534,8 @@ const CoursePackages = () => {
             </div>
           </div>
 
-          {/* Flexi+ Card */}
-          <div className=" relative bg-white rounded-3xl border-[3px] border-[#F15A24]  shadow-lg shadow-black/5 flex flex-col overflow-hidden transition-all duration-500 hover:border-[#F15A24] hover:-translate-y-3 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#F15A24]/15 group">
+          {/* Flexi Card */}
+          <div className="relative bg-white rounded-3xl border-[3px] border-[#F15A24] shadow-lg shadow-black/5 flex flex-col overflow-hidden transition-all duration-500 hover:border-[#F15A24] hover:-translate-y-3 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#F15A24]/15 group">
             <div className="absolute top-0 w-full bg-[#F15A24] text-white text-[14px] font-black uppercase tracking-widest py-1.5 text-center">
               Our Most Popular Plan
             </div>
@@ -349,11 +543,9 @@ const CoursePackages = () => {
               <span className="inline-block px-3 py-1 bg-[#FFF5F1] text-[#F15A24] text-[12px] font-black uppercase tracking-widest rounded mb-4">
                 Recommended
               </span>
-              <h2 className="text-3xl font-black text-[#1C1C1C] mb-1">
-                Flexi+
-              </h2>
+              <h2 className="text-3xl font-black text-[#1C1C1C] mb-1">Flexi</h2>
               <p className="text-sm text-gray-400 font-medium mb-4">
-                Guaranteed pass or your money back
+                Flexible booking with free retakes
               </p>
 
               <div className="mb-6">
@@ -365,97 +557,44 @@ const CoursePackages = () => {
                 </span>
               </div>
 
-              <div className="bg-[#FFF5F1] border border-[#F15A24]/20 rounded-xl p-4 flex gap-3 items-start mb-5 text-[13px] text-[#F15A24] font-medium leading-relaxed">
-                <CheckCircle2 className="shrink-0 mt-0.5" size={18} />
-                <div>
-                  <p className="font-bold text-[14px] mb-1">
-                    Passing guaranteed or your money back. 100% of course fee
-                    completely refunded
-                  </p>
-                  <p className="text-[13px] opacity-80">
-                    (After attending, studying & failing the exam up to 3 times)
-                  </p>
-                </div>
-              </div>
-
               <p className="text-[14px] text-gray-400 font-bold uppercase tracking-widest mb-4">
                 What's included
               </p>
               <ul className="space-y-3">
-                {features.flexi.map((feature, idx) => {
-                  const isZeroRisk = feature.includes("Zero Risk Guarantee");
-                  const isRetakes = feature.includes("Unlimited Free Retakes");
-
-                  return (
-                    <li
-                      key={idx}
-                      className={`flex items-start gap-3 ${
-                        !showAllFlexiFeatures && idx >= 2
-                          ? "hidden md:flex"
-                          : ""
-                      }`}
-                    >
-                      <Check
-                        className="text-[#F15A24] shrink-0 mt-0.5"
-                        size={18}
-                      />
-                      <span className="text-[15px] text-gray-600 leading-snug">
-                        {isZeroRisk ? (
-                          <>
-                            <b className="text-[#F15A24] underline">
-                              Zero Risk Guarantee
-                            </b>{" "}
-                            - If you fail, fail, pass... we will refund you 100%
-                            of the course fee -
-                            <span className="italic text-gray-400">
-                              {" "}
-                              worth £25
-                            </span>
-                          </>
-                        ) : isRetakes ? (
-                          <>
-                            Unlimited Free Retakes{" "}
-                            <span className="italic text-gray-400">
-                              (worth £49 per retake)
-                            </span>{" "}
-                            -
-                            <span className="bg-[#FFF5F1] text-[#F15A24] text-[12px] font-black uppercase px-1.5 py-0.5 rounded ml-1">
-                              Popular
-                            </span>
-                          </>
-                        ) : (
-                          feature
-                        )}
-                      </span>
-                    </li>
-                  );
-                })}
+                {features.flexi.map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <Check
+                      className="text-[#F15A24] shrink-0 mt-0.5"
+                      size={18}
+                    />
+                    <span className="text-[15px] text-gray-600 leading-snug">
+                      {idx === 0 ? (
+                        <b className="font-bold text-[#1C1C1C]">{feature}</b>
+                      ) : (
+                        feature
+                      )}
+                    </span>
+                  </li>
+                ))}
               </ul>
-
-              <button
-                onClick={() => setShowAllFlexiFeatures(!showAllFlexiFeatures)}
-                className="md:hidden mt-4 text-[#F15A24] font-bold text-sm hover:underline"
-              >
-                {showAllFlexiFeatures ? "See Less" : "See More"}
-              </button>
             </div>
 
             <div className="p-4 lg:p-8 pt-0 mt-auto border-t border-gray-50/50">
               <button
                 onClick={() =>
                   navigate(
-                    `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi+`,
+                    `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi`,
                   )
                 }
                 className="w-full py-4 rounded-xl cursor-pointer bg-[#F15A24] text-white font-black text-md hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#F15A24]/20"
               >
-                Select Flexi+
+                Select Flexi
               </button>
             </div>
           </div>
 
           {/* Premium Card */}
-          <div className=" relative bg-white rounded-3xl border-2 border-transparent shadow-lg shadow-black/5 flex flex-col overflow-hidden transition-all duration-500 hover:border-[#F15A24] hover:-translate-y-3 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#F15A24]/15 group">
+          <div className="relative bg-white rounded-3xl border-2 border-transparent shadow-lg shadow-black/5 flex flex-col overflow-hidden transition-all duration-500 hover:border-[#F15A24] hover:-translate-y-3 hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#F15A24]/15 group">
             <div className="p-4 lg:p-8 pb-6 flex-1">
               <span className="inline-block px-3 py-1 bg-purple-50 text-[#7344ff] text-[12px] font-black uppercase tracking-widest rounded mb-4">
                 Best Service
@@ -464,7 +603,7 @@ const CoursePackages = () => {
                 Premium
               </h2>
               <p className="text-sm text-gray-400 font-medium mb-6">
-                VIP treatment & exclusive privileges
+                VIP treatment & exclusive support
               </p>
 
               <div className="mb-6">
@@ -476,37 +615,22 @@ const CoursePackages = () => {
                 </span>
               </div>
 
-              <div className="bg-purple-50 border border-purple-100 rounded-xl p-4 flex gap-3 items-start mb-8 text-[13px] text-gray-600">
-                <CheckCircle2
-                  className="text-[#7344ff] shrink-0 mt-0.5"
-                  size={18}
-                />
-                <p className="text-[14px]">
-                  Same day results - We will fast track your results! <br />
-                  <span className="text-[13px] text-gray-400">
-                    (Instead of waiting for up to 14 days)
-                  </span>
-                </p>
-              </div>
-
               <p className="text-[13px] text-gray-400 font-bold uppercase tracking-widest mb-4">
                 What's included
               </p>
               <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <Check className="text-[#F15A24] shrink-0 mt-0.5" size={16} />
-                  <span className="text-[15px] text-gray-600 font-bold">
-                    Everything included in Flexi+
-                  </span>
-                </li>
-                {features.premium.slice(1).map((feature, idx) => (
+                {features.premium.map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-3">
                     <Check
                       className="text-[#F15A24] shrink-0 mt-0.5"
                       size={18}
                     />
                     <span className="text-[15px] text-gray-600 leading-snug">
-                      {feature}
+                      {idx === 0 ? (
+                        <b className="font-bold text-[#1C1C1C]">{feature}</b>
+                      ) : (
+                        feature
+                      )}
                     </span>
                   </li>
                 ))}
@@ -528,7 +652,6 @@ const CoursePackages = () => {
           </div>
         </div>
       </div>
-
       {/* FAQ Section */}
       <div className="max-w-5xl mx-auto px-4 lg:px-0 mb-24">
         {/* Section Header */}
@@ -548,37 +671,32 @@ const CoursePackages = () => {
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className={` group cursor-pointer bg-white rounded-2xl border overflow-hidden transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-[#F15A24]/10
-          ${
-            openFaq === idx
-              ? "border-[#F15A24] shadow-lg shadow-[#F15A24]/10"
-              : "border-gray-100 hover:border-[#F15A24]/30"
-          }
-        `}
+              className={`group cursor-pointer bg-white rounded-2xl border overflow-hidden transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-[#F15A24]/10 ${
+                openFaq === idx
+                  ? "border-[#F15A24] shadow-lg shadow-[#F15A24]/10"
+                  : "border-gray-100 hover:border-[#F15A24]/30"
+              }`}
             >
               {/* Question */}
               <button
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                className="w-full flex cursor-pointer  items-center justify-between px-2 md:px-8 py-5 text-left"
+                className="w-full flex cursor-pointer items-center justify-between px-4 md:px-8 py-5 text-left"
               >
-                <div className="flex items-center gap-2 md:gap-4">
+                <div className="flex items-center gap-3 md:gap-4">
                   <div
-                    className={`
-                px-3.5 py-2 rounded-full flex items-center justify-center text-sm font-bold transition-all
-                ${
-                  openFaq === idx
-                    ? "bg-[#F15A24] text-white"
-                    : "bg-[#FFF5F1] text-[#F15A24]"
-                }
-              `}
+                    className={`px-3.5 py-2 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                      openFaq === idx
+                        ? "bg-[#F15A24] text-white"
+                        : "bg-[#FFF5F1] text-[#F15A24]"
+                    }`}
                   >
                     ?
                   </div>
 
                   <h3
-                    className={` text-base md:text-lg md:font-semibold transition-colors
-                ${openFaq === idx ? "text-[#F15A24]" : "text-[#1C1C1C]"}
-              `}
+                    className={`text-base md:text-lg md:font-semibold transition-colors ${
+                      openFaq === idx ? "text-[#F15A24]" : "text-[#1C1C1C]"
+                    }`}
                   >
                     {faq.question}
                   </h3>
@@ -586,25 +704,27 @@ const CoursePackages = () => {
 
                 <ChevronDown
                   size={20}
-                  className={`
-              transition-all duration-300
-              ${openFaq === idx ? "rotate-180 text-[#F15A24]" : "text-gray-400"}
-            `}
+                  className={`transition-all duration-300 ${
+                    openFaq === idx
+                      ? "rotate-180 text-[#F15A24]"
+                      : "text-gray-400"
+                  }`}
                 />
               </button>
 
               {/* Answer */}
               <div
-                className={`
-            transition-all duration-300 cursor-pointer overflow-hidden
-            ${openFaq === idx ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}
-          `}
+                className={`transition-all duration-300 overflow-hidden ${
+                  openFaq === idx
+                    ? "max-h-[600px] opacity-100"
+                    : "max-h-0 opacity-0"
+                }`}
               >
                 <div className="px-6 md:px-8 pb-6">
                   <div className="pl-6 md:pl-12 border-l-2 border-[#F15A24]/20">
-                    <p className="text-base text-gray-600 leading-7">
+                    <div className="text-base text-gray-600 leading-7">
                       {faq.answer}
-                    </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -612,7 +732,6 @@ const CoursePackages = () => {
           ))}
         </div>
       </div>
-
       {/* Comparison Table */}
       <div className="bg-white py-20 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -636,22 +755,22 @@ const CoursePackages = () => {
               <thead>
                 <tr className="bg-slate-50">
                   <th className="p-5 text-left text-sm lg:text-base font-black text-[#1C1C1C] w-[40%]">
-                    Features
+                    FEATURES
                   </th>
 
                   <th className="p-5 text-center text-sm lg:text-base font-black text-[#1C1C1C]">
-                    Saver
+                    SAVER
                   </th>
 
                   <th className="p-5 text-center bg-[#FFF5F1] text-sm lg:text-base font-black text-[#F15A24] relative">
-                    Flexi+
+                    FLEXI
                     <span className="absolute top-2 right-2 bg-[#F15A24] text-white text-[10px] px-2 py-1 rounded-full font-bold uppercase">
                       Popular
                     </span>
                   </th>
 
                   <th className="p-5 text-center text-sm lg:text-base font-black text-[#7344ff]">
-                    Premium
+                    PREMIUM
                   </th>
                 </tr>
               </thead>
@@ -700,62 +819,8 @@ const CoursePackages = () => {
                     General Features
                   </td>
                 </tr>
-                {[
-                  {
-                    name: "Digital course handbook PC/Mac",
-                    saver: true,
-                    flexi: true,
-                    prem: true,
-                  },
-                  {
-                    name: "The Premium Guarantee App 📱",
-                    saver: true,
-                    flexi: true,
-                    prem: true,
-                  },
-                  {
-                    name: "Unlimited free retakes (worth £49 each)",
-                    saver: false,
-                    flexi: true,
-                    prem: true,
-                  },
-                  {
-                    name: "Zero risk guarantee",
-                    saver: false,
-                    flexi: true,
-                    prem: true,
-                  },
-                  {
-                    name: "Free reschedules (worth £15) and free name changes (worth £5)",
-                    saver: false,
-                    flexi: true,
-                    prem: true,
-                  },
-                  {
-                    name: "Full refund Policy up to 72 hours",
-                    saver: false,
-                    flexi: true,
-                    prem: true,
-                  },
-                  {
-                    name: "Passing strategy assessment (an easy and simple step guide to studying in your exam - exclusive)",
-                    saver: false,
-                    flexi: true,
-                    prem: true,
-                  },
-                  {
-                    name: "Premium learning material - Presentation, time assessment mock exam marking review - worth £149",
-                    saver: false,
-                    flexi: true,
-                    prem: true,
-                  },
-                  {
-                    name: "Job Board Access 💼",
-                    saver: false,
-                    flexi: false,
-                    prem: true,
-                  },
-                ].map((row, idx) => (
+
+                {featureRows.map((row, idx) => (
                   <tr
                     key={idx}
                     className="hover:bg-[#FFF5F1]/40 transition-colors"
@@ -765,41 +830,30 @@ const CoursePackages = () => {
                     </td>
 
                     <td className="p-5 text-center border-t border-gray-100">
-                      {row.saver ? (
-                        <Check className="text-[#00B67A] mx-auto" size={20} />
-                      ) : (
-                        <XIcon className="text-red-400 mx-auto" size={16} />
-                      )}
+                      {row.saver}
                     </td>
 
                     <td className="p-5 text-center bg-[#FFF5F1] border-t border-gray-100">
-                      {row.flexi ? (
-                        <Check className="text-[#00B67A] mx-auto" size={20} />
-                      ) : (
-                        <XIcon className="text-red-400 mx-auto" size={16} />
-                      )}
+                      {row.flexi}
                     </td>
 
                     <td className="p-5 text-center border-t border-gray-100">
-                      {row.prem ? (
-                        <Check className="text-[#00B67A] mx-auto" size={20} />
-                      ) : (
-                        <XIcon className="text-red-400 mx-auto" size={16} />
-                      )}
+                      {row.prem}
                     </td>
                   </tr>
                 ))}
+
                 <tr>
                   <td className="p-6 bg-slate-50"></td>
 
-                  <td className="p-3 md:p-6 text-cente">
+                  <td className="p-3 md:p-6 text-center">
                     <button
                       onClick={() =>
                         navigate(
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Saver`,
                         )
                       }
-                      className="px-9  py-3 rounded-xl cursor-pointer border border-gray-300 md:font-bold text-sm hover:border-[#F15A24] hover:text-[#F15A24] transition-all"
+                      className="px-6 py-3 rounded-xl cursor-pointer border border-gray-300 md:font-bold text-sm hover:border-[#F15A24] hover:text-[#F15A24] transition-all"
                     >
                       Select Saver
                     </button>
@@ -809,23 +863,23 @@ const CoursePackages = () => {
                     <button
                       onClick={() =>
                         navigate(
-                          `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi+`,
+                          `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Flexi`,
                         )
                       }
-                      className="px-9  py-3 rounded-xl cursor-pointer bg-[#F15A24] text-white md:font-bold text-sm shadow-lg shadow-[#F15A24]/20 hover:scale-105 transition-all"
+                      className="px-6 py-3 rounded-xl cursor-pointer bg-[#F15A24] text-white md:font-bold text-sm shadow-lg shadow-[#F15A24]/20 hover:scale-105 transition-all"
                     >
-                      Select Flexi+
+                      Select Flexi
                     </button>
                   </td>
 
-                  <td className="p-3 md:p-6  bg-purple-50">
+                  <td className="p-3 md:p-6 text-center bg-purple-50">
                     <button
                       onClick={() =>
                         navigate(
                           `/booking/checkout?courseId=${course._id}&scheduleId=${scheduleId}&plan=Premium`,
                         )
                       }
-                      className="px-9 py-3 rounded-xl cursor-pointer bg-[#7344ff] text-white md:font-bold text-sm shadow-lg shadow-[#7344ff]/20 hover:scale-105 transition-all"
+                      className="px-6 py-3 rounded-xl cursor-pointer bg-[#7344ff] text-white md:font-bold text-sm shadow-lg shadow-[#7344ff]/20 hover:scale-105 transition-all"
                     >
                       Select Premium
                     </button>

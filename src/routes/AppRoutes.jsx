@@ -25,6 +25,7 @@ import TrainerProfile from "../components/TrainerComponents/TrainerProfile";
 import PrivacyandPolicy from "../pages/PrivacyandPolicy";
 import TermsOfServices from "../pages/TermsOfServices";
 import CookiePolicy from "../pages/CookiePolicy";
+import NotFound from "../pages/NotFound";
 
 const AppRoutes = () => {
   return (
@@ -66,6 +67,8 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
