@@ -1,16 +1,14 @@
-import { useState } from "react";
 import "./App.css";
-import Home from "./pages/Home";
 import AppRoutes from "./routes/AppRoutes";
 import Header from "./components/shared/Header";
 import { BrowserRouter, useLocation } from "react-router-dom";
 import Footer from "./components/shared/Footer";
-import TopNav from "./components/shared/TopNav";
 import ScrollToTop from "./components/shared/ScrollToTop";
 
 import { AuthProvider } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import CookieConsent from "./components/ui/CookieConsent";
+import { HelmetProvider } from "react-helmet-async";
 
 const AppContent = () => {
   const location = useLocation();
@@ -34,11 +32,13 @@ const AppContent = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

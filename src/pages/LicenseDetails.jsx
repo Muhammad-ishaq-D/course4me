@@ -14,6 +14,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { NavLink, useSearchParams, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async"; // <--- Import Helmet
 import HeroSection from "../components/licenseDetails/HeroSection";
 import licenseService from "../api/services/licenseService";
 import Loader from "../components/ui/Loader";
@@ -100,7 +101,12 @@ const LicenseDetails = () => {
     const breakdown = license?.pricingBreakdown?.length
       ? license.pricingBreakdown
       : license?.pricing?.basePrice
-        ? [{ label: "Training course", price: `£${license.pricing.salePrice || license.pricing.basePrice}` }]
+        ? [
+            {
+              label: "Training course",
+              price: `£${license.pricing.salePrice || license.pricing.basePrice}`,
+            },
+          ]
         : [];
     if (breakdown.length > 0) {
       list.push({
@@ -174,8 +180,41 @@ const LicenseDetails = () => {
     );
   }
 
+  // Generate dynamic SEO metadata fields
+  const pageTitle = `${license?.title || license?.name || "SIA Licence Details"} | courses4me`;
+  const cleanDescription = (license?.fullDescription || "")
+    .replace(/<[^>]*>?/gm, "")
+    .trim();
+  const pageDescription =
+    cleanDescription.slice(0, 155) ||
+    `Get qualified and certified with courses4me. Learn how to apply for your ${license?.title || "SIA licence"} today.`;
+  const canonicalUrl = `https://courses4me.co.uk/license-details?id=${licenseId || ""}`;
+
   return (
     <div className="bg-[#F6F8FB] ">
+      {/* Dynamic SEO Meta Tags */}
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Structured Data / Schema Markup */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "EducationalOccupationalCredential",
+            name: license?.title || license?.name || "SIA Licence",
+            description: pageDescription,
+            credentialCategory: "Licence",
+            recognizedBy: {
+              "@type": "Organization",
+              name: "courses4me",
+              url: "https://courses4me.co.uk",
+            },
+          })}
+        </script>
+      </Helmet>
+
       {/* =====================HERO SECTION========================== */}
       <HeroSection license={license} />
 
@@ -304,13 +343,12 @@ const LicenseDetails = () => {
 
                   {/* ==============ABOUT / DESCRIPTION=============== */}
                   {section.content && (
-                    <p className="text-[#667085] leading-7 text-sm md:text-base" 
-                    dangerouslySetInnerHTML={{ __html: section.content }}
-                    >
-                      
-                    </p>
+                    <p
+                      className="text-[#667085] leading-7 text-sm md:text-base"
+                      dangerouslySetInnerHTML={{ __html: section.content }}
+                    />
                   )}
-                  
+
                   {/* ==============ELIGIBILITY=========== */}
                   {section.items && (
                     <div className="grid md:grid-cols-2 gap-3">

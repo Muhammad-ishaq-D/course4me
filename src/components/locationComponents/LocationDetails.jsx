@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async"; // <--- Import Helmet
 import {
   Clock3,
   CheckCircle2,
@@ -60,7 +61,10 @@ const CourseLocationView = ({ link }) => {
     (a, b) => new Date(a.startDate) - new Date(b.startDate),
   );
   const upcomingDates = dates.filter(
-    (d) => d.startDate && new Date(new Date(d.startDate).setHours(0,0,0,0)) >= new Date(new Date().setHours(0,0,0,0)),
+    (d) =>
+      d.startDate &&
+      new Date(new Date(d.startDate).setHours(0, 0, 0, 0)) >=
+        new Date(new Date().setHours(0, 0, 0, 0)),
   );
   const [showAllDates, setShowAllDates] = useState(false);
   const visibleDates = showAllDates ? upcomingDates : upcomingDates.slice(0, 4);
@@ -99,8 +103,38 @@ const CourseLocationView = ({ link }) => {
     .split("\n")
     .filter(Boolean);
 
+  // Dynamic SEO Fields
+  const locationName = loc.name || course.title || "Training Venue";
+  const city = loc.city || "UK";
+  const pageTitle = `${locationName} - Training Venue in ${city} | courses4me`;
+  const pageDescription = `Book professional training at ${locationName} in ${city}. Certified training venue with expert trainers. Explore dates, prices, and venue directions.`;
+  const canonicalUrl = `https://courses4me.co.uk/locations/${link._id || ""}`;
+
   return (
     <div className="bg-[#F4F7FB] min-h-screen">
+      {/* Dynamic SEO Metadata */}
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Structured Data (Place / Educational Organization Schema) */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Place",
+            name: locationName,
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: loc.addressLine1 || "",
+              addressLocality: loc.city || "",
+              postalCode: loc.postcode || "",
+              addressCountry: loc.country || "UK",
+            },
+          })}
+        </script>
+      </Helmet>
+
       {/* ── Hero ── */}
       <section className="relative min-h-[70vh] overflow-hidden bg-[#0B1120] flex items-center">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -372,21 +406,41 @@ const CourseLocationView = ({ link }) => {
                           slot.endDate !== slot.startDate &&
                           ` – ${fmtDate(slot.endDate)}`}
                       </p>
-                      {slot.timingsType === 'flexible' && slot.weeklyTimings ? (
+                      {slot.timingsType === "flexible" && slot.weeklyTimings ? (
                         <details className="mt-1 cursor-pointer group relative">
                           <summary className="text-sm font-semibold text-orange-600 hover:text-orange-700 list-none flex items-center gap-1 outline-none">
                             Varies by day (Click to view)
-                            <ChevronDown size={14} className="group-open:rotate-180 transition-transform" />
+                            <ChevronDown
+                              size={14}
+                              className="group-open:rotate-180 transition-transform"
+                            />
                           </summary>
                           <div className="absolute top-full left-0 mt-2 z-50 bg-white shadow-xl border border-gray-100 rounded-xl p-4 text-[13px] space-y-2 min-w-[240px]">
-                            {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
+                            {[
+                              "monday",
+                              "tuesday",
+                              "wednesday",
+                              "thursday",
+                              "friday",
+                              "saturday",
+                              "sunday",
+                            ].map((day) => {
                               const config = slot.weeklyTimings[day];
                               const isOff = !config || config.isOff;
                               return (
-                                <div key={day} className="flex justify-between items-center gap-4 border-b border-gray-50 pb-1.5 last:border-0 last:pb-0">
-                                  <span className="capitalize text-gray-500 font-medium">{day}</span>
-                                  <span className={`font-bold ${isOff ? 'text-gray-400' : 'text-gray-800'}`}>
-                                    {isOff ? 'Off' : `${fmtTime(config.startTime)} - ${fmtTime(config.endTime)}`}
+                                <div
+                                  key={day}
+                                  className="flex justify-between items-center gap-4 border-b border-gray-50 pb-1.5 last:border-0 last:pb-0"
+                                >
+                                  <span className="capitalize text-gray-500 font-medium">
+                                    {day}
+                                  </span>
+                                  <span
+                                    className={`font-bold ${isOff ? "text-gray-400" : "text-gray-800"}`}
+                                  >
+                                    {isOff
+                                      ? "Off"
+                                      : `${fmtTime(config.startTime)} - ${fmtTime(config.endTime)}`}
                                   </span>
                                 </div>
                               );
@@ -602,147 +656,163 @@ const CourseLocationView = ({ link }) => {
 };
 
 /* ─── legacy center-based view (backward compat) ─────────────────── */
-const LegacyCenterView = ({ center, courses }) => (
-  <div className="bg-[#F4F7FB] min-h-screen">
-    <section className="relative min-h-screen overflow-hidden bg-[#0B1120] flex items-center">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute left-0 top-0 w-[450px] h-[450px] bg-blue-600/20 blur-[130px]" />
-        <div className="absolute right-0 top-0 w-[450px] h-[450px] bg-orange-500/20 blur-[130px]" />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-orange-500/10 blur-[170px]" />
-      </div>
-      <div className="relative max-w-7xl mx-auto px-4 w-full pt-6 pb-8">
-        <div className="flex items-center gap-3 text-sm text-white/50 mb-7">
-          <NavLink to="/" className="hover:text-white transition">
-            Home
-          </NavLink>
-          <span>/</span>
-          <NavLink to="/locations" className="hover:text-white transition">
-            Locations
-          </NavLink>
-          <span>›</span>
-          <span className="text-white font-medium">{center.name}</span>
+const LegacyCenterView = ({ center, courses }) => {
+  const centerName = center.name || "Training Center";
+  const pageTitle = `${centerName} | courses4me`;
+  const pageDescription = `Explore accredited courses at ${centerName}. Certified training center delivering professional qualifications across the UK with courses4me.`;
+
+  return (
+    <div className="bg-[#F4F7FB] min-h-screen">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href="https://courses4me.co.uk/locations" />
+      </Helmet>
+
+      <section className="relative min-h-screen overflow-hidden bg-[#0B1120] flex items-center">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute left-0 top-0 w-[450px] h-[450px] bg-blue-600/20 blur-[130px]" />
+          <div className="absolute right-0 top-0 w-[450px] h-[450px] bg-orange-500/20 blur-[130px]" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-orange-500/10 blur-[170px]" />
         </div>
-        <div className="grid lg:grid-cols-[1fr_370px] gap-10 items-center">
-          <div>
-            <div className="flex flex-wrap items-center gap-3 mb-5">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
-                <div className="w-2 h-2 rounded-full bg-green-400" />
-                <span className="text-green-300 text-sm font-medium">
-                  In-Person Training
-                </span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
-                <CheckCircle2 className="w-4 h-4 text-orange-400" />
-                <span className="text-white/80 text-sm font-medium">
-                  Certified Center
-                </span>
-              </div>
-            </div>
-            <h1 className="text-4xl md:text-5xl xl:text-6xl font-black text-white leading-[1.05] max-w-3xl">
-              {center.name}
-            </h1>
-            <p className="text-base md:text-lg text-white/60 leading-relaxed mt-5 max-w-2xl">
-              Professional training center delivering certified courses,
-              practical workshops, and industry-recognized qualifications.
-            </p>
-            <div className="mt-8">
-              <button
-                onClick={() =>
-                  document
-                    .getElementById("courses-section")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-                className="h-13 px-8 cursor-pointer rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base transition-all duration-300 shadow-[0_15px_35px_rgba(249,115,22,0.35)]"
-              >
-                Explore Courses at This Center
-              </button>
-            </div>
+        <div className="relative max-w-7xl mx-auto px-4 w-full pt-6 pb-8">
+          <div className="flex items-center gap-3 text-sm text-white/50 mb-7">
+            <NavLink to="/" className="hover:text-white transition">
+              Home
+            </NavLink>
+            <span>/</span>
+            <NavLink to="/locations" className="hover:text-white transition">
+              Locations
+            </NavLink>
+            <span>›</span>
+            <span className="text-white font-medium">{center.name}</span>
           </div>
-          <div className="relative">
-            <div className="bg-[#2A1A16]/90 backdrop-blur-2xl border border-white/10 rounded-[28px] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.40)]">
-              <div className="relative rounded-[22px] overflow-hidden">
-                <img
-                  src={center.image}
-                  alt={center.name}
-                  className="w-full h-[190px] object-cover"
-                />
-                <button className="absolute top-4 left-4 w-11 h-11 rounded-full bg-orange-500 flex items-center justify-center shadow-lg">
-                  <Heart className="w-4 h-4 text-white" />
+          <div className="grid lg:grid-cols-[1fr_370px] gap-10 items-center">
+            <div>
+              <div className="flex flex-wrap items-center gap-3 mb-5">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
+                  <div className="w-2 h-2 rounded-full bg-green-400" />
+                  <span className="text-green-300 text-sm font-medium">
+                    In-Person Training
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
+                  <CheckCircle2 className="w-4 h-4 text-orange-400" />
+                  <span className="text-white/80 text-sm font-medium">
+                    Certified Center
+                  </span>
+                </div>
+              </div>
+              <h1 className="text-4xl md:text-5xl xl:text-6xl font-black text-white leading-[1.05] max-w-3xl">
+                {center.name}
+              </h1>
+              <p className="text-base md:text-lg text-white/60 leading-relaxed mt-5 max-w-2xl">
+                Professional training center delivering certified courses,
+                practical workshops, and industry-recognized qualifications.
+              </p>
+              <div className="mt-8">
+                <button
+                  onClick={() =>
+                    document
+                      .getElementById("courses-section")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
+                  className="h-13 px-8 cursor-pointer rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base transition-all duration-300 shadow-[0_15px_35px_rgba(249,115,22,0.35)]"
+                >
+                  Explore Courses at This Center
                 </button>
               </div>
-              <div className="mt-5 space-y-1">
-                <div className="flex items-center justify-between rounded-2xl bg-white/5 border border-white/5 px-4 py-3">
-                  <div className="flex items-center gap-3 text-white/60">
-                    <BookOpen className="w-4 h-4 text-orange-400" />
-                    <span className="text-sm">Available Courses</span>
-                  </div>
-                  <span className="text-white text-sm font-semibold">
-                    {courses.length}+
-                  </span>
+            </div>
+            <div className="relative">
+              <div className="bg-[#2A1A16]/90 backdrop-blur-2xl border border-white/10 rounded-[28px] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.40)]">
+                <div className="relative rounded-[22px] overflow-hidden">
+                  <img
+                    src={center.image}
+                    alt={center.name}
+                    className="w-full h-[190px] object-cover"
+                  />
+                  <button className="absolute top-4 left-4 w-11 h-11 rounded-full bg-orange-500 flex items-center justify-center shadow-lg">
+                    <Heart className="w-4 h-4 text-white" />
+                  </button>
                 </div>
-                <div className="flex items-center justify-between rounded-2xl bg-white/5 border border-white/5 px-4 py-3">
-                  <div className="flex items-center gap-3 text-white/60">
-                    <Clock3 className="w-4 h-4 text-orange-400" />
-                    <span className="text-sm">Opening Hours</span>
+                <div className="mt-5 space-y-1">
+                  <div className="flex items-center justify-between rounded-2xl bg-white/5 border border-white/5 px-4 py-3">
+                    <div className="flex items-center gap-3 text-white/60">
+                      <BookOpen className="w-4 h-4 text-orange-400" />
+                      <span className="text-sm">Available Courses</span>
+                    </div>
+                    <span className="text-white text-sm font-semibold">
+                      {courses.length}+
+                    </span>
                   </div>
-                  <span className="text-white text-sm font-semibold">
-                    Mon - Sat
-                  </span>
+                  <div className="flex items-center justify-between rounded-2xl bg-white/5 border border-white/5 px-4 py-3">
+                    <div className="flex items-center gap-3 text-white/60">
+                      <Clock3 className="w-4 h-4 text-orange-400" />
+                      <span className="text-sm">Opening Hours</span>
+                    </div>
+                    <span className="text-white text-sm font-semibold">
+                      Mon - Sat
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <section className="max-w-7xl mx-auto px-4 py-20">
-      <CenterDetails center={center} />
-      <div id="courses-section" className="mt-20">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-10">
-          <div>
-            <p className="text-[11px] uppercase tracking-[3px] text-orange-500 font-semibold">
-              Courses
-            </p>
-            <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mt-2">
-              Available Courses
-            </h2>
-          </div>
-          <div className="flex items-center gap-3 bg-orange-50 border border-orange-100 rounded-2xl px-5 py-4">
-            <div className="w-11 h-11 rounded-xl bg-orange-500 flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-white" />
-            </div>
+      </section>
+      <section className="max-w-7xl mx-auto px-4 py-20">
+        <CenterDetails center={center} />
+        <div id="courses-section" className="mt-20">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-10">
             <div>
-              <p className="text-xs uppercase tracking-[2px] text-orange-500 font-medium">
-                Total Courses
+              <p className="text-[11px] uppercase tracking-[3px] text-orange-500 font-semibold">
+                Courses
               </p>
-              <h3 className="text-2xl font-semibold text-gray-900">
-                {courses.length}
-              </h3>
+              <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mt-2">
+                Available Courses
+              </h2>
+            </div>
+            <div className="flex items-center gap-3 bg-orange-50 border border-orange-100 rounded-2xl px-5 py-4">
+              <div className="w-11 h-11 rounded-xl bg-orange-500 flex items-center justify-center">
+                <BookOpen className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[2px] text-orange-500 font-medium">
+                  Total Courses
+                </p>
+                <h3 className="text-2xl font-semibold text-gray-900">
+                  {courses.length}
+                </h3>
+              </div>
             </div>
           </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {courses.map((course) => (
+              <CourseCard
+                key={course._id || course.id}
+                id={course._id || course.id}
+                image={course.thumbnail || course.image}
+                title={course.title}
+                description={course.shortDescription || course.description}
+                badge={course.badge || "Popular"}
+                price={
+                  course.pricing?.salePrice ||
+                  course.pricing?.basePrice ||
+                  course.price
+                }
+                date={course.date || "Multiple Dates"}
+                category={course.category}
+                duration={course.duration}
+                isPopular={course.isPopular}
+                isOnline={course.isOnline || false}
+              />
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {courses.map((course) => (
-            <CourseCard
-              key={course._id || course.id}
-              id={course._id || course.id}
-              image={course.thumbnail || course.image}
-              title={course.title}
-              description={course.shortDescription || course.description}
-              badge={course.badge || "Popular"}
-              price={(course.pricing?.salePrice || course.pricing?.basePrice) || course.price}
-              date={course.date || "Multiple Dates"}
-              category={course.category}
-              duration={course.duration}
-              isPopular={course.isPopular}
-              isOnline={course.isOnline || false}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  </div>
-);
+      </section>
+    </div>
+  );
+};
 
 /* ─── main component ──────────────────────────────────────────────── */
 const LocationDetails = () => {
@@ -838,6 +908,13 @@ const LocationDetails = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-[#F4F7FB] flex items-center justify-center">
+        <Helmet>
+          <title>Location Not Found | courses4me</title>
+          <meta
+            name="description"
+            content="The requested training location details could not be found. View all available UK training locations on courses4me."
+          />
+        </Helmet>
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-orange-300 mx-auto mb-3" />
           <h2 className="text-xl font-bold text-gray-700">{error}</h2>
@@ -862,6 +939,13 @@ const LocationDetails = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F4F7FB]">
+      <Helmet>
+        <title>No Location Found | courses4me</title>
+        <meta
+          name="description"
+          content="Explore accredited training venues and course locations across the UK with courses4me."
+        />
+      </Helmet>
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-800">No Location Found</h1>
         <NavLink

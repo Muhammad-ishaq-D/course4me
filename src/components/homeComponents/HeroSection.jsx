@@ -35,6 +35,7 @@ const VideoPlayer = ({ src, label, className = "" }) => (
   >
     <video
       src={src}
+      alt="Students participating in a professional courses4me training session"
       className="w-full h-full object-cover"
       autoPlay
       loop
@@ -65,6 +66,7 @@ const HeroSection = () => {
                   Future.
                   <img
                     src={underlineStroke}
+                    alt="Students participating in a professional courses4me training session"
                     className="absolute bottom-1 md:bottom-2 left-2 w-[90%]"
                   />
                 </span>
@@ -107,7 +109,11 @@ const HeroSection = () => {
                 />
                 <div className="absolute bottom-18 left-6">
                   <div className="flex items-center gap-2 bg-[#FF5421] text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    <img src={playIcon} className="w-3 h-3" />
+                    <img
+                      src={playIcon}
+                      alt="Students participating in a professional courses4me training session"
+                      className="w-3 h-3"
+                    />
                     Live Training
                   </div>
                   <h3 className="mt-3 text-xl font-bold text-white">

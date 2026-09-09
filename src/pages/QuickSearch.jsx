@@ -13,6 +13,9 @@ import courseService from "../api/services/courseService";
 import licenseService from "../api/services/licenseService";
 import careerService from "../api/services/careerService";
 import courseLocationService from "../api/services/courseLocationService";
+import { useSearchParams } from "react-router-dom";
+
+import { Helmet } from "react-helmet-async";
 
 const QuickSearch = () => {
   // ================= STATES =================
@@ -45,6 +48,9 @@ const QuickSearch = () => {
   const [keywordSuggestions, setKeywordSuggestions] = useState([]);
   const [keywordLoading, setKeywordLoading] = useState(false);
 
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q") || "";
+
   // ================= REFS =================
   const resultsRef = useRef(null);
   const locationRef = useRef(null);
@@ -66,7 +72,11 @@ const QuickSearch = () => {
   // =====================================================================
   const locationSuggestions = useMemo(() => {
     if (!location.trim()) return [];
-    const tokens = location.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+    const tokens = location
+      .trim()
+      .toLowerCase()
+      .split(/[\s,]+/)
+      .filter(Boolean);
     if (tokens.length === 0) return [];
     const seen = new Set();
     const results = [];
@@ -80,14 +90,11 @@ const QuickSearch = () => {
     sortedLinks.forEach((link) => {
       const loc = link.locationId;
       if (!loc || typeof loc !== "object") return;
-      const fields = [
-        loc.name,
-        loc.city,
-        loc.postcode,
-        loc.addressLine1
-      ].map((f) => (f || "").toLowerCase());
+      const fields = [loc.name, loc.city, loc.postcode, loc.addressLine1].map(
+        (f) => (f || "").toLowerCase(),
+      );
       const matches = tokens.every((token) =>
-        fields.some((field) => field.includes(token))
+        fields.some((field) => field.includes(token)),
       );
       if (!matches) return;
       const label = [loc.city, loc.postcode].filter(Boolean).join(", ");
@@ -282,7 +289,11 @@ const QuickSearch = () => {
 
       // Filter courses by location using course-location links (new model)
       if (location.trim() && fetchedCourses.length > 0) {
-        const tokens = location.trim().toLowerCase().split(/[\s,]+/).filter(Boolean);
+        const tokens = location
+          .trim()
+          .toLowerCase()
+          .split(/[\s,]+/)
+          .filter(Boolean);
         const matchingCourseIds = new Set(
           allCourseLinks
             .filter((link) => {
@@ -292,10 +303,10 @@ const QuickSearch = () => {
                 loc.name,
                 loc.city,
                 loc.postcode,
-                loc.addressLine1
+                loc.addressLine1,
               ].map((f) => (f || "").toLowerCase());
               return tokens.every((token) =>
-                fields.some((field) => field.includes(token))
+                fields.some((field) => field.includes(token)),
               );
             })
             .map((link) => String(link.courseId?._id || link.courseId))
@@ -319,8 +330,47 @@ const QuickSearch = () => {
     }
   };
 
+  // Dynamic Metadata based on Search Query
+  const pageTitle = query
+    ? `Search Results for "${query}" | courses4me`
+    : "Search Courses & Locations | courses4me";
+
+  const pageDescription = query
+    ? `Find available accredited training courses, venues, and SIA qualifications matching "${query}" on courses4me.`
+    : "Search and compare accredited security training courses, locations, and SIA qualifications across the UK with courses4me.";
+
+  const canonicalUrl = `https://courses4me.co.uk/search${query ? `?q=${encodeURIComponent(query)}` : ""}`;
+
   return (
     <div className="min-h-screen bg-[#FAFAFC] overflow-hidden relative">
+      {/* Dynamic SEO Meta Tags */}
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        {/* Prevents internal search result pages from indexing if empty to protect site quality */}
+        <meta
+          name="robots"
+          content={query ? "noindex, follow" : "index, follow"}
+        />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Search Action / WebSite Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SearchResultsPage",
+            name: pageTitle,
+            description: pageDescription,
+            url: canonicalUrl,
+            publisher: {
+              "@type": "Organization",
+              name: "courses4me",
+              url: "https://courses4me.co.uk",
+            },
+          })}
+        </script>
+      </Helmet>
+
       {/* ================= BACKGROUND ================= */}
       <div className="absolute top-0 left-0 w-[350px] h-[350px] bg-[#F15A24]/10 blur-[120px] rounded-full" />
       <div className="absolute top-20 right-0 w-[300px] h-[300px] bg-orange-200/20 blur-[120px] rounded-full" />
@@ -498,7 +548,11 @@ const QuickSearch = () => {
                         key={i}
                         type="button"
                         disabled={item.isInactive}
-                        title={item.isInactive ? "This location is temporarily inactive for this course from administration" : undefined}
+                        title={
+                          item.isInactive
+                            ? "This location is temporarily inactive for this course from administration"
+                            : undefined
+                        }
                         onClick={() => {
                           if (item.isInactive) return;
                           setShowLocationSuggestions(false);
@@ -593,7 +647,9 @@ const QuickSearch = () => {
                           title={item.title}
                           description={item.fullDescription}
                           badge={item.badge}
-                          price={item.pricing?.salePrice || item.pricing?.basePrice}
+                          price={
+                            item.pricing?.salePrice || item.pricing?.basePrice
+                          }
                           date={item.date}
                           category={item.category}
                           duration={item.duration}
@@ -639,6 +695,6 @@ const QuickSearch = () => {
       </section>
     </div>
   );
-};
+};;
 
 export default QuickSearch;

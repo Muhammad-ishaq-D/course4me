@@ -201,6 +201,7 @@ const RealStories = () => {
           <div className="rounded-2xl overflow-hidden relative">
             <img
               src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
+              alt="Students participating in a professional courses4me training session"
               className="w-full h-full object-cover"
             />
             <span className="absolute bottom-3 left-3 text-white text-sm">
@@ -212,6 +213,7 @@ const RealStories = () => {
           <div className="rounded-2xl overflow-hidden relative">
             <img
               src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655"
+              alt="Students participating in a professional courses4me training session"
               className="w-full h-full object-cover"
             />
             <span className="absolute bottom-3 left-3 text-white text-sm">

@@ -178,7 +178,7 @@ const CoursePackages = () => {
       answer: "The minimum age requirement is 18 years old.",
     },
     {
-      question: "13. How to apply for SIA license",
+      question: "How to apply for SIA license",
       answer: (
         <div className="space-y-2 whitespace-pre-line">
           <p>A. Open link below</p>

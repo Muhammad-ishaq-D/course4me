@@ -1,20 +1,25 @@
 import React from "react";
-// import SIASection from "../components/LicenseComponents/SIASection";
 import HowItWorksSection from "../components/LicenseComponents/HowItWorksSection";
-// import CompareLicences from "../components/LicenseComponents/CompareLicences";
 import FAQSection from "../components/LicenseComponents/FAQSection";
-// import HelpSection from "../components/LicenseComponents/HelpSection";
 import ExploreAllLicences from "../components/LicenseComponents/ExploreAllLicences";
+
+import { Helmet } from "react-helmet-async";
 
 export default function Licenses() {
   return (
     <div>
-      {/* <SIASection /> */}
+      <Helmet>
+        <title>SIA Security Licences & Training | courses4me</title>
+        <meta
+          name="description"
+          content="Get qualified for your official SIA license. Explore Door Supervisor, CCTV Operator, and Security Guard training options."
+        />
+        <link rel="canonical" href="https://courses4me.co.uk/licences" />
+      </Helmet>
+
       <ExploreAllLicences />
-      {/* <CompareLicences /> */}
       <HowItWorksSection />
       <FAQSection />
-      {/* <HelpSection /> */}
     </div>
   );
 }

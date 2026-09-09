@@ -13,6 +13,7 @@ import {
   User2,
 } from "lucide-react";
 import { useNavigate, Link, useParams, NavLink } from "react-router-dom";
+import { Helmet } from "react-helmet-async"; // <--- Import Helmet
 import Blog1 from "../assets/home/blog1.png";
 import AuthorImg from "../assets/home/Sarah Mitchell.png";
 import Blog4 from "../assets/home/blog4.png";
@@ -40,13 +41,78 @@ const BlogArticle = () => {
     relatedArticles = [
       ...relatedArticles,
       ...blogsData
-        .filter((item) => item.id !== blog.id)
+        .filter((item) => item.id !== blog?.id)
         .slice(0, 3 - relatedArticles.length),
     ];
   }
 
+  if (!blog) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f9fafb]">
+        <Helmet>
+          <title>Article Not Found | courses4me</title>
+          <meta
+            name="description"
+            content="The requested blog article could not be found. Explore our latest guides and news on courses4me."
+          />
+        </Helmet>
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800">
+            Article Not Found
+          </h2>
+          <NavLink
+            to="/blog"
+            className="mt-4 inline-block text-[#F15A24] font-semibold hover:underline"
+          >
+            ← Back to Blog
+          </NavLink>
+        </div>
+      </div>
+    );
+  }
+
+  // Dynamic Metadata Fields
+  const articleTitle = blog.title || "Blog Article";
+  const pageTitle = `${articleTitle} | courses4me Blog`;
+  const cleanExcerpt = (blog.excerpt || blog.summary || "")
+    .replace(/<[^>]*>?/gm, "")
+    .trim();
+  const pageDescription =
+    cleanExcerpt.slice(0, 155) ||
+    `Read ${articleTitle} on courses4me. Get expert training insights, career advice, and industry news.`;
+  const canonicalUrl = `https://courses4me.co.uk/blog/${id}`;
+
   return (
     <div className="bg-[#f9fafb] min-h-screen pb-20">
+      {/* Dynamic SEO Meta Tags */}
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Structured Data (BlogPosting Schema Markup) */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: articleTitle,
+            description: pageDescription,
+            image: blog.image ? [blog.image] : undefined,
+            datePublished: blog.publishDate || undefined,
+            author: {
+              "@type": "Person",
+              name: blog.author || "courses4me Team",
+              jobTitle: blog.role || undefined,
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "courses4me",
+              url: "https://courses4me.co.uk",
+            },
+          })}
+        </script>
+      </Helmet>
+
       {/* ─── HERO CONTENT ─── */}
       <div className="relative bg-[#0B1D33] overflow-hidden">
         {/* BACKGROUND */}
@@ -83,11 +149,11 @@ const BlogArticle = () => {
 
           {/* TITLE */}
           <h1 className="max-w-5xl text-4xl md:text-6xl font-black leading-[1.05] text-white tracking-tight">
-            <h1>{blog?.title}</h1>
+            {blog?.title}
           </h1>
 
           <p className="mt-8 max-w-3xl text-lg md:text-xl text-gray-300 leading-relaxed">
-            <p>{blog?.excerpt}</p>
+            {blog?.excerpt}
           </p>
 
           {/* AUTHOR SECTION */}
@@ -129,13 +195,13 @@ const BlogArticle = () => {
         <div className="w-full h-[300px] md:h-[500px] rounded-t-[32px] overflow-hidden shadow-2xl border-4 border-white">
           <img
             src={blog?.image}
-            alt="Door Supervisor"
+            alt={blog?.title || "Blog Image"}
             className="w-full h-full object-cover"
           />
         </div>
 
         {/* Content Container */}
-        <div className="bg-white rounded-b-[32px] sm:rounded-[32px] sm:-mt-10 p-6  md:p-16 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-gray-100 relative mb-16">
+        <div className="bg-white rounded-b-[32px] sm:rounded-[32px] sm:-mt-10 p-6 md:p-16 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-gray-100 relative mb-16">
           {/* ================= TOP ACTION BAR ================= */}
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 pb-8 border-b border-gray-100 mb-12">
             {/* BACK BUTTON */}
@@ -162,43 +228,11 @@ const BlogArticle = () => {
                 </p>
               </div>
             </button>
-
-            {/* SHARE SECTION */}
-            {/* <div className="flex items-center gap-4">
-              <div className="hidden sm:flex items-center gap-2 text-orange-600 text-xs font-bold uppercase tracking-[0.18em]">
-                <Share2 size={15} />
-                Share Article
-              </div>
-
-              <div className="flex items-center gap-3">
-                <button className="group/social cursor-pointer w-11 h-11 rounded-2xl border border-gray-200 bg-white flex items-center justify-center hover:bg-[#1877F2] hover:border-[#1877F2] transition-all duration-300 shadow-sm">
-                  <Facebook
-                    size={16}
-                    className="text-gray-500 group-hover/social:text-white transition"
-                  />
-                </button>
-
-                <button className="group/social cursor-pointer w-11 h-11 rounded-2xl border border-gray-200 bg-white flex items-center justify-center hover:bg-[#1DA1F2] hover:border-[#1DA1F2] transition-all duration-300 shadow-sm">
-                  <Twitter
-                    size={16}
-                    className="text-gray-500 group-hover/social:text-white transition"
-                  />
-                </button>
-
-                <button className="group/social cursor-pointer w-11 h-11 rounded-2xl border border-gray-200 bg-white flex items-center justify-center hover:bg-[#0A66C2] hover:border-[#0A66C2] transition-all duration-300 shadow-sm">
-                  <Linkedin
-                    size={16}
-                    className="text-gray-500 group-hover/social:text-white transition"
-                  />
-                </button>
-              </div>
-            </div> */}
           </div>
 
           {/* Article Typography */}
-
           <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed">
-            {blog.content.map((section, index) => {
+            {blog.content?.map((section, index) => {
               if (section.type === "heading") {
                 return (
                   <h2
@@ -234,7 +268,7 @@ const BlogArticle = () => {
               if (section.type === "list") {
                 return (
                   <ul key={index} className="mb-10 space-y-4 list-none pl-0">
-                    {section.items.map((item, i) => (
+                    {section.items?.map((item, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <span className="w-2 h-2 rounded-full bg-[#FF5421] mt-2.5 shrink-0"></span>
 
@@ -247,7 +281,7 @@ const BlogArticle = () => {
               if (section.type === "numberedList") {
                 return (
                   <div key={index} className="mb-10 space-y-3">
-                    {section.items.map((item, i) => (
+                    {section.items?.map((item, i) => (
                       <div key={i} className="flex items-center gap-3">
                         <div className="w-7 h-7 rounded-full bg-[#0B1D33] text-white text-sm font-bold flex items-center justify-center">
                           {i + 1}
@@ -261,21 +295,6 @@ const BlogArticle = () => {
               }
 
               return null;
-
-              <div>
-                <p
-                  key={index}
-                  className="mb-8 text-lg leading-relaxed text-gray-700"
-                >
-                  {section.category}
-                </p>
-                <NavLink
-                  to="/courses"
-                  className="text-[#FF5421] hover:text-[#FF5421]/80 font-bold"
-                >
-                  Find a Course
-                </NavLink>
-              </div>;
             })}
           </div>
 

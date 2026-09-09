@@ -1,13 +1,22 @@
 import React from "react";
-import BlogHero from "../components/blogComponents/BlogHero";
 import FeaturedArticle from "../components/blogComponents/FeaturedArticle";
-import CategoryFilters from "../components/blogComponents/CategoryFilters";
 import ArticleGrid from "../components/blogComponents/ArticleGrid";
 import NewsletterCTA from "../components/blogComponents/NewsletterCTA";
+
+import { Helmet } from "react-helmet-async";
 
 const Blog = () => {
   return (
     <div className="min-h-screen bg-white ">
+      <Helmet>
+        <title>Latest News, Guides & Training Insights | courses4me Blog</title>
+        <meta
+          name="description"
+          content="Read industry updates, career tips, and course guides from courses4me experts to help you stay ahead in your field."
+        />
+        <link rel="canonical" href="https://courses4me.co.uk/blog" />
+      </Helmet>
+
       <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <h1 className="mt-4 text-4xl md:text-5xl font-black text-[#0F172A] tracking-tight">
@@ -20,11 +29,8 @@ const Blog = () => {
           </p>
         </div>
       </div>
-      {/* <BlogHero /> */}
       <FeaturedArticle />
-      {/* <CategoryFilters /> */}
       <ArticleGrid />
-      {/* <Pagination /> */}
       <NewsletterCTA />
     </div>
   );

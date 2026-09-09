@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://courses4me.co.uk/sitemap.xml
