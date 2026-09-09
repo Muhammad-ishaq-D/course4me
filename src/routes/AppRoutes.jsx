@@ -11,6 +11,8 @@ import CourseResults from "../pages/courses/CourseResults";
 import CoursePackages from "../pages/courses/CoursePackages";
 import CourseCheckout from "../pages/courses/CourseCheckout";
 import BookingSuccess from "../pages/courses/BookingSuccess";
+import PaymentSuccess from "../pages/courses/PaymentSuccess";
+import PaymentCancelled from "../pages/courses/PaymentCancelled";
 import BlogArticle from "../pages/BlogArticle";
 import Signin from "../pages/Authentication/Signin";
 import ResetPassword from "../pages/Authentication/ResetPassword";
@@ -39,6 +41,9 @@ const AppRoutes = () => {
       <Route path="/booking/packages" element={<CoursePackages />} />
       <Route path="/booking/checkout" element={<CourseCheckout />} />
       <Route path="/booking-success" element={<BookingSuccess />} />
+      <Route path="/booking-cancelled" element={<PaymentCancelled />} />
+      <Route path="/payment-success" element={<PaymentSuccess />} />
+      <Route path="/payment-cancelled" element={<PaymentCancelled />} />
       <Route path="/licences" element={<Licenses />} />
       <Route path="/licences/licencesdetails" element={<LicenseDetails />} />
       <Route path="/blog" element={<Blog />} />
