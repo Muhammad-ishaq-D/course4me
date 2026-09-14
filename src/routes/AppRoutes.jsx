@@ -28,6 +28,7 @@ import PrivacyandPolicy from "../pages/PrivacyandPolicy";
 import TermsOfServices from "../pages/TermsOfServices";
 import CookiePolicy from "../pages/CookiePolicy";
 import NotFound from "../pages/NotFound";
+import FaqPage from "../pages/FaqPage";
 
 const AppRoutes = () => {
   return (
@@ -47,6 +48,7 @@ const AppRoutes = () => {
       <Route path="/licences" element={<Licenses />} />
       <Route path="/licences/licencesdetails" element={<LicenseDetails />} />
       <Route path="/blog" element={<Blog />} />
+      <Route path="/faqs" element={<FaqPage />} />
       <Route path="/blog/article/:id" element={<BlogArticle />} />
       <Route path="/locations" element={<Locations />} />
       <Route path="/locations/locationdetails" element={<LocationDetails />} />

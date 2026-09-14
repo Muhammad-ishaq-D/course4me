@@ -65,7 +65,8 @@ const Header = () => {
               // onClick={() => setIsCoursesModalOpen(true)}
               //className={navLinkClasses}
               className={({ isActive }) => {
-                const isActiveCourse = isActive || location.pathname.startsWith('/booking');
+                const isActiveCourse =
+                  isActive || location.pathname.startsWith("/booking");
                 return isActiveCourse
                   ? "text-[#F15A24] font-semibold"
                   : "text-[#2f3a47] font-medium hover:text-[#F15A24] transition-colors duration-200";
@@ -88,6 +89,9 @@ const Header = () => {
             </NavLink>
             <NavLink to="/blog" className={navLinkClasses}>
               Blog & News
+            </NavLink>
+            <NavLink to="/faqs" className={navLinkClasses}>
+              FAQs
             </NavLink>
           </nav>
 
@@ -120,17 +124,19 @@ const Header = () => {
 
                   {/* ARROW */}
                   <ChevronDown
-                    className={`w-4 h-4 text-gray-400 transition-all duration-300 ${profileOpen ? "rotate-180 text-[#F15A24]" : ""
-                      }`}
+                    className={`w-4 h-4 text-gray-400 transition-all duration-300 ${
+                      profileOpen ? "rotate-180 text-[#F15A24]" : ""
+                    }`}
                   />
                 </button>
 
                 {/* DROPDOWN */}
                 <div
-                  className={`absolute right-0 top-15 w-57.5 bg-white border border-[#edf1f5] rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 origin-top-right z-9999 ${profileOpen
+                  className={`absolute right-0 top-15 w-57.5 bg-white border border-[#edf1f5] rounded-2xl shadow-[0_15px_50px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 origin-top-right z-9999 ${
+                    profileOpen
                       ? "opacity-100 scale-100 visible"
                       : "opacity-0 scale-95 invisible"
-                    }`}
+                  }`}
                 >
                   {/* TOP INFO */}
                   <div className="px-5 py-4 border-b border-[#edf1f5]">
@@ -200,16 +206,19 @@ const Header = () => {
             className="lg:hidden flex flex-col justify-center items-center w-8 h-8 relative"
           >
             <span
-              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${open ? "rotate-45 translate-y-1.5" : ""
-                }`}
+              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${
+                open ? "rotate-45 translate-y-1.5" : ""
+              }`}
             />
             <span
-              className={`h-0.5 w-6 bg-[#2f3a47] rounded my-1 transition-all duration-300 ${open ? "opacity-0" : ""
-                }`}
+              className={`h-0.5 w-6 bg-[#2f3a47] rounded my-1 transition-all duration-300 ${
+                open ? "opacity-0" : ""
+              }`}
             />
             <span
-              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${open ? "-rotate-45 -translate-y-1.5" : ""
-                }`}
+              className={`h-0.5 w-6 bg-[#2f3a47] rounded transition-all duration-300 ${
+                open ? "-rotate-45 -translate-y-1.5" : ""
+              }`}
             />
           </button>
         </div>
@@ -217,10 +226,11 @@ const Header = () => {
 
       {/* MOBILE MENU */}
       <div
-        className={`lg:hidden absolute top-full z-999 left-0 w-full bg-white shadow-xl transition-all duration-300 overflow-hidden ${open
+        className={`lg:hidden absolute top-full z-999 left-0 w-full bg-white shadow-xl transition-all duration-300 overflow-hidden ${
+          open
             ? "opacity-100 visible translate-y-0"
             : "opacity-0 invisible -translate-y-2"
-          }`}
+        }`}
       >
         <div className="max-h-[calc(100vh-72px)] overflow-y-auto">
           <div className="flex flex-col px-6 py-6 space-y-5 text-[#2f3a47]">
@@ -275,6 +285,13 @@ const Header = () => {
             >
               Blog & News
             </NavLink>
+            <NavLink
+              to="/faqs"
+              onClick={() => setOpen(false)}
+              className={mobileNavLinkClasses}
+            >
+              FAQs
+            </NavLink>
 
             <div className="pt-5 border-t border-[#edf1f5] flex flex-col gap-4">
               {/* FIND COURSE BUTTON */}
@@ -319,15 +336,17 @@ const Header = () => {
 
                     {/* ARROW */}
                     <ChevronDown
-                      className={`w-5 h-5 text-gray-400 transition duration-300 ${mobileProfileOpen ? "rotate-180 text-[#F15A24]" : ""
-                        }`}
+                      className={`w-5 h-5 text-gray-400 transition duration-300 ${
+                        mobileProfileOpen ? "rotate-180 text-[#F15A24]" : ""
+                      }`}
                     />
                   </button>
 
                   {/* PROFILE DROPDOWN */}
                   <div
-                    className={`overflow-y-scroll transition-all duration-300 ${mobileProfileOpen ? " opacity-100" : "max-h-0 opacity-0"
-                      }`}
+                    className={`overflow-y-scroll transition-all duration-300 ${
+                      mobileProfileOpen ? " opacity-100" : "max-h-0 opacity-0"
+                    }`}
                   >
                     <div className="bg-white border border-[#edf1f5] rounded-2xl p-2 flex flex-col">
                       {/* OVERVIEW */}

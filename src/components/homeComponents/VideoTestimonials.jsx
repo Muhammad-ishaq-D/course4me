@@ -1,12 +1,16 @@
-import { Play, Star, Quote } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Play, Pause, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
-import jamesOkonkwo from "../../assets/home/James Okonkwo.png";
-import sarahMitchell from "../../assets/home/Sarah Mitchell.png";
+import jamesOkonkwo from "../../assets/home/SuccessStoriesVideos/Video1.mp4";
+import sarahMitchell from "../../assets/home/SuccessStoriesVideos/Video2.mp4";
 import Emma from "../../assets/home/emma.png";
 import davidOsei from "../../assets/home/David Osei.png";
 
 function VideoTestimonials() {
+  const [playingIndex, setPlayingIndex] = useState(null);
+  const videoRefs = useRef([]);
+
   const testimonials = [
     {
       role: "Door Supervisor",
@@ -15,7 +19,7 @@ function VideoTestimonials() {
       job: "Door Supervisor — London",
       quote:
         "I went from zero experience to earning £18/hour in just 3 months.",
-      img: jamesOkonkwo,
+      video: jamesOkonkwo,
     },
     {
       role: "CCTV Operator",
@@ -23,7 +27,7 @@ function VideoTestimonials() {
       name: "Sarah Mitchell",
       job: "CCTV Operator — Manchester",
       quote: "The CCTV course completely changed my career opportunities.",
-      img: sarahMitchell,
+      video: sarahMitchell,
     },
     {
       role: "Close Protection",
@@ -42,6 +46,23 @@ function VideoTestimonials() {
       img: davidOsei,
     },
   ];
+
+  const handleTogglePlay = (index) => {
+    const video = videoRefs.current[index];
+    if (!video) return;
+
+    if (playingIndex === index) {
+      video.pause();
+      setPlayingIndex(null);
+    } else {
+      // Pause all other videos
+      videoRefs.current.forEach((v, i) => {
+        if (v && i !== index) v.pause();
+      });
+      video.play();
+      setPlayingIndex(index);
+    }
+  };
 
   return (
     <section
@@ -83,89 +104,136 @@ function VideoTestimonials() {
 
         {/* TESTIMONIAL CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-10">
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: i * 0.1,
-              }}
-              viewport={{ once: true }}
-              whileHover={{ y: -8 }}
-              className="group h-full"
-            >
-              {/* CARD */}
-              <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] h-full flex flex-col">
-                {/* IMAGE */}
-                <div className="relative overflow-hidden">
-                  <img
-                    src={t.img}
-                    alt={t.name}
-                    className="w-full h-[300px] object-cover group-hover:scale-105 transition duration-700"
-                  />
+          {testimonials.map((t, i) => {
+            const isPlaying = playingIndex === i;
 
-                  {/* OVERLAY */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-                  {/* ROLE */}
-                  <div className="absolute top-4 left-4 bg-[#00A3FF] text-white text-[10px]  uppercase tracking-wider px-3 py-1 rounded-full shadow-lg">
-                    {t.role}
-                  </div>
-
-                  {/* DURATION */}
-                  <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white text-xs  px-3 py-1 rounded-full border border-white/10">
-                    {t.duration}
-                  </div>
-
-                  {/* PLAY BUTTON */}
-                  {/* <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full bg-[#FF5421] flex items-center justify-center shadow-[0_20px_40px_rgba(248,81,12,0.35)] group-hover:scale-110 transition duration-300">
-                      <Play
-                        size={24}
-                        fill="white"
-                        className="text-white ml-1"
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.6,
+                  delay: i * 0.1,
+                }}
+                viewport={{ once: true }}
+                whileHover={{ y: -8 }}
+                className="group h-full"
+              >
+                {/* CARD */}
+                <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] h-full flex flex-col">
+                  {/* MEDIA CONTAINER */}
+                  <div
+                    className="relative overflow-hidden cursor-pointer bg-black"
+                    onClick={() => t.video && handleTogglePlay(i)}
+                  >
+                    {t.video ? (
+                      <video
+                        ref={(el) => (videoRefs.current[i] = el)}
+                        src={t.video}
+                        className="w-full h-[320px] object-cover object-top transition duration-700"
+                        playsInline
+                        preload="metadata"
+                        onEnded={() => setPlayingIndex(null)}
                       />
-                    </div>
-                  </div> */}
-
-                  {/* BOTTOM INFO */}
-                  <div className="absolute bottom-5 left-5 right-5">
-                    {/* NAME */}
-                    <h4 className="text-xl font-bold text-white">{t.name}</h4>
-
-                    {/* JOB */}
-                    <p className="text-base text-gray-300">{t.job}</p>
-                  </div>
-                </div>
-
-                {/* QUOTE */}
-                <div className="p-5 flex flex-col flex-1">
-                  <div className="flex justify-end mb-2 items-center">
-                    <div className="flex items-center  gap-1">
-                      <Star
-                        size={16}
-                        className="fill-[#FF5421] text-[#FF5421]"
+                    ) : (
+                      <img
+                        src={t.img}
+                        alt={t.name}
+                        className="w-full h-[320px] object-cover object-top group-hover:scale-105 transition duration-700"
                       />
+                    )}
 
-                      <span className="text-sm font-bold text-white">4.9</span>
+                    {/* OVERLAY */}
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent transition-opacity duration-300 ${
+                        isPlaying
+                          ? "opacity-20 group-hover:opacity-60"
+                          : "opacity-100"
+                      }`}
+                    />
+
+                    {/* ROLE */}
+                    <div className="absolute top-4 left-4 bg-[#00A3FF] text-white text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow-lg z-10">
+                      {t.role}
+                    </div>
+
+                    {/* DURATION */}
+                    <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/10 z-10">
+                      {t.duration}
+                    </div>
+
+                    {/* PLAY / PAUSE BUTTON */}
+                    <div
+                      className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+                        isPlaying
+                          ? "opacity-0 group-hover:opacity-100"
+                          : "opacity-100"
+                      }`}
+                    >
+                      <div className="w-16 h-16 rounded-full bg-[#FF5421] flex items-center justify-center shadow-[0_20px_40px_rgba(248,81,12,0.35)] group-hover:scale-110 transition duration-300">
+                        {isPlaying ? (
+                          <Pause
+                            size={24}
+                            fill="white"
+                            className="text-white"
+                          />
+                        ) : (
+                          <Play
+                            size={24}
+                            fill="white"
+                            className="text-white ml-1"
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* BOTTOM INFO */}
+                    <div
+                      className={`absolute bottom-5 left-5 right-5 z-10 transition-opacity duration-300 ${
+                        isPlaying
+                          ? "opacity-0 group-hover:opacity-100"
+                          : "opacity-100"
+                      }`}
+                    >
+                      {/* NAME */}
+                      <h4 className="text-xl font-bold text-white">{t.name}</h4>
+
+                      {/* JOB */}
+                      <p className="text-base text-gray-300">{t.job}</p>
                     </div>
                   </div>
 
-                  <p className="text-base text-gray-300 leading-relaxed">
-                    "{t.quote}"
-                  </p>
-                </div>
+                  {/* QUOTE */}
+                  <div className="p-5 flex flex-col flex-1">
+                    <div className="flex justify-end mb-2 items-center">
+                      <div className="flex items-center gap-1">
+                        <Star
+                          size={16}
+                          className="fill-[#FF5421] text-[#FF5421]"
+                        />
 
-                {/* HOVER LINE */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-[#00A3FF] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-              </div>
-            </motion.div>
-          ))}
+                        <span className="text-sm font-bold text-white">
+                          4.9
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="text-base text-gray-300 leading-relaxed">
+                      "{t.quote}"
+                    </p>
+                  </div>
+
+                  {/* HOVER LINE */}
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-[#00A3FF] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
+
 export default VideoTestimonials;
