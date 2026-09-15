@@ -33,8 +33,8 @@ const CourseHero = ({ course }) => {
       {/* <section className="bg-[#F8FAFC] border-b mt-5 border-gray-200"></section> */}
 
       {/* 🔥 HERO */}
-      <section className="relative text-white py-10 lg:py-12 overflow-hidden bg-[#141414]">
-        <div className="hidden md:block max-w-7xl mx-auto px-4 lg:px-10 py-4">
+      <section className="relative text-white py-4 lg:py-6 overflow-hidden bg-[#141414]">
+        <div className="hidden md:block max-w-7xl mx-auto px-4 lg:px-10 py-2">
           <div className="flex items-center flex-wrap gap-2 text-xs md:text-sm">
             {/* Home */}
             <NavLink
@@ -123,7 +123,7 @@ const CourseHero = ({ course }) => {
               </div>
 
               {/* FEATURES */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 mb-8 text-base text-white/70">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 mb-5 text-base text-white/70">
                 {displayHighlights.map((item, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <CheckCircle2 size={14} className="text-[#00A3F4]" />
@@ -216,14 +216,14 @@ const CourseHero = ({ course }) => {
                       <span className="text-white text-base">In-Person</span>
                     </div>
 
-                    <div className="flex justify-between">
+                    {/* <div className="flex justify-between">
                       <div className="flex items-center text-base gap-2 text-white/50">
                         <Users size={16} /> Pass Rate
                       </div>
                       <span className="text-white text-base">
                         {displayPassRate}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

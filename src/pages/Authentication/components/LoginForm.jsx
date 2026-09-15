@@ -88,7 +88,7 @@ const LoginForm = () => {
   return (
     <div className="flex justify-center lg:justify-end">
       <div className="w-full max-w-120">
-        <div className="bg-white rounded-[2.5rem] p-4 md:p-8 shadow-2xl border border-gray-100">
+        <div className="bg-white rounded-xl p-4 md:p-8 shadow-2xl border border-gray-100">
           <div className="flex items-center gap-5 mb-10">
             <div className="bg-orange-50 p-4 rounded-2xl">
               <User className="text-orange-600 w-7 h-7" />

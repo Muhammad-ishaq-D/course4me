@@ -340,11 +340,11 @@ const CourseResults = () => {
   }
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen mt-5">
-      <main className="max-w-300 mx-auto px-4 py-6 md:py-20">
+    <div className="bg-[#F8FAFC] min-h-screen">
+      <main className="max-w-300 mx-auto px-4 py-4 md:py-6">
         <button
           onClick={() => navigate(-1)}
-          className="hidden md:flex items-center gap-2 text-gray-400 cursor-pointer hover:text-[#d84a1a] transition-colors text-xs font-bold uppercase tracking-widest mb-6"
+          className="hidden md:flex items-center gap-2 text-gray-400 cursor-pointer hover:text-[#d84a1a] transition-colors text-xs font-bold uppercase tracking-widest mb-2"
         >
           <ArrowLeft size={16} /> Back
         </button>

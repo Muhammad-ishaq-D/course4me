@@ -38,7 +38,7 @@ const HeroSection = ({ license }) => {
       <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-size-[60px_60px]" />
 
       {/* ====================CONTAINER====================== */}
-      <div className="relative max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-6 lg:py-20">
+      <div className="relative max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-6 lg:py-8">
         {/* =======================BREADCRUMB================= */}
         <div className="hidden md:flex flex-wrap items-center gap-3 text-xs md:text-sm text-white/50 mb-4">
           <NavLink
@@ -83,7 +83,7 @@ const HeroSection = ({ license }) => {
             </div>
 
             {/* TITLE */}
-            <h1 className="text-4xl md:text-6xl xl:text-[74px] font-black leading-[0.95] tracking-tight text-white">
+            <h1 className="text-xl md:text-5xl xl:text-[56px] font-black leading-[0.95] tracking-tight text-white">
               {titleMain}{" "}
               <span className="block text-[#F15A24]">{titleHighlight}</span>
             </h1>
@@ -167,10 +167,10 @@ const HeroSection = ({ license }) => {
               </div>
 
               {/* DESCRIPTION */}
-              <p className="relative text-white/60 mt-5 leading-7 text-base">
+              {/* <p className="relative text-white/60 mt-5 leading-7 text-base">
                 {license?.shortDescription ||
                   "Includes training materials, assessments, certification support, and professional guidance."}
-              </p>
+              </p> */}
 
               {/* FEATURES */}
               <div className="relative mt-6 space-y-3">

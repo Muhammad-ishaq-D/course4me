@@ -172,12 +172,12 @@ const ExploreAllLicences = () => {
   };
 
   return (
-    <section className="py-10 md:py-14 px-4 md:px-8 lg:px-16 min-h-screen bg-[#F5F7FA]">
+    <section className="py-6 md:py-8 px-4 md:px-8 lg:px-16 min-h-screen bg-[#F5F7FA]">
       <div className="max-w-7xl mx-auto">
         {/* =====================================================
                   HEADER
-            ===================================================== */}
-        <div className="mb-6 md:mb-14">
+===================================================== */}
+        <div className="mb-6 md:mb-10">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
             {/* LEFT CONTENT */}
             <div className="max-w-2xl">
@@ -196,29 +196,44 @@ const ExploreAllLicences = () => {
               </p>
             </div>
 
-            {/* RIGHT SEARCH */}
+            {/* RIGHT SEARCH WITH LABEL */}
             <div className="relative w-full lg:w-[420px] xl:w-[460px] shrink-0">
-              {/* Search Icon */}
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#98A2B3] z-10">
-                <Search size={18} />
+              {/* SEARCH LABEL */}
+              <div className="flex items-center justify-between mb-2 px-1">
+                <label
+                  htmlFor="licence-search-input"
+                  className="text-xs md:text-sm font-bold text-[#101828] uppercase tracking-wider flex items-center gap-1.5"
+                >
+                  <span>Find Your Licence</span>
+                </label>
               </div>
 
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search licences by name, category..."
-                className="w-full h-14 pl-11 pr-11 bg-white border border-[#E4E7EC] rounded-2xl text-base text-[#101828] placeholder-[#98A2B3] focus:outline-none focus:border-[#F15A24]/40 focus:shadow-[0_0_0_3px_rgba(241,90,36,0.08)] transition-all duration-300"
-              />
+              {/* INPUT CONTAINER */}
+              <div className="relative">
+                {/* Search Icon */}
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#98A2B3] z-10 pointer-events-none">
+                  <Search size={18} />
+                </div>
 
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-all duration-200"
-                >
-                  <X size={16} className="text-[#667085]" />
-                </button>
-              )}
+                <input
+                  id="licence-search-input"
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Type licence name, category, or role..."
+                  className="w-full h-14 pl-11 pr-11 bg-white border border-[#E4E7EC] rounded-2xl text-base text-[#101828] placeholder-[#98A2B3] focus:outline-none focus:border-[#F15A24]/40 focus:shadow-[0_0_0_3px_rgba(241,90,36,0.08)] transition-all duration-300"
+                />
+
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-all duration-200 cursor-pointer"
+                    aria-label="Clear search input"
+                  >
+                    <X size={16} className="text-[#667085]" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

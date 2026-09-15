@@ -213,12 +213,10 @@ const ExploreAllCourses = () => {
   };
 
   return (
-    <section className="py-10 md:py-14 px-4 md:px-8 lg:px-16 min-h-screen bg-[#F5F7FA]">
+    <section className="py-6 md:py-8 px-4 md:px-8 lg:px-16 min-h-screen bg-[#F5F7FA]">
       <div className="max-w-7xl mx-auto">
-        {/* =====================================================
-    HEADER
-===================================================== */}
-        <div className="mb-10 md:mb-14">
+        {/* ======================= HEADER ======================= */}
+        <div className="mb-8 md:mb-10">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
             {/* LEFT CONTENT */}
             <div className="max-w-2xl">
@@ -238,66 +236,90 @@ const ExploreAllCourses = () => {
               </p>
             </div>
 
-            {/* RIGHT SEARCH */}
+            {/* RIGHT SEARCH WITH MEANINGFUL LABEL */}
             <div className="relative w-full lg:w-105 xl:w-115 shrink-0">
-              {/* Search Icon */}
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
-                <Search className="w-5 h-5 text-[#F15A24]" />
+              {/* LABEL & HINT */}
+              <div className="flex items-center justify-between mb-2 px-1">
+                <label
+                  htmlFor="course-search-input"
+                  className="text-xs md:text-sm font-bold text-[#141414] uppercase tracking-wider flex items-center gap-1.5"
+                >
+                  <span>Find Your Course</span>
+                </label>
+
               </div>
 
-              <input
-                type="text"
-                placeholder="Search course by name, category..."
-                value={searchInput}
-                onFocus={() => setShowSuggestions(true)}
-                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                onChange={(e) => {
-                  setSearchInput(e.target.value);
-                  setShowSuggestions(true);
-                }}
-                className="w-full h-14 rounded-2xl border border-gray-200 bg-white pl-12 pr-12 text-base outline-none focus:border-[#F15A24] focus:ring-4 focus:ring-orange-100 transition"
-              />
+              {/* INPUT CONTAINER */}
+              <div className="relative">
+                {/* Search Icon */}
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
+                  <Search className="w-5 h-5 text-[#F15A24]" />
+                </div>
 
-              {searchInput && (
-                <button
-                  onClick={() => {
-                    setSearchInput("");
-                    setShowSuggestions(false);
+                <input
+                  id="course-search-input"
+                  type="text"
+                  placeholder="Type course name, keyword, or category..."
+                  value={searchInput}
+                  onFocus={() => setShowSuggestions(true)}
+                  onBlur={() =>
+                    setTimeout(() => setShowSuggestions(false), 150)
+                  }
+                  onChange={(e) => {
+                    setSearchInput(e.target.value);
+                    setShowSuggestions(true);
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"
-                >
-                  <X className="w-4 h-4 text-gray-500" />
-                </button>
-              )}
+                  className="w-full h-14 rounded-2xl border border-gray-200 bg-white pl-12 pr-12 text-base text-[#141414] placeholder:text-gray-400 outline-none focus:border-[#F15A24] focus:ring-4 focus:ring-orange-100 transition duration-200"
+                />
 
-              {/* Suggestions */}
+                {/* Clear Button */}
+                {searchInput && (
+                  <button
+                    onClick={() => {
+                      setSearchInput("");
+                      setShowSuggestions(false);
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition cursor-pointer"
+                    aria-label="Clear search input"
+                  >
+                    <X className="w-4 h-4 text-gray-500" />
+                  </button>
+                )}
+              </div>
+
+              {/* Suggestions Dropdown */}
               {showSuggestions && courseSuggestions.length > 0 && (
-                <div className="absolute left-0 right-0 top-full mt-3 bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden z-50">
+                <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl border border-gray-200 shadow-2xl overflow-hidden z-50">
+                  <div className="px-4 py-2 bg-slate-50 border-b border-gray-100 flex items-center justify-between text-xs font-bold text-gray-400 uppercase tracking-wider">
+                    <span>Suggested Courses</span>
+                    <span>{courseSuggestions.length} Results</span>
+                  </div>
+
                   <div className="max-h-80 overflow-y-auto">
                     {courseSuggestions.map((course) => (
                       <button
                         key={course.id}
                         onMouseDown={() => navigate(`/course/${course.id}`)}
-                        className="w-full flex items-center gap-4 px-5 py-4 hover:bg-orange-50 border-b border-gray-100 last:border-none text-left transition"
+                        className="w-full flex items-center gap-4 px-5 py-3.5 hover:bg-orange-50/60 border-b border-gray-100 last:border-none text-left transition cursor-pointer group"
                       >
-                        <div className="w-12 h-12 rounded-xl overflow-hidden bg-orange-50 flex items-center justify-center shrink-0">
+                        <div className="w-11 h-11 rounded-xl overflow-hidden bg-orange-50 flex items-center justify-center shrink-0 border border-orange-100">
                           {course.image ? (
                             <img
                               src={course.image}
                               alt={course.title}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                             />
                           ) : (
                             <BookOpen className="w-5 h-5 text-[#F15A24]" />
                           )}
                         </div>
 
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900 line-clamp-1">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-gray-900 text-sm line-clamp-1 group-hover:text-[#F15A24] transition-colors">
                             {course.title}
                           </h4>
 
-                          <p className="text-sm text-gray-500">
+                          <p className="text-xs text-gray-400 font-medium mt-0.5">
                             {course.category}
                           </p>
                         </div>
@@ -456,7 +478,7 @@ const ExploreAllCourses = () => {
             ) : filteredCourses.length > 0 ? (
               <motion.div
                 layout
-                className="grid grid-cols-1 md:grid-cols-2 mt-6 xl:grid-cols-3 gap-5"
+                className="grid grid-cols-1 md:grid-cols-2 mt-6 xl:grid-cols-3 gap-3"
               >
                 <AnimatePresence mode="popLayout">
                   {filteredCourses.map((course) => (

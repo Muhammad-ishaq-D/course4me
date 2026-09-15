@@ -260,8 +260,8 @@ const CoursePackages = () => {
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* Dark Header */}
-      <div className="bg-[#1C1C1C] pt-12 pb-40 relative px-4 md:px-0">
-        <div className="max-w-[1200px] mx-auto px-4 pt-6">
+      <div className="bg-[#1C1C1C] pt-8 pb-40 relative px-4 md:px-0">
+        <div className="max-w-[1200px] mx-auto px-4 pt-2">
           <button
             onClick={() => navigate(-1)}
             className="hidden md:flex items-center gap-2 cursor-pointer text-gray-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest mb-6"

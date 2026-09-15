@@ -126,7 +126,7 @@ const BlogArticle = () => {
         {/* GRID */}
         <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-10 md:pt-14 lg:pt-32 pb-48">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-4 md:pt-6 lg:pt-8 pb-48">
           {/* Breadcrumb */}
           <div className="hidden md:flex items-center gap-2 text-sm text-gray-400 mb-8">
             <NavLink to="/">Home</NavLink>

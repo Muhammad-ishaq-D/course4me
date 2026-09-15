@@ -182,19 +182,6 @@ const CareerListing = () => {
                     HERO SECTION
 ====================================================== */}
         <div className="mb-5 relative z-40">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-base mb-5">
-            <NavLink
-              to="/"
-              className="text-[#98A2B3] cursor-pointer font-medium"
-            >
-              Home
-            </NavLink>
-
-            <span className="text-[#D0D5DD]">/</span>
-
-            <span className="text-[#111827]  font-bold">Careers</span>
-          </div>
 
           {/* Hero Box */}
           <div className="relative overflow-visible rounded-[32px] border border-[#FFE2D6] bg-gradient-to-br from-[#FFF7F3] via-white to-[#FFF1EB] p-5 md:p-7 shadow-sm">
@@ -229,42 +216,6 @@ const CareerListing = () => {
                     licensed and build your future in the security industry.
                   </p>
 
-                  {/* Stats */}
-                  <div className="flex flex-wrap items-center gap-6 mt-7">
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-black text-[#111827]">
-                        120+
-                      </h3>
-
-                      <p className="text-sm md:text-base text-[#667085] mt-1">
-                        Career Opportunities
-                      </p>
-                    </div>
-
-                    <div className="w-px h-10 bg-[#E4E7EC]" />
-
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-black text-[#111827]">
-                        45K+
-                      </h3>
-
-                      <p className="text-sm md:text-base text-[#667085] mt-1">
-                        Students Trained
-                      </p>
-                    </div>
-
-                    <div className="w-px h-10 bg-[#E4E7EC]" />
-
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-black text-[#111827]">
-                        98%
-                      </h3>
-
-                      <p className="text-sm md:text-base text-[#667085] mt-1">
-                        Success Rate
-                      </p>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Search Box */}

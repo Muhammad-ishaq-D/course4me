@@ -376,16 +376,12 @@ const QuickSearch = () => {
       <div className="absolute top-20 right-0 w-[300px] h-[300px] bg-orange-200/20 blur-[120px] rounded-full" />
 
       {/* ================= MAIN ================= */}
-      <section className="relative px-4 sm:px-6 lg:px-10 py-12 lg:py-16">
+      <section className="relative px-4 sm:px-6 lg:px-10 py-6 lg:py-8">
         <div className="max-w-7xl mx-auto">
           {/* ================= HERO ================= */}
           <div className="text-center max-w-4xl mx-auto">
-            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#FFF3EE] text-[#F15A24] text-sm font-semibold border border-[#F15A24]/10">
-              <Sparkles size={16} />
-              Smart Discovery Platform
-            </span>
 
-            <h1 className="mt-6 text-4xl md:text-6xl font-black text-gray-900 leading-[1.05]">
+            <h1 className="mt-3 text-4xl md:text-6xl font-black text-gray-900 leading-[1.05]">
               Find The Right
               <span className="text-[#F15A24]"> Course</span>,
               <br />

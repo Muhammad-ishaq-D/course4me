@@ -27,7 +27,7 @@ const HeroCareerDetails = ({ career }) => {
         </div>
 
         {/* Content */}
-        <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-14">
+        <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-10 py-6 lg:py-8">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10 items-center">
             {/* ================= LEFT CONTENT ================= */}
             <div>

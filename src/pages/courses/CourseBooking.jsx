@@ -205,7 +205,7 @@ const CourseBooking = () => {
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen">
-      <main className="max-w-300 mx-auto px-4 md:px-6 py-8">
+      <main className="max-w-300 mx-auto px-4 md:px-6 py-4 md:py-6">
         {/* Breadcrumbs */}
         <nav className="hidden md:flex flex-wrap items-center gap-2 text-sm md:text-base text-gray-400 mb-8 overflow-x-auto no-scrollbar">
           <Link to="/" className="hover:text-gray-600">
@@ -227,7 +227,7 @@ const CourseBooking = () => {
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#1C1C1C] mb-2">
           {course.title}
         </h1>
-        <p className="text-[#64748B] mb-10 text-base md:text-lg">
+        <p className="text-[#64748B] mb-8 text-base md:text-lg">
           Search for training centres near you and choose the date and location
           that best suits your schedule.
         </p>

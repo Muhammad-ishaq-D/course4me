@@ -847,8 +847,8 @@ const CourseCheckout = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]  pt-10">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
+    <div className="min-h-screen bg-[#F8FAFC]  pt-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-2 md:py-4">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-gray-500 hover:text-[#1C1C1C] transition-colors text-sm font-bold mb-4"

@@ -1,5 +1,5 @@
 import React from "react";
-import { Star, ExternalLink } from "lucide-react";
+import { Star } from "lucide-react";
 
 const testimonials = [
   {
@@ -20,7 +20,7 @@ const testimonials = [
   {
     name: "Marcus Thompson",
     role: "CCTV Training · December 2025",
-    text: "Completed the CCTV course with very professional trainers. Learn so much about surveillance and  techniques.",
+    text: "Completed the CCTV course with very professional trainers. Learn so much about surveillance and techniques.",
   },
   {
     name: "Emma Wilson",
@@ -36,232 +36,215 @@ const testimonials = [
 
 const RealStories = () => {
   return (
-    <section className="py-20 px-6 lg:px-16 bg-[#F5F7FA]">
+    <section className="py-20 px-4 sm:px-6 lg:px-16 bg-[#F5F7FA]">
       <div className="max-w-7xl mx-auto">
-        {/* TITLE */}
-        <h2 className="text-[34px] font-bold text-[#1A1A1A] mb-5">
+        {/* SECTION HEADER */}
+        <h2 className="text-3xl sm:text-[34px] font-extrabold text-[#1A1A1A] mb-8 tracking-tight">
           Real stories from real people
         </h2>
 
-        {/* TOP GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">
-          {/* TRUSTPILOT */}
-          <div className="relative h-full min-h-80 bg-white rounded-[28px] border border-[#F3E3DC] p-7 overflow-hidden transition-all duration-300 hover:shadow-[0_18px_40px_rgba(241,90,36,0.12)]">
-            {/* GLOW */}
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F15A24]/5 rounded-full blur-3xl" />
+        {/* TOP METRICS & HIGHLIGHTS GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-14 items-stretch">
+          {/* TRUSTPILOT METRIC CARD */}
+          <div className="relative bg-white rounded-[28px] border border-[#F3E3DC] p-7 overflow-hidden transition-all duration-300 hover:shadow-[0_18px_40px_rgba(241,90,36,0.12)] flex flex-col justify-between h-full">
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F15A24]/5 rounded-full blur-3xl pointer-events-none" />
 
-            {/* HEADER */}
-            <div className="flex items-start justify-between relative z-10">
-              <div>
-                <span className="inline-flex items-center gap-2 bg-[#FFF3EE] text-[#F15A24] text-[11px] px-3 py-1.5 rounded-full font-semibold uppercase tracking-[0.15em]">
-                  Total Reviews
-                </span>
+            <div>
+              <div className="flex items-start justify-between relative z-10">
+                <div>
+                  <span className="inline-flex items-center gap-2 bg-[#FFF3EE] text-[#F15A24] text-[11px] px-3 py-1.5 rounded-full font-bold uppercase tracking-wider">
+                    Total Reviews
+                  </span>
+                  <h3 className="text-4xl lg:text-[44px] leading-none font-black text-[#111111] mt-5">
+                    34,032
+                  </h3>
+                  <p className="text-xs text-[#8A8A8A] font-medium mt-1">
+                    Verified Student Reviews
+                  </p>
+                </div>
 
-                <h3 className="text-[44px] leading-none font-bold text-[#111111] mt-5">
-                  34,032
-                </h3>
-
-                <p className="text-sm text-[#8A8A8A] mt-1">
-                  Verified Student Reviews
-                </p>
+                <div className="w-12 h-12 rounded-2xl bg-[#FFF4EF] border border-[#F15A24]/10 flex items-center justify-center shadow-xs shrink-0">
+                  <span className="text-xl font-bold text-[#F15A24]">★</span>
+                </div>
               </div>
 
-              {/* ICON */}
-              <div className="w-14 h-14 rounded-2xl bg-[#FFF4EF] border border-[#F15A24]/10 flex items-center justify-center shadow-sm">
-                <span className="text-[24px] font-bold text-[#F15A24]">★</span>
-              </div>
-            </div>
+              <div className="mt-8 relative z-10">
+                <div className="flex items-center gap-1.5">
+                  {[...Array(5)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-7 h-7 rounded-lg bg-[#F15A24] flex items-center justify-center shadow-xs"
+                    >
+                      <Star
+                        size={13}
+                        fill="white"
+                        color="white"
+                        strokeWidth={2}
+                      />
+                    </div>
+                  ))}
+                </div>
 
-            {/* RATING */}
-            <div className="mt-8 relative z-10">
-              {/* STARS */}
-              <div className="flex items-center gap-1.5">
-                {[...Array(5)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-8 h-8 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-sm"
-                  >
-                    <Star
-                      size={15}
-                      fill="white"
-                      color="white"
-                      strokeWidth={2}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* SCORE BELOW STARS */}
-              <div className="mt-4">
-                <h4 className="text-[24px] font-bold text-[#111111] leading-none">
-                  4.6/5 Rating
-                </h4>
-
-                <p className="text-sm text-[#8A8A8A] mt-1">
-                  Based on verified students
-                </p>
+                <div className="mt-4">
+                  <h4 className="text-xl font-extrabold text-[#111111] leading-none">
+                    4.6/5 Rating
+                  </h4>
+                  <p className="text-xs text-[#8A8A8A] font-medium mt-1">
+                    Based on verified students
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* FOOTER */}
             <div className="mt-7 pt-5 border-t border-[#F4E7E2] flex items-center justify-between relative z-10">
               <div>
-                <p className="text-md font-semibold text-[#1A1A1A]">
+                <p className="text-xs font-bold text-[#1A1A1A]">
                   Excellent Student Satisfaction
                 </p>
-
-                <p className="text-sm text-[#8A8A8A] mt-1">
+                <p className="text-[11px] text-[#8A8A8A] font-medium mt-0.5">
                   Trusted by thousands of learners
                 </p>
               </div>
-
-              <div className="px-3 py-2 rounded-full bg-[#F15A24] text-white flex items-center justify-center text-sm font-bold shadow-lg">
+              <div className="w-7 h-7 rounded-full bg-[#F15A24] text-white flex items-center justify-center text-xs font-bold shrink-0">
                 ✓
               </div>
             </div>
           </div>
 
-          {/* GOOGLE REVIEWS */}
-          <div className="relative h-full min-h-80 bg-white rounded-[28px] border border-[#F3E3DC] p-7 overflow-hidden transition-all duration-300 hover:shadow-[0_18px_40px_rgba(241,90,36,0.12)]">
-            {/* GLOW */}
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F15A24]/5 rounded-full blur-3xl" />
+          {/* GOOGLE REVIEWS METRIC CARD */}
+          <div className="relative bg-white rounded-[28px] border border-[#F3E3DC] p-7 overflow-hidden transition-all duration-300 hover:shadow-[0_18px_40px_rgba(241,90,36,0.12)] flex flex-col justify-between h-full">
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F15A24]/5 rounded-full blur-3xl pointer-events-none" />
 
-            {/* HEADER */}
-            <div className="flex items-start justify-between relative z-10">
-              <div>
-                <span className="inline-flex items-center gap-2 bg-[#FFF3EE] text-[#F15A24] text-[11px] px-3 py-1.5 rounded-full font-semibold uppercase tracking-[0.15em]">
-                  Google Reviews
-                </span>
+            <div>
+              <div className="flex items-start justify-between relative z-10">
+                <div>
+                  <span className="inline-flex items-center gap-2 bg-[#FFF3EE] text-[#F15A24] text-[11px] px-3 py-1.5 rounded-full font-bold uppercase tracking-wider">
+                    Google Reviews
+                  </span>
+                  <h3 className="text-4xl lg:text-[44px] leading-none font-black text-[#111111] mt-5">
+                    9,511
+                  </h3>
+                  <p className="text-xs text-[#8A8A8A] font-medium mt-1">
+                    Verified Student Reviews
+                  </p>
+                </div>
 
-                <h3 className="text-[44px] leading-none font-bold text-[#111111] mt-5">
-                  9,511
-                </h3>
-
-                <p className="text-sm text-[#8A8A8A] mt-1">
-                  Verified Student Reviews
-                </p>
+                <div className="w-12 h-12 rounded-2xl bg-[#FFF4EF] border border-[#F15A24]/10 flex items-center justify-center shadow-xs shrink-0">
+                  <span className="text-xl font-bold text-[#F15A24]">G</span>
+                </div>
               </div>
 
-              {/* ICON */}
-              <div className="w-14 h-14 rounded-2xl bg-[#FFF4EF] border border-[#F15A24]/10 flex items-center justify-center shadow-sm">
-                <span className="text-[24px] font-bold text-[#F15A24]">G</span>
-              </div>
-            </div>
+              <div className="mt-8 relative z-10">
+                <div className="flex items-center gap-1.5">
+                  {[...Array(5)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-7 h-7 rounded-lg bg-[#F15A24] flex items-center justify-center shadow-xs"
+                    >
+                      <Star
+                        size={13}
+                        fill="white"
+                        color="white"
+                        strokeWidth={2}
+                      />
+                    </div>
+                  ))}
+                </div>
 
-            {/* RATING */}
-            <div className="mt-8 relative z-10">
-              {/* STARS */}
-              <div className="flex items-center gap-1.5">
-                {[...Array(5)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-8 h-8 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-sm"
-                  >
-                    <Star
-                      size={15}
-                      fill="white"
-                      color="white"
-                      strokeWidth={2}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* SCORE BELOW STARS */}
-              <div className="mt-4">
-                <h4 className="text-[24px] font-bold text-[#111111] leading-none">
-                  4.9/5 Rating
-                </h4>
-
-                <p className="text-sm text-[#8A8A8A] mt-1">
-                  Average Student Feedback
-                </p>
+                <div className="mt-4">
+                  <h4 className="text-xl font-extrabold text-[#111111] leading-none">
+                    4.9/5 Rating
+                  </h4>
+                  <p className="text-xs text-[#8A8A8A] font-medium mt-1">
+                    Average Student Feedback
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* FOOTER */}
             <div className="mt-7 pt-5 border-t border-[#F4E7E2] flex items-center justify-between relative z-10">
               <div>
-                <p className="text-md font-semibold text-[#1A1A1A]">
+                <p className="text-xs font-bold text-[#1A1A1A]">
                   Outstanding Learning Experience
                 </p>
-
-                <p className="text-sm text-[#8A8A8A] mt-1">
+                <p className="text-[11px] text-[#8A8A8A] font-medium mt-0.5">
                   Highly rated by our students
                 </p>
               </div>
-
-              <div className="px-3 py-2 rounded-full bg-[#F15A24] text-white flex items-center justify-center text-sm font-bold shadow-lg">
+              <div className="w-7 h-7 rounded-full bg-[#F15A24] text-white flex items-center justify-center text-xs font-bold shrink-0">
                 ✓
               </div>
             </div>
           </div>
 
-          {/* IMAGE 1 */}
-          <div className="rounded-2xl overflow-hidden relative">
+          {/* SESSION IMAGE 1 */}
+          <div className="rounded-[28px] overflow-hidden relative min-h-[280px] lg:min-h-full border border-gray-200/80 shadow-xs group">
             <img
               src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
-              alt="Students participating in a professional courses4me training session"
-              className="w-full h-full object-cover"
+              alt="Conflict & Security Guard Training"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <span className="absolute bottom-3 left-3 text-white text-sm">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <span className="absolute bottom-4 left-4 right-4 text-white text-xs font-bold leading-snug">
               Conflict & Security Guard Training – January 2026
             </span>
           </div>
 
-          {/* IMAGE 2 */}
-          <div className="rounded-2xl overflow-hidden relative">
+          {/* SESSION IMAGE 2 */}
+          <div className="rounded-[28px] overflow-hidden relative min-h-[280px] lg:min-h-full border border-gray-200/80 shadow-xs group">
             <img
               src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655"
-              alt="Students participating in a professional courses4me training session"
-              className="w-full h-full object-cover"
+              alt="Callie Champion"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <span className="absolute bottom-3 left-3 text-white text-sm">
-              Callie Champion
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <span className="absolute bottom-4 left-4 right-4 text-white text-xs font-bold leading-snug">
+              Callie Champion — Licensed Professional
             </span>
           </div>
         </div>
 
-        {/* TESTIMONIALS */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {/* TESTIMONIAL CARDS GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 items-stretch">
           {testimonials.map((t, i) => (
             <div
               key={i}
-              className="relative bg-white rounded-[30px] p-6 pt-10 border border-[#F15A24]/10 shadow-[0_10px_30px_rgba(241,90,36,0.08)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(241,90,36,0.15)]"
+              className="relative bg-white rounded-[28px] p-6 sm:p-7 border border-[#F15A24]/10 shadow-[0_10px_30px_rgba(241,90,36,0.06)] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(241,90,36,0.12)] flex flex-col justify-between h-full group"
             >
-              {/* TOP RIGHT LETTER */}
-              <div className="hidden lg:block absolute top-5 right-5">
-                <div className="w-[72px] h-[72px] rounded-full border-[6px] border-[#F15A24] bg-[#FFE7DE] flex items-center justify-center shadow-md">
-                  <span className="text-[28px] font-bold text-[#F15A24]">
-                    {t.name.charAt(0)}
-                  </span>
+              <div>
+                {/* CARD HEADER */}
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg font-extrabold text-[#F15A24] leading-tight truncate">
+                      {t.name}
+                    </h3>
+                    <p className="text-xs text-[#8A8A8A] font-medium mt-1 leading-snug">
+                      {t.role}
+                    </p>
+                  </div>
+
+                  {/* INITIAL AVATAR */}
+                  <div className="w-11 h-11 rounded-2xl border-2 border-[#F15A24] bg-[#FFE7DE] flex items-center justify-center shrink-0 shadow-xs">
+                    <span className="text-base font-black text-[#F15A24]">
+                      {t.name.charAt(0)}
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              {/* CLIENT INFO */}
-              <div className="mb-5">
-                <h3 className="text-[22px] font-bold text-[#F15A24] leading-none">
-                  {t.name}
-                </h3>
-
-                <p className="text-sm text-[#8A8A8A] mt-2 font-medium">
-                  {t.role}
+                {/* REVIEW TEXT */}
+                <p className="text-sm text-[#666666] leading-relaxed font-normal italic pb-12">
+                  "{t.text}"
                 </p>
               </div>
 
-              {/* TEXT */}
-              <p className=" text-sm md:text-base  leading-6 text-[#666666] pr-3 min-h-30">
-                {t.text}
-              </p>
-
-              {/* BOTTOM DESIGN */}
-              <div className="absolute left-0 bottom-0 flex items-end justify-between w-full">
-                {/* STARS SECTION */}
-                <div className="bg-[#F15A24] px-6 py-3 rounded-tr-[42px] flex items-center gap-1 shadow-lg">
-                  {[...Array(5)].map((_, i) => (
+              {/* CARD FOOTER */}
+              <div className="absolute left-0 bottom-0 flex items-end justify-between w-full pointer-events-none">
+                {/* RATING BADGE */}
+                <div className="bg-[#F15A24] px-4 py-2 rounded-tr-2xl flex items-center gap-1 shadow-md pointer-events-auto">
+                  {[...Array(5)].map((_, idx) => (
                     <Star
-                      key={i}
-                      size={14}
+                      key={idx}
+                      size={12}
                       fill="#FFF"
                       color="#FFF"
                       strokeWidth={1.5}
@@ -269,9 +252,9 @@ const RealStories = () => {
                   ))}
                 </div>
 
-                {/* QUOTE */}
-                <div className="pr-5 pb-3">
-                  <span className="text-[#F15A24] text-[42px] font-black  block leading-none opacity-90">
+                {/* QUOTE DECORATION */}
+                <div className="pr-5 pb-2 pointer-events-auto">
+                  <span className="text-[#F15A24]/20 group-hover:text-[#F15A24]/40 text-3xl font-black block leading-none transition-colors">
                     ❞
                   </span>
                 </div>
@@ -280,23 +263,22 @@ const RealStories = () => {
           ))}
         </div>
 
-        {/* BOTTOM CTA */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2 md:gap-4">
-            <div className="px-1.5 py-3  rounded-full bg-[#F65B15] text-white flex items-center justify-center font-bold text-base  md:text-lg">
-              95%
+        {/* BOTTOM STATS BANNER */}
+        <div className="rounded-[28px] bg-white border border-gray-200/80 p-6 sm:p-7 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-5">
+          <div className="flex items-center gap-4 text-center sm:text-left">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#F65B15] text-white flex items-center justify-center font-black text-lg sm:text-xl shadow-md shadow-[#F65B15]/20 shrink-0">
+              98%
             </div>
             <div>
-              <h4 className="font-semibold">Industry-Leading Pass Rate</h4>
-              <p className="text-md text-gray-500">
-                Our students consistently achieve outstanding results
+              <h4 className="text-base sm:text-lg font-extrabold text-[#1A1A1A]">
+                Industry-Leading Pass Rate
+              </h4>
+              <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">
+                Our students consistently achieve outstanding career results
+                with our exam prep.
               </p>
             </div>
           </div>
-
-          {/* <button className="bg-black text-white px-6 py-3 rounded-xl flex items-center gap-2">
-            View all reviews <ExternalLink size={16} />
-          </button> */}
         </div>
       </div>
     </section>

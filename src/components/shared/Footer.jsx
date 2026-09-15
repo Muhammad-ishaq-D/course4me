@@ -92,7 +92,7 @@ const Footer = () => {
               Popular Licences
             </h4>
 
-            <ul className="space-y-4">
+            <ul className="space-y-2">
               {licenses.map((licence) => (
                 <li key={licence._id}>
                   <Link
@@ -112,7 +112,7 @@ const Footer = () => {
               Popular Courses
             </h4>
 
-            <ul className="space-y-4">
+            <ul className="space-y-2">
               {courses.map((course) => (
                 <li key={course._id}>
                   <Link
@@ -132,7 +132,7 @@ const Footer = () => {
               Training Locations
             </h4>
 
-            <ul className="space-y-4">
+            <ul className="space-y-2">
               {locations.map((loc) => (
                 <li
                   key={loc.city}
@@ -163,7 +163,7 @@ const Footer = () => {
               CONTACT US
             </h4>
             <ul className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
-              <div className="space-y-4 mb-8 ">
+              <div className="space-y-2 mb-8 ">
                 <div className="flex items-center gap-3 group cursor-pointer">
                   <div className="w-5 h-5 flex items-center justify-center">
                     <Phone className="text-[#00A3FF]" size={18} />

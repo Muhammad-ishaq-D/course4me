@@ -184,7 +184,7 @@ const CourseLocationView = ({ link }) => {
                 )}
               </div>
 
-              <h1 className="text-4xl md:text-5xl xl:text-6xl font-black text-white leading-[1.05] max-w-3xl">
+              <h1 className="text-4xl md:text-5xl xl:text-[56px] font-black text-white leading-[1.05] max-w-3xl">
                 {loc.name || "Training Centre"}
               </h1>
 

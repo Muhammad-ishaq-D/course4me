@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import courseService from "../../api/services/courseService";
-import { Users } from "lucide-react";
+import { Users, Sparkles } from "lucide-react";
 import John from "../../assets/home/john.png";
 import { motion } from "framer-motion";
 import TrainerCard from "../ui/TrainerCard";
@@ -37,7 +37,7 @@ export default function TrainersSection() {
                   : ["London", "Manchester"],
                 rating: "4.9",
                 reviews: "120+",
-                badge: "Certified",
+                badge: "SIA Certified",
                 image: course.instructor.photo || John,
               });
             }
@@ -54,28 +54,43 @@ export default function TrainersSection() {
   }, []);
 
   return (
-    <section className="bg-white text-[#1A1A1A] py-24 px-6">
-      <div id="team" className="max-w-7xl mx-auto">
-        {/* Badge */}
-        <div className="flex justify-center mb-6">
-          <span className="flex items-center gap-2 bg-[#1A1A1A] text-white px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase shadow-md">
-            <Users size={16} className="text-[#00A3FF]" />
-            OUR TEAM
-          </span>
-        </div>
+    <section className="relative overflow-hidden bg-white text-[#111111] py-20 lg:py-24 px-4">
+      {/* BACKGROUND ACCENTS */}
+      <div className="absolute top-0 right-0 w-80 h-80 bg-[#00A3FF]/10 blur-3xl rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#FF5421]/10 blur-3xl rounded-full pointer-events-none" />
 
-        {/* Heading */}
-        <h2 className="text-center text-[44px] md:text-[52px] font-bold mb-3 leading-[1.05] tracking-tight">
-          Meet Our Trainers
-        </h2>
+      <div
+        id="team"
+        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10"
+      >
+        {/* HEADER CONTENT */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center max-w-3xl mx-auto mb-14"
+        >
+          {/* BADGE */}
+          <div className="inline-flex items-center gap-2 bg-[#FF5421]/10 border border-[#FF5421]/20 text-[#FF5421] px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
+            <Sparkles size={14} className="fill-[#FF5421]" />
+            Our Team
+          </div>
 
-        <p className="text-center text-gray-600 max-w-2xl mx-auto mb-10 text-lg font-medium">
-          Industry veterans and certified professionals who are passionate about
-          launching your career in security.
-        </p>
+          {/* HEADING */}
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.08] tracking-tight text-[#111111] mb-4">
+            Meet Our <span className="text-[#FF5421]">Trainers</span>
+          </h2>
 
-        {/* Trainer Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 px-2 gap-6">
+          {/* SUBTITLE */}
+          <p className="text-base sm:text-lg text-gray-500 font-medium leading-relaxed">
+            Industry veterans and certified professionals who are passionate
+            about launching your career in security.
+          </p>
+        </motion.div>
+
+        {/* TRAINER GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
           {loading
             ? [...Array(3)].map((_, i) => <TrainerCardSkeleton key={i} />)
             : trainersList.map((trainer, i) => (

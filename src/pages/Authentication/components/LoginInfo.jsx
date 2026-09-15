@@ -31,7 +31,7 @@ const LoginInfo = () => {
           <span className="inline-block bg-orange-950/50 text-orange-500 text-xs font-bold px-4 py-1.5 rounded-full border border-orange-500/30 mb-6">
             🎓 Student Access
           </span>
-          <h1 className="text-white text-5xl md:text-7xl font-bold mb-6 tracking-tight leading-tight">
+          <h1 className="text-white text-4xl md:text-5xl lg:text-[56px] font-bold mb-6 tracking-tight leading-tight">
             Student <span className="text-orange-500">Portal</span>
           </h1>
           <p className="text-gray-400 text-lg max-w-md leading-relaxed opacity-80">

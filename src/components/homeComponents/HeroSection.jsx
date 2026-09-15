@@ -53,11 +53,11 @@ const VideoPlayer = ({ src, label, className = "" }) => (
 const HeroSection = () => {
   return (
     <section className="bg-white  px-2 relative overflow-hidden">
-      <div className="relative max-w-7xl mx-auto  py-12 md:py-20">
+      <div className="relative max-w-7xl mx-auto  py-12 md:py-14">
         <div className="grid grid-cols-1 xl:grid-cols-2 px-4 md:px-8 gap-8  items-center">
           {/* LEFT COLUMN */}
           <div className="">
-            <h2 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold leading-tight">
+            <h2 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold leading-tight">
               Get Trained,
               <span className="text-[#FF5421]"> Licenced,</span>
               <span className="block -mt-2 md:-mt-3">
