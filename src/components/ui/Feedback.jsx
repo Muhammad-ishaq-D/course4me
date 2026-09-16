@@ -44,7 +44,7 @@ const Feedback = () => {
 
           <div className="bg-slate-50 rounded-xl px-1 py-3 text-center">
             <h4 className="text-sm md:text-base font-black text-[#F15A24]">
-              95%
+              98%
             </h4>
             <p className=" text-xs md:text-sm text-slate-500">Pass Rate</p>
           </div>

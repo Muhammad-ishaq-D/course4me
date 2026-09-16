@@ -7,7 +7,7 @@ const TrustBadges = () => {
       <div className="bg-white py-2 px-3 rounded-2xl border border-gray-50 shadow-sm text-center">
         <GraduationCap className="mx-auto text-[#F15A24] mb-3" size={24} />
         <p className="text-[13px] md:text-[15px] font-bold text-[#1a1a1a]">
-          95% pass rate
+          98% pass rate
         </p>
         <p className=" text-[11px] md:text-[13px] text-gray-400 font-medium">
           Industry leading

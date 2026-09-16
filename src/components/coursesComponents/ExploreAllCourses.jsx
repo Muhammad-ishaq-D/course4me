@@ -12,12 +12,12 @@ import {
   Search,
   BookOpen,
   X,
+  SearchX,
 } from "lucide-react";
 
 import CourseCard from "../ui/CourseCard";
 import courseService from "../../api/services/courseService";
 import Loader from "../ui/Loader";
-import Searchbar from "../ui/Searchbar";
 import EmptyState from "../ui/EmptyState";
 import ExploreSidebar from "../ui/ExploreSidebar";
 
@@ -27,19 +27,16 @@ const categories = [
     icon: <Shield size={22} className="text-white" />,
     bgColor: "bg-red-500",
   },
-
   {
     name: "First Aid",
     icon: <Activity size={22} className="text-white" />,
     bgColor: "bg-[#34C759]",
   },
-
   {
     name: "Health & Safety",
     icon: <ShieldCheck size={22} className="text-white" />,
     bgColor: "bg-[#007AFF]",
   },
-
   {
     name: "Specialist",
     icon: <BriefcaseBusiness size={22} className="text-white" />,
@@ -53,29 +50,18 @@ const ExploreAllCourses = () => {
   const ALL_CATEGORY = "All";
   const categoryParam = searchParams.get("category") || ALL_CATEGORY;
 
-  // =====================================================
   // STATES
-  // =====================================================
   const [allCourses, setAllCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // all | popular
   const [activeTab, setActiveTab] = useState("all");
-
-  //for filters model in sm and md screen
   const [openFilters, setOpenFilters] = useState(false);
 
-  //courses section refrence
   const coursesSectionRef = useRef(null);
-
-
   const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  // =====================================================
   // FETCH COURSES
-  // =====================================================
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -87,15 +73,13 @@ const ExploreAllCourses = () => {
 
         const data = response?.data?.data || [];
 
-        console.log("popular", data);
-
         const mappedCourses = data.map((course) => ({
           id: course._id,
           title: course.title,
           category: course.category,
           description: course.shortDescription,
           image: course.thumbnail,
-          price: (course.pricing?.salePrice || course.pricing?.basePrice),
+          price: course.pricing?.salePrice || course.pricing?.basePrice,
           badge: course.level,
           duration: course.duration,
           reviews: course.reviewsCount,
@@ -128,9 +112,7 @@ const ExploreAllCourses = () => {
     fetchCourses();
   }, []);
 
-  // =====================================================
   // CATEGORY FILTER
-  // =====================================================
   const categoryCourses = useMemo(() => {
     if (categoryParam === ALL_CATEGORY) {
       return allCourses;
@@ -138,16 +120,12 @@ const ExploreAllCourses = () => {
 
     return allCourses.filter((course) => {
       const courseCategory = course.category?.trim()?.toLowerCase();
-
       const selectedCategory = categoryParam?.trim()?.toLowerCase();
-
       return courseCategory === selectedCategory;
     });
   }, [allCourses, categoryParam]);
 
-  // =====================================================
   // POPULAR FILTER
-  // =====================================================
   const filteredCourses = useMemo(() => {
     if (activeTab === "popular") {
       return categoryCourses.filter((course) => course.isPopular === true);
@@ -156,9 +134,7 @@ const ExploreAllCourses = () => {
     return categoryCourses;
   }, [categoryCourses, activeTab]);
 
-
-
-  // search course suggestion 
+  // SEARCH COURSE SUGGESTIONS
   const courseSuggestions = useMemo(() => {
     if (!searchInput.trim()) return [];
 
@@ -174,9 +150,6 @@ const ExploreAllCourses = () => {
       .slice(0, 8);
   }, [searchInput, allCourses]);
 
-  // =====================================================
-  // CATEGORY COUNTS
-  // =====================================================
   const getCategoryCount = (categoryName) => {
     if (categoryName === ALL_CATEGORY) {
       return allCourses.length;
@@ -190,7 +163,6 @@ const ExploreAllCourses = () => {
     }).length;
   };
 
-  // smooth scroll in catagry changes time
   const handleCategoryWithScroll = (category) => {
     handleCategoryChange(category);
 
@@ -201,9 +173,7 @@ const ExploreAllCourses = () => {
       });
     }, 100);
   };
-  // =====================================================
-  // HANDLE CATEGORY CHANGE
-  // =====================================================
+
   const handleCategoryChange = (category) => {
     if (category === ALL_CATEGORY) {
       setSearchParams({});
@@ -236,9 +206,8 @@ const ExploreAllCourses = () => {
               </p>
             </div>
 
-            {/* RIGHT SEARCH WITH MEANINGFUL LABEL */}
+            {/* RIGHT SEARCH WITH SUGGESTIONS & EMPTY STATE */}
             <div className="relative w-full lg:w-105 xl:w-115 shrink-0">
-              {/* LABEL & HINT */}
               <div className="flex items-center justify-between mb-2 px-1">
                 <label
                   htmlFor="course-search-input"
@@ -246,12 +215,10 @@ const ExploreAllCourses = () => {
                 >
                   <span>Find Your Course</span>
                 </label>
-
               </div>
 
               {/* INPUT CONTAINER */}
               <div className="relative">
-                {/* Search Icon */}
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
                   <Search className="w-5 h-5 text-[#F15A24]" />
                 </div>
@@ -263,7 +230,7 @@ const ExploreAllCourses = () => {
                   value={searchInput}
                   onFocus={() => setShowSuggestions(true)}
                   onBlur={() =>
-                    setTimeout(() => setShowSuggestions(false), 150)
+                    setTimeout(() => setShowSuggestions(false), 200)
                   }
                   onChange={(e) => {
                     setSearchInput(e.target.value);
@@ -272,7 +239,6 @@ const ExploreAllCourses = () => {
                   className="w-full h-14 rounded-2xl border border-gray-200 bg-white pl-12 pr-12 text-base text-[#141414] placeholder:text-gray-400 outline-none focus:border-[#F15A24] focus:ring-4 focus:ring-orange-100 transition duration-200"
                 />
 
-                {/* Clear Button */}
                 {searchInput && (
                   <button
                     onClick={() => {
@@ -287,59 +253,71 @@ const ExploreAllCourses = () => {
                 )}
               </div>
 
-              {/* Suggestions Dropdown */}
-              {showSuggestions && courseSuggestions.length > 0 && (
+              {/* SUGGESTIONS DROPDOWN */}
+              {showSuggestions && searchInput.trim().length > 0 && (
                 <div className="absolute left-0 right-0 top-full mt-2 bg-white rounded-2xl border border-gray-200 shadow-2xl overflow-hidden z-50">
-                  <div className="px-4 py-2 bg-slate-50 border-b border-gray-100 flex items-center justify-between text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    <span>Suggested Courses</span>
-                    <span>{courseSuggestions.length} Results</span>
-                  </div>
+                  {courseSuggestions.length > 0 ? (
+                    <>
+                      <div className="px-4 py-2 bg-slate-50 border-b border-gray-100 flex items-center justify-between text-xs font-bold text-gray-400 uppercase tracking-wider">
+                        <span>Suggested Courses</span>
+                        <span>{courseSuggestions.length} Results</span>
+                      </div>
 
-                  <div className="max-h-80 overflow-y-auto">
-                    {courseSuggestions.map((course) => (
-                      <button
-                        key={course.id}
-                        onMouseDown={() => navigate(`/course/${course.id}`)}
-                        className="w-full flex items-center gap-4 px-5 py-3.5 hover:bg-orange-50/60 border-b border-gray-100 last:border-none text-left transition cursor-pointer group"
-                      >
-                        <div className="w-11 h-11 rounded-xl overflow-hidden bg-orange-50 flex items-center justify-center shrink-0 border border-orange-100">
-                          {course.image ? (
-                            <img
-                              src={course.image}
-                              alt={course.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                            />
-                          ) : (
-                            <BookOpen className="w-5 h-5 text-[#F15A24]" />
-                          )}
-                        </div>
+                      <div className="max-h-80 overflow-y-auto">
+                        {courseSuggestions.map((course) => (
+                          <button
+                            key={course.id}
+                            onMouseDown={() => navigate(`/course/${course.id}`)}
+                            className="w-full flex items-center gap-4 px-5 py-3.5 hover:bg-orange-50/60 border-b border-gray-100 last:border-none text-left transition cursor-pointer group"
+                          >
+                            <div className="w-11 h-11 rounded-xl overflow-hidden bg-orange-50 flex items-center justify-center shrink-0 border border-orange-100">
+                              {course.image ? (
+                                <img
+                                  src={course.image}
+                                  alt={course.title}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                />
+                              ) : (
+                                <BookOpen className="w-5 h-5 text-[#F15A24]" />
+                              )}
+                            </div>
 
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-gray-900 text-sm line-clamp-1 group-hover:text-[#F15A24] transition-colors">
-                            {course.title}
-                          </h4>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-gray-900 text-sm line-clamp-1 group-hover:text-[#F15A24] transition-colors">
+                                {course.title}
+                              </h4>
 
-                          <p className="text-xs text-gray-400 font-medium mt-0.5">
-                            {course.category}
-                          </p>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
+                              <p className="text-xs text-gray-400 font-medium mt-0.5">
+                                {course.category}
+                              </p>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    /* EMPTY STATE WHEN NO COURSE FOUND */
+                    <div className="p-6 text-center">
+                      <div className="w-12 h-12 rounded-full bg-orange-50 text-[#F15A24] flex items-center justify-center mx-auto mb-3">
+                        <SearchX size={22} />
+                      </div>
+                      <h4 className="text-sm font-bold text-[#141414]">
+                        No courses found
+                      </h4>
+                      <p className="text-xs text-gray-500 mt-1 max-w-[240px] mx-auto leading-relaxed">
+                        We couldn't find any course matching.
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* =====================================================
-            MAIN LAYOUT
-        ===================================================== */}
+        {/* MAIN LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] gap-6 items-start">
-          {/* =====================================================
-              SIDEBAR
-          ===================================================== */}
-          {/* DESKTOP SIDEBAR */}
+          {/* SIDEBAR */}
           <div className="hidden lg:block sticky top-0 h-fit">
             <ExploreSidebar
               activeTab={activeTab}
@@ -351,14 +329,13 @@ const ExploreAllCourses = () => {
               title="Courses"
             />
           </div>
-          {/* =====================================================
-              COURSES SECTION
-          ===================================================== */}
+
+          {/* COURSES SECTION */}
           <div>
             {/* TOP BAR */}
             <div
               ref={coursesSectionRef}
-              className="bg-white rounded-xl border border-[#ECECEC] shadow-[0_10px_40px_rgba(0,0,0,0.05)] px-6 py-4 mb-8 lg:mb-2 flex flex-col  md:flex-row md:items-center md:justify-between gap-4"
+              className="bg-white rounded-xl border border-[#ECECEC] shadow-[0_10px_40px_rgba(0,0,0,0.05)] px-6 py-4 mb-8 lg:mb-2 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
             >
               <div className="flex gap-2 items-center">
                 <h2 className="text-2xl font-bold text-[#141414]">
@@ -367,14 +344,13 @@ const ExploreAllCourses = () => {
                     : categoryParam}
                 </h2>
 
-                <p className="text-gray-500  text-md">
+                <p className="text-gray-500 text-md">
                   {filteredCourses.length}{" "}
                   {filteredCourses.length === 1 ? "course" : "courses"}{" "}
                   available
                 </p>
               </div>
 
-              {/* ACTIVE FILTER */}
               {activeTab === "popular" && (
                 <div className="inline-flex items-center gap-2 bg-[#FFF1EB] text-[#F15A24] px-4 py-2 rounded-full text-sm font-semibold w-fit">
                   <Flame size={16} />
@@ -387,14 +363,11 @@ const ExploreAllCourses = () => {
               onClick={() => setOpenFilters(true)}
               className="lg:hidden sticky top-0 z-40 mb-4 w-full bg-white border border-[#ECECEC] rounded-2xl px-5 py-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)] flex items-center justify-between transition-all duration-300 hover:border-[#F15A24]/30 active:scale-[0.99]"
             >
-              {/* LEFT CONTENT */}
               <div className="flex items-center gap-3">
-                {/* ICON */}
                 <div className="w-11 h-11 rounded-xl bg-[#F15A24] flex items-center justify-center shadow-lg shadow-[#F15A24]/20">
                   <Grid3X3 size={18} className="text-white" />
                 </div>
 
-                {/* TEXT */}
                 <div className="text-left">
                   <h3 className="text-[#141414] text-xl font-bold leading-none">
                     Filter Courses
@@ -406,7 +379,6 @@ const ExploreAllCourses = () => {
                 </div>
               </div>
 
-              {/* RIGHT ICON */}
               <div className="w-9 h-9 rounded-xl bg-[#FFF4EF] flex items-center justify-center">
                 <ChevronRight size={18} className="text-[#F15A24]" />
               </div>
@@ -416,7 +388,6 @@ const ExploreAllCourses = () => {
             <AnimatePresence>
               {openFilters && (
                 <div className="fixed inset-0 z-50 lg:hidden">
-                  {/* BACKDROP */}
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -426,7 +397,6 @@ const ExploreAllCourses = () => {
                     onClick={() => setOpenFilters(false)}
                   />
 
-                  {/* SIDEBAR */}
                   <motion.div
                     initial={{ x: "-100%" }}
                     animate={{ x: 0 }}
@@ -438,7 +408,6 @@ const ExploreAllCourses = () => {
                     }}
                     className="absolute left-0 top-0 h-full w-[88%] max-w-[360px] bg-white shadow-2xl overflow-y-auto"
                   >
-                    {/* HEADER */}
                     <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between z-10">
                       <h2 className="text-lg font-bold text-[#141414]">
                         Filters
@@ -452,7 +421,6 @@ const ExploreAllCourses = () => {
                       </button>
                     </div>
 
-                    {/* SIDEBAR CONTENT */}
                     <div className="p-4">
                       <ExploreSidebar
                         activeTab={activeTab}
@@ -472,7 +440,7 @@ const ExploreAllCourses = () => {
               )}
             </AnimatePresence>
 
-            {/* LOADER */}
+            {/* LOADER & CARDS */}
             {loading ? (
               <Loader text="Loading Courses..." />
             ) : filteredCourses.length > 0 ? (

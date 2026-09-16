@@ -71,7 +71,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="bg-[#0F0F0F] text-white  py-16 border-t border-white/5">
+    <footer className="bg-[#0F0F0F] text-white py-16 border-t border-white/5">
       <div className="max-w-325 mx-auto px-6">
         {/* TOP GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16">
@@ -95,8 +95,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {licenses.map((licence) => (
                 <li key={licence._id}>
+                  {/* UPDATED DYNAMIC ROUTE FOR LICENCE DETAILS */}
                   <Link
-                    to="/licences"
+                    to={`/licences/licencesdetails?id=${licence._id}`}
                     className="text-[#A1A1A1] hover:text-white transition-colors line-clamp-1"
                   >
                     {licence.title}
@@ -126,9 +127,9 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* TRAINING LOCATIONS + PAGES */}
+          {/* TRAINING LOCATIONS */}
           <div className="lg:pr-5 lg:border-r lg:border-white/10">
-            <h4 className="font-bold  text-white text-lg mb-8 uppercase ">
+            <h4 className="font-bold text-white text-lg mb-8 uppercase">
               Training Locations
             </h4>
 
@@ -149,7 +150,7 @@ const Footer = () => {
                 >
                   <MapPin
                     size={15}
-                    className="text-[#00A3FF] md:absolute md:-left-5 "
+                    className="text-[#00A3FF] md:absolute md:-left-5"
                   />
                   <span className="md:ml-3">{loc.city}</span>
                 </li>
@@ -163,7 +164,7 @@ const Footer = () => {
               CONTACT US
             </h4>
             <ul className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
-              <div className="space-y-2 mb-8 ">
+              <div className="space-y-2 mb-8">
                 <div className="flex items-center gap-3 group cursor-pointer">
                   <div className="w-5 h-5 flex items-center justify-center">
                     <Phone className="text-[#00A3FF]" size={18} />
@@ -177,16 +178,21 @@ const Footer = () => {
                   <div className="w-5 h-5 flex items-center justify-center">
                     <Mail className="text-[#00A3FF]" size={18} />
                   </div>
-                  <span className="text-[#A1A1A1] text-base">
+                  <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=info@courses4me.co.uk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#A1A1A1] text-base"
+                  >
                     info@courses4me.co.uk
-                  </span>
+                  </a>
                 </div>
               </div>
             </ul>
           </div>
         </div>
 
-        {/* Footer Bottom */}
+        {/* FOOTER BOTTOM */}
         <div className="border-t border-white/10 pt-8 mt-8">
           <div className="flex flex-wrap items-center justify-center gap-5 md:gap-10 lg:gap-28 text-base text-center">
             <span className="text-white">
