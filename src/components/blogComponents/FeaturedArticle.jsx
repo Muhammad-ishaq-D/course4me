@@ -8,11 +8,18 @@ import {
   TrendingUp,
   BookOpen,
 } from "lucide-react";
-import { blogsData } from "../../data/blogs";
+import useBlogs from "../../hooks/useBlogs";
+import FeaturedArticleSkeleton from "../ui/FeaturedArticleSkeleton";
 
 const FeaturedArticle = () => {
   const navigate = useNavigate();
-  const featuredBlog = blogsData[0];
+  const { blogs, loading } = useBlogs();
+  const featuredBlog = blogs[0];
+
+  if (loading) return <FeaturedArticleSkeleton />;
+
+  // Nothing to feature: stay out of the way rather than render an empty card.
+  if (!featuredBlog) return null;
 
   return (
     <section className=" px-4 sm:px-6  mb-20 ">

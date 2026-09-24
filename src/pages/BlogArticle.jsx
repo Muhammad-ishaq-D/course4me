@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ArrowLeft,
   Share2,
@@ -20,20 +20,46 @@ import Blog4 from "../assets/home/blog4.png";
 import Blog5 from "../assets/home/blog5.png";
 import Blog6 from "../assets/home/blog6.png";
 import ArticleCard from "../components/blogComponents/ArticleCard";
-import { blogsData } from "../data/blogs";
+import useBlogs from "../hooks/useBlogs";
+import blogService from "../api/services/blogService";
+import BlogArticleSkeleton from "../components/ui/BlogArticleSkeleton";
 
 const BlogArticle = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
 
-  const blog = blogsData.find((item) => item.id === Number(id));
+  // The list is only headlines, so the article is fetched on its own for the
+  // body. The id in the URL still works; a slug is accepted too, for links
+  // shared from elsewhere.
+  const { blogs: blogsData } = useBlogs();
+  const [blog, setBlog] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
 
-  const currentIndex = blogsData.findIndex((item) => item.id === Number(id));
+    let active = true;
+    setLoading(true);
+
+    blogService
+      .getBlogById(id)
+      .then((res) => {
+        if (active) setBlog(res?.data?.data || null);
+      })
+      .catch(() => {
+        if (active) setBlog(null);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  const currentIndex = blogsData.findIndex((item) => item.id === blog?.id);
 
   let relatedArticles = blogsData.slice(currentIndex + 1, currentIndex + 4);
 
@@ -45,6 +71,9 @@ const BlogArticle = () => {
         .slice(0, 3 - relatedArticles.length),
     ];
   }
+
+  // Wait for the article before deciding it is missing.
+  if (loading) return <BlogArticleSkeleton />;
 
   if (!blog) {
     return (
