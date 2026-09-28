@@ -1,6 +1,7 @@
 import React from "react";
 import { Star, MapPin, Award, ShieldCheck, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { optimizedImage } from "../../utils/seo";
 
 function TrainerCard({ trainer, onClick }) {
   return (
@@ -19,9 +20,11 @@ function TrainerCard({ trainer, onClick }) {
         {/* IMAGE & OVERLAY AREA */}
         <div className="relative h-[220px] overflow-hidden bg-black shrink-0">
           <img
-            src={trainer.image}
+            src={optimizedImage(trainer.image, 480)}
             alt={trainer.name}
             className="w-full h-full object-cover object-top group-hover:scale-105 transition duration-700"
+            loading="lazy"
+            decoding="async"
           />
           {/* OVERLAY */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-black/20 to-transparent" />

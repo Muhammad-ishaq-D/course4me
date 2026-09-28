@@ -51,7 +51,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-18">
           {/* LOGO */}
           <Link to="/">
-            <img src={Logo} alt="courses4me" className="w-36 md:w-44" />
+            <img src={Logo} alt="courses4me" width="176" height="43" fetchPriority="high" className="w-36 md:w-44 h-auto" />
           </Link>
 
           {/* DESKTOP NAV */}
@@ -119,6 +119,8 @@ const Header = () => {
                       src={user.profileImage}
                       alt={user.name}
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
 
@@ -203,6 +205,8 @@ const Header = () => {
           {/* HAMBURGER */}
           <button
             onClick={() => setOpen(!open)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
             className="lg:hidden flex flex-col justify-center items-center w-8 h-8 relative"
           >
             <span
@@ -319,6 +323,8 @@ const Header = () => {
                           src={user.profileImage}
                           alt={user.name}
                           className="w-full h-full object-cover"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
 

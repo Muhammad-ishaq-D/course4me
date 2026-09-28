@@ -13,15 +13,18 @@ import {
   CalendarDays,
   ArrowRight,
 } from "lucide-react";
-import { NavLink, useSearchParams, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async"; // <--- Import Helmet
+import { NavLink, useSearchParams, useNavigate, useParams } from "react-router-dom";
+import Seo from "../components/shared/Seo";
+import { absoluteUrl, breadcrumbSchema, licenceUrl, plainText } from "../utils/seo";
 import HeroSection from "../components/licenseDetails/HeroSection";
 import licenseService from "../api/services/licenseService";
 import Loader from "../components/ui/Loader";
 
 const LicenseDetails = () => {
   const [searchParams] = useSearchParams();
-  const licenseId = searchParams.get("id");
+  const { licenceId } = useParams();
+  // /licences/:licenceId/:slug, or the older /licences/licencesdetails?id=
+  const licenseId = licenceId || searchParams.get("id");
   const navigate = useNavigate();
 
   const [license, setLicense] = useState(null);
@@ -181,39 +184,45 @@ const LicenseDetails = () => {
   }
 
   // Generate dynamic SEO metadata fields
-  const pageTitle = `${license?.title || license?.name || "SIA Licence Details"} | courses4me`;
-  const cleanDescription = (license?.fullDescription || "")
-    .replace(/<[^>]*>?/gm, "")
-    .trim();
+  const licenceTitle = license?.title || license?.name || "SIA Licence Details";
   const pageDescription =
-    cleanDescription.slice(0, 155) ||
+    plainText(license?.subtitle || license?.fullDescription) ||
     `Get qualified and certified with courses4me. Learn how to apply for your ${license?.title || "SIA licence"} today.`;
-  const canonicalUrl = `https://courses4me.co.uk/license-details?id=${licenseId || ""}`;
+  const canonicalPath = licenceUrl(licenseId, license?.title || license?.name);
 
   return (
     <div className="bg-[#F6F8FB] ">
-      {/* Dynamic SEO Meta Tags */}
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-
-        {/* Structured Data / Schema Markup */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "EducationalOccupationalCredential",
-            name: license?.title || license?.name || "SIA Licence",
-            description: pageDescription,
-            credentialCategory: "Licence",
-            recognizedBy: {
-              "@type": "Organization",
-              name: "courses4me",
-              url: "https://courses4me.co.uk",
-            },
-          })}
-        </script>
-      </Helmet>
+      <Seo
+        title={license ? `${licenceTitle} - Training & How to Apply` : "Licence Not Found"}
+        description={pageDescription}
+        path={canonicalPath}
+        image={license?.thumbnail || license?.image}
+        noindex={!license}
+        jsonLd={
+          license
+            ? [
+                {
+                  "@context": "https://schema.org",
+                  "@type": "EducationalOccupationalCredential",
+                  name: licenceTitle,
+                  description: pageDescription,
+                  url: absoluteUrl(canonicalPath),
+                  credentialCategory: "Licence",
+                  recognizedBy: {
+                    "@type": "GovernmentOrganization",
+                    name: "Security Industry Authority",
+                    url: "https://www.gov.uk/government/organisations/security-industry-authority",
+                  },
+                },
+                breadcrumbSchema([
+                  { name: "Home", path: "/" },
+                  { name: "Licences", path: "/licences" },
+                  { name: licenceTitle, path: canonicalPath },
+                ]),
+              ]
+            : undefined
+        }
+      />
 
       {/* =====================HERO SECTION========================== */}
       <HeroSection license={license} />

@@ -15,7 +15,7 @@ import careerService from "../api/services/careerService";
 import courseLocationService from "../api/services/courseLocationService";
 import { useSearchParams } from "react-router-dom";
 
-import { Helmet } from "react-helmet-async";
+import Seo from "../components/shared/Seo";
 
 const QuickSearch = () => {
   // ================= STATES =================
@@ -332,44 +332,17 @@ const QuickSearch = () => {
 
   // Dynamic Metadata based on Search Query
   const pageTitle = query
-    ? `Search Results for "${query}" | courses4me`
-    : "Search Courses & Locations | courses4me";
+    ? `Search Results for "${query}"`
+    : "Search Courses & Locations";
 
   const pageDescription = query
     ? `Find available accredited training courses, venues, and SIA qualifications matching "${query}" on courses4me.`
     : "Search and compare accredited security training courses, locations, and SIA qualifications across the UK with courses4me.";
 
-  const canonicalUrl = `https://courses4me.co.uk/search${query ? `?q=${encodeURIComponent(query)}` : ""}`;
-
   return (
     <div className="min-h-screen bg-[#FAFAFC] overflow-hidden relative">
-      {/* Dynamic SEO Meta Tags */}
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        {/* Prevents internal search result pages from indexing if empty to protect site quality */}
-        <meta
-          name="robots"
-          content={query ? "noindex, follow" : "index, follow"}
-        />
-        <link rel="canonical" href={canonicalUrl} />
-
-        {/* Search Action / WebSite Schema */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SearchResultsPage",
-            name: pageTitle,
-            description: pageDescription,
-            url: canonicalUrl,
-            publisher: {
-              "@type": "Organization",
-              name: "courses4me",
-              url: "https://courses4me.co.uk",
-            },
-          })}
-        </script>
-      </Helmet>
+      {/* Internal search results are kept out of the index; links are still followed */}
+      <Seo title={pageTitle} description={pageDescription} noindex />
 
       {/* ================= BACKGROUND ================= */}
       <div className="absolute top-0 left-0 w-[350px] h-[350px] bg-[#F15A24]/10 blur-[120px] rounded-full" />

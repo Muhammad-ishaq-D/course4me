@@ -139,6 +139,8 @@ function VideoTestimonials() {
                         src={t.img}
                         alt={t.name}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition duration-700"
+                        loading="lazy"
+                        decoding="async"
                       />
                     )}
 

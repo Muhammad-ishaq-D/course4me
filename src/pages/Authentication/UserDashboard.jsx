@@ -49,6 +49,8 @@ const UserDashboard = () => {
                     src={user?.profileImage}
                     alt={user?.name}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
 

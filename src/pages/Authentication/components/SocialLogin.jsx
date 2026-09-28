@@ -31,6 +31,8 @@ const SocialLogin = ({ className = "" }) => {
           src="https://www.svgrepo.com/show/355037/google.svg"
           className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"
           alt="Google"
+          loading="lazy"
+          decoding="async"
         />
         <span>Google</span>
         <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5 pointer-events-none"></div>

@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import Seo from "../../components/shared/Seo";
+import {
+  SITE_NAME,
+  SITE_URL,
+  absoluteUrl,
+  breadcrumbSchema,
+  courseUrl,
+  plainText,
+} from "../../utils/seo";
 import CourseHero from "../../components/coursesComponents/details/CourseHero";
 import CourseMainContent from "../../components/coursesComponents/details/CourseMainContent";
 import RelatedCourses from "../../components/coursesComponents/details/RelatedCourses";
@@ -45,43 +53,60 @@ const CourseDetail = () => {
   }
 
   // Fallback metadata fields if any property is missing from the API
-  const pageTitle = `${course.title || course.name || "Course Details"} | courses4me`;
+  const courseTitle = course.title || course.name || "Course Details";
   const pageDescription =
-    course.description ||
-    course.summary ||
-    `Enroll in ${course.title || "our training course"} with courses4me and gain industry-recognized qualifications in the UK.`;
-  const canonicalUrl = `https://courses4me.co.uk/course/${courseId}`;
+    plainText(course.subtitle || course.description || course.fullDescription || course.summary) ||
+    `Enrol in ${courseTitle} with courses4me and gain an industry-recognised qualification at training centres across the UK.`;
+  const canonicalPath = courseUrl(courseId, courseTitle);
+  const price = course.pricing?.salePrice || course.pricing?.basePrice;
+  const workload = String(course.duration || "").match(/(\d+(?:\.\d+)?)\s*(hour|hr|day|week)/i);
+  const workloadIso = workload
+    ? `P${/^h/i.test(workload[2]) ? "T" : ""}${workload[1]}${/^h/i.test(workload[2]) ? "H" : workload[2][0].toUpperCase()}`
+    : undefined;
+
+  const courseSchema = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: courseTitle,
+    description: pageDescription,
+    url: absoluteUrl(canonicalPath),
+    image: course.thumbnail ? [course.thumbnail] : undefined,
+    inLanguage: "en-GB",
+    provider: { "@type": "Organization", name: SITE_NAME, sameAs: SITE_URL },
+    offers: price
+      ? {
+          "@type": "Offer",
+          category: "Paid",
+          price: String(price),
+          priceCurrency: "GBP",
+          availability: "https://schema.org/InStock",
+          url: absoluteUrl(canonicalPath),
+        }
+      : undefined,
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: course.isOnline ? "Online" : "Onsite",
+      courseWorkload: workloadIso,
+      location: course.isOnline ? undefined : { "@type": "Country", name: "United Kingdom" },
+    },
+  };
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen">
-      {/* Dynamic SEO Tags */}
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-
-        {/* Structured Data (Course Schema Markup) */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Course",
-            name: course.title || course.name,
-            description: pageDescription,
-            provider: {
-              "@type": "Organization",
-              name: "courses4me",
-              sameAs: "https://courses4me.co.uk",
-            },
-            offers: {
-              "@type": "Offer",
-              price: course.price || "0",
-              priceCurrency: "GBP",
-              availability: "https://schema.org/InStock",
-              url: canonicalUrl,
-            },
-          })}
-        </script>
-      </Helmet>
+      <Seo
+        title={/course|training|award/i.test(courseTitle) ? courseTitle : `${courseTitle} Course`}
+        description={pageDescription}
+        path={canonicalPath}
+        image={course.thumbnail}
+        jsonLd={[
+          courseSchema,
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Courses", path: "/courses" },
+            { name: courseTitle, path: canonicalPath },
+          ]),
+        ]}
+      />
 
       <div id="overview">
         <CourseHero course={course} />

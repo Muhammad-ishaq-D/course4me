@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Award,
   Briefcase,
@@ -11,7 +11,6 @@ import {
 import { motion } from "framer-motion";
 
 const HiringTrainingSection = () => {
-  const navigate = useNavigate();
 
   const features = [
     "100% Career & Placement Assistance",
@@ -73,13 +72,13 @@ const HiringTrainingSection = () => {
               ))}
             </div>
 
-            <button
-              onClick={() => navigate("/careers")}
+            <Link
+              to="/careers"
               className="group mt-6 sm:mt-8 w-full sm:w-auto bg-[#FF5421] hover:bg-[#ca5633] active:scale-95 transition-all duration-300 text-white px-6 sm:px-9 py-3.5 sm:py-4 rounded-full font-bold text-sm sm:text-md flex items-center justify-center gap-3 shadow-[0_12px_28px_rgba(248,81,12,0.2)] hover:shadow-[0_18px_36px_rgba(248,81,12,0.35)] cursor-pointer"
             >
               <span>Explore Career Opportunities</span>
               <ArrowRight className="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
-            </button>
+            </Link>
           </motion.div>
 
           {/* RIGHT SIDE */}

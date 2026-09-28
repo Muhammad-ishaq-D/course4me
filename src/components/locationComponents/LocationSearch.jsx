@@ -13,7 +13,8 @@ import {
   BookOpen,
   X,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { courseLocationUrl, optimizedImage } from "../../utils/seo";
 import courseLocationService from "../../api/services/courseLocationService";
 import Loader from "../ui/Loader";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
@@ -160,9 +161,9 @@ const LocationSearch = () => {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
               {/* Left */}
               <div>
-                <h2 className="text-3xl font-bold text-gray-900 leading-tight">
+                <h1 className="text-3xl font-bold text-gray-900 leading-tight">
                   Find Courses Near You
-                </h2>
+                </h1>
                 <p className="text-lg text-gray-500 mt-1 max-w-xl leading-relaxed">
                   Search by town, city, or postcode to discover available
                   training courses at your nearest location.
@@ -352,9 +353,11 @@ const LocationSearch = () => {
                         <div className="w-full sm:w-32 md:w-36 h-60 sm:h-32 md:h-46 rounded-3xl overflow-hidden shrink-0 bg-orange-50 flex items-center justify-center">
                           {course.thumbnail && !imgErrors[link._id] ? (
                             <img
-                              src={course.thumbnail}
+                              src={optimizedImage(course.thumbnail, 320)}
                               alt={course.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              loading="lazy"
+                              decoding="async"
                               onError={() =>
                                 setImgErrors((prev) => ({
                                   ...prev,
@@ -432,17 +435,14 @@ const LocationSearch = () => {
                               >
                                 Book Now
                               </button>
-                              <button
-                                onClick={() =>
-                                  navigate(
-                                    `/locations/locationdetails/${link._id}`,
-                                  )
-                                }
+                              <Link
+                                to={courseLocationUrl(link._id, course.title, loc.city)}
+                                aria-label={`${course.title || "Course"} in ${loc.city || "this location"} details`}
                                 className="py-3 md:px-9 px-6 rounded-xl cursor-pointer border border-gray-200  text-sm font-semibold flex items-center gap-1.5 "
                               >
                                 Details
                                 <ArrowRight className="w-3.5 h-3.5" />
-                              </button>
+                              </Link>
                             </div>
                           </div>
                         </div>

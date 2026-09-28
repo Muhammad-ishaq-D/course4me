@@ -3,19 +3,21 @@ import FeaturedArticle from "../components/blogComponents/FeaturedArticle";
 import ArticleGrid from "../components/blogComponents/ArticleGrid";
 import NewsletterCTA from "../components/blogComponents/NewsletterCTA";
 
-import { Helmet } from "react-helmet-async";
+import Seo from "../components/shared/Seo";
+import { breadcrumbSchema } from "../utils/seo";
 
 const Blog = () => {
   return (
     <div className="min-h-screen bg-white ">
-      <Helmet>
-        <title>Latest News, Guides & Training Insights | courses4me Blog</title>
-        <meta
-          name="description"
-          content="Read industry updates, career tips, and course guides from courses4me experts to help you stay ahead in your field."
-        />
-        <link rel="canonical" href="https://courses4me.co.uk/blog" />
-      </Helmet>
+      <Seo
+        title="Security Career Guides & SIA News | courses4me Blog"
+        description="Read SIA licence updates, security career guides, course tips and industry news from the courses4me team to help you get qualified and find work."
+        path="/blog"
+        jsonLd={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Blog", path: "/blog" },
+        ])}
+      />
 
       <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

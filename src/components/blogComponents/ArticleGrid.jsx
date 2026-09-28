@@ -215,6 +215,7 @@ const ArticleGrid = () => {
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
+            aria-label="Previous page"
             className={`p-2 md:p-3 rounded-full flex items-center justify-center border transition-all duration-300 ${
               currentPage === 1
                 ? "bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed"
@@ -245,6 +246,7 @@ const ArticleGrid = () => {
               setCurrentPage((prev) => Math.min(prev + 1, totalPages))
             }
             disabled={currentPage === totalPages}
+            aria-label="Next page"
             className={` p-2 md:p-3 rounded-full flex items-center justify-center border transition-all duration-300 ${
               currentPage === totalPages
                 ? "bg-gray-100 border-gray-200 text-gray-300 cursor-not-allowed"

@@ -44,7 +44,7 @@ export default function CentreDetailsModal({ centre, onClose, onBookNow }) {
           <div className="w-[400px] shrink-0 overflow-y-auto px-8 pb-8 custom-scrollbar border-r border-gray-100">
             <div>
               <div className="relative h-[240px] rounded-[24px] overflow-hidden mb-6 shadow-md">
-                <img src={centre.image} alt={centre.city} className="w-full h-full object-cover" />
+                <img src={centre.image} alt={centre.city} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 <div className="absolute top-4 right-4">
                   <div className="bg-black/60 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-[14px] font-bold flex items-center gap-1.5 shadow-sm border border-white/10">
                     <Star size={14} className="fill-[#FBBF24] text-[#FBBF24]" />

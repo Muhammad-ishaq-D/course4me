@@ -16,6 +16,7 @@ import Loader from "../ui/Loader";
 
 // Standardizing images from assets (Still used for fallback or icons if needed)
 import doorImg from "../../assets/courses/door.png";
+import { optimizedImage } from "../../utils/seo";
 
 const categoryTemplates = [
   {
@@ -185,9 +186,11 @@ const BrowseCoursesModal = ({ isOpen, onClose }) => {
                       >
                         <div className="w-16 h-14 md:w-20 md:h-16 rounded-xl overflow-hidden shrink-0 shadow-md bg-gray-100">
                           <img
-                            src={course.image}
+                            src={optimizedImage(course.image, 160)}
                             alt={course.title}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            loading="lazy"
+                            decoding="async"
                           />
                         </div>
                         <div className="grow">

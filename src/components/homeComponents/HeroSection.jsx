@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   X,
   Search,
@@ -29,25 +29,54 @@ import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 
 /* ─── Video Player ─── */
-const VideoPlayer = ({ src, label, className = "" }) => (
-  <div
-    className={`bg-linear-to-br from-gray-800 to-gray-900 rounded-3xl overflow-hidden border border-gray-700 shadow-xl relative group ${className}`}
-  >
-    <video
-      src={src}
-      alt="Students participating in a professional courses4me training session"
-      className="w-full h-full object-cover"
-      autoPlay
-      loop
-      muted
-      playsInline
-      preload="auto"
-    />
-    <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black to-transparent p-3 opacity-100 group-hover:opacity-0 transition-opacity duration-300">
-      <p className="font-medium text-xs text-white">{label}</p>
+// The source is attached only after the page has loaded and the player is on
+// screen, so the videos never compete with the page content for bandwidth.
+const VideoPlayer = ({ src, label, className = "" }) => {
+  const ref = useRef(null);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    let observer;
+    const start = () => {
+      observer = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting && entry.target.offsetParent !== null) {
+          setActive(true);
+          observer.disconnect();
+        }
+      });
+      observer.observe(el);
+    };
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
+    return () => {
+      window.removeEventListener("load", start);
+      observer?.disconnect();
+    };
+  }, []);
+
+  return (
+    <div
+      className={`bg-linear-to-br from-gray-800 to-gray-900 rounded-3xl overflow-hidden border border-gray-700 shadow-xl relative group ${className}`}
+    >
+      <video
+        ref={ref}
+        src={active ? src : undefined}
+        aria-label={label || "courses4me training video"}
+        className="w-full h-full object-cover"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="none"
+      />
+      <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black to-transparent p-3 opacity-100 group-hover:opacity-0 transition-opacity duration-300">
+        <p className="font-medium text-xs text-white">{label}</p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 /* ─── Hero Section ─── */
 const HeroSection = () => {
@@ -57,7 +86,7 @@ const HeroSection = () => {
         <div className="grid grid-cols-1 xl:grid-cols-2 px-4 md:px-8 gap-8  items-center">
           {/* LEFT COLUMN */}
           <div className="">
-            <h2 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold leading-tight">
               Get Trained,
               <span className="text-[#FF5421]"> Licenced,</span>
               <span className="block -mt-2 md:-mt-3">
@@ -66,12 +95,13 @@ const HeroSection = () => {
                   Future.
                   <img
                     src={underlineStroke}
-                    alt="Students participating in a professional courses4me training session"
+                    alt=""
+                    aria-hidden="true"
                     className="absolute bottom-1 md:bottom-2 left-2 w-[90%]"
                   />
                 </span>
               </span>
-            </h2>
+            </h1>
 
             <p className="text-base sm:text-lg text-gray-500 mt-3 max-w-lg">
               Explore accredited courses from trusted UK training providers.
@@ -111,7 +141,8 @@ const HeroSection = () => {
                   <div className="flex items-center gap-2 bg-[#FF5421] text-white px-3 py-1 rounded-full text-sm font-semibold">
                     <img
                       src={playIcon}
-                      alt="Students participating in a professional courses4me training session"
+                      alt=""
+                      aria-hidden="true"
                       className="w-3 h-3"
                     />
                     Live Training

@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Award,
   Users,
@@ -38,7 +38,6 @@ const features = [
 ];
 
 const WhyChooseTrainingCentres = () => {
-  const navigate = useNavigate();
 
   return (
     <section className="relative overflow-hidden bg-[#F9FAFB] py-20 lg:py-24 px-4">
@@ -138,8 +137,8 @@ const WhyChooseTrainingCentres = () => {
           viewport={{ once: true }}
           className="mt-12 sm:mt-16 flex justify-center"
         >
-          <button
-            onClick={() => navigate("/courses")}
+          <Link
+            to="/courses"
             className="
               group
               w-full sm:w-auto
@@ -163,7 +162,7 @@ const WhyChooseTrainingCentres = () => {
           >
             <span>Browse All Courses</span>
             <ArrowRight className="w-5 h-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1.5" />
-          </button>
+          </Link>
         </motion.div>
       </div>
     </section>

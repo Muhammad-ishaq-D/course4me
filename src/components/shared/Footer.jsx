@@ -14,6 +14,7 @@ import {
   MapPin,
 } from "lucide-react";
 import Logo from "../../assets/Logo.svg";
+import { courseUrl, licenceUrl } from "../../utils/seo";
 
 const Footer = () => {
   const [courses, setCourses] = useState([]);
@@ -77,7 +78,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16">
           {/* ABOUT */}
           <div className="lg:pr-5 lg:border-r lg:border-white/10">
-            <img src={Logo} alt="logo" className="w-40 md:w-44" />
+            <img src={Logo} alt="courses4me" width="176" height="43" loading="lazy" className="w-40 md:w-44 h-auto" />
 
             <p className="text-[#A1A1A1] text-base mt-4 leading-relaxed">
               courses4me helps you discover, compare, and book accredited
@@ -88,16 +89,16 @@ const Footer = () => {
 
           {/* POPULAR LICENCES */}
           <div className="lg:pr-5 lg:border-r lg:border-white/10">
-            <h4 className="font-bold text-white text-lg mb-8 uppercase tracking-wide">
+            <h2 className="font-bold text-white text-lg mb-8 uppercase tracking-wide">
               Popular Licences
-            </h4>
+            </h2>
 
             <ul className="space-y-2">
               {licenses.map((licence) => (
                 <li key={licence._id}>
                   {/* UPDATED DYNAMIC ROUTE FOR LICENCE DETAILS */}
                   <Link
-                    to={`/licences/licencesdetails?id=${licence._id}`}
+                    to={licenceUrl(licence._id, licence.title)}
                     className="text-[#A1A1A1] hover:text-white transition-colors line-clamp-1"
                   >
                     {licence.title}
@@ -109,15 +110,15 @@ const Footer = () => {
 
           {/* POPULAR COURSES */}
           <div className="lg:pr-5 lg:border-r lg:border-white/10">
-            <h4 className="font-bold text-white text-lg mb-8 uppercase tracking-wide">
+            <h2 className="font-bold text-white text-lg mb-8 uppercase tracking-wide">
               Popular Courses
-            </h4>
+            </h2>
 
             <ul className="space-y-2">
               {courses.map((course) => (
                 <li key={course._id}>
                   <Link
-                    to={`/course/${course._id}`}
+                    to={courseUrl(course._id, course.title)}
                     className="text-[#A1A1A1] hover:text-white transition-colors line-clamp-1"
                   >
                     {course.title}
@@ -129,9 +130,9 @@ const Footer = () => {
 
           {/* TRAINING LOCATIONS */}
           <div className="lg:pr-5 lg:border-r lg:border-white/10">
-            <h4 className="font-bold text-white text-lg mb-8 uppercase">
+            <h2 className="font-bold text-white text-lg mb-8 uppercase">
               Training Locations
-            </h4>
+            </h2>
 
             <ul className="space-y-2">
               {locations.map((loc) => (
@@ -160,10 +161,10 @@ const Footer = () => {
 
           {/* CONTACT */}
           <div>
-            <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
+            <h2 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               CONTACT US
-            </h4>
-            <ul className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
+            </h2>
+            <div className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
               <div className="space-y-2 mb-8">
                 <div className="flex items-center gap-3 group cursor-pointer">
                   <div className="w-5 h-5 flex items-center justify-center">
@@ -188,7 +189,7 @@ const Footer = () => {
                   </a>
                 </div>
               </div>
-            </ul>
+            </div>
           </div>
         </div>
 

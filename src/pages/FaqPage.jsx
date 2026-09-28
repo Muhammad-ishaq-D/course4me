@@ -1,5 +1,15 @@
 import React, { useState } from "react";
 import { ChevronDown, ArrowLeft } from "lucide-react";
+import Seo from "../components/shared/Seo";
+import { breadcrumbSchema } from "../utils/seo";
+
+// Plain text of an answer, which may be a string or JSX.
+const toText = (node) => {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(toText).join(" ");
+  return toText(node.props?.children);
+};
 
 const FaqPage = () => {
   const [openFaq, setOpenFaq] = useState(null);
@@ -131,8 +141,33 @@ const FaqPage = () => {
     },
   ];
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: toText(faq.answer).replace(/\s+/g, " ").trim(),
+      },
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] py-12 md:py-20">
+      <Seo
+        title="SIA Course & Licence FAQs"
+        description="Answers to common questions about SIA courses and licences: who the course is for, the ID you need, when you get your certificate, and how to apply for your SIA licence."
+        path="/faqs"
+        jsonLd={[
+          faqSchema,
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "FAQs", path: "/faqs" },
+          ]),
+        ]}
+      />
       <div className="max-w-5xl mx-auto px-4 lg:px-0">
 
         {/* Section Header */}

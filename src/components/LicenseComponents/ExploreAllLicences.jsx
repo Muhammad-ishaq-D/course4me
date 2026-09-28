@@ -186,9 +186,9 @@ const ExploreAllLicences = () => {
                 Professional Security Licences
               </span>
 
-              <h2 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
+              <h1 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
                 Explore all licences
-              </h2>
+              </h1>
 
               <p className="text-[#141414]/60 mt-2 text-base md:text-lg leading-relaxed">
                 Browse professional SIA licences, first aid qualifications,

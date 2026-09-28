@@ -1,19 +1,21 @@
 import React from "react";
 import LocationSearchPage from "../components/locationComponents/LocationSearch";
-import { Helmet } from "react-helmet-async";
+import Seo from "../components/shared/Seo";
+import { breadcrumbSchema } from "../utils/seo";
 
 export default function Locations() {
 
   return (
     <div>
-      <Helmet>
-        <title>Find Training Locations Near You in the UK | courses4me</title>
-        <meta
-          name="description"
-          content="Discover courses4me training venues across major UK cities, including London, Manchester, Birmingham, and more."
-        />
-        <link rel="canonical" href="https://courses4me.co.uk/locations" />
-      </Helmet>
+      <Seo
+        title="Training Centres Near You Across the UK"
+        description="Find courses4me training centres near you across the UK, including London, Manchester, Birmingham and Cardiff. Search by postcode, compare course dates and book your place."
+        path="/locations"
+        jsonLd={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Locations", path: "/locations" },
+        ])}
+      />
 
       <LocationSearchPage />
     </div>

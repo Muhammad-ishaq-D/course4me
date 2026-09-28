@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Helmet } from "react-helmet-async"; // <--- Import Helmet
+import Seo from "../components/shared/Seo";
+import { breadcrumbSchema, careerUrl, plainText } from "../utils/seo";
 
 import { careersData } from "../data/careerData";
 import HeroCareerDetails from "../components/careerDetailsComponents/HeroCareerDetails";
@@ -37,61 +38,60 @@ const CareerDetails = () => {
   if (!career) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Helmet>
-          <title>Career Not Found | courses4me</title>
-          <meta
-            name="description"
-            content="The requested career guide could not be found. Explore available job roles and career paths in the UK with courses4me."
-          />
-        </Helmet>
-        <h2 className="text-2xl font-bold">Career Not Found</h2>
+        <Seo
+          title="Career Not Found"
+          description="The requested career guide could not be found. Explore available job roles and career paths in the UK with courses4me."
+          noindex
+        />
+        <h1 className="text-2xl font-bold">Career Not Found</h1>
       </div>
     );
   }
 
   // Dynamic Metadata Fields
   const careerTitle = career.title || career.name || "Career Role";
-  const pageTitle = `${careerTitle} Career Guide & Training | courses4me`;
-  const cleanDescription = (career.description || career.overview || "")
-    .replace(/<[^>]*>?/gm, "")
-    .trim();
   const pageDescription =
-    cleanDescription.slice(0, 155) ||
+    plainText(career.description || career.overview) ||
     `Explore training pathways, salary expectations, and job roles for ${careerTitle} in the UK with courses4me.`;
-  const canonicalUrl = `https://courses4me.co.uk/careers/${id}`;
+  const canonicalPath = careerUrl(id, careerTitle);
+  // Salaries are display text such as "£24K — £32K / year"; schema.org wants numbers.
+  const salaryNumbers = [
+    ...String(career.salary || "").replace(/,/g, "").matchAll(/(\d+(?:\.\d+)?)\s*(k)?/gi),
+  ].map(([, value, thousands]) => Number(value) * (thousands ? 1000 : 1));
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen">
-      {/* Dynamic SEO Tags */}
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-
-        {/* Structured Data (Occupation Schema Markup) */}
-        <script type="application/ld+json">
-          {JSON.stringify({
+      <Seo
+        title={`${careerTitle} Career Guide & Training`}
+        description={pageDescription}
+        path={canonicalPath}
+        jsonLd={[
+          {
             "@context": "https://schema.org",
             "@type": "Occupation",
             name: careerTitle,
             description: pageDescription,
-            occupationLocation: {
-              "@type": "City",
-              name: "United Kingdom",
-            },
-            estimatedSalary: career.salary
+            occupationLocation: { "@type": "Country", name: "United Kingdom" },
+            estimatedSalary: salaryNumbers?.length
               ? [
                   {
                     "@type": "MonetaryAmountDistribution",
-                    currency: "GBP",
                     name: "base",
-                    median: career.salary,
+                    currency: "GBP",
+                    duration: "P1Y",
+                    minValue: Math.min(...salaryNumbers),
+                    maxValue: Math.max(...salaryNumbers),
                   },
                 ]
               : undefined,
-          })}
-        </script>
-      </Helmet>
+          },
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Careers", path: "/careers" },
+            { name: careerTitle, path: canonicalPath },
+          ]),
+        ]}
+      />
 
       {/* ===================HERO SECTION================= */}
       <HeroCareerDetails career={career} />

@@ -20,6 +20,7 @@ import courseService from "../../api/services/courseService";
 import Loader from "../ui/Loader";
 import EmptyState from "../ui/EmptyState";
 import ExploreSidebar from "../ui/ExploreSidebar";
+import { courseUrl, optimizedImage } from "../../utils/seo";
 
 const categories = [
   {
@@ -195,9 +196,9 @@ const ExploreAllCourses = () => {
                 Professional Training Courses
               </span>
 
-              <h2 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
+              <h1 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
                 Explore all courses
-              </h2>
+              </h1>
 
               <p className="text-[#141414]/60 mt-2 text-base md:text-lg leading-relaxed">
                 Browse our wide range of professional training courses and
@@ -267,15 +268,17 @@ const ExploreAllCourses = () => {
                         {courseSuggestions.map((course) => (
                           <button
                             key={course.id}
-                            onMouseDown={() => navigate(`/course/${course.id}`)}
+                            onMouseDown={() => navigate(courseUrl(course.id, course.title))}
                             className="w-full flex items-center gap-4 px-5 py-3.5 hover:bg-orange-50/60 border-b border-gray-100 last:border-none text-left transition cursor-pointer group"
                           >
                             <div className="w-11 h-11 rounded-xl overflow-hidden bg-orange-50 flex items-center justify-center shrink-0 border border-orange-100">
                               {course.image ? (
                                 <img
-                                  src={course.image}
+                                  src={optimizedImage(course.image, 96)}
                                   alt={course.title}
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                  loading="lazy"
+                                  decoding="async"
                                 />
                               ) : (
                                 <BookOpen className="w-5 h-5 text-[#F15A24]" />

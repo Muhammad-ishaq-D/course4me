@@ -21,6 +21,8 @@ const AppPromotionSection = () => {
                 src={courses4meApp}
                 alt="Courses4Me App mobile phone mockup"
                 className="w-72 md:w-80 lg:w-[420px] h-auto object-contain relative z-10"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
@@ -54,6 +56,8 @@ const AppPromotionSection = () => {
                   src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
                   alt="Apple"
                   className="w-7 h-7 object-contain"
+                  loading="lazy"
+                  decoding="async"
                 />
 
                 <div className="flex flex-col leading-tight">
@@ -76,6 +80,8 @@ const AppPromotionSection = () => {
                   src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg"
                   alt="Google Play"
                   className="w-7 h-7 object-contain"
+                  loading="lazy"
+                  decoding="async"
                 />
 
                 <div className="flex flex-col leading-tight">

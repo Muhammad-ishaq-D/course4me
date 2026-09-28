@@ -7,6 +7,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { optimizedImage } from "../../utils/seo";
 
 const HeroSection = ({ license }) => {
   const scrollToTraining = () => {
@@ -142,9 +143,10 @@ const HeroSection = ({ license }) => {
               {license?.thumbnail && (
                 <div className="relative w-full h-[150px] rounded-3xl overflow-hidden mb-6 border border-white/10 shadow-[0_8px_25px_rgba(0,0,0,0.3)]">
                   <img
-                    src={license.thumbnail}
+                    src={optimizedImage(license.thumbnail, 900)}
                     alt={license.title || "License Thumbnail"}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                    fetchPriority="high"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
                 </div>

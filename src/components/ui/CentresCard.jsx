@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { MapPin, Clock, Star, Sparkles, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import CentreDetailsModal from "../locationComponents/CentreDetailsModal";
+import { optimizedImage } from "../../utils/seo";
 
 const courseTitleToId = (title) => {
   const t = title.toLowerCase();
@@ -27,9 +28,11 @@ const CentresCard = ({ centre, index }) => {
         {/* ================= IMAGE ================= */}
         <div className="relative h-62.5 overflow-hidden">
           <img
-            src={centre.image}
+            src={optimizedImage(centre.image, 640)}
             alt={centre.city}
             className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+            loading="lazy"
+            decoding="async"
           />
 
           {/* Overlay */}

@@ -129,6 +129,8 @@ const LoginForm = () => {
                       : "https://www.svgrepo.com/show/475647/facebook-color.svg"}
                     className="w-4 h-4"
                     alt={socialHint}
+                    loading="lazy"
+                    decoding="async"
                   />
                   Sign in with {socialHint.charAt(0).toUpperCase() + socialHint.slice(1)}
                 </button>

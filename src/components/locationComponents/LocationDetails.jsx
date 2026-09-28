@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async"; // <--- Import Helmet
+import Seo from "../shared/Seo";
+import {
+  SITE_NAME,
+  SITE_URL,
+  absoluteUrl,
+  breadcrumbSchema,
+  courseLocationUrl,
+  courseUrl,
+  optimizedImage,
+} from "../../utils/seo";
 import {
   Clock3,
   CheckCircle2,
@@ -106,34 +115,63 @@ const CourseLocationView = ({ link }) => {
   // Dynamic SEO Fields
   const locationName = loc.name || course.title || "Training Venue";
   const city = loc.city || "UK";
-  const pageTitle = `${locationName} - Training Venue in ${city} | courses4me`;
-  const pageDescription = `Book professional training at ${locationName} in ${city}. Certified training venue with expert trainers. Explore dates, prices, and venue directions.`;
-  const canonicalUrl = `https://courses4me.co.uk/locations/${link._id || ""}`;
+  const courseTitle = course.title || "Training Course";
+  const pageTitle = `${courseTitle} in ${city} - ${locationName}`;
+  const pageDescription = `Book ${courseTitle} at ${locationName}, ${city}. Upcoming course dates, prices, what's included and venue directions.`;
+  const canonicalPath = courseLocationUrl(link._id, course.title, loc.city);
+  const venue = {
+    "@type": "Place",
+    name: locationName,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: [loc.addressLine1, loc.addressLine2].filter(Boolean).join(", ") || undefined,
+      addressLocality: loc.city || undefined,
+      postalCode: loc.postcode || undefined,
+      addressCountry: "GB",
+    },
+  };
+  const coursePrice = link.price ?? course.pricing?.salePrice ?? course.pricing?.basePrice;
 
   return (
     <div className="bg-[#F4F7FB] min-h-screen">
-      {/* Dynamic SEO Metadata */}
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-
-        {/* Structured Data (Place / Educational Organization Schema) */}
-        <script type="application/ld+json">
-          {JSON.stringify({
+      <Seo
+        title={pageTitle}
+        description={pageDescription}
+        path={canonicalPath}
+        image={course.thumbnail}
+        jsonLd={[
+          {
             "@context": "https://schema.org",
-            "@type": "Place",
-            name: locationName,
-            address: {
-              "@type": "PostalAddress",
-              streetAddress: loc.addressLine1 || "",
-              addressLocality: loc.city || "",
-              postalCode: loc.postcode || "",
-              addressCountry: loc.country || "UK",
-            },
-          })}
-        </script>
-      </Helmet>
+            "@type": "Course",
+            name: `${courseTitle} - ${city}`,
+            description: pageDescription,
+            url: absoluteUrl(canonicalPath),
+            provider: { "@type": "Organization", name: SITE_NAME, sameAs: SITE_URL },
+            offers: coursePrice
+              ? {
+                  "@type": "Offer",
+                  category: "Paid",
+                  price: String(coursePrice),
+                  priceCurrency: "GBP",
+                  availability: "https://schema.org/InStock",
+                  url: absoluteUrl(canonicalPath),
+                }
+              : undefined,
+            hasCourseInstance: (upcomingDates.length ? upcomingDates.slice(0, 5) : [null]).map((d) => ({
+              "@type": "CourseInstance",
+              courseMode: "Onsite",
+              location: venue,
+              startDate: d?.startDate || undefined,
+              endDate: d?.endDate || undefined,
+            })),
+          },
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Locations", path: "/locations" },
+            { name: `${courseTitle} in ${city}`, path: canonicalPath },
+          ]),
+        ]}
+      />
 
       {/* ── Hero ── */}
       <section className="relative min-h-[70vh] overflow-hidden bg-[#0B1120] flex items-center">
@@ -314,12 +352,12 @@ const CourseLocationView = ({ link }) => {
                     </button>
                   )}
                   {course._id && (
-                    <button
-                      onClick={() => navigate(`/course/${course._id}`)}
+                    <NavLink
+                      to={courseUrl(course._id, course.title)}
                       className="w-full px-5 py-4 cursor-pointer rounded-2xl border border-white/10 hover:bg-white/5 text-white/70 font-semibold text-sm transition-all flex items-center justify-center gap-2"
                     >
                       Course Details <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                    </NavLink>
                   )}
                 </div>
               </div>
@@ -663,11 +701,8 @@ const LegacyCenterView = ({ center, courses }) => {
 
   return (
     <div className="bg-[#F4F7FB] min-h-screen">
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href="https://courses4me.co.uk/locations" />
-      </Helmet>
+      {/* Reached only with router state, so there is no URL to index */}
+      <Seo title={pageTitle} description={pageDescription} noindex />
 
       <section className="relative min-h-screen overflow-hidden bg-[#0B1120] flex items-center">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -727,9 +762,11 @@ const LegacyCenterView = ({ center, courses }) => {
               <div className="bg-[#2A1A16]/90 backdrop-blur-2xl border border-white/10 rounded-[28px] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.40)]">
                 <div className="relative rounded-[22px] overflow-hidden">
                   <img
-                    src={center.image}
+                    src={optimizedImage(center.image, 1000)}
                     alt={center.name}
                     className="w-full h-[190px] object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <button className="absolute top-4 left-4 w-11 h-11 rounded-full bg-orange-500 flex items-center justify-center shadow-lg">
                     <Heart className="w-4 h-4 text-white" />
@@ -908,13 +945,11 @@ const LocationDetails = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-[#F4F7FB] flex items-center justify-center">
-        <Helmet>
-          <title>Location Not Found | courses4me</title>
-          <meta
-            name="description"
-            content="The requested training location details could not be found. View all available UK training locations on courses4me."
-          />
-        </Helmet>
+        <Seo
+          title="Location Not Found"
+          description="The requested training location details could not be found. View all available UK training locations on courses4me."
+          noindex
+        />
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-orange-300 mx-auto mb-3" />
           <h2 className="text-xl font-bold text-gray-700">{error}</h2>
@@ -939,13 +974,11 @@ const LocationDetails = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F4F7FB]">
-      <Helmet>
-        <title>No Location Found | courses4me</title>
-        <meta
-          name="description"
-          content="Explore accredited training venues and course locations across the UK with courses4me."
-        />
-      </Helmet>
+      <Seo
+        title="No Location Found"
+        description="Explore accredited training venues and course locations across the UK with courses4me."
+        noindex
+      />
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-800">No Location Found</h1>
         <NavLink

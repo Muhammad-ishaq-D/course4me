@@ -50,9 +50,9 @@ export default function CookieConsent() {
 
               <NavLink
                 to="/cookie-policy"
-                className="inline-block cursor-pointer mt-2 text-xs md:text-sm font-semibold text-[#F15A24] hover:text-[#df4c18]"
+                className="inline-block cursor-pointer mt-2 text-xs md:text-sm font-semibold text-[#C2410C] hover:text-[#9A3412] underline underline-offset-2"
               >
-                Learn More
+                Read our cookie policy
               </NavLink>
             </div>
           </div>
@@ -68,7 +68,7 @@ export default function CookieConsent() {
 
             <button
               onClick={acceptCookies}
-              className="flex-1 px-4 py-2 rounded-xl cursor-pointer bg-[#F15A24] hover:bg-[#df4c18] text-white font-medium shadow-[0_8px_20px_rgba(241,90,36,0.25)] transition"
+              className="flex-1 px-4 py-2 rounded-xl cursor-pointer bg-[#C2410C] hover:bg-[#9A3412] text-white font-medium shadow-[0_8px_20px_rgba(241,90,36,0.25)] transition"
             >
               Accept
             </button>

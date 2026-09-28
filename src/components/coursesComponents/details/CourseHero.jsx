@@ -10,6 +10,7 @@ import {
   Calendar,
   Heart,
 } from "lucide-react";
+import { optimizedImage } from "../../../utils/seo";
 
 const CourseHero = ({ course }) => {
   const navigate = useNavigate();
@@ -151,9 +152,10 @@ const CourseHero = ({ course }) => {
                 {/* IMAGE */}
                 <div className="relative rounded-xl overflow-hidden">
                   <img
-                    src={displayImage}
+                    src={optimizedImage(displayImage, 800)}
                     alt={course.title}
                     className="w-full h-[200px] object-cover"
+                    fetchPriority="high"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

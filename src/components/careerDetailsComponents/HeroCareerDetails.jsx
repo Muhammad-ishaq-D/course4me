@@ -8,6 +8,7 @@ import {
   Star,
   Heart,
 } from "lucide-react";
+import { optimizedImage } from "../../utils/seo";
 
 const HeroCareerDetails = ({ career }) => {
   return (
@@ -129,9 +130,10 @@ const HeroCareerDetails = ({ career }) => {
                 {/* Image */}
                 <div className="relative overflow-hidden rounded-[20px]">
                   <img
-                    src={career.image}
+                    src={optimizedImage(career.image, 1200)}
                     alt={career.title}
                     className="w-full h-[210px] object-cover"
+                    fetchPriority="high"
                   />
 
                   {/* Popular */}

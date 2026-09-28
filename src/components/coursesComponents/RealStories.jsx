@@ -180,9 +180,11 @@ const RealStories = () => {
           {/* SESSION IMAGE 1 */}
           <div className="rounded-[28px] overflow-hidden relative min-h-[280px] lg:min-h-full border border-gray-200/80 shadow-xs group">
             <img
-              src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
+              src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=75&auto=format&fit=crop"
               alt="Conflict & Security Guard Training"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <span className="absolute bottom-4 left-4 right-4 text-white text-xs font-bold leading-snug">
@@ -193,9 +195,11 @@ const RealStories = () => {
           {/* SESSION IMAGE 2 */}
           <div className="rounded-[28px] overflow-hidden relative min-h-[280px] lg:min-h-full border border-gray-200/80 shadow-xs group">
             <img
-              src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655"
+              src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=75&auto=format&fit=crop"
               alt="Callie Champion"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <span className="absolute bottom-4 left-4 right-4 text-white text-xs font-bold leading-snug">

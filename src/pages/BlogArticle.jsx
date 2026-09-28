@@ -12,8 +12,18 @@ import {
   Tag,
   User2,
 } from "lucide-react";
-import { useNavigate, Link, useParams, NavLink } from "react-router-dom";
-import { Helmet } from "react-helmet-async"; // <--- Import Helmet
+import { Link, useParams, NavLink } from "react-router-dom";
+import Seo from "../components/shared/Seo";
+import {
+  DEFAULT_IMAGE,
+  SITE_NAME,
+  SITE_URL,
+  absoluteUrl,
+  blogUrl,
+  breadcrumbSchema,
+  optimizedImage,
+  plainText,
+} from "../utils/seo";
 import Blog1 from "../assets/home/blog1.png";
 import AuthorImg from "../assets/home/Sarah Mitchell.png";
 import Blog4 from "../assets/home/blog4.png";
@@ -25,8 +35,6 @@ import blogService from "../api/services/blogService";
 import BlogArticleSkeleton from "../components/ui/BlogArticleSkeleton";
 
 const BlogArticle = () => {
-  const navigate = useNavigate();
-
   const { id } = useParams();
 
   // The list is only headlines, so the article is fetched on its own for the
@@ -78,13 +86,11 @@ const BlogArticle = () => {
   if (!blog) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f9fafb]">
-        <Helmet>
-          <title>Article Not Found | courses4me</title>
-          <meta
-            name="description"
-            content="The requested blog article could not be found. Explore our latest guides and news on courses4me."
-          />
-        </Helmet>
+        <Seo
+          title="Article Not Found"
+          description="The requested blog article could not be found. Explore our latest guides and news on courses4me."
+          noindex
+        />
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800">
             Article Not Found
@@ -102,32 +108,34 @@ const BlogArticle = () => {
 
   // Dynamic Metadata Fields
   const articleTitle = blog.title || "Blog Article";
-  const pageTitle = `${articleTitle} | courses4me Blog`;
-  const cleanExcerpt = (blog.excerpt || blog.summary || "")
-    .replace(/<[^>]*>?/gm, "")
-    .trim();
   const pageDescription =
-    cleanExcerpt.slice(0, 155) ||
+    plainText(blog.excerpt || blog.summary) ||
     `Read ${articleTitle} on courses4me. Get expert training insights, career advice, and industry news.`;
-  const canonicalUrl = `https://courses4me.co.uk/blog/${id}`;
+  const canonicalPath = blogUrl(blog.slug ? blog : { id });
+  const isoDate = (value) => {
+    const date = value ? new Date(value) : null;
+    return date && !Number.isNaN(date.getTime()) ? date.toISOString() : undefined;
+  };
 
   return (
     <div className="bg-[#f9fafb] min-h-screen pb-20">
-      {/* Dynamic SEO Meta Tags */}
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-
-        {/* Structured Data (BlogPosting Schema Markup) */}
-        <script type="application/ld+json">
-          {JSON.stringify({
+      <Seo
+        title={`${articleTitle} | courses4me Blog`}
+        description={pageDescription}
+        path={canonicalPath}
+        image={blog.image}
+        type="article"
+        jsonLd={[
+          {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
-            headline: articleTitle,
+            mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(canonicalPath) },
+            headline: articleTitle.slice(0, 110),
             description: pageDescription,
-            image: blog.image ? [blog.image] : undefined,
-            datePublished: blog.publishDate || undefined,
+            image: blog.image ? [blog.image] : [DEFAULT_IMAGE],
+            datePublished: isoDate(blog.publishedAt || blog.publishDate || blog.createdAt),
+            dateModified: isoDate(blog.updatedAt || blog.publishedAt || blog.publishDate),
+            articleSection: blog.category || undefined,
             author: {
               "@type": "Person",
               name: blog.author || "courses4me Team",
@@ -135,12 +143,18 @@ const BlogArticle = () => {
             },
             publisher: {
               "@type": "Organization",
-              name: "courses4me",
-              url: "https://courses4me.co.uk",
+              name: SITE_NAME,
+              url: SITE_URL,
+              logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` },
             },
-          })}
-        </script>
-      </Helmet>
+          },
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+            { name: articleTitle, path: canonicalPath },
+          ]),
+        ]}
+      />
 
       {/* ─── HERO CONTENT ─── */}
       <div className="relative bg-[#0B1D33] overflow-hidden">
@@ -223,8 +237,11 @@ const BlogArticle = () => {
         {/* Main Image */}
         <div className="w-full h-[300px] md:h-[500px] rounded-t-[32px] overflow-hidden shadow-2xl border-4 border-white">
           <img
-            src={blog?.image}
+            src={optimizedImage(blog?.image, 1200)}
             alt={blog?.title || "Blog Image"}
+            width="1000"
+            height="500"
+            fetchPriority="high"
             className="w-full h-full object-cover"
           />
         </div>
@@ -234,8 +251,8 @@ const BlogArticle = () => {
           {/* ================= TOP ACTION BAR ================= */}
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 pb-8 border-b border-gray-100 mb-12">
             {/* BACK BUTTON */}
-            <button
-              onClick={() => navigate("/blog")}
+            <Link
+              to="/blog"
               className="group inline-flex cursor-pointer items-center gap-3 self-start"
             >
               {/* ICON */}
@@ -256,7 +273,7 @@ const BlogArticle = () => {
                   All Articles
                 </p>
               </div>
-            </button>
+            </Link>
           </div>
 
           {/* Article Typography */}

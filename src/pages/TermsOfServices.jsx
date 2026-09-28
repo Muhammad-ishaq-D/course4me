@@ -1,9 +1,8 @@
 import React from "react";
 import { Shield, Lock, CreditCard, Mail } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const TermsOfServices = () => {
-  const navigate = useNavigate();
 
   return (
     <div className="bg-white min-h-screen">
@@ -286,12 +285,12 @@ const TermsOfServices = () => {
               information.
             </p>
 
-            <button
-              onClick={() => navigate("/privacy-policy")}
+            <Link
+              to="/privacy-policy"
               className="mt-5 bg-[#F15A24] text-white px-5 py-3 rounded-xl font-semibold"
             >
               View Privacy Policy
-            </button>
+            </Link>
           </div>
 
           <div>

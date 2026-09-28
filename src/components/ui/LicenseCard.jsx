@@ -7,6 +7,7 @@ import {
   Briefcase,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { licenceUrl, optimizedImage } from "../../utils/seo";
 
 const LicenseCard = ({ item, index }) => {
   return (
@@ -17,13 +18,13 @@ const LicenseCard = ({ item, index }) => {
       {/* IMAGE */}
       <div className="relative overflow-hidden">
         <img
-          src={
-            item.thumbnail ||
+          src={optimizedImage(item.thumbnail ||
             item.image ||
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop"
-          }
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop", 640)}
           alt={item.title}
           className="w-full h-[180px] object-cover group-hover:scale-105 transition duration-700"
+          loading="lazy"
+          decoding="async"
         />
 
         {/* OVERLAY */}
@@ -107,7 +108,7 @@ const LicenseCard = ({ item, index }) => {
           </div>
 
           <NavLink
-            to={`/licences/licencesdetails?id=${item._id || item.title}`}
+            to={licenceUrl(item._id || item.title, item.title)}
             className="whitespace-nowrap py-3 px-3 rounded-xl bg-[#F15A24] hover:bg-[#E14D17] text-white text-sm font-bold flex items-center gap-2 transition-all duration-300 shadow-lg shadow-[#F15A24]/20 mt-6"
           >
             View Licence

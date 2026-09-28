@@ -55,7 +55,7 @@ export default function BookingModal({ centre, onClose, onSubmit }) {
                 <div className="bg-[#F8FAFC] rounded-[24px] p-6 border border-gray-100 mt-4">
                   {/* Image */}
                   <div className="relative h-[200px] rounded-[18px] overflow-hidden mb-6">
-                    <img src={centre.image} alt={centre.city} className="w-full h-full object-cover" />
+                    <img src={centre.image} alt={centre.city} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-4 left-4">
                       <h3 className="text-white text-[20px] font-extrabold">{centre.city}</h3>

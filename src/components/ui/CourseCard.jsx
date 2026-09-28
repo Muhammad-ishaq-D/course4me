@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, TrendingUp, Calendar, Tag } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { courseUrl, optimizedImage } from "../../utils/seo";
 
 const CourseCard = ({
   id,
@@ -17,6 +18,7 @@ const CourseCard = ({
   isOnline = false,
 }) => {
   const navigate = useNavigate();
+  const detailsUrl = courseUrl(id, title);
 
   return (
     <motion.div
@@ -30,8 +32,12 @@ const CourseCard = ({
         {/* IMAGE & BADGES CONTAINER */}
         <div className="relative h-[190px] overflow-hidden bg-gray-100">
           <img
-            src={image}
+            src={optimizedImage(image, 600)}
             alt={title}
+            width="600"
+            height="190"
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
 
@@ -72,7 +78,7 @@ const CourseCard = ({
         <div className="p-5 flex flex-col justify-between">
           <div>
             <h3 className="text-[#111111] text-xl font-extrabold leading-snug mb-2 line-clamp-2 group-hover:text-[#F15A24] transition-colors duration-300">
-              {title}
+              <Link to={detailsUrl}>{title}</Link>
             </h3>
 
             <p className="text-gray-500 text-xs sm:text-sm leading-relaxed line-clamp-2 mb-4 font-medium">
@@ -116,13 +122,14 @@ const CourseCard = ({
             Book Training
           </button>
 
-          <button
-            onClick={() => navigate(`/course/${id}`)}
+          <Link
+            to={detailsUrl}
+            aria-label={`${title} course details`}
             className="w-full h-11 rounded-xl border border-gray-200 hover:border-[#111111] hover:bg-[#111111] hover:text-white text-[#111111] text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all duration-300 cursor-pointer active:scale-95"
           >
             <span>Details</span>
             <ArrowRight size={13} />
-          </button>
+          </Link>
         </div>
       </div>
     </motion.div>

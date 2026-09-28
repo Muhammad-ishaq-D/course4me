@@ -10,7 +10,8 @@ import TrainersSection from "../components/homeComponents/TrainersSection";
 import VideoTestimonials from "../components/homeComponents/VideoTestimonials";
 import StatsBar from "../components/homeComponents/StatsBar";
 
-import { Helmet } from "react-helmet-async";
+import Seo from "../components/shared/Seo";
+import { organizationSchema, websiteSchema } from "../utils/seo";
 
 export default function Home() {
    const location = useLocation();
@@ -37,16 +38,12 @@ export default function Home() {
    
   return (
     <div className="">
-      <Helmet>
-        
-        <title>courses4me | Professional Training Courses</title>
-        <meta
-          name="description"
-          content="Explore accredited courses and training certifications across the UK with Courses4me."
-        />
-        {/* Fixes Missing Canonical URL Tag */}
-        <link rel="canonical" href="https://courses4me.co.uk/" />
-      </Helmet>
+      <Seo
+        title="courses4me - SIA Security Courses, Licences & Jobs in the UK"
+        description="Book accredited SIA security courses, first aid and professional training at centres across the UK. Get your SIA licence, find security jobs and start your career with courses4me."
+        path="/"
+        jsonLd={[organizationSchema, websiteSchema]}
+      />
       
       <HeroSection />
       <StatsBar />

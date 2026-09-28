@@ -67,6 +67,8 @@ const TrainerProfile = () => {
                   src={trainer.image}
                   alt={trainer.name}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
 
                 {/* OVERLAY */}

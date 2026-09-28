@@ -3,19 +3,21 @@ import HowItWorksSection from "../components/LicenseComponents/HowItWorksSection
 import FAQSection from "../components/LicenseComponents/FAQSection";
 import ExploreAllLicences from "../components/LicenseComponents/ExploreAllLicences";
 
-import { Helmet } from "react-helmet-async";
+import Seo from "../components/shared/Seo";
+import { breadcrumbSchema } from "../utils/seo";
 
 export default function Licenses() {
   return (
     <div>
-      <Helmet>
-        <title>SIA Security Licences & Training | courses4me</title>
-        <meta
-          name="description"
-          content="Get qualified for your official SIA license. Explore Door Supervisor, CCTV Operator, and Security Guard training options."
-        />
-        <link rel="canonical" href="https://courses4me.co.uk/licences" />
-      </Helmet>
+      <Seo
+        title="SIA Licence Training & How to Apply"
+        description="Get qualified for your SIA licence. Compare Door Supervisor, CCTV Operator and Security Guard licence training, eligibility, costs and how to apply with courses4me."
+        path="/licences"
+        jsonLd={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Licences", path: "/licences" },
+        ])}
+      />
 
       <ExploreAllLicences />
       <HowItWorksSection />
