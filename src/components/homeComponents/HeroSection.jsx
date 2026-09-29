@@ -147,9 +147,9 @@ const HeroSection = () => {
                     />
                     Live Training
                   </div>
-                  <h3 className="mt-3 text-xl font-bold text-white">
+                  <p className="mt-3 text-xl font-bold text-white">
                     Professional Door <br /> Supervisor Course
-                  </h3>
+                  </p>
                 </div>
               </div>
 

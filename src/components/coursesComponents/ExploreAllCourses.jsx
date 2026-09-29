@@ -197,7 +197,7 @@ const ExploreAllCourses = () => {
               </span>
 
               <h1 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
-                Explore all courses
+                SIA Security & First Aid Courses
               </h1>
 
               <p className="text-[#141414]/60 mt-2 text-base md:text-lg leading-relaxed">
@@ -372,9 +372,9 @@ const ExploreAllCourses = () => {
                 </div>
 
                 <div className="text-left">
-                  <h3 className="text-[#141414] text-xl font-bold leading-none">
+                  <h2 className="text-[#141414] text-xl font-bold leading-none">
                     Filter Courses
-                  </h3>
+                  </h2>
 
                   <p className="text-gray-500 text-sm mt-1">
                     Categories & featured courses

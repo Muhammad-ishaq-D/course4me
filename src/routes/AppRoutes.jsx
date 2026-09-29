@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Loader from "../components/ui/Loader";
 import Seo from "../components/shared/Seo";
+import { breadcrumbSchema } from "../utils/seo";
 
 // Every page except the home page is loaded on demand, so a visitor only
 // downloads the code for the page they open.
@@ -21,6 +22,7 @@ const BookingSuccess = lazy(() => import("../pages/courses/BookingSuccess"));
 const PaymentSuccess = lazy(() => import("../pages/courses/PaymentSuccess"));
 const PaymentCancelled = lazy(() => import("../pages/courses/PaymentCancelled"));
 const BlogArticle = lazy(() => import("../pages/BlogArticle"));
+const BlogAuthor = lazy(() => import("../pages/BlogAuthor"));
 const Signin = lazy(() => import("../pages/Authentication/Signin"));
 const ResetPassword = lazy(() => import("../pages/Authentication/ResetPassword"));
 const UserDashboard = lazy(() => import("../pages/Authentication/UserDashboard"));
@@ -54,7 +56,15 @@ const Private = ({ title, children }) => (
 // given to search engines and screen readers as a hidden main heading.
 const Legal = ({ title, description, path, children }) => (
   <>
-    <Seo title={title} description={description} path={path} />
+    <Seo
+      title={title}
+      description={description}
+      path={path}
+      jsonLd={breadcrumbSchema([
+        { name: "Home", path: "/" },
+        { name: title, path },
+      ])}
+    />
     <h1 className="sr-only">{title}</h1>
     {children}
   </>
@@ -81,6 +91,7 @@ const AppRoutes = () => {
         <Route path="/licences/licencesdetails" element={<LicenseDetails />} />
         <Route path="/licences/:licenceId/:slug?" element={<LicenseDetails />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/author/:slug" element={<BlogAuthor />} />
         <Route path="/blog/:id" element={<BlogArticle />} />
         <Route path="/blog/article/:id" element={<BlogArticle />} />
         <Route path="/faqs" element={<FaqPage />} />

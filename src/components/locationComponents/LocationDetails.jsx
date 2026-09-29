@@ -8,6 +8,7 @@ import {
   breadcrumbSchema,
   courseLocationUrl,
   courseUrl,
+  isoDuration,
   optimizedImage,
 } from "../../utils/seo";
 import {
@@ -116,7 +117,11 @@ const CourseLocationView = ({ link }) => {
   const locationName = loc.name || course.title || "Training Venue";
   const city = loc.city || "UK";
   const courseTitle = course.title || "Training Course";
-  const pageTitle = `${courseTitle} in ${city} - ${locationName}`;
+  // The venue name is dropped when it only repeats the city or makes the title too long.
+  const pageTitle = [
+    locationName.toLowerCase() !== city.toLowerCase() && `${courseTitle} in ${city} - ${locationName}`,
+    `${courseTitle} in ${city}`,
+  ];
   const pageDescription = `Book ${courseTitle} at ${locationName}, ${city}. Upcoming course dates, prices, what's included and venue directions.`;
   const canonicalPath = courseLocationUrl(link._id, course.title, loc.city);
   const venue = {
@@ -131,6 +136,8 @@ const CourseLocationView = ({ link }) => {
     },
   };
   const coursePrice = link.price ?? course.pricing?.salePrice ?? course.pricing?.basePrice;
+  // A disabled course link or venue cannot be booked, so it is kept out of search.
+  const bookable = (link.status ?? "Active") === "Active" && (loc.status ?? "Active") === "Active";
 
   return (
     <div className="bg-[#F4F7FB] min-h-screen">
@@ -138,7 +145,9 @@ const CourseLocationView = ({ link }) => {
         title={pageTitle}
         description={pageDescription}
         path={canonicalPath}
+        redirectToCanonical
         image={course.thumbnail}
+        noindex={!bookable}
         jsonLd={[
           {
             "@context": "https://schema.org",
@@ -146,6 +155,7 @@ const CourseLocationView = ({ link }) => {
             name: `${courseTitle} - ${city}`,
             description: pageDescription,
             url: absoluteUrl(canonicalPath),
+            inLanguage: "en-GB",
             provider: { "@type": "Organization", name: SITE_NAME, sameAs: SITE_URL },
             offers: coursePrice
               ? {
@@ -160,6 +170,7 @@ const CourseLocationView = ({ link }) => {
             hasCourseInstance: (upcomingDates.length ? upcomingDates.slice(0, 5) : [null]).map((d) => ({
               "@type": "CourseInstance",
               courseMode: "Onsite",
+              courseWorkload: isoDuration(course.duration, d?.startDate, d?.endDate || d?.startDate),
               location: venue,
               startDate: d?.startDate || undefined,
               endDate: d?.endDate || undefined,
@@ -222,7 +233,15 @@ const CourseLocationView = ({ link }) => {
                 )}
               </div>
 
+              {/* The main heading says what the page is: this course in this city, at this venue */}
               <h1 className="text-4xl md:text-5xl xl:text-[56px] font-black text-white leading-[1.05] max-w-3xl">
+                {course.title && (
+                  <span className="block text-sm md:text-base font-semibold text-orange-300 tracking-wide mb-3 leading-snug">
+                    {course.title}
+                    {loc.city ? ` in ${loc.city}` : ""}
+                    <span className="sr-only"> at </span>
+                  </span>
+                )}
                 {loc.name || "Training Centre"}
               </h1>
 

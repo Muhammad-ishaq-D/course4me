@@ -162,7 +162,7 @@ const LocationSearch = () => {
               {/* Left */}
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 leading-tight">
-                  Find Courses Near You
+                  Training Centres Near You
                 </h1>
                 <p className="text-lg text-gray-500 mt-1 max-w-xl leading-relaxed">
                   Search by town, city, or postcode to discover available
@@ -437,10 +437,9 @@ const LocationSearch = () => {
                               </button>
                               <Link
                                 to={courseLocationUrl(link._id, course.title, loc.city)}
-                                aria-label={`${course.title || "Course"} in ${loc.city || "this location"} details`}
                                 className="py-3 md:px-9 px-6 rounded-xl cursor-pointer border border-gray-200  text-sm font-semibold flex items-center gap-1.5 "
                               >
-                                Details
+                                Details<span className="sr-only"> for {course.title} in {loc.city}</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
                               </Link>
                             </div>

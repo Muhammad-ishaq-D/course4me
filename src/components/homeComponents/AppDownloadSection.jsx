@@ -30,7 +30,7 @@ const AppPromotionSection = () => {
           {/* RIGHT: Text Content */}
           <div className="flex-1 text-white">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-[#FF5421] text-white text-[10px] font-bold uppercase tracking-widest py-2 px-4 rounded-lg mb-6 shadow-lg">
+            <div className="inline-flex items-center gap-2 bg-[#FF5421] text-white text-xs font-bold uppercase tracking-widest py-2 px-4 rounded-lg mb-6 shadow-lg">
               <Smartphone size={14} />
               UK's #1 Security App
             </div>
@@ -48,8 +48,7 @@ const AppPromotionSection = () => {
             {/* Store buttons */}
             <div className="flex flex-wrap items-center gap-5 mb-12">
               {/* APP STORE */}
-              <a
-                href="#"
+              <div
                 className=" group bg-white hover:bg-[#F9FAFB] px-9 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] transition-all duration-300 flex items-center gap-4"
               >
                 <img
@@ -61,7 +60,7 @@ const AppPromotionSection = () => {
                 />
 
                 <div className="flex flex-col leading-tight">
-                  <span className="text-[11px] text-gray-500 font-medium">
+                  <span className="text-xs text-gray-500 font-medium">
                     Download on the
                   </span>
 
@@ -69,11 +68,10 @@ const AppPromotionSection = () => {
                     App Store
                   </span>
                 </div>
-              </a>
+              </div>
 
               {/* GOOGLE PLAY */}
-              <a
-                href="#"
+              <div
                 className=" group bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 px-9 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] transition-all duration-300 flex items-center gap-4"
               >
                 <img
@@ -85,7 +83,7 @@ const AppPromotionSection = () => {
                 />
 
                 <div className="flex flex-col leading-tight">
-                  <span className="text-[11px] text-gray-400 font-medium">
+                  <span className="text-xs text-gray-400 font-medium">
                     GET IT ON
                   </span>
 
@@ -93,7 +91,7 @@ const AppPromotionSection = () => {
                     Google Play
                   </span>
                 </div>
-              </a>
+              </div>
             </div>
           </div>
         </div>

@@ -44,9 +44,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">2.1</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Personal Information
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     We may collect personal details including your full name,
@@ -60,9 +60,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">2.2</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Course & Booking Information
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     This includes selected courses, training locations, booking
@@ -76,9 +76,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">2.3</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Payment Information
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     When making payments through course4me, transaction
@@ -94,9 +94,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">2.4</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Technical Information
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     We automatically collect technical information such as your
@@ -111,9 +111,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">2.5</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Communications & Support
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     If you contact our support team, submit enquiries, or
@@ -143,9 +143,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">3.1</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Process Course Bookings
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     To register you for selected courses, confirm bookings, and
@@ -158,9 +158,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">3.2</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Provide Customer Support
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     To respond to enquiries, resolve issues, provide assistance,
@@ -173,9 +173,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">3.3</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Send Booking Updates
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     To send booking confirmations, reminders, schedule changes,
@@ -189,9 +189,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">3.4</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Improve User Experience
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     To analyse website usage, improve navigation, enhance search
@@ -204,9 +204,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">3.5</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Prevent Fraud & Security Risks
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     To detect suspicious activity, protect accounts, prevent
@@ -220,9 +220,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">3.6</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Meet Legal Requirements
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     To comply with applicable laws, regulations, government
@@ -280,9 +280,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">5.1</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Booking Confirmation
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     Training providers may receive your booking information to
@@ -296,9 +296,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">5.2</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Certification & Qualification Processing
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     Where applicable, training providers may use your details to
@@ -312,9 +312,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">5.3</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Training & Customer Support
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     Providers may contact you regarding course schedules, venue
@@ -328,9 +328,9 @@ const PrivacyandPolicy = () => {
                 <span className="font-bold text-[#F15A24] shrink-0">5.4</span>
 
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Limited & Necessary Sharing
-                  </h4>
+                  </h3>
 
                   <p className="text-gray-600 mt-1 leading-7">
                     course4me only shares information that is reasonably

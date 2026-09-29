@@ -39,9 +39,9 @@ export default function CookieConsent() {
             </div>
 
             <div className="flex-1">
-              <h3 className="text-[16px] font-bold text-[#111827]">
+              <p className="text-[16px] font-bold text-[#111827]">
                 Cookie Preferences
-              </h3>
+              </p>
 
               <p className="mt-1 text-xs md:text-sm text-gray-600 leading-6">
                 We use cookies to improve your experience and analyze website

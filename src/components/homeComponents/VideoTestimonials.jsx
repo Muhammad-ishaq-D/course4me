@@ -155,7 +155,7 @@ function VideoTestimonials() {
 
                     {/* TOP BADGES */}
                     <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10 pointer-events-none">
-                      <span className="bg-[#00A3FF] text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
+                      <span className="bg-[#00A3FF] text-white text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
                         {t.role}
                       </span>
                       <span className="bg-black/60 backdrop-blur-md text-white text-xs font-semibold px-2.5 py-1 rounded-full border border-white/10">
@@ -193,9 +193,9 @@ function VideoTestimonials() {
                           : "opacity-100"
                       }`}
                     >
-                      <h4 className="text-lg font-bold text-white leading-tight">
+                      <h3 className="text-lg font-bold text-white leading-tight">
                         {t.name}
-                      </h4>
+                      </h3>
                       <p className="text-xs text-gray-300 font-medium mt-0.5">
                         {t.job}
                       </p>

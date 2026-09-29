@@ -17,9 +17,9 @@ const ExploreSidebar = ({
             FILTERS
         ===================================================== */}
         <div className="pb-6 border-b border-gray-100">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">
             Filters
-          </h3>
+          </h2>
 
           <button
             onClick={() =>
@@ -48,7 +48,7 @@ const ExploreSidebar = ({
 
               {/* TEXT */}
               <div className="text-left">
-                <h4 className="font-semibold text-sm">Featured Only</h4>
+                <h3 className="font-semibold text-sm">Featured Only</h3>
 
                 <p
                   className={`text-sm ${
@@ -81,9 +81,9 @@ const ExploreSidebar = ({
         <div className="pt-3">
           {/* HEADER */}
           <div className="flex items-center  justify-between mb-5">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400">
               Categories
-            </h3>
+            </h2>
 
             {/* <div className="w-9 h-9 rounded-xl bg-[#F15A24]/10 flex items-center justify-center">
               <Grid3X3 size={18} className="text-[#F15A24]" />

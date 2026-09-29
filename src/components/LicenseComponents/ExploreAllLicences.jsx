@@ -187,7 +187,7 @@ const ExploreAllLicences = () => {
               </span>
 
               <h1 className="text-3xl md:text-5xl font-bold text-[#141414] leading-tight">
-                Explore all licences
+                SIA Licence Training
               </h1>
 
               <p className="text-[#141414]/60 mt-2 text-base md:text-lg leading-relaxed">
@@ -300,9 +300,9 @@ const ExploreAllLicences = () => {
                 </div>
 
                 <div className="text-left">
-                  <h3 className="text-[#141414] text-xl font-bold leading-none">
+                  <h2 className="text-[#141414] text-xl font-bold leading-none">
                     Filter Licences
-                  </h3>
+                  </h2>
 
                   <p className="text-gray-500 text-sm mt-1">
                     Categories & featured licences

@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { NavLink, useSearchParams, useNavigate, useParams } from "react-router-dom";
 import Seo from "../components/shared/Seo";
-import { absoluteUrl, breadcrumbSchema, licenceUrl, plainText } from "../utils/seo";
+import { absoluteUrl, breadcrumbSchema, describe, licenceUrl } from "../utils/seo";
 import HeroSection from "../components/licenseDetails/HeroSection";
 import licenseService from "../api/services/licenseService";
 import Loader from "../components/ui/Loader";
@@ -185,17 +185,23 @@ const LicenseDetails = () => {
 
   // Generate dynamic SEO metadata fields
   const licenceTitle = license?.title || license?.name || "SIA Licence Details";
-  const pageDescription =
-    plainText(license?.subtitle || license?.fullDescription) ||
-    `Get qualified and certified with courses4me. Learn how to apply for your ${license?.title || "SIA licence"} today.`;
+  const pageDescription = describe(
+    [license?.subtitle, license?.fullDescription],
+    `How to get your ${licenceTitle}: who is eligible, the training you need, costs and how to apply, with courses4me.`,
+  );
   const canonicalPath = licenceUrl(licenseId, license?.title || license?.name);
 
   return (
     <div className="bg-[#F6F8FB] ">
       <Seo
-        title={license ? `${licenceTitle} - Training & How to Apply` : "Licence Not Found"}
+        title={
+          license
+            ? [`${licenceTitle} - Training & How to Apply`, `${licenceTitle} Training`, licenceTitle]
+            : "Licence Not Found"
+        }
         description={pageDescription}
         path={canonicalPath}
+        redirectToCanonical
         image={license?.thumbnail || license?.image}
         noindex={!license}
         jsonLd={
@@ -233,10 +239,10 @@ const LicenseDetails = () => {
       <section className="py-14 lg:py-20 px-4 md:px-8 lg:px-16">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[330px_minmax(0,1fr)] gap-6 items-start">
           {/* ===================SIDEBAR========================= */}
-          <div className="hidden lg:block sticky top-0 self-start">
+          <div className="lg:sticky lg:top-0 self-start">
             <div className="space-y-2">
               {/* ===============NAVIGATION========================= */}
-              <div className="bg-white border border-[#EEF2F6] rounded-[28px] p-4 shadow-[0_10px_35px_rgba(0,0,0,0.04)]">
+              <div className="hidden lg:block bg-white border border-[#EEF2F6] rounded-[28px] p-4 shadow-[0_10px_35px_rgba(0,0,0,0.04)]">
                 <h3 className="text-xs uppercase tracking-[0.2em] text-[#98A2B3] font-bold mb-2 px-2">
                   Licence Details
                 </h3>
@@ -524,9 +530,9 @@ const LicenseDetails = () => {
                       className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[#E4E7EC] rounded-2xl px-5 py-4 bg-[#FCFCFD] hover:border-[#F15A24]/30 hover:shadow-md transition-all duration-300"
                     >
                       <div className="flex-1">
-                        <h4 className="font-bold text-[#101828] text-sm md:text-base group-hover:text-[#F15A24] transition-colors duration-200">
+                        <h3 className="font-bold text-[#101828] text-sm md:text-base group-hover:text-[#F15A24] transition-colors duration-200">
                           {course.title}
-                        </h4>
+                        </h3>
                         <div className="flex flex-wrap items-center gap-3 mt-2">
                           {course.duration && (
                             <span className="flex items-center gap-1.5 text-sm md:text-base text-[#667085]">

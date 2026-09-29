@@ -208,13 +208,13 @@ const FaqPage = () => {
                     ?
                   </div>
 
-                  <h3
+                  <h2
                     className={`text-base md:text-lg md:font-semibold transition-colors ${
                       openFaq === idx ? "text-[#F15A24]" : "text-[#1C1C1C]"
                     }`}
                   >
                     {faq.question}
-                  </h3>
+                  </h2>
                 </div>
 
                 <ChevronDown

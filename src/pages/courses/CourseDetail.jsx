@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import NotFound from "../NotFound";
 import Seo from "../../components/shared/Seo";
 import {
   SITE_NAME,
@@ -7,11 +8,13 @@ import {
   absoluteUrl,
   breadcrumbSchema,
   courseUrl,
-  plainText,
+  describe,
+  isoDuration,
 } from "../../utils/seo";
 import CourseHero from "../../components/coursesComponents/details/CourseHero";
 import CourseMainContent from "../../components/coursesComponents/details/CourseMainContent";
 import RelatedCourses from "../../components/coursesComponents/details/RelatedCourses";
+import CourseLocations from "../../components/coursesComponents/details/CourseLocations";
 import courseService from "../../api/services/courseService";
 import Loader from "../../components/ui/Loader";
 
@@ -49,20 +52,24 @@ const CourseDetail = () => {
   }
 
   if (!course) {
-    return <Navigate to="/courses" replace />;
+    // A removed or mistyped course is a missing page, not a redirect to the list.
+    return (
+      <>
+        <Seo title="Course Not Found" noindex />
+        <NotFound />
+      </>
+    );
   }
 
   // Fallback metadata fields if any property is missing from the API
   const courseTitle = course.title || course.name || "Course Details";
-  const pageDescription =
-    plainText(course.subtitle || course.description || course.fullDescription || course.summary) ||
-    `Enrol in ${courseTitle} with courses4me and gain an industry-recognised qualification at training centres across the UK.`;
+  const pageDescription = describe(
+    [course.subtitle, course.description, course.fullDescription, course.summary],
+    `Book ${courseTitle} with courses4me at accredited training centres across the UK. Compare course dates and prices and book online.`,
+  );
   const canonicalPath = courseUrl(courseId, courseTitle);
   const price = course.pricing?.salePrice || course.pricing?.basePrice;
-  const workload = String(course.duration || "").match(/(\d+(?:\.\d+)?)\s*(hour|hr|day|week)/i);
-  const workloadIso = workload
-    ? `P${/^h/i.test(workload[2]) ? "T" : ""}${workload[1]}${/^h/i.test(workload[2]) ? "H" : workload[2][0].toUpperCase()}`
-    : undefined;
+  const workloadIso = isoDuration(course.duration);
 
   const courseSchema = {
     "@context": "https://schema.org",
@@ -70,7 +77,8 @@ const CourseDetail = () => {
     name: courseTitle,
     description: pageDescription,
     url: absoluteUrl(canonicalPath),
-    image: course.thumbnail ? [course.thumbnail] : undefined,
+    // Only a real URL is usable here; the API may hold the image as base64 data.
+    image: /^https?:\/\//.test(course.thumbnail || "") ? [course.thumbnail] : undefined,
     inLanguage: "en-GB",
     provider: { "@type": "Organization", name: SITE_NAME, sameAs: SITE_URL },
     offers: price
@@ -97,6 +105,7 @@ const CourseDetail = () => {
         title={/course|training|award/i.test(courseTitle) ? courseTitle : `${courseTitle} Course`}
         description={pageDescription}
         path={canonicalPath}
+        redirectToCanonical
         image={course.thumbnail}
         jsonLd={[
           courseSchema,
@@ -113,6 +122,7 @@ const CourseDetail = () => {
       </div>
 
       <CourseMainContent course={course} />
+      <CourseLocations course={course} courseId={courseId} />
       <RelatedCourses />
     </div>
   );

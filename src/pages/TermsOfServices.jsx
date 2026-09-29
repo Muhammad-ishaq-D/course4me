@@ -33,9 +33,9 @@ const TermsOfServices = () => {
               <li className="flex gap-4">
                 <span className="font-bold text-[#F15A24]">2.1</span>
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Age Requirement
-                  </h4>
+                  </h3>
                   <p className="text-gray-600 mt-1 leading-7">
                     You must be at least 18 years old or have permission from a
                     parent or guardian to use course4me.
@@ -46,9 +46,9 @@ const TermsOfServices = () => {
               <li className="flex gap-4">
                 <span className="font-bold text-[#F15A24]">2.2</span>
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Accurate Information
-                  </h4>
+                  </h3>
                   <p className="text-gray-600 mt-1 leading-7">
                     You agree to provide accurate and complete information when
                     creating an account or booking courses.

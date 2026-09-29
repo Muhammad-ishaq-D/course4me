@@ -19,10 +19,11 @@ import {
   SITE_NAME,
   SITE_URL,
   absoluteUrl,
+  authorUrl,
   blogUrl,
   breadcrumbSchema,
+  describe,
   optimizedImage,
-  plainText,
 } from "../utils/seo";
 import Blog1 from "../assets/home/blog1.png";
 import AuthorImg from "../assets/home/Sarah Mitchell.png";
@@ -108,9 +109,10 @@ const BlogArticle = () => {
 
   // Dynamic Metadata Fields
   const articleTitle = blog.title || "Blog Article";
-  const pageDescription =
-    plainText(blog.excerpt || blog.summary) ||
-    `Read ${articleTitle} on courses4me. Get expert training insights, career advice, and industry news.`;
+  const pageDescription = describe(
+    [blog.excerpt, blog.summary],
+    `Read ${articleTitle} on the courses4me blog: career advice, SIA training guides and security industry news.`,
+  );
   const canonicalPath = blogUrl(blog.slug ? blog : { id });
   const isoDate = (value) => {
     const date = value ? new Date(value) : null;
@@ -120,9 +122,10 @@ const BlogArticle = () => {
   return (
     <div className="bg-[#f9fafb] min-h-screen pb-20">
       <Seo
-        title={`${articleTitle} | courses4me Blog`}
+        title={articleTitle}
         description={pageDescription}
         path={canonicalPath}
+        redirectToCanonical
         image={blog.image}
         type="article"
         jsonLd={[
@@ -140,12 +143,13 @@ const BlogArticle = () => {
               "@type": "Person",
               name: blog.author || "courses4me Team",
               jobTitle: blog.role || undefined,
+              url: blog.author ? absoluteUrl(authorUrl(blog.author)) : undefined,
             },
             publisher: {
               "@type": "Organization",
               name: SITE_NAME,
               url: SITE_URL,
-              logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` },
+              logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png`, width: 512, height: 512 },
             },
           },
           breadcrumbSchema([
@@ -208,7 +212,13 @@ const BlogArticle = () => {
                 className="text-black bg-orange-600 p-1 rounded-full"
               />
               <div>
-                <h4 className="text-white font-bold">{blog?.author}</h4>
+                <p className="text-white font-bold">
+                  {blog?.author ? (
+                    <Link to={authorUrl(blog.author)} className="hover:text-[#F15A24] transition-colors">
+                      {blog.author}
+                    </Link>
+                  ) : null}
+                </p>
 
                 <p className="text-gray-400 text-sm">{blog?.role}</p>
               </div>

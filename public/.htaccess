@@ -1,10 +1,34 @@
 Options -MultiViews
 DirectoryIndex index.html
 
+# Any URL that is not a page of the app gets a real 404 status, but still shows
+# the app's own "Page not found" screen.
+ErrorDocument 404 /index.html
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
+  # ── 1. One address per page ─────────────────────────────────────────────
+  # www.courses4me.co.uk -> courses4me.co.uk (http -> https is done by the host)
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # /index.html -> /
+  RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+  RewriteRule ^index\.html$ / [R=301,L]
+
+  # /courses/ -> /courses (real folders such as /assets/ are left alone)
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # ── 2. Old page addresses -> current ones ───────────────────────────────
+  # Filled in by `npm run build:seo` (scripts/prerender.mjs), which knows the
+  # current address of every course, licence, article, career and location.
+  # BEGIN GENERATED REDIRECTS
+  # END GENERATED REDIRECTS
+
+  # ── 3. Pre-rendered pages for crawlers ──────────────────────────────────
   # Search engines and link-preview bots get the pre-rendered HTML of a page
   # when `npm run build:seo` produced one (dist/prerender/<path>/index.html).
   # Everyone else, and any page without a snapshot, gets the normal app.
@@ -17,11 +41,25 @@ DirectoryIndex index.html
   RewriteCond %{DOCUMENT_ROOT}/prerender/$1/index.html -f
   RewriteRule ^(.+?)/?$ /prerender/$1/index.html [L]
 
-  # Single-page app: anything that is not a real file or folder is the app
+  # ── 4. The app's pages ──────────────────────────────────────────────────
+  # Keep in step with src/routes/AppRoutes.jsx: a route missing here still
+  # works for visitors, but is sent with a 404 status, so search engines drop it.
   RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^(courses|faqs|blog|careers|licences|locations|quicksearch|signin|reset-password|trainer-profile|dashboard|privacy-policy|terms-of-services|cookie-policy)$ /index.html [L]
+  RewriteRule ^(booking-success|booking-cancelled|payment-success|payment-cancelled)$ /index.html [L]
+  RewriteRule ^booking/(course|results|packages|checkout)$ /index.html [L]
+  RewriteRule ^course/[^/]+(/[^/]+)?$ /index.html [L]
+  RewriteRule ^licences/[^/]+(/[^/]+)?$ /index.html [L]
+  RewriteRule ^blog/(author/[^/]+|article/[^/]+|[^/]+)$ /index.html [L]
+  RewriteRule ^careers/(careerdetails/[^/]+|[^/]+(/[^/]+)?)$ /index.html [L]
+  RewriteRule ^locations/locationdetails(/[^/]+(/[^/]+)?)?$ /index.html [L]
+  RewriteRule ^apply-job/[^/]+$ /index.html [L]
+
+  # ── 5. Anything else is not a page: 404 (ErrorDocument above) ───────────
 </IfModule>
 
 <IfModule mod_headers.c>

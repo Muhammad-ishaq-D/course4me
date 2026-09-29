@@ -83,7 +83,7 @@ const CareerCards = ({ filteredCareers }) => {
                 to={careerUrl(career.id, career.title)}
                 className="inline-flex items-center gap-2 text-[#F8510C] text-base font-bold hover:gap-3 transition-all"
               >
-                Details
+                Details<span className="sr-only"> about {career.title} careers</span>
                 <ArrowRight className="w-4 h-4" />
               </NavLink>
             </div>

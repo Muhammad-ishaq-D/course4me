@@ -190,6 +190,7 @@ listOf(courseLocations).forEach((l) => (l._id ?? l.id) != null && enqueue(`/loca
 console.log(`  ${queue.length} pages queued before crawling links`);
 
 const sitemap = new Map(); // canonical URL -> true
+const redirects = new Map(); // old path the app moved away from -> canonical path
 const failures = [];
 let rendered = 0;
 
@@ -275,9 +276,17 @@ async function renderPage(route) {
       if (url.origin === origin || url.origin === SITE_URL) enqueue(url.pathname);
     }
 
-    // A redirect inside the app (e.g. unknown course -> /courses) is not a page.
-    if (normalise(info.path) !== route) return;
     if (/noindex/i.test(info.robots)) return;
+    const canonical = (info.canonical || SITE_URL + route).replace(origin, SITE_URL);
+    const canonicalPath = normalise(new URL(canonical).pathname);
+    const finalPath = normalise(info.path);
+    // Detail pages move an old address (e.g. /course/16) to their canonical one.
+    // Anything that ends up somewhere else is not this page.
+    if (finalPath !== route && finalPath !== canonicalPath) return;
+    if (finalPath !== route) {
+      redirects.set(route, canonicalPath);
+      if (sitemap.has(canonical)) return; // canonical page already saved
+    }
 
     const html = await page.evaluate(() => {
       document.querySelectorAll("iframe[src*='google.com/maps']").forEach((f) => f.removeAttribute("src"));
@@ -293,11 +302,8 @@ async function renderPage(route) {
       return "<!doctype html>\n" + document.documentElement.outerHTML;
     });
 
-    // Save under the visited path and, if different, the canonical path, since
-    // crawlers request the canonical one.
-    const canonical = (info.canonical || SITE_URL + route).replace(origin, SITE_URL);
-    const canonicalPath = normalise(new URL(canonical).pathname);
-    for (const p of new Set([route, canonicalPath])) {
+    // Saved under the canonical path, which is the one crawlers are sent to.
+    for (const p of new Set([canonicalPath])) {
       const file = p === "/" ? path.join(OUT, "index.html") : path.join(OUT, ...p.slice(1).split("/"), "index.html");
       fs.mkdirSync(path.dirname(file), { recursive: true });
       fs.writeFileSync(file, html.replaceAll(origin, SITE_URL));
@@ -382,6 +388,55 @@ const xml = [
   "",
 ].join("\n");
 fs.writeFileSync(path.join(DIST, "sitemap.xml"), xml);
+
+// 301s from every old address shape to the current page, written into
+// dist/.htaccess so servers and crawlers never see the old URLs as pages.
+const moved = new Map(redirects); // old path -> new path
+const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const queryRedirects = []; // [old path, id, new path] for ?id= addresses
+for (const u of urls) {
+  const p = new URL(u).pathname;
+  let m;
+  if ((m = p.match(/^\/course\/([^/]+)\/[^/]+$/))) moved.set(`/course/${m[1]}`, p);
+  if ((m = p.match(/^\/licences\/([^/]+)\/[^/]+$/))) {
+    moved.set(`/licences/${m[1]}`, p);
+    queryRedirects.push(["/licences/licencesdetails", m[1], p]);
+  }
+  if ((m = p.match(/^\/careers\/([^/]+)\/[^/]+$/))) {
+    moved.set(`/careers/${m[1]}`, p);
+    moved.set(`/careers/careerdetails/${m[1]}`, p);
+  }
+  if ((m = p.match(/^\/locations\/locationdetails\/([^/]+)\/[^/]+$/))) moved.set(`/locations/locationdetails/${m[1]}`, p);
+}
+for (const b of listOf(blogs)) {
+  const target = b.slug ? `/blog/${b.slug}` : null;
+  if (!target || !sitemap.has(SITE_URL + target)) continue;
+  for (const id of [b.id, b._id].filter((x) => x != null)) {
+    moved.set(`/blog/article/${id}`, target);
+    moved.set(`/blog/${id}`, target);
+  }
+}
+for (const [from, to] of moved) if (from === to) moved.delete(from);
+
+const rules = [
+  ...[...moved].sort().map(([from, to]) => `  RewriteRule ^${esc(from.slice(1))}$ ${encodeURI(to)} [R=301,L]`),
+  ...queryRedirects.map(
+    ([from, id, to]) =>
+      `  RewriteCond %{QUERY_STRING} (^|&)id=${esc(String(id))}(&|$)\n  RewriteRule ^${esc(from.slice(1))}$ ${encodeURI(to)}? [R=301,L]`
+  ),
+];
+const htaccessPath = path.join(DIST, ".htaccess");
+const htaccess = fs.readFileSync(htaccessPath, "utf8");
+const START = "# BEGIN GENERATED REDIRECTS";
+const END = "# END GENERATED REDIRECTS";
+if (htaccess.includes(START) && htaccess.includes(END)) {
+  const before = htaccess.slice(0, htaccess.indexOf(START) + START.length);
+  const after = htaccess.slice(htaccess.indexOf(END));
+  fs.writeFileSync(htaccessPath, `${before}\n${rules.join("\n")}\n  ${after}`);
+  console.log(`${rules.length} old-address redirects written to dist/.htaccess`);
+} else {
+  console.log("dist/.htaccess has no GENERATED REDIRECTS markers; redirects not written");
+}
 
 console.log(`\nPre-rendered ${rendered} pages into dist/prerender, ${urls.length} URLs in dist/sitemap.xml`);
 if (failures.length) {
