@@ -23,6 +23,14 @@ ErrorDocument 404 /index.html
   RewriteRule ^(.+)/$ /$1 [R=301,L]
 
   # ── 2. Old page addresses -> current ones ───────────────────────────────
+  # Unpublished duplicates -> the page that replaces them (2026-09-30)
+  RewriteRule ^blog/(building-an-effective-security-team|6|article/6)$ /blog/building-an-effective-security-team-2 [R=301,L]
+  RewriteRule ^blog/(how-to-become-a-door-supervisor-2026-2|14|article/14)$ /blog/how-to-become-a-door-supervisor-2026 [R=301,L]
+  RewriteRule ^licences/21(/[^/]*)?$ /licences/18/sia-door-supervisor-licence [R=301,L]
+  RewriteRule ^blog/author/marcus-thompson$ /blog/author/mark-thompson [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)id=21(&|$)
+  RewriteRule ^licences/licencesdetails$ /licences/18/sia-door-supervisor-licence? [R=301,L]
+
   # Filled in by `npm run build:seo` (scripts/prerender.mjs), which knows the
   # current address of every course, licence, article, career and location.
   # BEGIN GENERATED REDIRECTS

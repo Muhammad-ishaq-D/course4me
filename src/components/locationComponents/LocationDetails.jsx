@@ -155,6 +155,7 @@ const CourseLocationView = ({ link }) => {
             name: `${courseTitle} - ${city}`,
             description: pageDescription,
             url: absoluteUrl(canonicalPath),
+            image: /^https?:\/\//.test(course.thumbnail || "") ? [course.thumbnail] : undefined,
             inLanguage: "en-GB",
             provider: { "@type": "Organization", name: SITE_NAME, sameAs: SITE_URL },
             offers: coursePrice

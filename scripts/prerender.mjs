@@ -418,8 +418,20 @@ for (const b of listOf(blogs)) {
 }
 for (const [from, to] of moved) if (from === to) moved.delete(from);
 
+// Any other slug after a known id (a renamed course, a venue whose city changed)
+// goes to the current one. /course/<id>/book is a real page and is left alone.
+const staleSlugs = [];
+for (const u of urls) {
+  const p = new URL(u).pathname;
+  const m = p.match(/^\/(course|licences|careers|locations\/locationdetails)\/([^/]+)\/([^/]+)$/);
+  if (!m) continue;
+  const keep = m[1] === "course" ? `${esc(m[3])}|book` : esc(m[3]);
+  staleSlugs.push(`  RewriteRule ^${esc(m[1])}/${esc(m[2])}/(?!(?:${keep})$)[^/]+$ ${encodeURI(p)} [R=301,L]`);
+}
+
 const rules = [
   ...[...moved].sort().map(([from, to]) => `  RewriteRule ^${esc(from.slice(1))}$ ${encodeURI(to)} [R=301,L]`),
+  ...staleSlugs,
   ...queryRedirects.map(
     ([from, id, to]) =>
       `  RewriteCond %{QUERY_STRING} (^|&)id=${esc(String(id))}(&|$)\n  RewriteRule ^${esc(from.slice(1))}$ ${encodeURI(to)}? [R=301,L]`

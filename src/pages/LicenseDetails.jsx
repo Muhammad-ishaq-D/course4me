@@ -183,6 +183,17 @@ const LicenseDetails = () => {
     );
   }
 
+  const trainingPrice = license?.pricing?.salePrice || license?.pricing?.basePrice;
+  const summary = [
+    license?.duration && { label: "Duration", value: license.duration, icon: <Clock3 size={18} /> },
+    license?.valid && { label: "Validity", value: license.valid, icon: <Shield size={18} /> },
+    trainingPrice && {
+      label: "Training From",
+      value: `£${trainingPrice}`,
+      icon: <span className="text-[18px] font-semibold">£</span>,
+    },
+  ].filter(Boolean);
+
   // Generate dynamic SEO metadata fields
   const licenceTitle = license?.title || license?.name || "SIA Licence Details";
   const pageDescription = describe(
@@ -280,56 +291,30 @@ const LicenseDetails = () => {
               </div>
 
               {/* =====================QUICK SUMMARY CARD=================== */}
-              <div className="bg-white border border-[#EEF2F6] rounded-[28px] p-5 shadow-[0_10px_35px_rgba(0,0,0,0.04)]">
-                {/* TITLE */}
-                <h3 className="text-xs uppercase tracking-[0.2em] text-[#98A2B3] font-bold mb-3 ">
-                  Quick Summary
-                </h3>
+              {/* Only facts the licence actually has; no made-up defaults. */}
+              {summary.length > 0 && (
+                <div className="bg-white border border-[#EEF2F6] rounded-[28px] p-5 shadow-[0_10px_35px_rgba(0,0,0,0.04)]">
+                  {/* TITLE */}
+                  <h3 className="text-xs uppercase tracking-[0.2em] text-[#98A2B3] font-bold mb-3 ">
+                    Quick Summary
+                  </h3>
 
-                {/* DETAILS */}
-                <div className="space-y-2">
-                  {/* ITEM */}
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3 text-[#667085]">
-                      <Clock3 size={18} />
+                  {/* DETAILS */}
+                  <div className="space-y-2">
+                    {summary.map(({ label, value, icon }) => (
+                      <div key={label} className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3 text-[#667085]">
+                          {icon}
 
-                      <span className="text-base">Duration</span>
-                    </div>
+                          <span className="text-base">{label}</span>
+                        </div>
 
-                    <span className="font-bold text-[#101828] text-base">
-                      {license?.duration || "6 days"}
-                    </span>
-                  </div>
-
-                  {/* ITEM */}
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3 text-[#667085]">
-                      <Shield size={18} />
-
-                      <span className="text-base">Validity</span>
-                    </div>
-
-                    <span className="font-bold text-[#101828] text-base">
-                      {license?.valid || "3 years"}
-                    </span>
-                  </div>
-
-                  {/* ITEM */}
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3 text-[#667085]">
-                      <span className="text-[18px] font-semibold">£</span>
-
-                      <span className="text-base">Training From</span>
-                    </div>
-
-                    <span className="font-bold text-[#101828] text-base">
-                      {license?.pricing && typeof license.pricing === "object"
-                        ? `£${license.pricing.salePrice || license.pricing.basePrice}`
-                        : "£219"}
-                    </span>
+                        <span className="font-bold text-[#101828] text-base">{value}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -419,16 +404,16 @@ const LicenseDetails = () => {
                   {section.modules && (
                     <div className="border border-[#E4E7EC] rounded-[24px] p-5 bg-[#FCFCFD]">
                       {/* DURATION */}
-                      <div className="flex items-center gap-2 text-[#667085] mb-5">
-                        <Clock3 size={18} />
+                      {license?.duration && (
+                        <div className="flex items-center gap-2 text-[#667085] mb-5">
+                          <Clock3 size={18} />
 
-                        <p className="text-base">
-                          Course duration:
-                          <span className="font-bold text-[#101828] ml-2">
-                            {license?.duration || "6 days (approx. 54 hours)"}
-                          </span>
-                        </p>
-                      </div>
+                          <p className="text-base">
+                            Course duration:
+                            <span className="font-bold text-[#101828] ml-2">{license.duration}</span>
+                          </p>
+                        </div>
+                      )}
 
                       {/* MODULE GRID */}
                       <div className="grid md:grid-cols-2 gap-3">
