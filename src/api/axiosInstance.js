@@ -19,11 +19,19 @@ axiosInstance.interceptors.request.use(
     }
 );
 
+// Forms whose 401 means "wrong details", not "session expired": the page
+// shows the message itself, so no logout or reload.
+const AUTH_FORM_ENDPOINTS = ['/auth/login', '/auth/register', '/auth/google', '/auth/check-email', '/auth/update-password'];
+
 // Response interceptor to handle auth errors (401, 403)
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401 || (error.response?.status === 403 && error.response?.data?.message?.includes('account has been'))) {
+        const url = error.config?.url || '';
+        const isAuthForm = AUTH_FORM_ENDPOINTS.some((path) => url.includes(path));
+        const hadToken = Boolean(error.config?.headers?.Authorization);
+
+        if (!isAuthForm && hadToken && (error.response?.status === 401 || (error.response?.status === 403 && error.response?.data?.message?.includes('account has been')))) {
             // Log out user if suspended or token expired
             localStorage.removeItem('token');
             localStorage.removeItem('user');
