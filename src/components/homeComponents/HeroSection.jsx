@@ -25,7 +25,6 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 
 /* ─── Video Player ─── */
@@ -162,14 +161,9 @@ const HeroSection = () => {
                     <div className="text-sm">Professionals Trained</div>
                   </div>
 
-                  <motion.span
-                    animate={{ y: [0, 146, 0] }}
-                    transition={{
-                      duration: 12,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="absolute top-0 left-24 -translate-x-1/2 translate-y-[-50%] px-6 py-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl flex items-center gap-3 text-sm font-semibold whitespace-nowrap z-10"
+                  {/* Floats up and down with a CSS animation (App.css), off the main thread */}
+                  <span
+                    className="hero-float absolute top-0 left-24 -translate-x-1/2 translate-y-[-50%] px-6 py-4 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl flex items-center gap-3 text-sm font-semibold whitespace-nowrap z-10"
                   >
                     <div className="w-8 h-8 bg-[#00A3FF1A] rounded-full flex items-center justify-center">
                       <CheckCircle className="w-4 h-4 text-[#00A3FF]" />
@@ -181,7 +175,7 @@ const HeroSection = () => {
                         Official Training Centre
                       </span>
                     </div>
-                  </motion.span>
+                  </span>
                 </div>
 
                 {/* CCTV Card */}

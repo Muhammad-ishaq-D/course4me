@@ -1,9 +1,10 @@
 import axiosInstance from "../axiosInstance";
+import cachedGet from "../cachedGet";
 
 const courseService = {
     // Get all courses with pagination/filters
     getAllCourses: async (params = {}) => {
-        return await axiosInstance.get('/courses', { params });
+        return await cachedGet('/courses', params);
     },
 
     // Get a single course by ID (with fallback to license for unified booking integration)

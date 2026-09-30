@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import useNearScreen from "../../hooks/useNearScreen";
 import { Link, NavLink } from "react-router-dom";
 import courseService from "../../api/services/courseService";
 import licenseService from "../../api/services/licenseService";
@@ -20,13 +21,17 @@ const Footer = () => {
   const [courses, setCourses] = useState([]);
   const [licenses, setLicenses] = useState([]);
   const [locations, setLocations] = useState([]);
+  // The lists are only needed once the footer is close to the screen, so they
+  // do not compete with the page's own content while it loads.
+  const [footerRef, nearScreen] = useNearScreen();
 
   useEffect(() => {
+    if (!nearScreen) return;
     const fetchData = async () => {
       try {
         const [coursesRes, licensesRes, locationsRes] = await Promise.all([
           courseService.getAllCourses({ status: "Published" }),
-          licenseService.getAllLicenses(),
+          licenseService.getAllLicenses({ status: "Published" }),
           locationService.getAllLocations(),
         ]);
 
@@ -69,10 +74,10 @@ const Footer = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [nearScreen]);
 
   return (
-    <footer className="bg-[#0F0F0F] text-white py-16 border-t border-white/5">
+    <footer ref={footerRef} className="bg-[#0F0F0F] text-white py-16 border-t border-white/5">
       <div className="max-w-325 mx-auto px-6">
         {/* TOP GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16">

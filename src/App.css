@@ -45,3 +45,23 @@ input:-webkit-autofill:focus {
   caret-color: inherit !important;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+/* Home hero "SIA Approved" badge: floats down 146px and back every 12s.
+   Only the transform changes, so the browser animates it off the main thread. */
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(146px);
+  }
+}
+.hero-float {
+  animation: hero-float 12s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-float {
+    animation: none;
+  }
+}

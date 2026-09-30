@@ -1,4 +1,5 @@
 import axiosInstance from "../axiosInstance";
+import cachedGet from "../cachedGet";
 
 const locationService = {
     // Search training centers — only returns centers matching keyword / city filters
@@ -14,7 +15,7 @@ const locationService = {
 
     // Get all locations (includes disabled ones — the UI shows them greyed out / non-selectable)
     getAllLocations: async () => {
-        const response = await axiosInstance.get('/locations');
+        const response = await cachedGet('/locations');
         return response.data;
     },
 

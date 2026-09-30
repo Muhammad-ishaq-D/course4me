@@ -2,22 +2,24 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import courseService from "../../../api/services/courseService";
 import CourseCard from "../../ui/CourseCard";
+import useNearScreen from "../../../hooks/useNearScreen";
 
 const RelatedCourses = () => {
   const { courseId } = useParams();
 
   const [otherCourses, setOtherCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Loaded when the section is about to scroll into view.
+  const [sectionRef, nearScreen] = useNearScreen();
 
   useEffect(() => {
+    if (!nearScreen) return;
     const fetchRelated = async () => {
       try {
         setLoading(true);
 
-        const response = await courseService.getAllCourses({
-          status: "Published",
-          limit: 4,
-        });
+        // Same request as the footer, so the two share one download.
+        const response = await courseService.getAllCourses({ status: "Published" });
 
         const data = response.data?.data || [];
 
@@ -35,9 +37,10 @@ const RelatedCourses = () => {
     };
 
     fetchRelated();
-  }, [courseId]);
+  }, [courseId, nearScreen]);
 
-  if (loading || otherCourses.length === 0) return null;
+  // An empty marker keeps a place in the page for the observer until data arrives.
+  if (loading || otherCourses.length === 0) return <div ref={sectionRef} aria-hidden="true" />;
 
   return (
     <section className="py-20 bg-white">
