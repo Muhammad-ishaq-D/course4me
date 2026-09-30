@@ -93,6 +93,8 @@ const HeroSection = () => {
                 <span className="relative inline-block text-[#00A3F4]">
                   Future.
                   <img
+                    width="300"
+                    height="10"
                     src={underlineStroke}
                     alt=""
                     aria-hidden="true"
@@ -139,6 +141,8 @@ const HeroSection = () => {
                 <div className="absolute bottom-18 left-6">
                   <div className="flex items-center gap-2 bg-[#FF5421] text-white px-3 py-1 rounded-full text-sm font-semibold">
                     <img
+                      width="11"
+                      height="14"
                       src={playIcon}
                       alt=""
                       aria-hidden="true"

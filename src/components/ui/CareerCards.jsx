@@ -15,6 +15,8 @@ const CareerCards = ({ filteredCareers }) => {
           {/* Image */}
           <div className="relative h-44 overflow-hidden rounded-t-[28px]">
             <img
+              width="640"
+              height="427"
               src={optimizedImage(career.image, 640)}
               alt={career.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"

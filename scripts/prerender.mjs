@@ -59,7 +59,9 @@ const SKIP = [
 ];
 
 // Not needed for the markup, and the videos are what makes Chrome struggle.
-const BLOCKED = /\.(mp4|webm|mov)(\?|$)|google\.com\/maps|js\.stripe\.com|m\.stripe\.network|googletagmanager|google-analytics/i;
+// Maps are blocked too: the Maps key only allows the live domain, so here it
+// would put Google's error box into the snapshot.
+const BLOCKED = /\.(mp4|webm|mov)(\?|$)|google\.com\/maps|maps\.googleapis\.com|maps\.gstatic\.com|js\.stripe\.com|m\.stripe\.network|googletagmanager|google-analytics/i;
 
 const chromeCandidates = [
   process.env.CHROME_PATH,
@@ -189,7 +191,7 @@ listOf(blogs).forEach((b) => (b.slug ?? b.id) != null && enqueue(`/blog/${b.slug
 listOf(courseLocations).forEach((l) => (l._id ?? l.id) != null && enqueue(`/locations/locationdetails/${l._id ?? l.id}`));
 console.log(`  ${queue.length} pages queued before crawling links`);
 
-const sitemap = new Map(); // canonical URL -> true
+const sitemap = new Map(); // canonical URL -> main image URL (or null)
 const redirects = new Map(); // old path the app moved away from -> canonical path
 const failures = [];
 let rendered = 0;
@@ -261,6 +263,21 @@ async function renderPage(route) {
     const info = await page.evaluate(() => ({
       robots: document.querySelector('meta[name="robots"]')?.content || "",
       canonical: document.querySelector('link[rel="canonical"]')?.href || "",
+      // The page's main image for the image sitemap: from its structured data,
+      // else its own share image (the site-wide default does not count).
+      image: (() => {
+        for (const el of document.querySelectorAll('script[type="application/ld+json"]')) {
+          try {
+            const img = [].concat(JSON.parse(el.textContent).image || [])[0];
+            const url = typeof img === "string" ? img : img?.url;
+            if (url && /^https:\/\//.test(url) && !/\/og-image\.jpg$/.test(url)) return url;
+          } catch {
+            /* not JSON */
+          }
+        }
+        const og = document.querySelector('meta[property="og:image"]')?.content || "";
+        return /\/og-image\.jpg$/.test(og) ? null : og || null;
+      })(),
       path: location.pathname,
       links: [...document.querySelectorAll("a[href]")].map((a) => a.getAttribute("href")),
     }));
@@ -309,7 +326,7 @@ async function renderPage(route) {
       fs.writeFileSync(file, html.replaceAll(origin, SITE_URL));
     }
     seen.add(canonicalPath);
-    sitemap.set(canonical, true);
+    sitemap.set(canonical, info.image || null);
     rendered++;
     process.stdout.write(`\r  rendered ${rendered}, ${queue.length} left in queue   `);
   } catch (err) {
@@ -379,11 +396,12 @@ const priority = (url) => {
 const urls = [...sitemap.keys()].sort();
 const xml = [
   '<?xml version="1.0" encoding="UTF-8"?>',
-  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-  ...urls.map(
-    (u) =>
-      `  <url>\n    <loc>${u.replace(/&/g, "&amp;")}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${priority(u)}</priority>\n  </url>`
-  ),
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
+  ...urls.map((u) => {
+    const img = sitemap.get(u);
+    const imageXml = img ? `\n    <image:image>\n      <image:loc>${img.replace(/&/g, "&amp;")}</image:loc>\n    </image:image>` : "";
+    return `  <url>\n    <loc>${u.replace(/&/g, "&amp;")}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${priority(u)}</priority>${imageXml}\n  </url>`;
+  }),
   "</urlset>",
   "",
 ].join("\n");

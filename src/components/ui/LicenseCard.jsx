@@ -18,6 +18,8 @@ const LicenseCard = ({ item, index }) => {
       {/* IMAGE */}
       <div className="relative overflow-hidden">
         <img
+          width="640"
+          height="360"
           src={optimizedImage(item.thumbnail ||
             item.image ||
             "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop", 640)}

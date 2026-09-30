@@ -143,6 +143,8 @@ const HeroSection = ({ license }) => {
               {license?.thumbnail && (
                 <div className="relative w-full h-[150px] rounded-3xl overflow-hidden mb-6 border border-white/10 shadow-[0_8px_25px_rgba(0,0,0,0.3)]">
                   <img
+                    width="900"
+                    height="600"
                     src={optimizedImage(license.thumbnail, 900)}
                     alt={license.title || "License Thumbnail"}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"

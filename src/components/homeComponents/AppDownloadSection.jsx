@@ -3,7 +3,7 @@ import { Smartphone, Download, ArrowRight, Apple, Play } from "lucide-react";
 
 // Note: The provided image mentions a specific asset "Courses4Me App.png".
 // This import path should point to your actual image file.
-import courses4meApp from "../../assets/home/Courses4Me App.png";
+import courses4meApp from "../../assets/home/courses4me-app-mockup.webp";
 
 const AppPromotionSection = () => {
   return (
@@ -18,6 +18,8 @@ const AppPromotionSection = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-[#FF5421] opacity-20 blur-[80px] rounded-full"></div>
               <img
+                width="567"
+                height="474"
                 src={courses4meApp}
                 alt="Courses4Me App mobile phone mockup"
                 className="w-72 md:w-80 lg:w-[420px] h-auto object-contain relative z-10"
@@ -52,6 +54,8 @@ const AppPromotionSection = () => {
                 className=" group bg-white hover:bg-[#F9FAFB] px-9 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] transition-all duration-300 flex items-center gap-4"
               >
                 <img
+                  width="24"
+                  height="24"
                   src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
                   alt="Apple"
                   className="w-7 h-7 object-contain"
@@ -75,6 +79,8 @@ const AppPromotionSection = () => {
                 className=" group bg-[#1F1F1F] hover:bg-[#2A2A2A] border border-white/10 px-9 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.2)] transition-all duration-300 flex items-center gap-4"
               >
                 <img
+                  width="24"
+                  height="24"
                   src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg"
                   alt="Google Play"
                   className="w-7 h-7 object-contain"

@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import courseService from "../../../api/services/courseService";
 import CourseCard from "../../ui/CourseCard";
 import useNearScreen from "../../../hooks/useNearScreen";
+// Shown when a course has no image of its own
+import fallbackCourseImage from "../../../assets/courses/door-supervisor-training.webp";
 
 const RelatedCourses = () => {
   const { courseId } = useParams();
@@ -64,7 +66,7 @@ const RelatedCourses = () => {
             <CourseCard
               key={course._id}
               id={course._id}
-              image={course.thumbnail || "/assets/courses/door.png"}
+              image={course.thumbnail || fallbackCourseImage}
               title={course.title}
               description={course.subtitle}
               price={(course.pricing?.salePrice || course.pricing?.basePrice)}

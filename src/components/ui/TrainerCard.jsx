@@ -20,6 +20,8 @@ function TrainerCard({ trainer, onClick }) {
         {/* IMAGE & OVERLAY AREA */}
         <div className="relative h-[220px] overflow-hidden bg-black shrink-0">
           <img
+            width="480"
+            height="480"
             src={optimizedImage(trainer.image, 480)}
             alt={trainer.name}
             className="w-full h-full object-cover object-top group-hover:scale-105 transition duration-700"

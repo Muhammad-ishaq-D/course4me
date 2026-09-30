@@ -130,6 +130,8 @@ const HeroCareerDetails = ({ career }) => {
                 {/* Image */}
                 <div className="relative overflow-hidden rounded-[20px]">
                   <img
+                    width="1200"
+                    height="800"
                     src={optimizedImage(career.image, 1200)}
                     alt={career.title}
                     className="w-full h-[210px] object-cover"

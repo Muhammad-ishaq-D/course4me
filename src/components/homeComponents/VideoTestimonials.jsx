@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 
 import jamesOkonkwo from "../../assets/home/SuccessStoriesVideos/Video1.mp4";
 import sarahMitchell from "../../assets/home/SuccessStoriesVideos/Video2.mp4";
-import Emma from "../../assets/home/emma.png";
-import davidOsei from "../../assets/home/David Osei.png";
+import Emma from "../../assets/home/emma-testimonial.webp";
+import davidOsei from "../../assets/home/david-osei-testimonial.webp";
 
 function VideoTestimonials() {
   const [playingIndex, setPlayingIndex] = useState(null);
@@ -136,6 +136,8 @@ function VideoTestimonials() {
                       />
                     ) : (
                       <img
+                        width="300"
+                        height="400"
                         src={t.img}
                         alt={t.name}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition duration-700"

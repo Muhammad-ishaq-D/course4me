@@ -11,6 +11,8 @@ import {
   Heart,
 } from "lucide-react";
 import { optimizedImage } from "../../../utils/seo";
+// Shown when a course has no image of its own
+import fallbackCourseImage from "../../../assets/courses/door-supervisor-training.webp";
 
 const CourseHero = ({ course }) => {
   const navigate = useNavigate();
@@ -26,7 +28,7 @@ const CourseHero = ({ course }) => {
   const displayReviews = course.reviewsCount || "1,000+";
   const displayBooked = course.bookedCount || "500+";
   const displayPassRate = course.passRate || "98%";
-  const displayImage = course.thumbnail || "/assets/courses/door.png";
+  const displayImage = course.thumbnail || fallbackCourseImage;
   const displayHighlights = course.highlights || [];
 
   return (
@@ -152,6 +154,8 @@ const CourseHero = ({ course }) => {
                 {/* IMAGE */}
                 <div className="relative rounded-xl overflow-hidden">
                   <img
+                    width="800"
+                    height="450"
                     src={optimizedImage(displayImage, 800)}
                     alt={course.title}
                     className="w-full h-[200px] object-cover"
