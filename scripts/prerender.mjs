@@ -243,14 +243,21 @@ async function renderPage(route) {
     const res = await page.goto(origin + route, { waitUntil: "networkidle0", timeout: 60000 });
     if (!res || res.status() >= 400) throw new Error(`HTTP ${res?.status()}`);
 
-    // Scroll through the page so content that animates in on scroll is shown.
+    // Scroll through the page so content that animates in on scroll is shown,
+    // and sections that load as they come near the screen (LazySection) are
+    // all rendered: keep going until no placeholder is left (max ~20s).
     await page.evaluate(async () => {
       const scroller = document.getElementById("main-scroll-container") || document.scrollingElement;
-      for (let y = 0; y < scroller.scrollHeight; y += 700) {
-        scroller.scrollTo(0, y);
-        await new Promise((r) => setTimeout(r, 60));
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      for (let pass = 0; pass < 4; pass++) {
+        for (let y = 0; y < scroller.scrollHeight; y += 600) {
+          scroller.scrollTo({ top: y, behavior: "instant" });
+          await sleep(document.querySelector("[data-lazy-section]") ? 250 : 60);
+        }
+        if (!document.querySelector("[data-lazy-section]")) break;
+        await sleep(1000);
       }
-      scroller.scrollTo(0, 0);
+      scroller.scrollTo({ top: 0, behavior: "instant" });
     });
     await page.waitForNetworkIdle({ idleTime: 500, timeout: 30000 }).catch(() => {});
 
@@ -294,6 +301,8 @@ async function renderPage(route) {
     }
 
     if (/noindex/i.test(info.robots)) return;
+    // A section that never loaded would leave crawlers a page with holes; try again later.
+    if (await page.evaluate(() => !!document.querySelector("[data-lazy-section]"))) return "retry";
     const canonical = (info.canonical || SITE_URL + route).replace(origin, SITE_URL);
     const canonicalPath = normalise(new URL(canonical).pathname);
     const finalPath = normalise(info.path);

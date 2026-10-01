@@ -1,41 +1,47 @@
-import React,{useEffect} from "react";
+import React, { lazy, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import HeroSection from "../components/homeComponents/HeroSection";
 import HiringTrainingSection from "../components/homeComponents/HiringTrainingSection";
-import CoursesLicencesSection from "../components/homeComponents/CoursesLicencesSection";
-import TestimonialsSection from "../components/homeComponents/TestimonialsSection";
-import WhyChooseSection from "../components/homeComponents/WhyChooseSection";
-import AppDownloadSection from "../components/homeComponents/AppDownloadSection";
-import TrainersSection from "../components/homeComponents/TrainersSection";
-import VideoTestimonials from "../components/homeComponents/VideoTestimonials";
 import StatsBar from "../components/homeComponents/StatsBar";
+import LazySection from "../components/shared/LazySection";
 
 import Seo from "../components/shared/Seo";
 import { organizationSchema, websiteSchema } from "../utils/seo";
 
+// Sections below the first screen load as the visitor scrolls towards them.
+const CoursesLicencesSection = lazy(() => import("../components/homeComponents/CoursesLicencesSection"));
+const WhyChooseSection = lazy(() => import("../components/homeComponents/WhyChooseSection"));
+const VideoTestimonials = lazy(() => import("../components/homeComponents/VideoTestimonials"));
+const TestimonialsSection = lazy(() => import("../components/homeComponents/TestimonialsSection"));
+const TrainersSection = lazy(() => import("../components/homeComponents/TrainersSection"));
+const AppDownloadSection = lazy(() => import("../components/homeComponents/AppDownloadSection"));
+
 export default function Home() {
    const location = useLocation();
    const navigate = useNavigate();
+   // Coming back to a section (e.g. from a trainer profile): render everything
+   // at once so the target exists, then scroll to it.
+   const scrollTarget = location.state?.scrollTo;
 
    useEffect(() => {
-     if (location.state?.scrollTo) {
-       const section = document.getElementById(location.state.scrollTo);
+     if (!scrollTarget) return undefined;
 
-       if (section) {
-         section.scrollIntoView({
-           behavior: "smooth",
-           block: "start",
-         });
+     // The target may still be loading; keep looking for up to 5 seconds.
+     let tries = 0;
+     const timer = setInterval(() => {
+       const section = document.getElementById(scrollTarget);
+       if (section || ++tries > 50) {
+         clearInterval(timer);
+         section?.scrollIntoView({ behavior: "smooth", block: "start" });
+         // Clear the state so it doesn't scroll again on refresh
+         navigate(location.pathname, { replace: true, state: {} });
        }
+     }, 100);
+     return () => clearInterval(timer);
+   }, [scrollTarget, location.pathname, navigate]);
 
-       // Clear the state so it doesn't scroll again on refresh
-       navigate(location.pathname, {
-         replace: true,
-         state: {},
-       });
-     }
-   }, [location, navigate]);
-   
+  const eager = Boolean(scrollTarget);
+
   return (
     <div className="">
       <Seo
@@ -44,16 +50,28 @@ export default function Home() {
         path="/"
         jsonLd={[organizationSchema, websiteSchema]}
       />
-      
+
       <HeroSection />
       <StatsBar />
       <HiringTrainingSection />
-      <CoursesLicencesSection />
-      <WhyChooseSection />
-      <VideoTestimonials />
-      <TestimonialsSection />
-      <TrainersSection />
-      <AppDownloadSection />
+      <LazySection eager={eager} minHeight={900}>
+        <CoursesLicencesSection />
+      </LazySection>
+      <LazySection eager={eager} minHeight={800}>
+        <WhyChooseSection />
+      </LazySection>
+      <LazySection eager={eager} minHeight={700}>
+        <VideoTestimonials />
+      </LazySection>
+      <LazySection eager={eager} minHeight={800}>
+        <TestimonialsSection />
+      </LazySection>
+      <LazySection eager={eager} minHeight={700}>
+        <TrainersSection />
+      </LazySection>
+      <LazySection eager={eager} minHeight={600}>
+        <AppDownloadSection />
+      </LazySection>
     </div>
   );
 }
