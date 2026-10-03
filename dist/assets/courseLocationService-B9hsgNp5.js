@@ -1,0 +1,1 @@
+import{t as e}from"./axiosInstance-D8idrjpg.js";var t={getAll:()=>e.get(`/course-locations`),getById:t=>e.get(`/course-locations/${t}`),getByCourse:t=>e.get(`/course-locations/course/${t}?activeOnly=true`)};export{t};

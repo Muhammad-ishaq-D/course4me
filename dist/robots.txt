@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Account area and pre-rendered snapshots (served to crawlers under the real URLs)
+Disallow: /dashboard
+Disallow: /prerender/
+
+# Booking, checkout, sign-in and search pages also carry a noindex tag;
+# they stay crawlable so search engines can see it.
+
+Sitemap: https://courses4me.co.uk/sitemap.xml

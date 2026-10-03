@@ -1,0 +1,1 @@
+import{t as e}from"./axiosInstance-D8idrjpg.js";var t=300*1e3,n=new Map;function r(r,i={}){let a=`${r}?${JSON.stringify(i)}`,o=n.get(a);if(o&&Date.now()-o.at<t)return o.promise;let s=e.get(r,{params:i}).catch(e=>{throw n.delete(a),e});return n.set(a,{at:Date.now(),promise:s}),s}export{r as t};
