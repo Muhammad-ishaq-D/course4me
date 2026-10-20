@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import courseService from "../../api/services/courseService";
 import licenseService from "../../api/services/licenseService";
 import locationService from "../../api/services/locationService";
-import { Phone, Mail, Facebook, Instagram, MapPin } from "lucide-react";
+import { Phone, Mail, Facebook, Instagram, MapPin, Youtube } from "lucide-react";
 import Logo from "../../assets/Logo.svg";
 
 // Custom TikTok Icon SVG
@@ -236,6 +236,17 @@ const Footer = () => {
                     className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-[#1877F2] hover:border-[#1877F2] hover:shadow-[0_0_15px_rgba(24,119,242,0.3)] transition-all duration-300"
                   >
                     <Facebook size={18} />
+                  </a>
+
+                  {/* YouTube */}
+                  <a
+                    href="https://www.youtube.com/@courses4meuk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="YouTube"
+                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-[#FF0000] hover:border-[#FF0000] hover:shadow-[0_0_15px_rgba(255,0,0,0.3)] transition-all duration-300"
+                  >
+                    <Youtube size={18} />
                   </a>
                 </div>
               </div>

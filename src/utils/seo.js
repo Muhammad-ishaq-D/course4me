@@ -164,6 +164,13 @@ export const organizationSchema = {
   description:
     "Accredited SIA security training, first aid and professional courses delivered at training centres across the UK.",
   areaServed: { "@type": "Country", name: "United Kingdom" },
+  // Official social profiles (same as the footer), so search engines link them to the business
+  sameAs: [
+    "https://www.youtube.com/@courses4meuk",
+    "https://www.facebook.com/share/1JbpoYDkJu/",
+    "https://www.instagram.com/courses4me2",
+    "https://www.tiktok.com/@courses4me0",
+  ],
   contactPoint: {
     "@type": "ContactPoint",
     telephone: CONTACT_PHONE,
