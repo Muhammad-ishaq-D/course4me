@@ -1,39 +1,28 @@
 import React, { useState, useEffect } from "react";
+import useNearScreen from "../../hooks/useNearScreen";
 import { Link, NavLink } from "react-router-dom";
 import courseService from "../../api/services/courseService";
 import licenseService from "../../api/services/licenseService";
 import locationService from "../../api/services/locationService";
 import { Phone, Mail, Facebook, Instagram, MapPin } from "lucide-react";
 import Logo from "../../assets/Logo.svg";
-
-// Custom TikTok Icon SVG
-const TikTokIcon = ({ size = 18, className = "" }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
-  </svg>
-);
+import { courseUrl, licenceUrl } from "../../utils/seo";
 
 const Footer = () => {
   const [courses, setCourses] = useState([]);
   const [licenses, setLicenses] = useState([]);
   const [locations, setLocations] = useState([]);
+  // The lists are only needed once the footer is close to the screen, so they
+  // do not compete with the page's own content while it loads.
+  const [footerRef, nearScreen] = useNearScreen();
 
   useEffect(() => {
+    if (!nearScreen) return;
     const fetchData = async () => {
       try {
         const [coursesRes, licensesRes, locationsRes] = await Promise.all([
           courseService.getAllCourses({ status: "Published" }),
-          licenseService.getAllLicenses(),
+          licenseService.getAllLicenses({ status: "Published" }),
           locationService.getAllLocations(),
         ]);
 
@@ -75,16 +64,26 @@ const Footer = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [nearScreen]);
 
   return (
-    <footer className="bg-[#0F0F0F] text-white py-16 border-t border-white/5">
+    <footer
+      ref={footerRef}
+      className="bg-[#0F0F0F] text-white py-16 border-t border-white/5"
+    >
       <div className="max-w-325 mx-auto px-6">
         {/* TOP GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-16">
           {/* ABOUT */}
           <div className="lg:pr-5 lg:border-r lg:border-white/10">
-            <img src={Logo} alt="logo" className="w-40 md:w-44" />
+            <img
+              src={Logo}
+              alt="courses4me"
+              width="176"
+              height="43"
+              loading="lazy"
+              className="w-40 md:w-44 h-auto"
+            />
 
             <p className="text-[#A1A1A1] text-base mt-4 leading-relaxed">
               courses4me helps you discover, compare, and book accredited
@@ -95,15 +94,15 @@ const Footer = () => {
 
           {/* POPULAR LICENCES */}
           <div className="lg:pr-5 lg:border-r lg:border-white/10">
-            <h4 className="font-bold text-white text-lg mb-8 uppercase tracking-wide">
+            <h2 className="font-bold text-white text-lg mb-8 uppercase tracking-wide">
               Popular Licences
-            </h4>
+            </h2>
 
             <ul className="space-y-2">
               {licenses.map((licence) => (
                 <li key={licence._id}>
                   <Link
-                    to={`/licences/licencesdetails?id=${licence._id}`}
+                    to={licenceUrl(licence._id, licence.title)}
                     className="text-[#A1A1A1] hover:text-white transition-colors line-clamp-1"
                   >
                     {licence.title}
@@ -115,15 +114,15 @@ const Footer = () => {
 
           {/* POPULAR COURSES */}
           <div className="lg:pr-5 lg:border-r lg:border-white/10">
-            <h4 className="font-bold text-white text-lg mb-8 uppercase tracking-wide">
+            <h2 className="font-bold text-white text-lg mb-8 uppercase tracking-wide">
               Popular Courses
-            </h4>
+            </h2>
 
             <ul className="space-y-2">
               {courses.map((course) => (
                 <li key={course._id}>
                   <Link
-                    to={`/course/${course._id}`}
+                    to={courseUrl(course._id, course.title)}
                     className="text-[#A1A1A1] hover:text-white transition-colors line-clamp-1"
                   >
                     {course.title}
@@ -135,9 +134,9 @@ const Footer = () => {
 
           {/* TRAINING LOCATIONS */}
           <div className="lg:pr-5 lg:border-r lg:border-white/10">
-            <h4 className="font-bold text-white text-lg mb-8 uppercase">
+            <h2 className="font-bold text-white text-lg mb-8 uppercase">
               Training Locations
-            </h4>
+            </h2>
 
             <ul className="space-y-2">
               {locations.map((loc) => (
@@ -166,12 +165,11 @@ const Footer = () => {
 
           {/* CONTACT & BRAND-COLORED SOCIAL LINKS */}
           <div>
-            <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
+            <h2 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               CONTACT US
-            </h4>
-
+            </h2>
             <div className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
-              <div className="space-y-3 mb-6">
+              <div className="space-y-2 mb-8">
                 <div className="flex items-center gap-3 group cursor-pointer">
                   <div className="w-5 h-5 flex items-center justify-center">
                     <Phone className="text-[#00A3FF]" size={18} />
@@ -195,47 +193,6 @@ const Footer = () => {
                     className="text-[#A1A1A1] text-base hover:text-white transition-colors"
                   >
                     info@courses4me.co.uk
-                  </a>
-                </div>
-              </div>
-
-              {/* OFFICIAL BRAND-COLORED SOCIAL MEDIA ICONS */}
-              <div className="pt-2">
-                <p className="text-white font-semibold text-sm mb-3 uppercase tracking-wider">
-                  Follow Us
-                </p>
-                <div className="flex items-center gap-3">
-                  {/* TikTok */}
-                  <a
-                    href="https://www.tiktok.com/@courses4me0?_r=1&_t=ZN-9AgoaduDFEh"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="TikTok"
-                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-black hover:border-[#00F2FE] hover:shadow-[0_0_15px_rgba(0,242,254,0.3)] transition-all duration-300"
-                  >
-                    <TikTokIcon size={18} />
-                  </a>
-
-                  {/* Instagram */}
-                  <a
-                    href="https://www.instagram.com/courses4me2?utm_source=qr&rpxt=dzZ3eTlhZGRobGcz"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Instagram"
-                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:border-transparent hover:shadow-[0_0_15px_rgba(220,39,67,0.3)] transition-all duration-300"
-                  >
-                    <Instagram size={18} />
-                  </a>
-
-                  {/* Facebook */}
-                  <a
-                    href="https://www.facebook.com/share/1JbpoYDkJu/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Facebook"
-                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-[#1877F2] hover:border-[#1877F2] hover:shadow-[0_0_15px_rgba(24,119,242,0.3)] transition-all duration-300"
-                  >
-                    <Facebook size={18} />
                   </a>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { courseUrl, licenceUrl } from "../../utils/seo";
 import courseService from "../../api/services/courseService";
 import licenseService from "../../api/services/licenseService";
 import {
@@ -43,16 +44,16 @@ const ItemCard = ({
   icon: Icon,
   title,
   description,
-  onClick,
+  to,
   variant = "course", // course | license
 }) => {
   const isLicense = variant === "license";
 
   return (
+    <Link to={to} className="block">
     <motion.div
       whileHover={{ y: -3 }}
       transition={{ duration: 0.2 }}
-      onClick={onClick}
       className={`
         group relative overflow-hidden rounded-2xl border p-4 sm:p-5
         cursor-pointer transition-all duration-300 flex flex-col justify-between gap-4
@@ -134,13 +135,13 @@ const ItemCard = ({
         `}
       />
     </motion.div>
+    </Link>
   );
 };
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 const CoursesLicencesSection = () => {
-  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("Most Popular");
   const [courses, setCourses] = useState([]);
   const [licences, setLicences] = useState([]);
@@ -310,13 +311,13 @@ const CoursesLicencesSection = () => {
                   </p>
                 </div>
 
-                <button
-                  onClick={() => navigate("/courses")}
+                <Link
+                  to="/courses"
                   className="hidden sm:flex items-center gap-2 text-[#FF5421] font-bold text-sm hover:gap-3 transition-all duration-300 cursor-pointer"
                 >
                   <span>View All Courses</span>
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </Link>
               </div>
 
               {/* COURSES LIST */}
@@ -331,7 +332,7 @@ const CoursesLicencesSection = () => {
                         icon={course.icon}
                         title={course.title}
                         description={course.description}
-                        onClick={() => navigate(`/course/${course.id}`)}
+                        to={courseUrl(course.id, course.title)}
                         variant="course"
                       />
                     ))}
@@ -339,13 +340,13 @@ const CoursesLicencesSection = () => {
             </div>
 
             {/* Mobile View All */}
-            <button
-              onClick={() => navigate("/courses")}
+            <Link
+              to="/courses"
               className="mt-6 sm:hidden w-full py-3 rounded-xl bg-orange-50 text-[#FF5421] font-bold text-sm flex items-center justify-center gap-2"
             >
               <span>View All Courses</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
 
           {/* RIGHT: POPULAR LICENCES (5 Cols) */}
@@ -361,13 +362,13 @@ const CoursesLicencesSection = () => {
                   </p>
                 </div>
 
-                <button
-                  onClick={() => navigate("/licences")}
+                <Link
+                  to="/licences"
                   className="hidden sm:flex items-center gap-2 text-[#00A3FF] font-bold text-sm hover:gap-3 transition-all duration-300 cursor-pointer"
                 >
-                  <span>View All</span>
+                  <span>View All Licences</span>
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </Link>
               </div>
 
               {/* LICENCES LIST */}
@@ -386,11 +387,7 @@ const CoursesLicencesSection = () => {
                           description={
                             licence.shortDescription || licence.description
                           }
-                          onClick={() =>
-                            navigate(
-                              `/licences/licencesdetails?id=${licence.id || licence.title}`,
-                            )
-                          }
+                          to={licenceUrl(licence.id || licence.title, licence.title)}
                           variant="license"
                         />
                       ))}
@@ -398,13 +395,13 @@ const CoursesLicencesSection = () => {
             </div>
 
             {/* Mobile View All */}
-            <button
-              onClick={() => navigate("/licences")}
+            <Link
+              to="/licences"
               className="mt-6 sm:hidden w-full py-3 rounded-xl bg-blue-50 text-[#00A3FF] font-bold text-sm flex items-center justify-center gap-2"
             >
               <span>View All Licences</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>

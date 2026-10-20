@@ -20,6 +20,7 @@ import courseLocationService from "../../api/services/courseLocationService";
 import BookingSkeleton from "../../components/ui/BookingSkeleton";
 import Loader from "../../components/ui/Loader";
 import Feedback from "../../components/ui/Feedback";
+import { courseUrl } from "../../utils/seo";
 
 const fmtDate = (d) =>
   d
@@ -216,7 +217,7 @@ const CourseBooking = () => {
             Courses
           </Link>
           <ChevronRight size={14} />
-          <Link to={`/course/${course._id}`} className="hover:text-gray-600">
+          <Link to={courseUrl(course._id, course.title)} className="hover:text-gray-600">
             {course.title}
           </Link>
           <ChevronRight size={14} />
@@ -455,7 +456,7 @@ const CourseBooking = () => {
             {/* Back link */}
             <div className="flex justify-center pt-8">
               <Link
-                to={`/course/${course._id}`}
+                to={courseUrl(course._id, course.title)}
                 className="flex items-center gap-2 group"
               >
                 <ChevronLeft

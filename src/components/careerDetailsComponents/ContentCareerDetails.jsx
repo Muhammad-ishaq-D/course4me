@@ -186,13 +186,16 @@ const ContentCareerDetails = ({ career }) => {
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <p className="text-sm text-white/50">Entry Level</p>
 
-                  <h4 className="mt-2 font-black text-lg sm:text-xl">£22K</h4>
+                  <p className="mt-2 font-black text-lg sm:text-xl">
+                    {/* Lower end of the career's salary range, e.g. "£24K — £32K / year" -> "£24K" */}
+                    {String(career.salary || "").split(/s*[—–-]s*/)[0] || "—"}
+                  </p>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <p className="text-sm text-white/50">Demand</p>
 
-                  <h4 className="mt-2 font-black text-lg sm:text-xl">High</h4>
+                  <p className="mt-2 font-black text-lg sm:text-xl">High</p>
                 </div>
               </div>
             </div>

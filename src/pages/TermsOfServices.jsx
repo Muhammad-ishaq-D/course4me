@@ -1,9 +1,8 @@
 import React from "react";
 import { Shield, Lock, CreditCard, Mail } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const TermsOfServices = () => {
-  const navigate = useNavigate();
 
   return (
     <div className="bg-white min-h-screen">
@@ -34,9 +33,9 @@ const TermsOfServices = () => {
               <li className="flex gap-4">
                 <span className="font-bold text-[#F15A24]">2.1</span>
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Age Requirement
-                  </h4>
+                  </h3>
                   <p className="text-gray-600 mt-1 leading-7">
                     You must be at least 18 years old or have permission from a
                     parent or guardian to use course4me.
@@ -47,9 +46,9 @@ const TermsOfServices = () => {
               <li className="flex gap-4">
                 <span className="font-bold text-[#F15A24]">2.2</span>
                 <div>
-                  <h4 className="font-semibold text-[#111827]">
+                  <h3 className="font-semibold text-[#111827]">
                     Accurate Information
-                  </h4>
+                  </h3>
                   <p className="text-gray-600 mt-1 leading-7">
                     You agree to provide accurate and complete information when
                     creating an account or booking courses.
@@ -286,12 +285,12 @@ const TermsOfServices = () => {
               information.
             </p>
 
-            <button
-              onClick={() => navigate("/privacy-policy")}
+            <Link
+              to="/privacy-policy"
               className="mt-5 bg-[#F15A24] text-white px-5 py-3 rounded-xl font-semibold"
             >
               View Privacy Policy
-            </button>
+            </Link>
           </div>
 
           <div>

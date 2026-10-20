@@ -172,6 +172,8 @@ const CardPaymentModal = ({
                   src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png"
                   alt="visa"
                   className="h-4 object-contain"
+                  loading="lazy"
+                  decoding="async"
                 />
 
                 {/* American Express */}
@@ -179,6 +181,8 @@ const CardPaymentModal = ({
                   src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg"
                   alt="amex"
                   className="h-5 object-contain"
+                  loading="lazy"
+                  decoding="async"
                 />
 
                 {/* Mastercard */}
@@ -186,6 +190,8 @@ const CardPaymentModal = ({
                   src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png"
                   alt="mastercard"
                   className="h-6 object-contain"
+                  loading="lazy"
+                  decoding="async"
                 />
 
                 {/* UnionPay */}
@@ -193,6 +199,8 @@ const CardPaymentModal = ({
                   src="https://upload.wikimedia.org/wikipedia/commons/1/1b/UnionPay_logo.svg"
                   alt="unionpay"
                   className="h-5 object-contain"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>

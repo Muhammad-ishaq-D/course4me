@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, TrendingUp, Calendar, Tag } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { courseUrl, optimizedImage } from "../../utils/seo";
 
 const CourseCard = ({
   id,
@@ -17,6 +18,7 @@ const CourseCard = ({
   isOnline = false,
 }) => {
   const navigate = useNavigate();
+  const detailsUrl = courseUrl(id, title);
 
   return (
     <motion.div
@@ -30,8 +32,12 @@ const CourseCard = ({
         {/* IMAGE & BADGES CONTAINER */}
         <div className="relative h-[190px] overflow-hidden bg-gray-100">
           <img
-            src={image}
+            src={optimizedImage(image, 600)}
             alt={title}
+            width="600"
+            height="190"
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
 
@@ -40,12 +46,12 @@ const CourseCard = ({
           {/* TOP BADGES */}
           <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
             {isPopular ? (
-              <div className="bg-black/80 backdrop-blur-md text-white text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full flex items-center gap-1 border border-white/10 shadow-md">
+              <div className="bg-black/80 backdrop-blur-md text-white text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full flex items-center gap-1 border border-white/10 shadow-md">
                 <TrendingUp size={12} className="text-[#F15A24]" />
                 <span>Popular</span>
               </div>
             ) : category ? (
-              <div className="bg-black/60 backdrop-blur-md text-white text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full border border-white/10 flex items-center gap-1">
+              <div className="bg-black/60 backdrop-blur-md text-white text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full border border-white/10 flex items-center gap-1">
                 <Tag size={10} className="text-[#F15A24]" />
                 <span>{category}</span>
               </div>
@@ -54,7 +60,7 @@ const CourseCard = ({
             )}
 
             {isOnline && (
-              <div className="bg-white text-[#F15A24] text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
+              <div className="bg-white text-[#F15A24] text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
                 Online
               </div>
             )}
@@ -72,7 +78,7 @@ const CourseCard = ({
         <div className="p-5 flex flex-col justify-between">
           <div>
             <h3 className="text-[#111111] text-xl font-extrabold leading-snug mb-2 line-clamp-2 group-hover:text-[#F15A24] transition-colors duration-300">
-              {title}
+              <Link to={detailsUrl}>{title}</Link>
             </h3>
 
             <p className="text-gray-500 text-xs sm:text-sm leading-relaxed line-clamp-2 mb-4 font-medium">
@@ -86,7 +92,7 @@ const CourseCard = ({
       <div className="p-5 pt-0 mt-auto">
         <div className="pt-3 border-t border-gray-100 mb-4 flex items-center justify-between">
           <div>
-            <p className="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider">
+            <p className="text-xs font-extrabold text-gray-400 uppercase tracking-wider">
               Starting From
             </p>
             <h4 className="text-[#111111] text-2xl font-black leading-none mt-0.5">
@@ -96,7 +102,7 @@ const CourseCard = ({
 
           {date && (
             <div className="text-right">
-              <p className="text-[11px] font-extrabold text-gray-400 uppercase tracking-wider flex items-center gap-1 justify-end">
+              <p className="text-xs font-extrabold text-gray-400 uppercase tracking-wider flex items-center gap-1 justify-end">
                 <Calendar size={11} className="text-[#F15A24]" />
                 Next Batch
               </p>
@@ -116,13 +122,13 @@ const CourseCard = ({
             Book Training
           </button>
 
-          <button
-            onClick={() => navigate(`/course/${id}`)}
+          <Link
+            to={detailsUrl}
             className="w-full h-11 rounded-xl border border-gray-200 hover:border-[#111111] hover:bg-[#111111] hover:text-white text-[#111111] text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all duration-300 cursor-pointer active:scale-95"
           >
-            <span>Details</span>
+            <span>Details<span className="sr-only"> for {title}</span></span>
             <ArrowRight size={13} />
-          </button>
+          </Link>
         </div>
       </div>
     </motion.div>

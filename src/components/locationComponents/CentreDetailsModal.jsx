@@ -56,6 +56,8 @@ const CentreDetailsModal = ({ centre, onClose }) => {
               src={centre.image}
               alt={centre.city}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
 
             {/* Overlay */}

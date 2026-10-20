@@ -101,7 +101,7 @@ const TestimonialsSection = () => {
             >
               <div>
                 <div className="flex items-start justify-between">
-                  <span className="inline-flex items-center gap-2 bg-orange-50 text-[#FF5421] text-[11px] px-3 py-1.5 rounded-full font-extrabold uppercase tracking-wider">
+                  <span className="inline-flex items-center gap-2 bg-orange-50 text-[#FF5421] text-xs px-3 py-1.5 rounded-full font-extrabold uppercase tracking-wider">
                     {stat.tag}
                   </span>
                   <div className="w-12 h-12 rounded-2xl bg-orange-50/80 border border-orange-100 flex items-center justify-center shrink-0">
@@ -150,7 +150,7 @@ const TestimonialsSection = () => {
                   <p className="text-xs font-bold text-[#111111]">
                     {stat.satisfactionText}
                   </p>
-                  <p className="text-[11px] text-gray-400 font-medium">
+                  <p className="text-xs text-gray-400 font-medium">
                     {stat.satisfactionSubtext}
                   </p>
                 </div>
@@ -171,13 +171,17 @@ const TestimonialsSection = () => {
             className="group relative rounded-[28px] overflow-hidden min-h-[300px] lg:min-h-full shadow-[0_10px_30px_rgba(0,0,0,0.03)] border border-gray-200/80"
           >
             <img
-              src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
+              width="800"
+              height="533"
+              src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=75&auto=format&fit=crop"
               alt="Practical Training Session"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-5 left-5 right-5 z-10">
-              <span className="bg-[#00A3FF] text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full mb-2 inline-block">
+              <span className="bg-[#00A3FF] text-white text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full mb-2 inline-block">
                 In-Class Training
               </span>
               <p className="text-sm font-bold text-white leading-snug">
@@ -195,13 +199,17 @@ const TestimonialsSection = () => {
             className="group relative rounded-[28px] overflow-hidden min-h-[300px] lg:min-h-full shadow-[0_10px_30px_rgba(0,0,0,0.03)] border border-gray-200/80"
           >
             <img
-              src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655"
+              width="800"
+              height="533"
+              src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=75&auto=format&fit=crop"
               alt="Graduation Day"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-5 left-5 right-5 z-10">
-              <span className="bg-[#FF5421] text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full mb-2 inline-block">
+              <span className="bg-[#FF5421] text-white text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full mb-2 inline-block">
                 Qualified Graduate
               </span>
               <p className="text-sm font-bold text-white leading-snug">
@@ -250,7 +258,7 @@ const TestimonialsSection = () => {
                 </div>
 
                 {/* ROLE BADGE */}
-                <span className="inline-block px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-[11px] font-bold uppercase tracking-wider mb-4">
+                <span className="inline-block px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold uppercase tracking-wider mb-4">
                   {t.role}
                 </span>
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Calendar, Clock, User, Tag, ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { blogUrl, optimizedImage } from "../../utils/seo";
 
 const getCategoryStyles = (category) => {
   switch (category) {
@@ -39,6 +40,7 @@ const getCategoryStyles = (category) => {
 
 const ArticleCard = ({
   id,
+  slug,
   image,
   category,
   title,
@@ -49,11 +51,10 @@ const ArticleCard = ({
   isFeatured,
 }) => {
   const styles = getCategoryStyles(category);
-  const navigate = useNavigate();
 
   return (
-    <div
-      onClick={() => navigate(`/blog/article/${id}`)}
+    <Link
+      to={blogUrl({ id, slug })}
       className="group relative flex flex-col h-full overflow-hidden rounded-[30px] bg-white border border-gray-100 shadow-[0_10px_40px_rgba(0,0,0,0.05)] hover:shadow-[0_25px_80px_rgba(0,0,0,0.10)] transition-all duration-500 hover:-translate-y-2 cursor-pointer"
     >
       {/* HOVER GLOW */}
@@ -63,8 +64,12 @@ const ArticleCard = ({
       <div className="relative h-[240px] overflow-hidden">
         {/* IMAGE */}
         <img
-          src={image}
+          src={optimizedImage(image, 640)}
           alt={title}
+          width="640"
+          height="240"
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
         />
 
@@ -144,7 +149,7 @@ const ArticleCard = ({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

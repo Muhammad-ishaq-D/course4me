@@ -53,7 +53,7 @@ const BookCourseModal = ({ centre, onClose, showModal }) => {
             {/* LEFT SIDE */}
             <div>
               <div className="relative rounded-2xl overflow-hidden">
-                <img src={centre.image} alt={centre.city} className="w-full h-[220px] object-cover" />
+                <img src={centre.image} alt={centre.city} className="w-full h-[220px] object-cover" loading="lazy" decoding="async" />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-5 text-white">
                   <h3 className="text-xl font-semibold">{centre.city}</h3>
                 </div>

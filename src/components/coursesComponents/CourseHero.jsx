@@ -77,6 +77,8 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
                     src={securityImg}
                     alt="Security"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-white/10 opacity-80">
@@ -84,6 +86,8 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
                     src={hospitalityImg}
                     alt="Hospitality"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
@@ -94,6 +98,8 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
                     src={healthSafetyImg}
                     alt="Health & Safety"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div className="rounded-2xl overflow-hidden aspect-[4/3] border border-white/10">
@@ -101,6 +107,8 @@ const CourseHero = ({ activeTab, setActiveTab }) => {
                     src={firstAidImg}
                     alt="First Aid"
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>

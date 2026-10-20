@@ -20,6 +20,7 @@ import CareerCards from "../ui/CareerCards";
 import EmptyState from "../ui/EmptyState";
 import Loader from "../ui/Loader";
 import { NavLink, useNavigate } from "react-router-dom";
+import { careerUrl } from "../../utils/seo";
 
 const categories = [
   {
@@ -172,7 +173,7 @@ const CareerListing = () => {
   const handleCareerSearch = () => {
     if (!selectedCareer) return;
 
-    navigate(`/careers/careerdetails/${selectedCareer.id}`);
+    navigate(careerUrl(selectedCareer.id, selectedCareer.title));
   };
 
   return (
@@ -439,6 +440,7 @@ const CareerListing = () => {
             {/* Pagination */}
             <div className="flex items-center justify-center gap-2 mt-10">
               <button
+                aria-label="Previous page"
                 className="w-10 h-10 rounded-xl  border border-gray-200 bg-white flex items-center justify-center cursor-pointer"
                 onClick={() => {
                   if (currentPage > 1) {
@@ -467,6 +469,7 @@ const CareerListing = () => {
               )}
 
               <button
+                aria-label="Next page"
                 className="w-10 h-10 rounded-xl cursor-pointer border border-gray-200 bg-white flex items-center justify-center"
                 onClick={() => {
                   if (currentPage < totalPages) {

@@ -58,9 +58,9 @@ const CookiePolicy = () => {
                   </span>
 
                   <div>
-                    <h4 className="font-semibold text-[#111827]">
+                    <h3 className="font-semibold text-[#111827]">
                       {item.title}
-                    </h4>
+                    </h3>
 
                     <p className="text-gray-600 mt-1 leading-7">{item.desc}</p>
                   </div>

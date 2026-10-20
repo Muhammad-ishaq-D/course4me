@@ -13,15 +13,18 @@ import {
   CalendarDays,
   ArrowRight,
 } from "lucide-react";
-import { NavLink, useSearchParams, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async"; // <--- Import Helmet
+import { NavLink, useSearchParams, useNavigate, useParams } from "react-router-dom";
+import Seo from "../components/shared/Seo";
+import { absoluteUrl, breadcrumbSchema, describe, licenceUrl } from "../utils/seo";
 import HeroSection from "../components/licenseDetails/HeroSection";
 import licenseService from "../api/services/licenseService";
 import Loader from "../components/ui/Loader";
 
 const LicenseDetails = () => {
   const [searchParams] = useSearchParams();
-  const licenseId = searchParams.get("id");
+  const { licenceId } = useParams();
+  // /licences/:licenceId/:slug, or the older /licences/licencesdetails?id=
+  const licenseId = licenceId || searchParams.get("id");
   const navigate = useNavigate();
 
   const [license, setLicense] = useState(null);
@@ -180,40 +183,63 @@ const LicenseDetails = () => {
     );
   }
 
+  const trainingPrice = license?.pricing?.salePrice || license?.pricing?.basePrice;
+  const summary = [
+    license?.duration && { label: "Duration", value: license.duration, icon: <Clock3 size={18} /> },
+    license?.valid && { label: "Validity", value: license.valid, icon: <Shield size={18} /> },
+    trainingPrice && {
+      label: "Training From",
+      value: `£${trainingPrice}`,
+      icon: <span className="text-[18px] font-semibold">£</span>,
+    },
+  ].filter(Boolean);
+
   // Generate dynamic SEO metadata fields
-  const pageTitle = `${license?.title || license?.name || "SIA Licence Details"} | courses4me`;
-  const cleanDescription = (license?.fullDescription || "")
-    .replace(/<[^>]*>?/gm, "")
-    .trim();
-  const pageDescription =
-    cleanDescription.slice(0, 155) ||
-    `Get qualified and certified with courses4me. Learn how to apply for your ${license?.title || "SIA licence"} today.`;
-  const canonicalUrl = `https://courses4me.co.uk/license-details?id=${licenseId || ""}`;
+  const licenceTitle = license?.title || license?.name || "SIA Licence Details";
+  const pageDescription = describe(
+    [license?.subtitle, license?.fullDescription],
+    `How to get your ${licenceTitle}: who is eligible, the training you need, costs and how to apply, with courses4me.`,
+  );
+  const canonicalPath = licenceUrl(licenseId, license?.title || license?.name);
 
   return (
     <div className="bg-[#F6F8FB] ">
-      {/* Dynamic SEO Meta Tags */}
-      <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-
-        {/* Structured Data / Schema Markup */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "EducationalOccupationalCredential",
-            name: license?.title || license?.name || "SIA Licence",
-            description: pageDescription,
-            credentialCategory: "Licence",
-            recognizedBy: {
-              "@type": "Organization",
-              name: "courses4me",
-              url: "https://courses4me.co.uk",
-            },
-          })}
-        </script>
-      </Helmet>
+      <Seo
+        title={
+          license
+            ? [`${licenceTitle} - Training & How to Apply`, `${licenceTitle} Training`, licenceTitle]
+            : "Licence Not Found"
+        }
+        description={pageDescription}
+        path={canonicalPath}
+        redirectToCanonical
+        image={license?.thumbnail || license?.image}
+        noindex={!license}
+        jsonLd={
+          license
+            ? [
+                {
+                  "@context": "https://schema.org",
+                  "@type": "EducationalOccupationalCredential",
+                  name: licenceTitle,
+                  description: pageDescription,
+                  url: absoluteUrl(canonicalPath),
+                  credentialCategory: "Licence",
+                  recognizedBy: {
+                    "@type": "GovernmentOrganization",
+                    name: "Security Industry Authority",
+                    url: "https://www.gov.uk/government/organisations/security-industry-authority",
+                  },
+                },
+                breadcrumbSchema([
+                  { name: "Home", path: "/" },
+                  { name: "Licences", path: "/licences" },
+                  { name: licenceTitle, path: canonicalPath },
+                ]),
+              ]
+            : undefined
+        }
+      />
 
       {/* =====================HERO SECTION========================== */}
       <HeroSection license={license} />
@@ -224,10 +250,10 @@ const LicenseDetails = () => {
       <section className="py-14 lg:py-20 px-4 md:px-8 lg:px-16">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[330px_minmax(0,1fr)] gap-6 items-start">
           {/* ===================SIDEBAR========================= */}
-          <div className="hidden lg:block sticky top-0 self-start">
+          <div className="lg:sticky lg:top-0 self-start">
             <div className="space-y-2">
               {/* ===============NAVIGATION========================= */}
-              <div className="bg-white border border-[#EEF2F6] rounded-[28px] p-4 shadow-[0_10px_35px_rgba(0,0,0,0.04)]">
+              <div className="hidden lg:block bg-white border border-[#EEF2F6] rounded-[28px] p-4 shadow-[0_10px_35px_rgba(0,0,0,0.04)]">
                 <h3 className="text-xs uppercase tracking-[0.2em] text-[#98A2B3] font-bold mb-2 px-2">
                   Licence Details
                 </h3>
@@ -265,56 +291,30 @@ const LicenseDetails = () => {
               </div>
 
               {/* =====================QUICK SUMMARY CARD=================== */}
-              <div className="bg-white border border-[#EEF2F6] rounded-[28px] p-5 shadow-[0_10px_35px_rgba(0,0,0,0.04)]">
-                {/* TITLE */}
-                <h3 className="text-xs uppercase tracking-[0.2em] text-[#98A2B3] font-bold mb-3 ">
-                  Quick Summary
-                </h3>
+              {/* Only facts the licence actually has; no made-up defaults. */}
+              {summary.length > 0 && (
+                <div className="bg-white border border-[#EEF2F6] rounded-[28px] p-5 shadow-[0_10px_35px_rgba(0,0,0,0.04)]">
+                  {/* TITLE */}
+                  <h3 className="text-xs uppercase tracking-[0.2em] text-[#98A2B3] font-bold mb-3 ">
+                    Quick Summary
+                  </h3>
 
-                {/* DETAILS */}
-                <div className="space-y-2">
-                  {/* ITEM */}
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3 text-[#667085]">
-                      <Clock3 size={18} />
+                  {/* DETAILS */}
+                  <div className="space-y-2">
+                    {summary.map(({ label, value, icon }) => (
+                      <div key={label} className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3 text-[#667085]">
+                          {icon}
 
-                      <span className="text-base">Duration</span>
-                    </div>
+                          <span className="text-base">{label}</span>
+                        </div>
 
-                    <span className="font-bold text-[#101828] text-base">
-                      {license?.duration || "6 days"}
-                    </span>
-                  </div>
-
-                  {/* ITEM */}
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3 text-[#667085]">
-                      <Shield size={18} />
-
-                      <span className="text-base">Validity</span>
-                    </div>
-
-                    <span className="font-bold text-[#101828] text-base">
-                      {license?.valid || "3 years"}
-                    </span>
-                  </div>
-
-                  {/* ITEM */}
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3 text-[#667085]">
-                      <span className="text-[18px] font-semibold">£</span>
-
-                      <span className="text-base">Training From</span>
-                    </div>
-
-                    <span className="font-bold text-[#101828] text-base">
-                      {license?.pricing && typeof license.pricing === "object"
-                        ? `£${license.pricing.salePrice || license.pricing.basePrice}`
-                        : "£219"}
-                    </span>
+                        <span className="font-bold text-[#101828] text-base">{value}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -404,16 +404,16 @@ const LicenseDetails = () => {
                   {section.modules && (
                     <div className="border border-[#E4E7EC] rounded-[24px] p-5 bg-[#FCFCFD]">
                       {/* DURATION */}
-                      <div className="flex items-center gap-2 text-[#667085] mb-5">
-                        <Clock3 size={18} />
+                      {license?.duration && (
+                        <div className="flex items-center gap-2 text-[#667085] mb-5">
+                          <Clock3 size={18} />
 
-                        <p className="text-base">
-                          Course duration:
-                          <span className="font-bold text-[#101828] ml-2">
-                            {license?.duration || "6 days (approx. 54 hours)"}
-                          </span>
-                        </p>
-                      </div>
+                          <p className="text-base">
+                            Course duration:
+                            <span className="font-bold text-[#101828] ml-2">{license.duration}</span>
+                          </p>
+                        </div>
+                      )}
 
                       {/* MODULE GRID */}
                       <div className="grid md:grid-cols-2 gap-3">
@@ -515,9 +515,9 @@ const LicenseDetails = () => {
                       className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[#E4E7EC] rounded-2xl px-5 py-4 bg-[#FCFCFD] hover:border-[#F15A24]/30 hover:shadow-md transition-all duration-300"
                     >
                       <div className="flex-1">
-                        <h4 className="font-bold text-[#101828] text-sm md:text-base group-hover:text-[#F15A24] transition-colors duration-200">
+                        <h3 className="font-bold text-[#101828] text-sm md:text-base group-hover:text-[#F15A24] transition-colors duration-200">
                           {course.title}
-                        </h4>
+                        </h3>
                         <div className="flex flex-wrap items-center gap-3 mt-2">
                           {course.duration && (
                             <span className="flex items-center gap-1.5 text-sm md:text-base text-[#667085]">

@@ -2,6 +2,7 @@ import React from "react";
 import { Briefcase, Shield, ArrowRight } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
+import { careerUrl, optimizedImage } from "../../utils/seo";
 
 const CareerCards = ({ filteredCareers }) => {
   return (
@@ -14,9 +15,13 @@ const CareerCards = ({ filteredCareers }) => {
           {/* Image */}
           <div className="relative h-44 overflow-hidden rounded-t-[28px]">
             <img
-              src={career.image}
+              width="640"
+              height="427"
+              src={optimizedImage(career.image, 640)}
               alt={career.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
+              loading="lazy"
+              decoding="async"
             />
 
             {/* Overlay */}
@@ -77,10 +82,10 @@ const CareerCards = ({ filteredCareers }) => {
             <div className="flex items-center justify-between mt-6">
               {/* Button */}
               <NavLink
-                to={`/careers/careerdetails/${career.id}`}
+                to={careerUrl(career.id, career.title)}
                 className="inline-flex items-center gap-2 text-[#F8510C] text-base font-bold hover:gap-3 transition-all"
               >
-                Details
+                Details<span className="sr-only"> about {career.title} careers</span>
                 <ArrowRight className="w-4 h-4" />
               </NavLink>
             </div>

@@ -1,5 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { blogUrl, optimizedImage } from "../../utils/seo";
 import {
   ArrowRight,
   Calendar,
@@ -8,11 +9,17 @@ import {
   TrendingUp,
   BookOpen,
 } from "lucide-react";
-import { blogsData } from "../../data/blogs";
+import useBlogs from "../../hooks/useBlogs";
+import FeaturedArticleSkeleton from "../ui/FeaturedArticleSkeleton";
 
 const FeaturedArticle = () => {
-  const navigate = useNavigate();
-  const featuredBlog = blogsData[0];
+  const { blogs, loading } = useBlogs();
+  const featuredBlog = blogs[0];
+
+  if (loading) return <FeaturedArticleSkeleton />;
+
+  // Nothing to feature: stay out of the way rather than render an empty card.
+  if (!featuredBlog) return null;
 
   return (
     <section className=" px-4 sm:px-6  mb-20 ">
@@ -58,8 +65,8 @@ const FeaturedArticle = () => {
 
               {/* BUTTON */}
               <div className="mt-10">
-                <button
-                  onClick={() => navigate(`/blog/article/${featuredBlog.id}`)}
+                <Link
+                  to={blogUrl(featuredBlog)}
                   className="group/button inline-flex items-center gap-3 bg-[#F15A24] cursor-pointer text-white px-7 sm:px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-[0_10px_40px_rgba(0,0,0,0.12)]"
                 >
                   Read Full Article
@@ -67,7 +74,7 @@ const FeaturedArticle = () => {
                     size={18}
                     className="group-hover/button:translate-x-1 transition"
                   />
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -75,9 +82,13 @@ const FeaturedArticle = () => {
             <div className="relative overflow-hidden h-70 sm:h-90 lg:h-full">
               {/* IMAGE */}
               <img
-                src={featuredBlog?.image}
-                alt="Featured Article"
+                src={optimizedImage(featuredBlog?.image, 1000)}
+                alt={featuredBlog?.title || "Featured article"}
+                width="1000"
+                height="600"
                 className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+                loading="lazy"
+                decoding="async"
               />
 
               {/* DARK OVERLAY */}

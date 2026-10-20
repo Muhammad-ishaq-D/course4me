@@ -255,7 +255,7 @@ const CourseMainContent = ({ course }) => {
                   href="mailto:info@courses4me.co.uk"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#64748B] hover:text-[#00A3F4] transition font-medium"
+                  className="inline-block py-1 text-[#64748B] hover:text-[#00A3F4] transition font-medium"
                 >
                   info@courses4me.co.uk
                 </a>
