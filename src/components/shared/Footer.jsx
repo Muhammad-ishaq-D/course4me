@@ -3,17 +3,25 @@ import { Link, NavLink } from "react-router-dom";
 import courseService from "../../api/services/courseService";
 import licenseService from "../../api/services/licenseService";
 import locationService from "../../api/services/locationService";
-import {
-  Phone,
-  Mail,
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
-  Youtube,
-  MapPin,
-} from "lucide-react";
+import { Phone, Mail, Facebook, Instagram, MapPin } from "lucide-react";
 import Logo from "../../assets/Logo.svg";
+
+// Custom TikTok Icon SVG
+const TikTokIcon = ({ size = 18, className = "" }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
 
 const Footer = () => {
   const [courses, setCourses] = useState([]);
@@ -36,7 +44,6 @@ const Footer = () => {
         const uniqueCities = [];
         const seen = new Set();
 
-        // Sort so that active locations are processed first
         const sortedLocs = [...allLocs].sort((a, b) => {
           const aActive = a.status === "Active";
           const bActive = b.status === "Active";
@@ -95,7 +102,6 @@ const Footer = () => {
             <ul className="space-y-2">
               {licenses.map((licence) => (
                 <li key={licence._id}>
-                  {/* UPDATED DYNAMIC ROUTE FOR LICENCE DETAILS */}
                   <Link
                     to={`/licences/licencesdetails?id=${licence._id}`}
                     className="text-[#A1A1A1] hover:text-white transition-colors line-clamp-1"
@@ -158,20 +164,24 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* CONTACT */}
+          {/* CONTACT & BRAND-COLORED SOCIAL LINKS */}
           <div>
             <h4 className="font-bold text-white text-lg mb-8 tracking-wider uppercase">
               CONTACT US
             </h4>
-            <ul className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
-              <div className="space-y-2 mb-8">
+
+            <div className="space-y-5 text-[#A1A1A1] text-[14px] font-medium">
+              <div className="space-y-3 mb-6">
                 <div className="flex items-center gap-3 group cursor-pointer">
                   <div className="w-5 h-5 flex items-center justify-center">
                     <Phone className="text-[#00A3FF]" size={18} />
                   </div>
-                  <span className="text-white font-bold text-base">
+                  <a
+                    href="tel:08006894621"
+                    className="text-white font-bold text-base hover:text-[#00A3FF] transition-colors"
+                  >
                     Call Us 08006894621
-                  </span>
+                  </a>
                 </div>
 
                 <div className="flex items-center gap-3 group cursor-pointer">
@@ -182,13 +192,54 @@ const Footer = () => {
                     href="https://mail.google.com/mail/?view=cm&fs=1&to=info@courses4me.co.uk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#A1A1A1] text-base"
+                    className="text-[#A1A1A1] text-base hover:text-white transition-colors"
                   >
                     info@courses4me.co.uk
                   </a>
                 </div>
               </div>
-            </ul>
+
+              {/* OFFICIAL BRAND-COLORED SOCIAL MEDIA ICONS */}
+              <div className="pt-2">
+                <p className="text-white font-semibold text-sm mb-3 uppercase tracking-wider">
+                  Follow Us
+                </p>
+                <div className="flex items-center gap-3">
+                  {/* TikTok */}
+                  <a
+                    href="https://www.tiktok.com/@courses4me0?_r=1&_t=ZN-9AgoaduDFEh"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="TikTok"
+                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-black hover:border-[#00F2FE] hover:shadow-[0_0_15px_rgba(0,242,254,0.3)] transition-all duration-300"
+                  >
+                    <TikTokIcon size={18} />
+                  </a>
+
+                  {/* Instagram */}
+                  <a
+                    href="https://www.instagram.com/courses4me2?utm_source=qr&rpxt=dzZ3eTlhZGRobGcz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:border-transparent hover:shadow-[0_0_15px_rgba(220,39,67,0.3)] transition-all duration-300"
+                  >
+                    <Instagram size={18} />
+                  </a>
+
+                  {/* Facebook */}
+                  <a
+                    href="https://www.facebook.com/share/1JbpoYDkJu/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-[#1877F2] hover:border-[#1877F2] hover:shadow-[0_0_15px_rgba(24,119,242,0.3)] transition-all duration-300"
+                  >
+                    <Facebook size={18} />
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
