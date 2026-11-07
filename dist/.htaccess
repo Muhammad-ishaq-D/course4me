@@ -1,0 +1,159 @@
+Options -MultiViews
+DirectoryIndex index.html
+
+# Any URL that is not a page of the app gets a real 404 status, but still shows
+# the app's own "Page not found" screen.
+ErrorDocument 404 /index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # ── 1. One address per page ─────────────────────────────────────────────
+  # www.courses4me.co.uk -> courses4me.co.uk (http -> https is done by the host)
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # /index.html -> /
+  RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+  RewriteRule ^index\.html$ / [R=301,L]
+
+  # /courses/ -> /courses (real folders such as /assets/ are left alone)
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # ── 2. Old page addresses -> current ones ───────────────────────────────
+  # Unpublished duplicates -> the page that replaces them (2026-09-30)
+  RewriteRule ^blog/(building-an-effective-security-team|6|article/6)$ /blog/building-an-effective-security-team-2 [R=301,L]
+  RewriteRule ^blog/(how-to-become-a-door-supervisor-2026-2|14|article/14)$ /blog/how-to-become-a-door-supervisor-2026 [R=301,L]
+  RewriteRule ^licences/21(/[^/]*)?$ /licences/18/sia-door-supervisor-licence [R=301,L]
+  RewriteRule ^blog/author/marcus-thompson$ /blog/author/mark-thompson [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)id=21(&|$)
+  RewriteRule ^licences/licencesdetails$ /licences/18/sia-door-supervisor-licence? [R=301,L]
+
+  # Filled in by `npm run build:seo` (scripts/prerender.mjs), which knows the
+  # current address of every course, licence, article, career and location.
+  # BEGIN GENERATED REDIRECTS
+  RewriteRule ^blog/1$ /blog/how-to-become-a-door-supervisor-2026 [R=301,L]
+  RewriteRule ^blog/10$ /blog/how-technology-is-transforming-the-security-industry-2026 [R=301,L]
+  RewriteRule ^blog/11$ /blog/how-to-ace-your-security-job-interview [R=301,L]
+  RewriteRule ^blog/12$ /blog/retail-security-growing-opportunity-for-sia-licence-holders [R=301,L]
+  RewriteRule ^blog/2$ /blog/sia-licence-changes-2026 [R=301,L]
+  RewriteRule ^blog/3$ /blog/cctv-operator-demand-surge [R=301,L]
+  RewriteRule ^blog/4$ /blog/5-tips-to-pass-your-sia-exam-first-attempt [R=301,L]
+  RewriteRule ^blog/5$ /blog/security-career-salaries-2026 [R=301,L]
+  RewriteRule ^blog/7$ /blog/building-an-effective-security-team-2 [R=301,L]
+  RewriteRule ^blog/8$ /blog/why-first-aid-training-is-essential-for-security-professionals [R=301,L]
+  RewriteRule ^blog/9$ /blog/event-security-from-festivals-to-corporate-functions [R=301,L]
+  RewriteRule ^blog/article/1$ /blog/how-to-become-a-door-supervisor-2026 [R=301,L]
+  RewriteRule ^blog/article/10$ /blog/how-technology-is-transforming-the-security-industry-2026 [R=301,L]
+  RewriteRule ^blog/article/11$ /blog/how-to-ace-your-security-job-interview [R=301,L]
+  RewriteRule ^blog/article/12$ /blog/retail-security-growing-opportunity-for-sia-licence-holders [R=301,L]
+  RewriteRule ^blog/article/2$ /blog/sia-licence-changes-2026 [R=301,L]
+  RewriteRule ^blog/article/3$ /blog/cctv-operator-demand-surge [R=301,L]
+  RewriteRule ^blog/article/4$ /blog/5-tips-to-pass-your-sia-exam-first-attempt [R=301,L]
+  RewriteRule ^blog/article/5$ /blog/security-career-salaries-2026 [R=301,L]
+  RewriteRule ^blog/article/7$ /blog/building-an-effective-security-team-2 [R=301,L]
+  RewriteRule ^blog/article/8$ /blog/why-first-aid-training-is-essential-for-security-professionals [R=301,L]
+  RewriteRule ^blog/article/9$ /blog/event-security-from-festivals-to-corporate-functions [R=301,L]
+  RewriteRule ^careers/1$ /careers/1/door-supervisor [R=301,L]
+  RewriteRule ^careers/2$ /careers/2/cctv-operator [R=301,L]
+  RewriteRule ^careers/3$ /careers/3/security-guard [R=301,L]
+  RewriteRule ^careers/4$ /careers/4/event-security [R=301,L]
+  RewriteRule ^careers/careerdetails/1$ /careers/1/door-supervisor [R=301,L]
+  RewriteRule ^careers/careerdetails/2$ /careers/2/cctv-operator [R=301,L]
+  RewriteRule ^careers/careerdetails/3$ /careers/3/security-guard [R=301,L]
+  RewriteRule ^careers/careerdetails/4$ /careers/4/event-security [R=301,L]
+  RewriteRule ^course/16$ /course/16/cctv-operator-course [R=301,L]
+  RewriteRule ^course/17$ /course/17/emergency-first-aid-at-work [R=301,L]
+  RewriteRule ^course/18$ /course/18/level-2-award-for-working-as-a-door-supervisor [R=301,L]
+  RewriteRule ^course/4$ /course/4/door-supervise-training [R=301,L]
+  RewriteRule ^licences/17$ /licences/17/sia-cctv-operator-licence [R=301,L]
+  RewriteRule ^licences/18$ /licences/18/sia-door-supervisor-licence [R=301,L]
+  RewriteRule ^licences/19$ /licences/19/emergency-first-aid-certificate [R=301,L]
+  RewriteRule ^licences/20$ /licences/20/first-aid-license [R=301,L]
+  RewriteRule ^locations/locationdetails/18$ /locations/locationdetails/18/emergency-first-aid-at-work-london [R=301,L]
+  RewriteRule ^locations/locationdetails/19$ /locations/locationdetails/19/cctv-operator-course-westminster [R=301,L]
+  RewriteRule ^locations/locationdetails/20$ /locations/locationdetails/20/level-2-award-for-working-as-a-door-supervisor-bradford [R=301,L]
+  RewriteRule ^locations/locationdetails/21$ /locations/locationdetails/21/door-supervise-training-edinburgh-scotland [R=301,L]
+  RewriteRule ^careers/1/(?!(?:door-supervisor)$)[^/]+$ /careers/1/door-supervisor [R=301,L]
+  RewriteRule ^careers/2/(?!(?:cctv-operator)$)[^/]+$ /careers/2/cctv-operator [R=301,L]
+  RewriteRule ^careers/3/(?!(?:security-guard)$)[^/]+$ /careers/3/security-guard [R=301,L]
+  RewriteRule ^careers/4/(?!(?:event-security)$)[^/]+$ /careers/4/event-security [R=301,L]
+  RewriteRule ^course/16/(?!(?:cctv-operator-course|book)$)[^/]+$ /course/16/cctv-operator-course [R=301,L]
+  RewriteRule ^course/17/(?!(?:emergency-first-aid-at-work|book)$)[^/]+$ /course/17/emergency-first-aid-at-work [R=301,L]
+  RewriteRule ^course/18/(?!(?:level-2-award-for-working-as-a-door-supervisor|book)$)[^/]+$ /course/18/level-2-award-for-working-as-a-door-supervisor [R=301,L]
+  RewriteRule ^course/4/(?!(?:door-supervise-training|book)$)[^/]+$ /course/4/door-supervise-training [R=301,L]
+  RewriteRule ^licences/17/(?!(?:sia-cctv-operator-licence)$)[^/]+$ /licences/17/sia-cctv-operator-licence [R=301,L]
+  RewriteRule ^licences/18/(?!(?:sia-door-supervisor-licence)$)[^/]+$ /licences/18/sia-door-supervisor-licence [R=301,L]
+  RewriteRule ^licences/19/(?!(?:emergency-first-aid-certificate)$)[^/]+$ /licences/19/emergency-first-aid-certificate [R=301,L]
+  RewriteRule ^licences/20/(?!(?:first-aid-license)$)[^/]+$ /licences/20/first-aid-license [R=301,L]
+  RewriteRule ^locations/locationdetails/18/(?!(?:emergency-first-aid-at-work-london)$)[^/]+$ /locations/locationdetails/18/emergency-first-aid-at-work-london [R=301,L]
+  RewriteRule ^locations/locationdetails/19/(?!(?:cctv-operator-course-westminster)$)[^/]+$ /locations/locationdetails/19/cctv-operator-course-westminster [R=301,L]
+  RewriteRule ^locations/locationdetails/20/(?!(?:level-2-award-for-working-as-a-door-supervisor-bradford)$)[^/]+$ /locations/locationdetails/20/level-2-award-for-working-as-a-door-supervisor-bradford [R=301,L]
+  RewriteRule ^locations/locationdetails/21/(?!(?:door-supervise-training-edinburgh-scotland)$)[^/]+$ /locations/locationdetails/21/door-supervise-training-edinburgh-scotland [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)id=17(&|$)
+  RewriteRule ^licences/licencesdetails$ /licences/17/sia-cctv-operator-licence? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)id=18(&|$)
+  RewriteRule ^licences/licencesdetails$ /licences/18/sia-door-supervisor-licence? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)id=19(&|$)
+  RewriteRule ^licences/licencesdetails$ /licences/19/emergency-first-aid-certificate? [R=301,L]
+  RewriteCond %{QUERY_STRING} (^|&)id=20(&|$)
+  RewriteRule ^licences/licencesdetails$ /licences/20/first-aid-license? [R=301,L]
+  # END GENERATED REDIRECTS
+
+  # ── 3. Pre-rendered pages for crawlers ──────────────────────────────────
+  # Search engines and link-preview bots get the pre-rendered HTML of a page
+  # when `npm run build:seo` produced one (dist/prerender/<path>/index.html).
+  # Everyone else, and any page without a snapshot, gets the normal app.
+  RewriteCond %{HTTP_USER_AGENT} (googlebot|google-inspectiontool|bingbot|yandex|baiduspider|duckduckbot|slurp|applebot|facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|pinterest|redditbot|skypeuripreview|embedly) [NC]
+  RewriteCond %{DOCUMENT_ROOT}/prerender/index.html -f
+  RewriteRule ^$ /prerender/index.html [L]
+
+  RewriteCond %{HTTP_USER_AGENT} (googlebot|google-inspectiontool|bingbot|yandex|baiduspider|duckduckbot|slurp|applebot|facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|pinterest|redditbot|skypeuripreview|embedly) [NC]
+  RewriteCond %{REQUEST_URI} !^/prerender/
+  RewriteCond %{DOCUMENT_ROOT}/prerender/$1/index.html -f
+  RewriteRule ^(.+?)/?$ /prerender/$1/index.html [L]
+
+  # ── 4. The app's pages ──────────────────────────────────────────────────
+  # Keep in step with src/routes/AppRoutes.jsx: a route missing here still
+  # works for visitors, but is sent with a 404 status, so search engines drop it.
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^(courses|faqs|blog|careers|licences|locations|quicksearch|signin|reset-password|trainer-profile|dashboard|privacy-policy|terms-of-services|cookie-policy)$ /index.html [L]
+  RewriteRule ^(booking-success|booking-cancelled|payment-success|payment-cancelled)$ /index.html [L]
+  RewriteRule ^booking/(course|results|packages|checkout)$ /index.html [L]
+  RewriteRule ^course/[^/]+(/[^/]+)?$ /index.html [L]
+  RewriteRule ^licences/[^/]+(/[^/]+)?$ /index.html [L]
+  RewriteRule ^blog/(author/[^/]+|article/[^/]+|[^/]+)$ /index.html [L]
+  RewriteRule ^careers/(careerdetails/[^/]+|[^/]+(/[^/]+)?)$ /index.html [L]
+  RewriteRule ^locations/locationdetails(/[^/]+(/[^/]+)?)?$ /index.html [L]
+  RewriteRule ^apply-job/[^/]+$ /index.html [L]
+
+  # ── 5. Anything else is not a page: 404 (ErrorDocument above) ───────────
+</IfModule>
+
+<IfModule mod_headers.c>
+  # The same URL can return a snapshot or the app, so caches must key on the agent
+  Header append Vary User-Agent
+
+  # Files at the site root keep their names across deploys, so cache them for
+  # a week; hashed build output in /assets is cached for a year (assets/.htaccess)
+  <FilesMatch "\.(js|css|woff2?|svg|png|jpe?g|webp|avif|gif|ico|mp4|webm)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+  # Pages must always be revalidated so a new deploy shows up straight away
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json application/xml image/svg+xml
+</IfModule>
