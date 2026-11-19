@@ -1,0 +1,1 @@
+import{t as e}from"./axiosInstance-D8idrjpg.js";var t={getActiveJobs:async(t={})=>await e.get(`/jobs`,{params:t}),getJobDetails:async t=>await e.get(`/jobs/${t}`),submitApplication:async(t,n)=>await e.post(`/jobs/apply/${t}`,n),getMyApplications:async()=>(await e.get(`/jobs/my-applications`)).data};export{t};
